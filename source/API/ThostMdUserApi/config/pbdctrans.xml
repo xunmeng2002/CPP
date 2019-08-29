@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pbpackets version="2.00" updateDate="2016-06-17"> 
+	<pbpacket name="CommonInfo" id="1" version="2.0" mask="0" >
+		<string name="ContractID" id="10" maxlen="30" />
+		<int16 name="MarketID" id="11" />
+		<string name="ExchContractID" id="2" comment="交易所商品代码" maxlen="30" />
+		<string name="ContractName" id="3" maxlen="30" />
+		<int8 name="GroupOffset" id="17" comment="分组号" />
+		<int8 name="PriceDecimal" id="14" />
+		<int16 name="VolUnit" id="15" />
+		<int32 name="PriceRate" id="16" />
+	</pbpacket>
+	<pbpacket name="StockInfo" id="2" version="2.0" mask="0">
+		<string name="ContractID" id="10" maxlen="30" />
+		<int16 name="MarketID" id="11" />
+		<int8 name="StopFlag" id="1002" comment="全天停牌标记" />
+		<double name="Avg5Volume" id="1003" comment="5日均量" />
+		<double name="TotalCapital" id="1010" comment="总股本" />
+		<double name="FlowCapital" id="1011" comment="流通股本" />
+		<double name="AvgNetAssets" id="1012" comment="每股净资产" />
+		<double name="LastAvgProfit" id="1013" comment="上年度每股收益" />
+		<double name="ForecastAvgProfit" id="1014" comment="预计本年度每股收益" />
+		<double name="NetProfit" id="1015" comment="净利润" />
+		<double name="TotalAssets" id="1016" comment="总资产" />
+		<double name="TotalDebt" id="1017" comment="总负债" />
+	</pbpacket>
+	<pbpacket name="FuturesInfo" id="3" version="1" mask="0">
+	</pbpacket>
+	<pbpacket name="BondsInfo" id="4" version="2.0" mask="0">
+		<string name="ContractID" id="10" maxlen="30" />
+		<int16 name="MarketID" id="11" />
+		<int8 name="PaymentType" id="8001" comment="付息方式" />
+		<int8 name="PaymentFreq" id="8002" comment="年付息频率" />
+		<int32 name="IssueDate" id="8003" comment="发行日期" />
+		<int32 name="ListingDate" id="4" comment="上市交易日" />
+		<int32 name="InterestDate" id="8004" comment="开始计息日" />
+		<float name="Duration" id="8005" comment="债券期限" />
+		<float name="IssuePrice" id="8006" comment="发行价" />
+		<double name="FaceValue" id="8007" comment="发行面额" />
+		<float name="FaceRate" id="8008" comment="票面利率" />
+	</pbpacket>
+    <pbpacket name="OptionsInfo" id="5" version="2.0" mask="0">
+		<string name="ContractID" id="10" maxlen="30" />
+		<int16 name="MarketID" id="11" />
+		<string name="TargetSymbol" id="3001" comment="标的合约" maxlen="30" />
+		<int8 name="OptionAttr" id="3002" comment="期权类型" />
+		<int8 name="OptionType" id="3003" comment="行权方式" />
+		<float name="StrikePrice" id="3004" comment="行权价" />
+		<int32 name="StrikeDate" id="3005" comment="行权到期日" />
+		<int32 name="StrikeUnit" id="3006" comment="行权比例" />
+		<int8 name="OptionCP" id="3007" comment="期权方向" />
+		<int8 name="OptionAdjust" id="3014" comment="合约调整"/>
+		<int8 name="OptionLife" id="3015" comment="合约存续" />
+		<int8 name="OpenLimit" id="3016" comment="限制开仓" />
+		<int8 name="AllowTactics" id="3017" comment="允许组合策略" />
+		<int32 name="AutoSplitDate" id="3018" comment="垂直价差策略解除日期" />
+    </pbpacket>
+	<pbpacket name="QuotationData" id="10" version="2.0">
+		<string name="ContractID" id="10" maxlen="30" />
+		<int16 name="MarketID" id="11" />
+		<int32 name="TradeDate" id="20" />
+		<int32 name="UpdateDate" id="21" />
+		<int32 name="UpdateTime" id="22" />
+		<int32 name="LastClose" id="23" price="1" />
+		<int32 name="LastClear" id="24" price="1" />
+		<double name="LastOpenInterest" id="25" />
+		<int32 name="OpenPrice" id="26" price="1" />
+		<int32 name="HighPrice" id="27" price="1" />
+		<int32 name="LowPrice" id="28" price="1" />
+		<int32 name="LastPrice" id="29" price="1" />
+		<int32 name="UpperLimit" id="30" price="1" />
+		<int32 name="LowerLimit" id="31" price="1" />
+		<int32 name="AveragePrice" id="32" price="1" />
+		<int32 name="ClearPrice" id="33" price="1" />
+		<int32 name="ClosePrice" id="34" price="1" />
+		<double name="Volume" id="35" />
+		<double name="Turnover" id="36" />
+		<double name="OpenInterest" id="39" />
+		<array name="BidSize" comment="买盘档数" mask="0" maxsize="10">
+			<int32 name="BidPrice" id="40" price="1" />
+			<int32 name="BidVolume" id="41" />
+		</array>
+		<array name="AskSize" comment="卖盘档数" mask="0" maxsize="10">
+			<int32 name="AskPrice" id="42" price="1" />
+			<int32 name="AskVolume" id="43" />
+		</array>
+		<int32 name="TradeTicks" id="44" comment="成交笔数" />
+		<int8 name="TradeDirect" id="45" comment="交易方向" />
+		<int8 name="TradingStatus" id="7" comment="交易状态" />
+		<int32 name="FundsPV" id="5001" comment="基金前日净值" price="1" />
+		<int32 name="FundsIOPV" id="5002" comment="基金实时参考净值" price="1" />	
+	</pbpacket>
+	<pbpacket name="OrderData" id="11" version="2.0" mask="0">
+		<string name="ContractID" id="10" maxlen="30" />
+		<int16 name="MarketID" id="11" />
+		<int32 name="TradeDate" id="20" />
+		<int32 name="UpdateDate" id="21" />
+		<int32 name="UpdateTime" id="22" />	
+		<int8 name="OrderDirect" id="50" comment="委托方向" />
+		<int32 name="OrderPrice" id="51" comment="委托价格" price="1" />
+		<array name="OrderSize" comment="委托队列数" mask="0" maxsize="50">
+			<int32 name="OrderVolume" id="52" comment="委托量" />
+		</array>
+	</pbpacket>
+	<pbpacket name="IndexQuotationData" id="12" version="2.0">
+		<string name="ContractID" id="10" maxlen="30" />
+		<int16 name="MarketID" id="11" />
+		<int32 name="TradeDate" id="20" />
+		<int32 name="UpdateDate" id="21" />
+		<int32 name="UpdateTime" id="22" />
+		<int32 name="LastClose" id="23" price="1" />
+		<int32 name="LastClear" id="24" price="1" />
+		<double name="LastOpenInterest" id="25" />
+		<int32 name="OpenPrice" id="26" price="1" />
+		<int32 name="HighPrice" id="27" price="1" />
+		<int32 name="LowPrice" id="28" price="1" />
+		<int32 name="LastPrice" id="29" price="1" />
+		<int32 name="AveragePrice" id="32" price="1" />
+		<int32 name="ClearPrice" id="33" price="1" />
+		<int32 name="ClosePrice" id="34" price="1" />
+		<double name="Volume" id="35" />
+		<double name="Turnover" id="36" />
+		<double name="OpenInterest" id="39" />
+		<int16 name="CalcNum" id="6003" comment="统计样本数" />
+		<int16 name="RaiseNum" id="6001" comment="上涨数" />
+		<int16 name="DownNum" id="6002" comment="下跌数" />
+		<string name="LeadStock" id="6004" comment="领涨股" maxlen="30" />
+	</pbpacket>	
+</pbpackets>

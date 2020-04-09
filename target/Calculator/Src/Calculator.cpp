@@ -72,6 +72,21 @@ double Calculator::Parse(const char* expression)
 	}
 	return -1;
 }
+void Calculator::Clear()
+{
+	while (!m_Parameters.empty())
+	{
+		m_Parameters.pop();
+	}
+	while (!m_Operators.empty())
+	{
+		m_Operators.pop();
+	}
+
+	memset(m_NumBuff, 0, sizeof(m_NumBuff));
+	memset(m_ErrorMessage, 0, sizeof(m_ErrorMessage));
+}
+
 
 bool Calculator::IsValid(char oper)
 {

@@ -11,6 +11,7 @@ int main(int argc, char* argv[])
 	{
 		cout << calculator->Parse(buff) << endl;
 		memset(buff, 0, sizeof(buff));
+		calculator->Clear();
 	}
 	
 	return 0;

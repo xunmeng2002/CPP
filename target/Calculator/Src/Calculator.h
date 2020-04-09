@@ -8,6 +8,7 @@ class Calculator
 public:
 	
 	double Parse(const char* expression);
+	void Clear();
 
 private:
 	bool IsValid(char oper);

@@ -20,6 +20,8 @@ public:
 
 int main()
 {
+	cout << "INVALID_SOCKET = " << INVALID_SOCKET << endl;
+
 	TcpCallback tcp_callback;
 	TcpServer tcp_server("127.0.0.1", PORT);
 	tcp_server.register_callback(&tcp_callback);

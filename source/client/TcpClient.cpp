@@ -100,6 +100,7 @@ void TcpClient::run()
 				}
 				else
 				{
+					cout << "Recv Length = " << len << endl;
 					stop();
 				}
 			}
@@ -115,6 +116,7 @@ void TcpClient::run()
 				}
 				else
 				{
+					cout << "Send Length = " << len << endl;
 					stop();
 				}
 			}
@@ -122,6 +124,8 @@ void TcpClient::run()
 
 		handle_events();
 	}
+
+	cout << "Tcp Client Thread Exit!" << endl;
 }
 
 void TcpClient::prepare_fds()

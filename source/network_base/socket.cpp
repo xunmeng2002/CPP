@@ -50,13 +50,13 @@ SOCKET Socket::get_sock_id()
 
 int Socket::bind(int port)
 {
-	sockaddr_in m_sock_addr;
-	memset(&m_sock_addr, 0, sizeof(m_sock_addr));
-	m_sock_addr.sin_family = m_af;
-	//::inet_pton(m_af, "127.0.0.1", &m_sock_addr.sin_addr);
-	//m_sock_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-	m_sock_addr.sin_port = htons(port);
-	return ::bind(m_socket_id, (sockaddr*)&m_sock_addr, sizeof(m_sock_addr));
+	sockaddr_in sock_addr;
+	memset(&sock_addr, 0, sizeof(sock_addr));
+	sock_addr.sin_family = m_af;
+	::inet_pton(m_af, "127.0.0.1", &sock_addr.sin_addr);
+	//sock_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	sock_addr.sin_port = htons(port);
+	return ::bind(m_socket_id, (sockaddr*)&sock_addr, sizeof(sock_addr));
 }
 
 int Socket::listen(int back_log)
@@ -73,7 +73,7 @@ Socket* Socket::accept()
 	
 
 	socket->set_peer_address(client_addr);
-	cout << "accept addr:" << get_peer_name() << "\tport:" << ntohs(client_addr.sin_port) << endl;
+	cout << "accept addr:" << socket->get_peer_name() << "\tport:" << ntohs(client_addr.sin_port) << endl;
 	return socket;
 }
 

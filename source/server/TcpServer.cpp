@@ -85,7 +85,6 @@ void TcpServer::prepare_fds()
 	FD_ZERO(&m_recv_fds);
 	FD_ZERO(&m_send_fds);
 	FD_SET(m_socket_id, &m_recv_fds);
-	FD_SET(m_socket_id, &m_send_fds);
 
 	for (auto& it : m_send_cache_manager_map)
 	{
@@ -100,7 +99,7 @@ void TcpServer::prepare_fds()
 
 void TcpServer::accept()
 {
-	if (FD_ISSET(m_socket_id, &m_recv_fds) || FD_ISSET(m_socket_id, &m_send_fds))
+	if (FD_ISSET(m_socket_id, &m_recv_fds))
 	{
 		Socket* client_socket = m_socket->accept();
 		cout << "accept socket:" << client_socket->get_sock_id() << endl;

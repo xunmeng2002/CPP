@@ -3,13 +3,13 @@
 
 #ifdef WIN32
 #include <winsock2.h>
-#include <windows.h>
-#include <io.h>
-#include <process.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/timeb.h>
-#include <fcntl.h>
+//#include <windows.h>
+//#include <io.h>
+//#include <process.h>
+//#include <sys/types.h>
+//#include <sys/stat.h>
+//#include <sys/timeb.h>
+//#include <fcntl.h>
 #pragma comment(lib,"ws2_32.lib")
 #endif
 

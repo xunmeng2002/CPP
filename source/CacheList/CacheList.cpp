@@ -3,70 +3,44 @@
 #include <assert.h>
 using namespace std;
 
-CacheNode::CacheNode(bool reverse, int blockSize)
-	:m_BlockSize(blockSize), m_Length(0), m_Prev(nullptr), m_Next(nullptr)
+CacheNode::CacheNode(int blockSize)
+	:m_BlockSize(blockSize), m_Length(0), m_Next(nullptr)
 {
 	m_Head = new char[blockSize];
+	m_Read = m_Write = m_Head;
 	m_End = m_Head + blockSize;
-	if (reverse)
-	{
-		m_Read = m_Write = m_End;
-	}
-	else
-	{
-		m_Read = m_Write = m_Head;
-	}
 }
 CacheNode::~CacheNode()
 {
 	delete[] m_Head;
 }
-void CacheNode::Init()
-{
-	m_Read = m_Write = m_Head;
-	m_Prev = nullptr;
-	m_Next = nullptr;
-	m_Length = 0;
-}
-int CacheNode::PushFront(const void* data, int length)
-{
-	int pushLen = min(length, (m_Read - m_Head));
-	m_Read = m_Read - pushLen;
-	m_Length += pushLen;
-	::memcpy(m_Read, ((char*)data + (length - pushLen)), pushLen);
-	return pushLen;
-}
 int CacheNode::PushBack(void* data, int length)
 {
-	int pushLen = min(length, (m_End - m_Write));
-	::memcpy(m_Write, data, pushLen);
-	m_Write += pushLen;
-	m_Length += pushLen;
-	return pushLen;
+	length = min(length, int(m_End - m_Write));
+	::memcpy(m_Write, data, length);
+	m_Write += length;
+	m_Length += length;
+	return length;
 }
 int CacheNode::PopFront(void* data, int length)
 {
-	int popLen = min(length, m_Length);
+	length = min(length, m_Length);
 	if (data)
 	{
-		::memcpy(data, m_Read, popLen);
+		::memcpy(data, m_Read, length);
 	}
-	m_Read += popLen;
-	m_Length -= popLen;
-	return popLen;
+	m_Read += length;
+	m_Length -= length;
+	return length;
 }
-int CacheNode::PopBack(void* data, int length)
+void* CacheNode::GetRead()
 {
-	int popLen = min(length, m_Length);
-	m_Write -= popLen;
-	m_Length -= popLen;
-	if (data)
-	{
-		::memcpy(((char*)data + (length - popLen)), m_Write, popLen);
-	}
-	return popLen;
+	return m_Read;
 }
-
+void* CacheNode::GetWrite()
+{
+	return m_Write;
+}
 void* CacheNode::GetData(int& length)
 {
 	length = m_Length;
@@ -76,25 +50,13 @@ bool CacheNode::IsEmpty()
 {
 	return m_Length == 0;
 }
-bool CacheNode::IsFrontFull()
-{
-	return m_Head == m_Read;
-}
 bool CacheNode::IsFull()
 {
 	return m_Write == m_End;
 }
-void CacheNode::SetPrev(CacheNode* prev)
-{
-	m_Prev = prev;
-}
 void CacheNode::SetNext(CacheNode* next)
 {
 	m_Next = next;
-}
-CacheNode* CacheNode::GetPrev()
-{
-	return m_Prev;
 }
 CacheNode* CacheNode::GetNext()
 {
@@ -103,6 +65,7 @@ CacheNode* CacheNode::GetNext()
 void CacheNode::Clear()
 {
 	m_Read = m_Write = m_Head;
+	m_Next = nullptr;
 	m_Length = 0;
 }
 
@@ -111,7 +74,7 @@ void CacheNode::Clear()
 CacheList::CacheList(int blockSize)
 	:m_BlockSize(blockSize)
 {
-	m_Head = new CacheNode(false, m_BlockSize);
+	m_Head = new CacheNode(m_BlockSize);
 	m_Write = m_Tail = m_Head;
 	m_Length = 0;
 }
@@ -125,20 +88,6 @@ CacheList::~CacheList()
 		delete cacheNode;
 	}
 }
-void CacheList::PushFront(const void* data, int length)
-{
-	lock_guard<mutex> guard(m_Mutex);
-	int pushLen = 0;
-	while (pushLen < length)
-	{
-		if (m_Head->IsFrontFull())
-		{
-			AddHeadNode();
-		}
-		pushLen += m_Head->PushFront(data, length - pushLen);
-	}
-	m_Length += length;
-}
 void CacheList::PushBack(const void* data, int length)
 {
 	lock_guard<mutex> guard(m_Mutex);
@@ -150,7 +99,7 @@ void CacheList::PushBack(const void* data, int length)
 		{
 			if (m_Write == m_Tail)
 			{
-				AddTailNode();
+				AddNewNode();
 			}
 			m_Write = m_Write->GetNext();
 		}
@@ -174,7 +123,7 @@ bool CacheList::PopFront(void* data, int length)
 		}
 		else //用于GetData之后
 		{
-			popLen += m_Head->PopFront(nullptr, length - popLen);
+			popLen += m_Head->PopFront(data, length - popLen);
 		}
 		if (m_Head->IsEmpty() && m_Write != m_Head && m_Head->GetNext())
 		{
@@ -188,34 +137,6 @@ bool CacheList::PopFront(void* data, int length)
 				m_Length -= popLen;
 				return false;
 			}
-		}
-	}
-	m_Length -= length;
-	return true;
-}
-bool CacheList::PopBack(void* data, int length)
-{
-	lock_guard<mutex> guard(m_Mutex);
-	if (m_Length < length)
-	{
-		assert(false);
-		return false;
-	}
-	int popLen = 0;
-	while (popLen < length)
-	{
-		if (data)
-		{
-			popLen += m_Write->PopBack((char*)data, length - popLen);
-		}
-		else
-		{
-			popLen += m_Write->PopBack(nullptr, length - popLen);
-		}
-
-		if (m_Write->IsEmpty() && m_Write != m_Head)
-		{
-			m_Write = m_Write->GetPrev();
 		}
 	}
 	m_Length -= length;
@@ -236,37 +157,19 @@ bool CacheList::IsEmpty()
 	lock_guard<mutex> guard(m_Mutex);
 	return m_Head->IsEmpty();
 }
-void CacheList::Clear()
-{
-	while (m_Write != m_Head)
-	{
-		m_Write->Clear();
-		m_Write = m_Write->GetPrev();
-	}
-	m_Head->Clear();
-	m_Length = 0;
-}
 
 void CacheList::PopFrontNode()
 {
 	CacheNode* cacheNode = m_Head;
 	m_Head = m_Head->GetNext();
-	cacheNode->Init();
+	cacheNode->Clear();
 
 	m_Tail->SetNext(cacheNode);
 	m_Tail = cacheNode;
 }
-void CacheList::AddHeadNode()
+void CacheList::AddNewNode()
 {
-	CacheNode* cacheNode = new CacheNode(true, m_BlockSize);
-	cacheNode->SetNext(m_Head);
-	m_Head->SetPrev(cacheNode);
-	m_Head = cacheNode;
-}
-void CacheList::AddTailNode()
-{
-	CacheNode* cacheNode = new CacheNode(false, m_BlockSize);
-	cacheNode->SetPrev(m_Tail);
+	CacheNode* cacheNode = new CacheNode(m_BlockSize);
 	m_Tail->SetNext(cacheNode);
 	m_Tail = cacheNode;
 }

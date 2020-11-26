@@ -1,30 +1,29 @@
-#ifndef THREAD_BASE_H
-#define THREAD_BASE_H
 #include <thread>
+#include <atomic>
 #include <string>
+#pragma once
+
 
 class ThreadBase
 {
 public:
-	ThreadBase(const char *name);
+	ThreadBase(const char* name);
 	virtual ~ThreadBase();
 
-	void Join();
-	void Start();
-	void Stop();
-
+	virtual bool Start();
+	virtual void Stop();
+	virtual void Join();
+	
 protected:
-	virtual void InitThread() {}
-	virtual void ReleaseThread() {}
+	void ThreadFunc();
+	virtual void ThreadInit() = 0;
 	virtual void Run() = 0;
-	void ThreadProc();
+	virtual void ThreadExit() = 0;
 
 protected:
-	bool m_ShouldRun;
+	unsigned long m_ThreadID;
 	std::thread m_Thread;
-	DWORD m_ThreadID;
-	std::string m_ThreadName;
+	std::string m_Name;
+	std::atomic<bool> m_ShouldRun;
 };
 
-
-#endif

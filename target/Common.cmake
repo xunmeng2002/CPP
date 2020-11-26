@@ -1,9 +1,6 @@
 enable_language(CXX)
 cmake_minimum_required(VERSION 2.8)
 
-#宏定义，添加一个包
-#name：是一个不带双引号的字符
-#dir：是一个不带引号的路径
 macro(add_package name dir)
 	include_directories(${dir})
 	set(hfind ${ARGV1})
@@ -22,9 +19,6 @@ macro(add_package name dir)
 	set(all_file ${all_file}  ${name_header}  ${name_hpp} ${name_cpp} ${name_c})
 endmacro(add_package)
 
-#宏定义，添加一个包
-#name：是一个不带双引号的字符
-#dir：是一个不带引号的路径
 macro(add_package_all name dir)
 	include_directories(${dir})
 	set(hfind ${ARGV1})
@@ -40,6 +34,12 @@ if(UNIX)
 	add_compile_options(-g)
 endif(UNIX)
 
+if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+	SET(BIT 64)
+else( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+	SET(BIT 32)
+endif ( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+
 if(WIN32)
 	#windows上使用静态编译
 	set(CompilerFlags
@@ -48,8 +48,7 @@ if(WIN32)
         CMAKE_CXX_FLAGS_RELEASE
         CMAKE_C_FLAGS
         CMAKE_C_FLAGS_DEBUG
-        CMAKE_C_FLAGS_RELEASE
-        )
+        CMAKE_C_FLAGS_RELEASE)
 	foreach(CompilerFlag ${CompilerFlags})
 		string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
 	endforeach()
@@ -64,4 +63,10 @@ if(WIN32)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO")
 	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /SAFESEH:NO")
 	set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /SAFESEH:NO")
+	
+	#允许使用老版本函数和不安全函数
+	add_definitions("-D_CRT_SECURE_NO_WARNINGS")
+	add_definitions("-DNO_WARN_MBCS_MFC_DEPRECATION")
+	add_definitions("-D_CRT_SECURE_NO_DEPRECATE")
+	add_definitions("-D_WINSOCK_DEPRECATED_NO_WARNINGS")
 endif(WIN32)

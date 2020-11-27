@@ -1,6 +1,7 @@
 #include "TcpServer.h"
 #include "WorkThread.h"
 #include "WorkThreadManage.h"
+#include "MemCacheTemplateSingleton.h"
 #include <iostream>
 #include <fstream>
 #include <assert.h>
@@ -17,8 +18,9 @@ using namespace std;
 TcpServer TcpServer::m_Instance;
 
 TcpServer::TcpServer()
-    :TcpBase("TcpServer"), m_Family(0), m_Port(0), m_ServerAddress({0}), m_ServerSocket(INVALID_SOCKET)
+    :TcpIOCP("TcpServer"), m_Family(0), m_Port(0), m_ServerAddress({0}), m_ServerSocket(INVALID_SOCKET)
 {
+
 }
 TcpServer::~TcpServer()
 {
@@ -180,12 +182,12 @@ bool TcpServer::Listen(int backLog)
 
 bool TcpServer::PostAccept()
 {
-    SocketData* socketData = MemCacheTemplate<SocketData>::GetInstance().Allocate();
-    socketData->ConnectSocket = SocketMemCache::GetInstance().Allocate();
+    SocketData* socketData = MemCacheTemplateSingleton<SocketData>::GetInstance().Allocate();
+    socketData->ConnectSocket = AllocateSocket();
     if (socketData->ConnectSocket == INVALID_SOCKET)
     {
         WRITE_ERROR_LOG(GetLastError(), "CreateSocket Failed.");
-        MemCacheTemplate<SocketData>::GetInstance().Free(socketData);
+        MemCacheTemplateSingleton<SocketData>::GetInstance().Free(socketData);
         return false;
     }
     socketData->WsaBuffer.len = sizeof(socketData->Buffer);
@@ -198,6 +200,7 @@ bool TcpServer::PostAccept()
     if (!SocketApi::GetInstance().AcceptEx(m_ServerSocket, socketData->ConnectSocket, socketData->WsaBuffer.buf, 0,
         (sizeof(SOCKADDR_IN) + 16), (sizeof(SOCKADDR_IN) + 16), &transBytes, (LPOVERLAPPED)socketData) && WSAGetLastError() != ERROR_IO_PENDING)
     {
+        WRITE_LOG(LogLayer::Normal, LogLevel::Error, "Call AcceptEx Failed. Socket:[%lld]", socketData->ConnectSocket);
         WRITE_ERROR_LOG(WSAGetLastError(), "Call AcceptEx Failed.");
         return false;
     }

@@ -1,13 +1,12 @@
 #pragma once
 
 #include "SocketInit.h"
-#include "MemCacheTemplate.h"
 #include "SocketMemCache.h"
 #include "SocketDataStruct.h"
-#include "TcpBase.h"
+#include "TcpIOCP.h"
 
 
-class TcpServer : public TcpBase
+class TcpServer : public TcpIOCP
 {
 private:
 	TcpServer();

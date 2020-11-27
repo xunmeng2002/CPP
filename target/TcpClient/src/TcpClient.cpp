@@ -2,6 +2,7 @@
 #include "IOCompletePort.h"
 #include "SocketApi.h"
 #include "SocketMemCache.h"
+#include "MemCacheTemplateSingleton.h"
 #include "Logger.h"
 #include <assert.h>
 
@@ -12,7 +13,7 @@ using namespace std;
 TcpClient TcpClient::m_Instance;
 
 TcpClient::TcpClient()
-    :TcpBase("TcpClient"), m_Family(0), m_ServerIP(""), m_ServerPort(0), m_ServerAddress({ 0 }), m_LocalAddress({0}), m_InitSocket(INVALID_SOCKET)
+    :TcpIOCP("TcpClient"), m_Family(0), m_ServerIP(""), m_ServerPort(0), m_ServerAddress({ 0 }), m_LocalAddress({0}), m_InitSocket(INVALID_SOCKET)
 {
 
 }
@@ -69,7 +70,7 @@ void TcpClient::Run()
     SocketData* socketData;
 
     auto bOK = IOCompletePort::GetInstance().GetStatus(&len, (PULONG_PTR)&socket, (LPOVERLAPPED*)&socketData, INFINITE);
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "CompletionKey = [%d], Len = [%d], Ret = [%d].", socket, len, bOK);
+    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "CompletionKey:[%d], Len:[%d], Ret:[%d].", socket, len, bOK);
     if (socketData == nullptr)
     {
         WRITE_LOG(LogLayer::Normal, LogLevel::Info, "Thread Eixt. CompetionKey:[%d], SocketData is null.", socket);
@@ -79,13 +80,13 @@ void TcpClient::Run()
     if (!bOK)
     {
         WRITE_ERROR_LOG(GetLastError(), "GetQueuedCompletionStatus Failed.");
-        WRITE_LOG(LogLayer::Normal, LogLevel::Info, "GetQueuedCompletionStatus Failed. SOCKET=[%d].", socketData->ConnectSocket);
+        WRITE_LOG(LogLayer::Normal, LogLevel::Warning, "GetQueuedCompletionStatus Failed. ErrorID:[%d] SOCKET:[%lld].", GetLastError(), socketData->ConnectSocket);
         RemoveConnect(socketData);
         return;
     }
     if (len == 0 && (socketData->Operate == OperateType::Send || socketData->Operate == OperateType::Recv))
     {
-        WRITE_LOG(LogLayer::Normal, LogLevel::Info, "Disconnect SOCKET=[%d].", socketData->ConnectSocket);
+        WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "Disconnect SOCKET:[%lld].", socketData->ConnectSocket);
         RemoveConnect(socketData);
         return;
     }
@@ -122,12 +123,12 @@ bool TcpClient::Create(int maxConcurrency)
         WRITE_ERROR_LOG(-1, "Create IOCompletePort Failed.");
         return false;
     }
-    m_InitSocket = SocketMemCache::GetInstance().Allocate();
-    return true;
+    m_InitSocket = AllocateSocket();
+    return m_InitSocket != INVALID_SOCKET;
 }
 bool TcpClient::PostConnect()
 {
-    auto connectSocket = SocketMemCache::GetInstance().Allocate();
+    auto connectSocket = AllocateSocket();
     if(connectSocket == INVALID_SOCKET)
     {
         WRITE_ERROR_LOG(GetLastError(), "CreateSocket Failed.");
@@ -135,18 +136,18 @@ bool TcpClient::PostConnect()
     }
     if (bind(connectSocket, (const sockaddr*)&m_LocalAddress, sizeof(SOCKADDR_IN)) != 0)
     {
-        WRITE_ERROR_LOG(GetLastError(), "Bind Failed.");
-        SocketMemCache::GetInstance().Free(connectSocket);
+        WRITE_LOG(LogLayer::System, LogLevel::Error, "Bind Failed. ErrorID:[%d], Socket:[%lld]", GetLastError(), connectSocket);
+        closesocket(connectSocket);
         return false;
     }
     if (!IOCompletePort::GetInstance().AssociateDevice((HANDLE)connectSocket, connectSocket))
     {
-        WRITE_ERROR_LOG(GetLastError(), "Associate CompletionPort Failed, Socket.");
-        SocketMemCache::GetInstance().Free(connectSocket);
+        WRITE_LOG(LogLayer::System, LogLevel::Error, "Associate CompletionPort Failed. ErrorID:[%d], Socket:[%lld]", GetLastError(), connectSocket);
+        closesocket(connectSocket);
         return false;
     }
 
-    SocketData* socketData = MemCacheTemplate<SocketData>::GetInstance().Allocate();
+    SocketData* socketData = MemCacheTemplateSingleton<SocketData>::GetInstance().Allocate();
     socketData->ConnectSocket = connectSocket;
     socketData->WsaBuffer.len = sizeof(socketData->Buffer);
     socketData->WsaBuffer.buf = socketData->Buffer;

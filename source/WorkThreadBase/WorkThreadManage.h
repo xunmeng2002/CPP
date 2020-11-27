@@ -1,5 +1,6 @@
 #include <vector>
 #include <string>
+#include <atomic>
 #pragma once
 
 class WorkThreadBase;
@@ -21,10 +22,16 @@ public:
 	void SendTestMessage(const std::string& message);
 	WorkThreadBase* DispatchWorkThread();
 
+	void AddConnect();
+	void RemoveConnect();
+	int GetConnectNum();
+
 private:
 	static WorkThreadManage m_Instance;
 
 	std::vector<WorkThreadBase*> m_WorkThreads;
 	int m_MinSessionNum;
+
+	std::atomic<int> m_ConnectNum;
 };
 

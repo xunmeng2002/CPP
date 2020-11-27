@@ -31,7 +31,15 @@ int main(int argc, char* argv[])
     TcpClient::GetInstance().Start();
 
 
-    for (auto i = 0; i < 200; i++)
+    for (auto i = 0; i < 20480; i++)
+    {
+        if (!TcpClient::GetInstance().Connect())
+        {
+            WRITE_ERROR_LOG(-1, "TcpClient Connect Failed.");
+        }
+        Sleep(10);
+    }
+    while (WorkThreadManage::GetInstance().GetConnectNum() < 4096)
     {
         if (!TcpClient::GetInstance().Connect())
         {

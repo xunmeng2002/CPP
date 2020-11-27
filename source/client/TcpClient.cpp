@@ -1,4 +1,5 @@
-﻿#include "TcpClient.h"
+﻿#include <WinSock2.h>
+#include "TcpClient.h"
 #include <iostream>
 
 using namespace std;

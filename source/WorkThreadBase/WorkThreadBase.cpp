@@ -1,6 +1,7 @@
 #include "WorkThreadBase.h"
 #include "Logger.h"
-#include "MemCacheTemplate.h"
+#include "MemCacheTemplateSingleton.h"
+#include "WorkThreadManage.h"
 
 using namespace std;
 
@@ -53,7 +54,7 @@ void WorkThreadBase::Run()
 			HandleRecvMessage(socketData);
 			break;
 		}
-		MemCacheTemplate<SocketData>::GetInstance().Free(socketData);
+		MemCacheTemplateSingleton<SocketData>::GetInstance().Free(socketData);
 	}
 }
 void WorkThreadBase::ThreadExit()
@@ -77,12 +78,14 @@ SocketData* WorkThreadBase::GetRecvMessage()
 }
 void WorkThreadBase::HandleNewConnect(SocketData* socketData)
 {
+	WorkThreadManage::GetInstance().AddConnect();
 	lock_guard<mutex> guard(m_SessionIDMutex);
 	m_SessionIDs.insert(socketData->SessionID);
 	WRITE_LOG(LogLayer::Normal, LogLevel::Info, "WorkThread:[%d] NewConnect SessionID:%d", m_WorkThreadID, socketData->SessionID);
 }
 void WorkThreadBase::HandleDisConnect(SocketData* socketData)
 {
+	WorkThreadManage::GetInstance().RemoveConnect();
 	lock_guard<mutex> guard(m_SessionIDMutex);
 	m_SessionIDs.erase(socketData->SessionID);
 	WRITE_LOG(LogLayer::Normal, LogLevel::Info, "WorkThread:[%d] DisConnect SessionID:%d", m_WorkThreadID, socketData->SessionID);

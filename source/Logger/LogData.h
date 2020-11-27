@@ -11,6 +11,9 @@ struct LogData
 	LogData();
 	~LogData();
 
+	void PushBuffer();
+	void FreeBuffer(Buffer* buffer);
+
 	FILE* LogFile;
 	Buffer* CurrBuffer;
 	std::list<Buffer*> LogBuffers;

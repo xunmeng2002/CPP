@@ -2,8 +2,6 @@
 
 using namespace std;
 
-SocketMemCache SocketMemCache::m_Instance;
-
 SocketMemCache::SocketMemCache()
 	:m_Family(AF_INET)
 {
@@ -18,12 +16,9 @@ SocketMemCache::~SocketMemCache()
 	m_Items.clear();
 }
 
-SocketMemCache& SocketMemCache::GetInstance()
-{
-	return m_Instance;
-}
 void SocketMemCache::Init(int initNum, int family)
 {
+	m_Family = family;
 	for (auto i = 0; i < initNum; i++)
 	{
 		auto socket = WSASocket(m_Family, SOCK_STREAM, IPPROTO_TCP, NULL, 0, WSA_FLAG_OVERLAPPED);
@@ -36,7 +31,6 @@ void SocketMemCache::Init(int initNum, int family)
 }
 SOCKET SocketMemCache::Allocate()
 {
-	lock_guard<mutex> guard(m_Mutex);
 	if (!m_Items.empty())
 	{
 		auto item = m_Items.front();
@@ -47,6 +41,5 @@ SOCKET SocketMemCache::Allocate()
 }
 void SocketMemCache::Free(SOCKET socket)
 {
-	lock_guard<mutex> guard(m_Mutex);
 	m_Items.push_back(socket);
 }

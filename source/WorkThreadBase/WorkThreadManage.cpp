@@ -1,10 +1,12 @@
 #include "WorkThreadManage.h"
 #include "WorkThreadBase.h"
+#include "Logger.h"
 
 WorkThreadManage WorkThreadManage::m_Instance;
 
 WorkThreadManage::WorkThreadManage()
 {
+	m_ConnectNum.store(0);
 	m_MinSessionNum = 0;
 }
 WorkThreadManage::~WorkThreadManage()
@@ -48,6 +50,7 @@ void WorkThreadManage::Join()
 
 void WorkThreadManage::CloseConnects()
 {
+	WRITE_LOG(LogLayer::Normal, LogLevel::Info, "WorkThreadManage  CloseConnects.");
 	for (auto workThread : m_WorkThreads)
 	{
 		workThread->CloseConnects();
@@ -79,4 +82,17 @@ WorkThreadBase* WorkThreadManage::DispatchWorkThread()
 	}
 	m_MinSessionNum = currMinSessionNum;
 	return currWorkThread;
+}
+
+void WorkThreadManage::AddConnect()
+{
+	++m_ConnectNum;
+}
+void WorkThreadManage::RemoveConnect()
+{
+	--m_ConnectNum;
+}
+int WorkThreadManage::GetConnectNum()
+{
+	return m_ConnectNum.load();
 }

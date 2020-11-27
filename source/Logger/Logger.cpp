@@ -83,8 +83,7 @@ void Logger::WriteLog(LogLayer layer, LogLevel level, const char* file, int line
 	lock_guard<mutex> guard(logData->Mutex);
 	if (logData->CurrBuffer->Available() < len)
 	{
-		logData->LogBuffers.push_back(logData->CurrBuffer);
-		logData->CurrBuffer = MemCacheTemplate<Buffer>::GetInstance().Allocate();
+		logData->PushBuffer();
 	}
 	logData->CurrBuffer->Append(t_LogBuffer, len);
 	logData->ConditionVariable.notify_one();
@@ -140,8 +139,7 @@ void Logger::SwapInnerLogBuffers()
 			logData->ConditionVariable.wait_for(lock, chrono::seconds(1));
 			if (logData->CurrBuffer->Length() > 0)
 			{
-				logData->LogBuffers.push_back(logData->CurrBuffer);
-				logData->CurrBuffer = MemCacheTemplate<Buffer>::GetInstance().Allocate();
+				logData->PushBuffer();
 			}
 		}
 		logData->InnerLogBuffers.swap(logData->LogBuffers);
@@ -156,7 +154,7 @@ void Logger::WriteLog()
 		{
 			fwrite(buffer->GetData(), buffer->Length(), 1, logData->LogFile);
 			buffer->Reset();
-			MemCacheTemplate<Buffer>::GetInstance().Free(buffer);
+			logData->FreeBuffer(buffer);
 		}
 		logData->InnerLogBuffers.clear();
 		fflush(logData->LogFile);
@@ -206,7 +204,7 @@ void WriteLog(LogLayer layer, LogLevel level, const char* file, int line, const 
 	va_list va;
 	va_start(va, formatStr);
 	Logger::GetInstance().WriteLog(layer, level, file, line, formatStr, va);
-	if (level <= LogLevel::Info)
+	if (level <= LogLevel::Error)
 	{
 		Write(layer, level, formatStr, va);
 	}

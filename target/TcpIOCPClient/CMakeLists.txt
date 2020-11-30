@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 include(../Common.cmake)
-project(TcpServer)
+project(TcpIOCPClient)
 
 add_package(src ./src)
 add_package(ThreadBase ../../source/ThreadBase)
@@ -19,4 +19,4 @@ add_package(Logger ../../source/Logger)
 
 
 add_definitions("-D_CRT_SECURE_NO_WARNINGS")
-add_executable(TcpServer ${all_file})
+add_executable(TcpIOCPClient ${all_file})

@@ -20,6 +20,7 @@ public:
 	void Join();
 	void CloseConnects();
 	void SendTestMessage(const std::string& message);
+	void PrintSessions();
 	WorkThreadBase* DispatchWorkThread();
 
 	void AddConnect();

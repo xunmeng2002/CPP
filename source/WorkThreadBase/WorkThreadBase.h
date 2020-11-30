@@ -19,6 +19,7 @@ public:
 
 	virtual void CloseConnects() = 0;
 	virtual void SendTestMessage(const std::string& message) = 0;
+	void PrintSessions();
 protected:
 	virtual void ThreadInit() override;
 	virtual void Run() override;
@@ -32,7 +33,7 @@ protected:
 protected:
 	int m_WorkThreadID;
 
-	std::set<int> m_SessionIDs;
+	std::map<int, SOCKET> m_SessionIDs;
 	std::mutex m_SessionIDMutex;
 
 	std::list<SocketData*> m_RecvMessageList;

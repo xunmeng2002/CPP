@@ -29,6 +29,14 @@ void WorkThreadBase::OnRecvMessage(SocketData* socketData)
 	m_ThreadConditionVariable.notify_one();
 }
 
+void WorkThreadBase::PrintSessions()
+{
+	for (auto it : m_SessionIDs)
+	{
+		WRITE_LOG(LogLayer::Normal, LogLevel::Info, "WorkThread:[%d] SessionID:[%d] Socket:[%lld]", m_WorkThreadID, it.first, it.second);
+	}
+}
+
 void WorkThreadBase::ThreadInit()
 {
 	WRITE_LOG(LogLayer::Normal, LogLevel::Info, "WorkThread:%d Start.", m_WorkThreadID);
@@ -80,8 +88,9 @@ void WorkThreadBase::HandleNewConnect(SocketData* socketData)
 {
 	WorkThreadManage::GetInstance().AddConnect();
 	lock_guard<mutex> guard(m_SessionIDMutex);
-	m_SessionIDs.insert(socketData->SessionID);
-	WRITE_LOG(LogLayer::Normal, LogLevel::Info, "WorkThread:[%d] NewConnect SessionID:%d", m_WorkThreadID, socketData->SessionID);
+	m_SessionIDs.insert(make_pair(socketData->SessionID, socketData->ConnectSocket));
+	WRITE_LOG(LogLayer::Normal, LogLevel::Info, "WorkThread:[%d] NewConnect SessionID:[%d] Socket:[%lld]",
+		m_WorkThreadID, socketData->SessionID, socketData->ConnectSocket);
 }
 void WorkThreadBase::HandleDisConnect(SocketData* socketData)
 {

@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Utility.h"
-#include "TcpClient.h"
+#include "TcpIOCPClient.h"
 #include "WorkThread.h"
 #include "WorkThreadManage.h"
 #include "Logger.h"
@@ -22,28 +22,20 @@ int main(int argc, char* argv[])
     WorkThreadManage::GetInstance().Init(workThreads);
     WorkThreadManage::GetInstance().Start();
 
-    TcpClient::GetInstance().SetServerAddress("192.168.6.78", 20000);
-    if (!TcpClient::GetInstance().Init())
+    TcpIOCPClient::GetInstance().SetServerAddress("192.168.6.78", 20000);
+    if (!TcpIOCPClient::GetInstance().Init())
     {
         WRITE_ERROR_LOG(-1, "TcpServer Init Failed.");
         return 0;
     }
-    TcpClient::GetInstance().Start();
+    TcpIOCPClient::GetInstance().Start();
 
 
     for (auto i = 0; i < 20480; i++)
     {
-        if (!TcpClient::GetInstance().Connect())
+        if (!TcpIOCPClient::GetInstance().Connect())
         {
-            WRITE_ERROR_LOG(-1, "TcpClient Connect Failed.");
-        }
-        Sleep(10);
-    }
-    while (WorkThreadManage::GetInstance().GetConnectNum() < 4096)
-    {
-        if (!TcpClient::GetInstance().Connect())
-        {
-            WRITE_ERROR_LOG(-1, "TcpClient Connect Failed.");
+            WRITE_ERROR_LOG(-1, "TcpIOCPClient Connect Failed.");
         }
         Sleep(10);
     }
@@ -56,6 +48,8 @@ int main(int argc, char* argv[])
     }
 
     Sleep(5000);
+    WorkThreadManage::GetInstance().PrintSessions();
+    Sleep(1000);
 
     WorkThreadManage::GetInstance().CloseConnects();
 
@@ -64,8 +58,8 @@ int main(int argc, char* argv[])
     WorkThreadManage::GetInstance().Stop();
     WorkThreadManage::GetInstance().Join();
 
-    TcpClient::GetInstance().Stop();
-    TcpClient::GetInstance().Join();
+    TcpIOCPClient::GetInstance().Stop();
+    TcpIOCPClient::GetInstance().Join();
 
     Logger::GetInstance().Stop();
     Logger::GetInstance().Join();

@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "Logger.h"
-#include "TcpServer.h"
+#include "TcpIOCPServer.h"
 #include "WorkThread.h"
 #include "WorkThreadManage.h"
 #include "Logger.h"
@@ -22,13 +22,13 @@ int main(int argc, char* argv[])
     WorkThreadManage::GetInstance().Init(workThreads);
     WorkThreadManage::GetInstance().Start();
 
-    TcpServer::GetInstance().SetSocketInfo(20000, "0.0.0.0");
-    if (!TcpServer::GetInstance().Init())
+    TcpIOCPServer::GetInstance().SetSocketInfo(20000, "0.0.0.0");
+    if (!TcpIOCPServer::GetInstance().Init())
     {
-        WRITE_ERROR_LOG(-1, "TcpServer Init Failed.");
+        WRITE_ERROR_LOG(-1, "TcpIOCPServer Init Failed.");
         return 0;
     }
-    TcpServer::GetInstance().Start();
+    TcpIOCPServer::GetInstance().Start();
 
     Sleep(1000000);
     
@@ -39,8 +39,8 @@ int main(int argc, char* argv[])
     WorkThreadManage::GetInstance().Stop();
     WorkThreadManage::GetInstance().Join();
 
-    TcpServer::GetInstance().Stop();
-    TcpServer::GetInstance().Join();
+    TcpIOCPServer::GetInstance().Stop();
+    TcpIOCPServer::GetInstance().Join();
 
     Logger::GetInstance().Stop();
     Logger::GetInstance().Join();

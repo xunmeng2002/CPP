@@ -1,4 +1,4 @@
-#include "TcpServer.h"
+#include "TcpIOCPServer.h"
 #include "WorkThread.h"
 #include "WorkThreadManage.h"
 #include "MemCacheTemplateSingleton.h"
@@ -15,23 +15,23 @@ using namespace std;
 #define EXIT_CODE 0
 #define MAX_ACCPET_NUM 10
 
-TcpServer TcpServer::m_Instance;
+TcpIOCPServer TcpIOCPServer::m_Instance;
 
-TcpServer::TcpServer()
-    :TcpIOCP("TcpServer"), m_Family(0), m_Port(0), m_ServerAddress({0}), m_ServerSocket(INVALID_SOCKET)
+TcpIOCPServer::TcpIOCPServer()
+    :TcpIOCP("TcpIOCPServer"), m_Family(0), m_Port(0), m_ServerAddress({0}), m_ServerSocket(INVALID_SOCKET)
 {
 
 }
-TcpServer::~TcpServer()
+TcpIOCPServer::~TcpIOCPServer()
 {
 }
 
-TcpServer& TcpServer::GetInstance()
+TcpIOCPServer& TcpIOCPServer::GetInstance()
 {
     return m_Instance;
 }
 
-bool TcpServer::Init()
+bool TcpIOCPServer::Init()
 {
     if (!Create())
         return false;
@@ -41,13 +41,13 @@ bool TcpServer::Init()
         return false;
     return SocketApi::GetInstance().Init(m_ServerSocket);
 }
-void TcpServer::Stop()
+void TcpIOCPServer::Stop()
 {
     IOCompletePort::GetInstance().PostStatus(0, (DWORD)EXIT_CODE, NULL);
     m_ShouldRun.store(false);
 }
 
-void TcpServer::SetSocketInfo(int port, const char* ip, int family)
+void TcpIOCPServer::SetSocketInfo(int port, const char* ip, int family)
 {
     m_Family = family;
     m_IP = ip;
@@ -57,9 +57,9 @@ void TcpServer::SetSocketInfo(int port, const char* ip, int family)
     m_ServerAddress.sin_port = htons(port);
 }
 
-void TcpServer::ThreadInit()
+void TcpIOCPServer::ThreadInit()
 {
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "TcpServer Start.");
+    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "TcpIOCPServer Start.");
     for (auto i = 0; i < MAX_ACCPET_NUM; i++)
     {
         if (!PostAccept())
@@ -70,7 +70,7 @@ void TcpServer::ThreadInit()
         }
     }
 }
-void TcpServer::Run()
+void TcpIOCPServer::Run()
 {
     DWORD len;
     SOCKET socket;
@@ -117,7 +117,7 @@ void TcpServer::Run()
         assert(false);
     }
 }
-void TcpServer::ThreadExit()
+void TcpIOCPServer::ThreadExit()
 {
     closesocket(m_ServerSocket);
     for (auto& it : m_ConnectInfos)
@@ -125,10 +125,10 @@ void TcpServer::ThreadExit()
         closesocket(it.second.ConnectSocket);
     }
     m_ConnectInfos.clear();
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "TcpServer Exit.");
+    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "TcpIOCPServer Exit.");
 }
 
-bool TcpServer::Create(int nMaxConcurrency)
+bool TcpIOCPServer::Create(int nMaxConcurrency)
 {
     if (m_ServerSocket == INVALID_SOCKET)
     {
@@ -159,7 +159,7 @@ bool TcpServer::Create(int nMaxConcurrency)
     }
     return true;
 }
-bool TcpServer::TryBind()
+bool TcpIOCPServer::TryBind()
 {
     if (bind(m_ServerSocket, (sockaddr*)&m_ServerAddress, sizeof(m_ServerAddress)) == SOCKET_ERROR)
     {
@@ -169,7 +169,7 @@ bool TcpServer::TryBind()
     }
     return true;
 }
-bool TcpServer::Listen(int backLog)
+bool TcpIOCPServer::Listen(int backLog)
 {
     if (listen(m_ServerSocket, backLog) == SOCKET_ERROR)
     {
@@ -180,7 +180,7 @@ bool TcpServer::Listen(int backLog)
     return true;
 }
 
-bool TcpServer::PostAccept()
+bool TcpIOCPServer::PostAccept()
 {
     SocketData* socketData = MemCacheTemplateSingleton<SocketData>::GetInstance().Allocate();
     socketData->ConnectSocket = AllocateSocket();
@@ -206,7 +206,7 @@ bool TcpServer::PostAccept()
     }
     return true;
 }
-void TcpServer::OnAcceptComplete(SocketData* socketData, int len)
+void TcpIOCPServer::OnAcceptComplete(SocketData* socketData, int len)
 {
     SOCKADDR_IN* remoteAddr = NULL;
     SOCKADDR_IN* localAddr = NULL;
@@ -214,10 +214,9 @@ void TcpServer::OnAcceptComplete(SocketData* socketData, int len)
     SocketApi::GetInstance().GetAcceptExSockAddrs(socketData->WsaBuffer.buf, 0,
         (sizeof(SOCKADDR_IN) + 16), (sizeof(SOCKADDR_IN) + 16), (LPSOCKADDR*)&localAddr, &localLen, (LPSOCKADDR*)&remoteAddr, &remoteLen);
     
-    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "OnAcceptComplete: From <%s:%d> On <%s:%d> SocketData:[%p] SOCKET=[%d] Len=[%d], WSALen=[%d], WSAData=[%s].",
+    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "OnAcceptComplete: From <%s:%d> SOCKET:[%lld] Len:[%d], WSALen:[%d].",
         inet_ntoa(remoteAddr->sin_addr), ntohs(remoteAddr->sin_port),
-        inet_ntoa(localAddr->sin_addr), ntohs(localAddr->sin_port),
-        socketData, socketData->ConnectSocket, len, socketData->WsaBuffer.len, socketData->WsaBuffer.buf);
+        socketData->ConnectSocket, len, socketData->WsaBuffer.len);
     
     if (!IOCompletePort::GetInstance().AssociateDevice((HANDLE)socketData->ConnectSocket, socketData->ConnectSocket))
     {

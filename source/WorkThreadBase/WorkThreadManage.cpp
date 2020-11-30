@@ -63,6 +63,13 @@ void WorkThreadManage::SendTestMessage(const std::string& message)
 		workThread->SendTestMessage(message);
 	}
 }
+void WorkThreadManage::PrintSessions()
+{
+	for (auto workThread : m_WorkThreads)
+	{
+		workThread->PrintSessions();
+	}
+}
 
 WorkThreadBase* WorkThreadManage::DispatchWorkThread()
 {

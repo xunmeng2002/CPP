@@ -1,6 +1,6 @@
 #include "WorkThread.h"
 #include "Logger.h"
-#include "TcpServer.h"
+#include "TcpIOCPServer.h"
 
 using namespace std;
 
@@ -17,16 +17,16 @@ WorkThread::~WorkThread()
 void WorkThread::CloseConnects()
 {
 	lock_guard<mutex> guard(m_SessionIDMutex);
-	for (auto sessionID : m_SessionIDs)
+	for (auto it : m_SessionIDs)
 	{
-		TcpServer::GetInstance().CloseConnect(sessionID);
+		TcpIOCPServer::GetInstance().CloseConnect(it.first);
 	}
 }
 void WorkThread::SendTestMessage(const std::string& message)
 {
-	for (auto sessionID : m_SessionIDs)
+	for (auto it : m_SessionIDs)
 	{
-		SendTestMessage(sessionID, message);
+		SendTestMessage(it.first, message);
 	}
 }
 
@@ -38,20 +38,20 @@ void WorkThread::HandleRecvMessage(SocketData* socketData)
 		m_WorkThreadID, socketData->SessionID, socketData->ConnectSocket, socketData->WsaBuffer.len, socketData->WsaBuffer.buf);
 
 	char responseMessage[256] = { 0 };
-	sprintf(responseMessage, "Server Recv Message On SessionID:[%d], Socket:[%lld], Len:[%d].", socketData->SessionID, socketData->ConnectSocket, socketData->WsaBuffer.len);
-	if (!TcpServer::GetInstance().Send(socketData->SessionID, responseMessage, strlen(responseMessage)))
+	sprintf(responseMessage, "Server Recv Message Len:[%d].", socketData->WsaBuffer.len);
+	if (!TcpIOCPServer::GetInstance().Send(socketData->SessionID, responseMessage, strlen(responseMessage)))
 	{
-		TcpServer::GetInstance().CloseConnect(socketData->SessionID);
+		TcpIOCPServer::GetInstance().CloseConnect(socketData->SessionID);
 	}
 }
 
 void WorkThread::SendTestMessage(int sessionID, const std::string& message)
 {
-	sprintf(m_MessageBuffer, "Message From TcpServer, On WorkThread:[%d], SessionID:[%d] Message:[%s]", m_WorkThreadID, sessionID, message.c_str());
+	sprintf(m_MessageBuffer, "Message From TcpIOCPServer Data:[%s]", message.c_str());
 	WRITE_LOG(LogLayer::Normal, LogLevel::Info, "SendTestMessage, Len:[%d].", strlen(m_MessageBuffer));
-	if (!TcpServer::GetInstance().Send(sessionID, m_MessageBuffer, strlen(m_MessageBuffer)))
+	if (!TcpIOCPServer::GetInstance().Send(sessionID, m_MessageBuffer, strlen(m_MessageBuffer)))
 	{
 		WRITE_LOG(LogLayer::Normal, LogLevel::Info, "Tcp Send Failed. On WorkThread:[%d], SessionID:[%d]", m_WorkThreadID, sessionID);
-		TcpServer::GetInstance().CloseConnect(sessionID);
+		TcpIOCPServer::GetInstance().CloseConnect(sessionID);
 	}
 }

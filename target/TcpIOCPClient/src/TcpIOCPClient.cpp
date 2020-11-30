@@ -1,4 +1,4 @@
-#include "TcpClient.h"
+#include "TcpIOCPClient.h"
 #include "IOCompletePort.h"
 #include "SocketApi.h"
 #include "SocketMemCache.h"
@@ -10,23 +10,23 @@ using namespace std;
 
 #define EXIT_CODE 0
 
-TcpClient TcpClient::m_Instance;
+TcpIOCPClient TcpIOCPClient::m_Instance;
 
-TcpClient::TcpClient()
-    :TcpIOCP("TcpClient"), m_Family(0), m_ServerIP(""), m_ServerPort(0), m_ServerAddress({ 0 }), m_LocalAddress({0}), m_InitSocket(INVALID_SOCKET)
+TcpIOCPClient::TcpIOCPClient()
+    :TcpIOCP("TcpIOCPClient"), m_Family(0), m_ServerIP(""), m_ServerPort(0), m_ServerAddress({ 0 }), m_LocalAddress({0}), m_InitSocket(INVALID_SOCKET)
 {
 
 }
-TcpClient::~TcpClient()
+TcpIOCPClient::~TcpIOCPClient()
 {
 
 }
 
-TcpClient& TcpClient::GetInstance()
+TcpIOCPClient& TcpIOCPClient::GetInstance()
 {
     return m_Instance;
 }
-bool TcpClient::Init()
+bool TcpIOCPClient::Init()
 {
     if (!Create())
     {
@@ -34,12 +34,12 @@ bool TcpClient::Init()
     }
     return SocketApi::GetInstance().Init(m_InitSocket);
 }
-void TcpClient::Stop()
+void TcpIOCPClient::Stop()
 {
     IOCompletePort::GetInstance().PostStatus(0, (DWORD)EXIT_CODE, NULL);
     m_ShouldRun.store(false);
 }
-void TcpClient::SetServerAddress(const char* address, int port, int family)
+void TcpIOCPClient::SetServerAddress(const char* address, int port, int family)
 {
     m_Family = family;
     m_ServerIP = address;
@@ -54,16 +54,16 @@ void TcpClient::SetServerAddress(const char* address, int port, int family)
     m_LocalAddress.sin_addr.S_un.S_addr = INADDR_ANY;
     m_LocalAddress.sin_port = 0;
 }
-bool TcpClient::Connect()
+bool TcpIOCPClient::Connect()
 {
     return PostConnect();
 }
 
-void TcpClient::ThreadInit()
+void TcpIOCPClient::ThreadInit()
 {
-    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "TcpClient Start.");
+    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "TcpIOCPClient Start.");
 }
-void TcpClient::Run()
+void TcpIOCPClient::Run()
 {
     DWORD len;
     SOCKET socket;
@@ -107,16 +107,16 @@ void TcpClient::Run()
         break;
     case OperateType::Invalid:
     default:
-        WRITE_LOG(LogLayer::System, LogLevel::Error, "INVALID OPERATE TYPE[%d] SOCKET=[%d].", socketData->Operate, socketData->ConnectSocket);
+        WRITE_LOG(LogLayer::System, LogLevel::Error, "INVALID OPERATE TYPE[%d] SOCKET:[%lld].", socketData->Operate, socketData->ConnectSocket);
         assert(false);
     }
 }
-void TcpClient::ThreadExit()
+void TcpIOCPClient::ThreadExit()
 {
-    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "TcpClient Exit.");
+    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "TcpIOCPClient Exit.");
 }
 
-bool TcpClient::Create(int maxConcurrency)
+bool TcpIOCPClient::Create(int maxConcurrency)
 {
     if (!IOCompletePort::GetInstance().Create())
     {
@@ -126,7 +126,7 @@ bool TcpClient::Create(int maxConcurrency)
     m_InitSocket = AllocateSocket();
     return m_InitSocket != INVALID_SOCKET;
 }
-bool TcpClient::PostConnect()
+bool TcpIOCPClient::PostConnect()
 {
     auto connectSocket = AllocateSocket();
     if(connectSocket == INVALID_SOCKET)
@@ -154,7 +154,7 @@ bool TcpClient::PostConnect()
     memset(socketData->Buffer, 0, sizeof(socketData->Buffer));
     socketData->Operate = OperateType::Connect;
 
-    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "PostConnect SOCKET:[%lld].", socketData->ConnectSocket);
+    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "PostConnect  SOCKET:[%lld].", socketData->ConnectSocket);
     DWORD transBytes = 0;
     if (!SocketApi::GetInstance().ConnectEx(socketData->ConnectSocket, (const sockaddr*)&m_ServerAddress, sizeof(SOCKADDR),
         NULL, 0, &transBytes, (LPOVERLAPPED)socketData) && WSAGetLastError() != ERROR_IO_PENDING)
@@ -164,10 +164,10 @@ bool TcpClient::PostConnect()
     }
     return true;
 }
-void TcpClient::OnConnectComplete(SocketData* socketData, int len)
+void TcpIOCPClient::OnConnectComplete(SocketData* socketData, int len)
 {
-    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "OnConnectComplete: SocketData:[%p] SOCKET=[%d] Len=[%d], WSALen=[%d], WSAData=[%s].",
-        socketData, socketData->ConnectSocket, len, socketData->WsaBuffer.len, socketData->WsaBuffer.buf);
+    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "OnConnectComplete  SOCKET:[%lld] Len:[%d], WSALen:[%d].",
+        socketData->ConnectSocket, len, socketData->WsaBuffer.len);
 
     AddConnect(socketData);
 }

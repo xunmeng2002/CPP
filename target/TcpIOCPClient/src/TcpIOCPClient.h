@@ -6,15 +6,15 @@
 #include "TcpIOCP.h"
 
 
-class TcpClient :public TcpIOCP
+class TcpIOCPClient :public TcpIOCP
 {
 private:
-	TcpClient();
-	~TcpClient();
-	TcpClient(const TcpClient&) = delete;
-	TcpClient& operator=(const TcpClient&) = delete;
+	TcpIOCPClient();
+	~TcpIOCPClient();
+	TcpIOCPClient(const TcpIOCPClient&) = delete;
+	TcpIOCPClient& operator=(const TcpIOCPClient&) = delete;
 public:
-	static TcpClient& GetInstance();
+	static TcpIOCPClient& GetInstance();
 	bool Init();
 	void Stop() override;
 	void SetServerAddress(const char* address, int port, int family = AF_INET);
@@ -32,7 +32,7 @@ private:
 
 
 private:
-	static TcpClient m_Instance;
+	static TcpIOCPClient m_Instance;
 	SOCKET m_InitSocket;
 	int m_Family;
 	std::string m_ServerIP;

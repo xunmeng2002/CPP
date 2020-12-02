@@ -3,7 +3,10 @@
 #include "MemCacheTemplate.h"
 #include <Windows.h>
 #include <assert.h>
+#include <process.h>
+#include <iostream>
 #include "LogData.h"
+
 
 
 using namespace std;
@@ -121,11 +124,6 @@ void Logger::ThreadExit()
 
 bool Logger::CreateLogDir(const char* path)
 {
-	struct stat info;
-	if (stat(path, &info) == 0 && info.st_mode & S_IFDIR)
-	{
-		return true;
-	}
 	return CreateDirectory(path, NULL) || ERROR_ALREADY_EXISTS == GetLastError();
 }
 void Logger::SwapInnerLogBuffers()

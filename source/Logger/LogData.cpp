@@ -1,12 +1,11 @@
 #include "LogData.h"
 #include "MemCacheTemplate.h"
-
-thread_local MemCacheTemplate<Buffer> t_BufferPool;
+#include "MemCacheTemplateSingleton.h"
 
 LogData::LogData()
 {
 	LogFile = nullptr;
-	CurrBuffer = t_BufferPool.Allocate();
+	CurrBuffer = new Buffer();
 }
 LogData::~LogData()
 {
@@ -15,25 +14,25 @@ LogData::~LogData()
 		fclose(LogFile);
 		LogFile = nullptr;
 	}
-	t_BufferPool.Free(CurrBuffer);
+	delete CurrBuffer;
 	for (auto logBuffer : LogBuffers)
 	{
-		t_BufferPool.Free(logBuffer);
+		delete logBuffer;
 	}
 	LogBuffers.clear();
 
 	for (auto logBuffer : InnerLogBuffers)
 	{
-		t_BufferPool.Free(logBuffer);
+		delete logBuffer;
 	}
 	InnerLogBuffers.clear();
 }
 void LogData::PushBuffer()
 {
 	LogBuffers.push_back(CurrBuffer);
-	CurrBuffer = t_BufferPool.Allocate();
+	CurrBuffer = MemCacheTemplateSingleton<Buffer>::GetInstance().Allocate();
 }
 void LogData::FreeBuffer(Buffer* buffer)
 {
-	t_BufferPool.Free(buffer);
+	MemCacheTemplateSingleton<Buffer>::GetInstance().Free(buffer);
 }

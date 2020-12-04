@@ -10,12 +10,11 @@
 #define DURATION_us(tag) std::chrono::duration_cast<std::chrono::microseconds>(tag##_end - tag##_start).count()
 #define DURATION_ns(tag) std::chrono::duration_cast<std::chrono::nanoseconds>(tag##_end - tag##_start).count()
 
-void GetDateTime(char* currDate, char* currTime);
-
 tm* GetTime();
 
 int GetTimeStamp();
 
+//write format datetime into buff. format:YYYYMMDD HH:mm:ss.ms
 void GetFormatDateTime(char* buff, int size);
-
+//write format time into buff. format:HH:mm:ss.ms
 void GetFormatTime(char* buff, int size);

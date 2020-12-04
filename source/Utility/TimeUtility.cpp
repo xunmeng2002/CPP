@@ -4,35 +4,6 @@
 
 using namespace std;
 
-
-
-void GetDateTime(char* currDate, char* currTime)
-{
-	time_t ltime;
-	struct tm* now;
-	time(&ltime);
-	now = localtime(&ltime);
-
-	static char time_buffer[21];
-	if (currDate)
-	{
-		sprintf(time_buffer, "%04d%02d%02d",
-			now->tm_year + 1900,
-			now->tm_mon + 1,
-			now->tm_mday);
-		strcpy(currDate, time_buffer);
-	}
-
-	if (currTime)
-	{
-		sprintf(time_buffer, "%02d:%02d:%02d",
-			now->tm_hour,
-			now->tm_min,
-			now->tm_sec);
-		strcpy(currTime, time_buffer);
-	}
-}
-
 tm* GetTime()
 {
 	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();

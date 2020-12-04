@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
     }
     TcpIOCPServer::GetInstance().Start();
 
-    Sleep(1000000);
+    Sleep(300000);
     
     WorkThreadManage::GetInstance().CloseConnects();
 

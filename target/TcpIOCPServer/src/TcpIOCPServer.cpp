@@ -59,7 +59,7 @@ void TcpIOCPServer::SetSocketInfo(int port, const char* ip, int family)
 
 void TcpIOCPServer::ThreadInit()
 {
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "TcpIOCPServer Start.");
+    ThreadBase::ThreadInit();
     for (auto i = 0; i < MAX_ACCPET_NUM; i++)
     {
         if (!PostAccept())
@@ -119,13 +119,15 @@ void TcpIOCPServer::Run()
 }
 void TcpIOCPServer::ThreadExit()
 {
+    
     closesocket(m_ServerSocket);
     for (auto& it : m_ConnectInfos)
     {
         closesocket(it.second.ConnectSocket);
     }
     m_ConnectInfos.clear();
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "TcpIOCPServer Exit.");
+    
+    TcpIOCP::ThreadExit();
 }
 
 bool TcpIOCPServer::Create(int nMaxConcurrency)

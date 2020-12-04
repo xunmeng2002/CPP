@@ -12,7 +12,7 @@
 thread_local SocketMemCache t_SocketMemCache;
 
 TcpIOCP::TcpIOCP(const char* name)
-    :ThreadBase(name), m_LastSessionID(0)
+    :ThreadBase(name), m_LastSessionID(0), m_TotalSendLen(0L), m_TotalRecvLen(0L)
 {
 
 }
@@ -53,11 +53,10 @@ void TcpIOCP::CloseConnect(int sessionID)
     PostDisConnect(socketData);
 }
 
-bool TcpIOCP::PostDisConnect(SocketData* socketData)
+void TcpIOCP::ThreadExit()
 {
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "PostDisConnect For SessionID:[%d], Socket:[%lld].", socketData->SessionID, socketData->ConnectSocket);
-    socketData->Operate = OperateType::Disconnect;
-    return IOCompletePort::GetInstance().PostStatus(0, socketData->ConnectSocket, socketData);
+    ThreadBase::ThreadExit();
+    WRITE_LOG(LogLayer::System, LogLevel::Info, "TotalSendLen:[%lld], TotalRecvLen:[%lld]", m_TotalSendLen, m_TotalRecvLen);
 }
 
 SOCKET TcpIOCP::AllocateSocket()
@@ -111,12 +110,18 @@ bool TcpIOCP::PostRecv(int sessionID, SOCKET sock)
     }
     return true;
 }
-
+bool TcpIOCP::PostDisConnect(SocketData* socketData)
+{
+    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "PostDisConnect For SessionID:[%d], Socket:[%lld].", socketData->SessionID, socketData->ConnectSocket);
+    socketData->Operate = OperateType::Disconnect;
+    return IOCompletePort::GetInstance().PostStatus(0, socketData->ConnectSocket, socketData);
+}
 
 void TcpIOCP::OnSendComplete(SocketData* socketData, int len)
 {
     WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "OnSendComplete  SessionID:[%d] SOCKET:[%lld], WsaLen=[%d], Len=[%d].",
         socketData->SessionID, socketData->ConnectSocket, socketData->WsaBuffer.len, len);
+    m_TotalSendLen += len;
     if (len < socketData->WsaBuffer.len)
     {
         WRITE_ERROR_LOG(-1, "Sendlen Less than TargetLen.");
@@ -132,6 +137,7 @@ void TcpIOCP::OnRecvComplete(SocketData* socketData, int len)
 {
     WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "OnRecvComplete  SessionID:[%d] SOCKET:[%lld], WsaLen=[%d], Len=[%d].",
         socketData->SessionID, socketData->ConnectSocket, socketData->WsaBuffer.len, len);
+    m_TotalRecvLen += len;
 
     PostRecv(socketData->SessionID, socketData->ConnectSocket);
 

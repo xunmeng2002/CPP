@@ -59,10 +59,6 @@ bool TcpIOCPClient::Connect()
     return PostConnect();
 }
 
-void TcpIOCPClient::ThreadInit()
-{
-    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "TcpIOCPClient Start.");
-}
 void TcpIOCPClient::Run()
 {
     DWORD len;
@@ -110,10 +106,6 @@ void TcpIOCPClient::Run()
         WRITE_LOG(LogLayer::System, LogLevel::Error, "INVALID OPERATE TYPE[%d] SOCKET:[%lld].", socketData->Operate, socketData->ConnectSocket);
         assert(false);
     }
-}
-void TcpIOCPClient::ThreadExit()
-{
-    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "TcpIOCPClient Exit.");
 }
 
 bool TcpIOCPClient::Create(int maxConcurrency)

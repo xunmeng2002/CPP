@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
     TcpIOCPClient::GetInstance().Start();
 
 
-    for (auto i = 0; i < 20480; i++)
+    for (auto i = 0; i < 10240; i++)
     {
         if (!TcpIOCPClient::GetInstance().Connect())
         {

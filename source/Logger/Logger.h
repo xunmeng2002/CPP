@@ -57,7 +57,7 @@ private:
 	char m_HostName[128];
 	int m_Pid;
 	char m_ProcessName[128];
-	char m_CurrDate[9];
+	tm m_CreateLogFileTime;
 
 	std::map<LogLayer, LogData*> m_LogDatas;
 };

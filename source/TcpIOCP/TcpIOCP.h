@@ -16,6 +16,8 @@ public:
 	void CloseConnect(int sessionID);
 
 protected:
+	virtual void ThreadExit() override;
+
 	SOCKET AllocateSocket();
 	void FreeSocket(SOCKET socket);
 
@@ -32,5 +34,8 @@ protected:
 protected:
 	int m_LastSessionID;
 	std::map<int, ConnectInfo> m_ConnectInfos;
+
+	long long m_TotalSendLen;
+	long long m_TotalRecvLen;
 };
 

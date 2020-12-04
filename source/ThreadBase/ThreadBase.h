@@ -16,14 +16,14 @@ public:
 	
 protected:
 	void ThreadFunc();
-	virtual void ThreadInit() = 0;
+	virtual void ThreadInit();
 	virtual void Run() = 0;
-	virtual void ThreadExit() = 0;
+	virtual void ThreadExit();
 
 protected:
 	unsigned long m_ThreadID;
 	std::thread m_Thread;
-	std::string m_Name;
+	std::string m_ThreadName;
 	std::atomic<bool> m_ShouldRun;
 };
 

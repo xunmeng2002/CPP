@@ -21,9 +21,7 @@ public:
 
 	bool Connect();
 protected:
-	virtual void ThreadInit();
-	virtual void Run();
-	virtual void ThreadExit();
+	virtual void Run() override;
 
 private:
 	bool Create(int maxConcurrency = 0);

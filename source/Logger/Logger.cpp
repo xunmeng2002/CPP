@@ -6,7 +6,7 @@
 #include <process.h>
 #include <iostream>
 #include "LogData.h"
-
+#include "TimeUtility.h"
 
 
 using namespace std;
@@ -37,7 +37,7 @@ thread_local char* t_LogBuffer = new char[LOG_LINE_LENGTH];
 Logger Logger::m_Instance;
 
 Logger::Logger()
-	:ThreadBase("Logger"), m_ProcessName(""), m_CurrDate("")
+	:ThreadBase("Logger"), m_ProcessName("")
 {
 	gethostname(m_HostName, 128);
 	m_Pid = getpid();
@@ -71,10 +71,8 @@ void Logger::WriteLog(LogLayer layer, LogLevel level, const char* file, int line
 			file = p + 1;
 
 
-	time_t now;
-	time(&now);
-	char time_buff[128];
-	strftime(time_buff, 128, "%Y%m%d %H:%M:%S", localtime(&now));
+	char time_buff[32];
+	GetFormatDateTime(time_buff, 32);
 	int len = sprintf(t_LogBuffer, "%s %s %d %s ",
 		time_buff, m_HostName, GetCurrentThreadId(), s_LogLevelName[level].c_str());
 
@@ -93,7 +91,7 @@ void Logger::WriteLog(LogLayer layer, LogLevel level, const char* file, int line
 }
 void Logger::ThreadInit()
 {
-	
+	m_CreateLogFileTime = *GetTime();
 	CreateLogFile();
 }
 void Logger::Run()
@@ -105,10 +103,10 @@ void Logger::Run()
 	if (++count >= 120)
 	{
 		count = 0;
-		static char date[9];
-		GetDateTime(date, nullptr);
-		if (strcmp(date, m_CurrDate) != 0)
+		auto currTime = *GetTime();
+		if (m_CreateLogFileTime.tm_mday != currTime.tm_mday)
 		{
+			m_CreateLogFileTime = currTime;
 			CreateLogFile();
 		}
 	}
@@ -168,15 +166,9 @@ void Logger::CreateLogFile()
 			fclose(logData->LogFile);
 			logData->LogFile = nullptr;
 		}
-		time_t now;
-		time(&now);
 		char timeBuff[32];
-		strftime(timeBuff, 32, "%Y%m%d-%H%M%S", localtime(&now));
-		strncpy(m_CurrDate, timeBuff, 8);
-		m_CurrDate[8] = '\0';
-
-		char fileName[256];
-		
+		strftime(timeBuff, 32, "%Y%m%d-%H%M%S", &m_CreateLogFileTime);
+		char fileName[256];		
 		sprintf(fileName, "log/%s.%s.%s.%d.%s", m_ProcessName, timeBuff, m_HostName, m_Pid, s_LogLayerName[it.first].c_str());
 		logData->LogFile = fopen(fileName, "a+");
 		assert(logData->LogFile != nullptr);

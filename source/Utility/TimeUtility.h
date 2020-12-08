@@ -18,3 +18,9 @@ int GetTimeStamp();
 void GetFormatDateTime(char* buff, int size);
 //write format time into buff. format:HH:mm:ss.ms
 void GetFormatTime(char* buff, int size);
+
+template<typename T>
+long long GetDuration(std::chrono::system_clock::time_point& start, std::chrono::system_clock::time_point& end)
+{
+	return std::chrono::duration_cast<T>(end - start).count();
+}

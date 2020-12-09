@@ -2,6 +2,7 @@
 #include "Logger.h"
 #include "Logger.h"
 #include "SocketApi.h"
+#include "MemCacheTemplate.h"
 #include "MemCacheTemplateSingleton.h"
 #include "SocketMemCache.h"
 #include "IOCompletePort.h"
@@ -10,6 +11,7 @@
 
 
 thread_local SocketMemCache t_SocketMemCache;
+thread_local MemCacheTemplate<ConnectInfo> t_ConnectInfoCache;
 
 TcpIOCP::TcpIOCP(const char* name)
     :ThreadBase(name), m_LastSessionID(0), m_TotalSendLen(0L), m_TotalRecvLen(0L)
@@ -191,8 +193,11 @@ ConnectInfo* TcpIOCP::GetConnectInfo(int sessionID)
 }
 void TcpIOCP::AddConnectInfo(int sessionID, SOCKET connectSocket, WorkThreadBase* workThread)
 {
+    auto connectInfo = t_ConnectInfoCache.Allocate();
+    connectInfo->SetConnectInfo(connectSocket, workThread);
+
     lock_guard<mutex> guard(m_ConnectInfoMutex);
-    m_ConnectInfos.insert(make_pair(sessionID, new ConnectInfo(connectSocket, workThread)));
+    m_ConnectInfos.insert(make_pair(sessionID, connectInfo));
 }
 WorkThreadBase* TcpIOCP::RemoveConnectInfo(int sessionID)
 {
@@ -201,7 +206,10 @@ WorkThreadBase* TcpIOCP::RemoveConnectInfo(int sessionID)
     {
         return nullptr;
     }
-    auto workThread = m_ConnectInfos[sessionID]->WorkThread;
+    auto connectInfo = m_ConnectInfos[sessionID];
+    auto workThread = connectInfo->WorkThread;
+
+    t_ConnectInfoCache.Free(connectInfo);
     m_ConnectInfos.erase(sessionID);
     return workThread;
 }

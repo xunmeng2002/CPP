@@ -75,6 +75,11 @@ struct ConnectInfo
     {
 
     }
+    void SetConnectInfo(SOCKET socket, WorkThreadBase* workThread)
+    {
+        ConnectSocket = socket;
+        WorkThread = workThread;
+    }
     SOCKET ConnectSocket;
     WorkThreadBase* WorkThread;
 };

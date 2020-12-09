@@ -1,4 +1,5 @@
 #include <map>
+#include <mutex>
 #include "SocketInit.h"
 #include "SocketDataStruct.h"
 #include "ThreadBase.h"
@@ -31,9 +32,15 @@ protected:
 	void AddConnect(SocketData* socketData);
 	void RemoveConnect(SocketData* socketData);
 
+	ConnectInfo* GetConnectInfo(int sessionID);
+	void AddConnectInfo(int sessionID, SOCKET connectSocket, WorkThreadBase* workThread);
+	WorkThreadBase* RemoveConnectInfo(int sessionID);
+
 protected:
 	int m_LastSessionID;
-	std::map<int, ConnectInfo> m_ConnectInfos;
+	std::map<int, ConnectInfo*> m_ConnectInfos;
+
+	std::mutex m_ConnectInfoMutex;
 
 	long long m_TotalSendLen;
 	long long m_TotalRecvLen;

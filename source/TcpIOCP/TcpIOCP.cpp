@@ -23,11 +23,10 @@ TcpIOCP::~TcpIOCP()
 
 bool TcpIOCP::Send(int sessionID, const char* data, int len)
 {
-    if (m_ConnectInfos.find(sessionID) == m_ConnectInfos.end())
-    {
+    auto connectInfo = GetConnectInfo(sessionID);
+    if (connectInfo == nullptr)
         return false;
-    }
-    auto connectSocket = m_ConnectInfos[sessionID].ConnectSocket;
+    auto connectSocket = connectInfo->ConnectSocket;
     WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "SendMessage  sessionID:[%d] Socket:[%lld] Len:[%d].", sessionID, connectSocket, len);
     int sendLen = 0;
     while (len - sendLen > 0)
@@ -43,13 +42,12 @@ bool TcpIOCP::Send(int sessionID, const char* data, int len)
 }
 void TcpIOCP::CloseConnect(int sessionID)
 {
-    if (m_ConnectInfos.find(sessionID) == m_ConnectInfos.end())
-    {
+    auto connectInfo = GetConnectInfo(sessionID);
+    if (connectInfo == nullptr)
         return;
-    }
     auto socketData = MemCacheTemplateSingleton<SocketData>::GetInstance().Allocate();
     socketData->SessionID = sessionID;
-    socketData->ConnectSocket = m_ConnectInfos[sessionID].ConnectSocket;
+    socketData->ConnectSocket = connectInfo->ConnectSocket;
     PostDisConnect(socketData);
 }
 
@@ -143,13 +141,14 @@ void TcpIOCP::OnRecvComplete(SocketData* socketData, int len)
 
     socketData->Event = EventType::Recv;
     socketData->WsaBuffer.len = len;
-    if (m_ConnectInfos.find(socketData->SessionID) == m_ConnectInfos.end())
+    auto connectInfo = GetConnectInfo(socketData->SessionID);
+    if (connectInfo == nullptr)
     {
         WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "Cannot Find ConnectInfo, RemoveConnect. SessionID:[%d]", socketData->SessionID);
         RemoveConnect(socketData);
         return;
     }
-    m_ConnectInfos[socketData->SessionID].WorkThread->OnRecvMessage(socketData);
+    connectInfo->WorkThread->OnRecvMessage(socketData);
 }
 void TcpIOCP::AddConnect(SocketData* socketData)
 {
@@ -158,7 +157,7 @@ void TcpIOCP::AddConnect(SocketData* socketData)
     PostRecv(socketData->SessionID, socketData->ConnectSocket);
 
     auto workThread = WorkThreadManage::GetInstance().DispatchWorkThread();
-    m_ConnectInfos.insert(make_pair(socketData->SessionID, ConnectInfo(socketData->ConnectSocket, workThread)));
+    AddConnectInfo(socketData->SessionID, socketData->ConnectSocket, workThread);
     socketData->Event = EventType::NewConnect;
     workThread->OnRecvMessage(socketData);
 }
@@ -168,15 +167,41 @@ void TcpIOCP::RemoveConnect(SocketData* socketData)
     
     SocketApi::GetInstance().DisconnectEx(socketData->ConnectSocket, NULL, TF_REUSE_SOCKET, 0);
     FreeSocket(socketData->ConnectSocket);
-    if (m_ConnectInfos.find(socketData->SessionID) != m_ConnectInfos.end())
+
+    socketData->Event = EventType::DisConnect;
+    auto workThread = RemoveConnectInfo(socketData->SessionID);
+    if (workThread)
     {
-        socketData->Event = EventType::DisConnect;
-        auto workThread = m_ConnectInfos[socketData->SessionID].WorkThread;
         workThread->OnRecvMessage(socketData);
-        m_ConnectInfos.erase(socketData->SessionID);
     }
     else
     {
         MemCacheTemplateSingleton<SocketData>::GetInstance().Free(socketData);
     }
+}
+
+ConnectInfo* TcpIOCP::GetConnectInfo(int sessionID)
+{
+    lock_guard<mutex> guard(m_ConnectInfoMutex);
+    if (m_ConnectInfos.find(sessionID) == m_ConnectInfos.end())
+    {
+        return nullptr;
+    }
+    return m_ConnectInfos[sessionID];
+}
+void TcpIOCP::AddConnectInfo(int sessionID, SOCKET connectSocket, WorkThreadBase* workThread)
+{
+    lock_guard<mutex> guard(m_ConnectInfoMutex);
+    m_ConnectInfos.insert(make_pair(sessionID, new ConnectInfo(connectSocket, workThread)));
+}
+WorkThreadBase* TcpIOCP::RemoveConnectInfo(int sessionID)
+{
+    lock_guard<mutex> guard(m_ConnectInfoMutex);
+    if (m_ConnectInfos.find(sessionID) == m_ConnectInfos.end())
+    {
+        return nullptr;
+    }
+    auto workThread = m_ConnectInfos[sessionID]->WorkThread;
+    m_ConnectInfos.erase(sessionID);
+    return workThread;
 }

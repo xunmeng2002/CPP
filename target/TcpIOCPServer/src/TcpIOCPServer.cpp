@@ -119,15 +119,14 @@ void TcpIOCPServer::Run()
 }
 void TcpIOCPServer::ThreadExit()
 {
-    
+    TcpIOCP::ThreadExit();
     closesocket(m_ServerSocket);
+    lock_guard<mutex> guard(m_ConnectInfoMutex);
     for (auto& it : m_ConnectInfos)
     {
-        closesocket(it.second.ConnectSocket);
+        closesocket(it.second->ConnectSocket);
     }
     m_ConnectInfos.clear();
-    
-    TcpIOCP::ThreadExit();
 }
 
 bool TcpIOCPServer::Create(int nMaxConcurrency)

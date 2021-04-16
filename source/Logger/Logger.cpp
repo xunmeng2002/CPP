@@ -10,6 +10,7 @@
 
 
 using namespace std;
+using namespace LogSpace;
 
 #define LOG_LINE_LENGTH 64 * 1024
 
@@ -177,7 +178,7 @@ void Logger::CreateLogFile()
 }
 
 
-void Write(LogLayer layer, LogLevel level, const char* formatStr, va_list va)
+void LogSpace::Write(LogLayer layer, LogLevel level, const char* formatStr, va_list va)
 {
 	if (level > s_logLevel)
 		return;
@@ -190,7 +191,7 @@ void Write(LogLayer layer, LogLevel level, const char* formatStr, va_list va)
 }
 
 
-void WriteLog(LogLayer layer, LogLevel level, const char* file, int line, const char* formatStr, ...)
+void LogSpace::WriteLog(LogLayer layer, LogLevel level, const char* file, int line, const char* formatStr, ...)
 {
 	va_list va;
 	va_start(va, formatStr);
@@ -202,7 +203,7 @@ void WriteLog(LogLayer layer, LogLevel level, const char* file, int line, const 
 	va_end(va);
 }
 
-void WriteErrorLog(const char* file, int line, int errorID, const char* errorMsg)
+void LogSpace::WriteErrorLog(const char* file, int line, int errorID, const char* errorMsg)
 {
 	WriteLog(LogLayer::System, LogLevel::Error, file, line, "ErrorID:[%d], ErrorMsg:[%s].", errorID, errorMsg);
 }

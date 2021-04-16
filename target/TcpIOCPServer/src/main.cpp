@@ -10,8 +10,8 @@
 
 int main(int argc, char* argv[])
 {
-    Logger::GetInstance().Init(argv[0]);
-    Logger::GetInstance().Start();
+    LogSpace::Logger::GetInstance().Init(argv[0]);
+    LogSpace::Logger::GetInstance().Start();
 
     std::vector<WorkThreadBase*> workThreads;
     for (auto i = 0; i < 10; i++)
@@ -42,8 +42,8 @@ int main(int argc, char* argv[])
     TcpIOCPServer::GetInstance().Stop();
     TcpIOCPServer::GetInstance().Join();
 
-    Logger::GetInstance().Stop();
-    Logger::GetInstance().Join();
+    LogSpace::Logger::GetInstance().Stop();
+    LogSpace::Logger::GetInstance().Join();
     std::cout << "Hello World!\n";
 }
 

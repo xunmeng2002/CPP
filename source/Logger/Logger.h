@@ -20,53 +20,45 @@ enum class LogLevel : int
 };
 
 struct LogData;
-namespace LogSpace
+class Logger : public ThreadBase
 {
-	class Logger : public ThreadBase
-	{
-	private:
-		Logger();
-		~Logger();
-		Logger(const Logger&) = delete;
-		Logger& operator=(const Logger&) = delete;
+private:
+	Logger();
+	~Logger();
+	Logger(const Logger&) = delete;
+	Logger& operator=(const Logger&) = delete;
 
-	public:
-		static Logger& GetInstance();
-		bool Init(const char* fullProcessName);
-		void WriteLog(LogLevel level, const char* file, int line, const char* format, va_list va);
-
-
-	protected:
-		virtual void ThreadInit() override;
-		virtual void Run() override;
-		virtual void ThreadExit() override;
-
-
-		bool CreateLogDir(const char* path);
-		void SwapInnerLogBuffers();
-		void WriteLog();
-		void CreateLogFile();
-
-	private:
-		static Logger m_Instance;
-
-		char m_HostName[128];
-		int m_Pid;
-		char m_ProcessName[128];
-		tm m_CreateLogFileTime;
-
-		LogData* m_LogData;
-	};
-
-	void Write(LogLevel level, const char* formatStr, va_list va);
-
+public:
+	static Logger& GetInstance();
+	bool Init(const char* fullProcessName);
 	void WriteLog(LogLevel level, const char* file, int line, const char* formatStr, ...);
 
-	void WriteErrorLog(const char* file, int line, int errorID, const char* errorMsg);
-}
+
+protected:
+	virtual void ThreadInit() override;
+	virtual void Run() override;
+	virtual void ThreadExit() override;
+
+
+	bool CreateLogDir(const char* path);
+	void SwapInnerLogBuffers();
+	void WriteLog(LogLevel level, const char* file, int line, const char* format, va_list va);
+	void WriteToConsole(LogLevel level, const char* formatStr, va_list va);
+	void WriteLog();
+	void CreateLogFile();
+
+private:
+	static Logger m_Instance;
+
+	char m_HostName[128];
+	int m_Pid;
+	char m_ProcessName[128];
+	tm m_CreateLogFileTime;
+	LogData* m_LogData;
+};
 
 #define WRITE_LOG(level, formatStr, ...)\
-	LogSpace::WriteLog(level, __FILE__, __LINE__, formatStr, ##__VA_ARGS__);
+	Logger::GetInstance().WriteLog(level, __FILE__, __LINE__, formatStr, ##__VA_ARGS__);
 
 #define WRITE_ERROR_LOG(errorID, errorMsg)\
-	LogSpace::WriteErrorLog(__FILE__, __LINE__, errorID, errorMsg);
+	Logger::GetInstance().WriteLog(LogLevel::Error, __FILE__, __LINE__, "ErrorID:[%d], ErrorMsg:[%s].", errorID, errorMsg);

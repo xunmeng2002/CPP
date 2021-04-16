@@ -1,6 +1,5 @@
 #include "Logger.h"
 #include "Utility.h"
-#include "MemCacheTemplate.h"
 #include <Windows.h>
 #include <assert.h>
 #include <process.h>
@@ -10,7 +9,6 @@
 
 
 using namespace std;
-using namespace LogSpace;
 
 #define LOG_LINE_LENGTH 64 * 1024
 
@@ -54,29 +52,16 @@ bool Logger::Init(const char* fullProcessName)
 	m_LogData = new LogData();
 	return CreateLogDir("log");
 }
-void Logger::WriteLog(LogLevel level, const char* file, int line, const char* format, va_list va)
+void Logger::WriteLog(LogLevel level, const char* file, int line, const char* formatStr, ...)
 {
-	for (auto p = file; *p != '\0'; p++)
-		if (*p == '\\' || *p == '/')
-			file = p + 1;
-
-
-	char time_buff[32];
-	GetFormatDateTime(time_buff, 32);
-	int len = sprintf(t_LogBuffer, "%s %d %s ",
-		time_buff, GetCurrentThreadId(), s_LogLevelName[level].c_str());
-
-	len += vsnprintf(t_LogBuffer + len, (sizeof(t_LogBuffer) - len - 1), format, va);
-
-	len += _snprintf(t_LogBuffer + len, (sizeof(t_LogBuffer) - len - 1), "\t\t---%s:%d\n", file, line);
-
-	lock_guard<mutex> guard(m_LogData->Mutex);
-	if (m_LogData->CurrBuffer->Available() < len)
+	va_list va;
+	va_start(va, formatStr);
+	WriteLog(level, file, line, formatStr, va);
+	if (level <= LogLevel::Error)
 	{
-		m_LogData->PushBuffer();
+		WriteToConsole(level, formatStr, va);
 	}
-	m_LogData->CurrBuffer->Append(t_LogBuffer, len);
-	m_LogData->ConditionVariable.notify_one();
+	va_end(va);
 }
 void Logger::ThreadInit()
 {
@@ -126,6 +111,37 @@ void Logger::SwapInnerLogBuffers()
 	}
 	m_LogData->InnerLogBuffers.swap(m_LogData->LogBuffers);
 }
+void Logger::WriteLog(LogLevel level, const char* file, int line, const char* format, va_list va)
+{
+	for (auto p = file; *p != '\0'; p++)
+		if (*p == '\\' || *p == '/')
+			file = p + 1;
+	char time_buff[32];
+	GetFormatDateTime(time_buff, 32);
+	int len = sprintf(t_LogBuffer, "%s %d %s ",
+		time_buff, GetCurrentThreadId(), s_LogLevelName[level].c_str());
+
+	len += vsnprintf(t_LogBuffer + len, (sizeof(t_LogBuffer) - len - 1), format, va);
+	len += _snprintf(t_LogBuffer + len, (sizeof(t_LogBuffer) - len - 1), "\t\t---%s:%d\n", file, line);
+
+	lock_guard<mutex> guard(m_LogData->Mutex);
+	if (m_LogData->CurrBuffer->Available() < len)
+	{
+		m_LogData->PushBuffer();
+	}
+	m_LogData->CurrBuffer->Append(t_LogBuffer, len);
+	m_LogData->ConditionVariable.notify_one();
+}
+void Logger::WriteToConsole(LogLevel level, const char* formatStr, va_list va)
+{
+	if (level > s_logLevel)
+		return;
+	char logString[10240];
+	int len = snprintf(logString, sizeof(logString), "ThreadID[%05d] ", GetCurrentThreadId());
+	len += vsnprintf(logString + len, sizeof(logString) - len - 3, formatStr, va);
+
+	printf("%s\n", logString);
+}
 void Logger::WriteLog()
 {
 	for (auto buffer : m_LogData->InnerLogBuffers)
@@ -150,35 +166,5 @@ void Logger::CreateLogFile()
 	sprintf(fileName, "log/%s.%s.%s.%d.log", m_ProcessName, timeBuff, m_HostName, m_Pid);
 	m_LogData->LogFile = fopen(fileName, "a+");
 	assert(m_LogData->LogFile != nullptr);
-}
-
-
-void LogSpace::Write(LogLevel level, const char* formatStr, va_list va)
-{
-	if (level > s_logLevel)
-		return;
-	char logString[10240];
-	int len = snprintf(logString, sizeof(logString), "ThreadID[%05d] ", GetCurrentThreadId());
-
-	len += vsnprintf(logString + len, sizeof(logString) - len - 3, formatStr, va);
-
-	printf("%s\n", logString);
-}
-
-void LogSpace::WriteLog(LogLevel level, const char* file, int line, const char* formatStr, ...)
-{
-	va_list va;
-	va_start(va, formatStr);
-	Logger::GetInstance().WriteLog(level, file, line, formatStr, va);
-	if (level <= LogLevel::Error)
-	{
-		Write(level, formatStr, va);
-	}
-	va_end(va);
-}
-
-void LogSpace::WriteErrorLog(const char* file, int line, int errorID, const char* errorMsg)
-{
-	WriteLog(LogLevel::Error, file, line, "ErrorID:[%d], ErrorMsg:[%s].", errorID, errorMsg);
 }
 

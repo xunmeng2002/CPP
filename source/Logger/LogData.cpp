@@ -1,5 +1,4 @@
 #include "LogData.h"
-#include "MemCacheTemplate.h"
 #include "MemCacheTemplateSingleton.h"
 
 LogData::LogData()

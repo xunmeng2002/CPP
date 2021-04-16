@@ -57,7 +57,7 @@ void Logger::WriteLog(LogLevel level, const char* file, int line, const char* fo
 	va_list va;
 	va_start(va, formatStr);
 	WriteLog(level, file, line, formatStr, va);
-	if (level <= LogLevel::Error)
+	if (level >= LogLevel::Warning)
 	{
 		WriteToConsole(level, formatStr, va);
 	}
@@ -116,7 +116,6 @@ void Logger::FlushBuffers()
 	for (auto buffer : m_LogData->InnerLogBuffers)
 	{
 		fwrite(buffer->GetData(), buffer->Length(), 1, m_LogData->LogFile);
-		buffer->Reset();
 		m_LogData->FreeBuffer(buffer);
 	}
 	m_LogData->InnerLogBuffers.clear();

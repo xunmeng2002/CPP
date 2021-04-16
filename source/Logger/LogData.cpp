@@ -33,5 +33,6 @@ void LogData::PushBuffer()
 }
 void LogData::FreeBuffer(Buffer* buffer)
 {
+	buffer->Reset();
 	MemCacheTemplateSingleton<Buffer>::GetInstance().Free(buffer);
 }

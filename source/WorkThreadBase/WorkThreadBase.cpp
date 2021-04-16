@@ -31,6 +31,7 @@ void WorkThreadBase::OnRecvMessage(SocketData* socketData)
 
 void WorkThreadBase::PrintSessions()
 {
+	WRITE_LOG(LogLevel::Info, "PrintSessions: SessionSize:[%d]", m_SessionIDs.size());
 	for (auto it : m_SessionIDs)
 	{
 		WRITE_LOG(LogLevel::Info, "WorkThread:[%d] SessionID:[%d] Socket:[%lld]", m_WorkThreadID, it.first, it.second);

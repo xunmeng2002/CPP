@@ -42,9 +42,9 @@ protected:
 
 	bool CreateLogDir(const char* path);
 	void SwapInnerLogBuffers();
+	void FlushBuffers();
 	void WriteLog(LogLevel level, const char* file, int line, const char* format, va_list va);
 	void WriteToConsole(LogLevel level, const char* formatStr, va_list va);
-	void WriteLog();
 	void CreateLogFile();
 
 private:

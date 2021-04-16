@@ -71,7 +71,7 @@ void Logger::ThreadInit()
 void Logger::Run()
 {
 	SwapInnerLogBuffers();
-	WriteLog();
+	FlushBuffers();
 
 	static int count = 0;
 	if (++count >= 120)
@@ -111,6 +111,18 @@ void Logger::SwapInnerLogBuffers()
 	}
 	m_LogData->InnerLogBuffers.swap(m_LogData->LogBuffers);
 }
+void Logger::FlushBuffers()
+{
+	for (auto buffer : m_LogData->InnerLogBuffers)
+	{
+		fwrite(buffer->GetData(), buffer->Length(), 1, m_LogData->LogFile);
+		buffer->Reset();
+		m_LogData->FreeBuffer(buffer);
+	}
+	m_LogData->InnerLogBuffers.clear();
+	fflush(m_LogData->LogFile);
+}
+
 void Logger::WriteLog(LogLevel level, const char* file, int line, const char* format, va_list va)
 {
 	for (auto p = file; *p != '\0'; p++)
@@ -141,17 +153,6 @@ void Logger::WriteToConsole(LogLevel level, const char* formatStr, va_list va)
 	len += vsnprintf(logString + len, sizeof(logString) - len - 3, formatStr, va);
 
 	printf("%s\n", logString);
-}
-void Logger::WriteLog()
-{
-	for (auto buffer : m_LogData->InnerLogBuffers)
-	{
-		fwrite(buffer->GetData(), buffer->Length(), 1, m_LogData->LogFile);
-		buffer->Reset();
-		m_LogData->FreeBuffer(buffer);
-	}
-	m_LogData->InnerLogBuffers.clear();
-	fflush(m_LogData->LogFile);
 }
 void Logger::CreateLogFile()
 {

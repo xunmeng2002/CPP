@@ -34,7 +34,7 @@ void WorkThread::SendTestMessage(const std::string& message)
 void WorkThread::HandleRecvMessage(SocketData* socketData)
 {
 	socketData->FormatBuffer();
-	WRITE_LOG(LogLayer::Normal, LogLevel::Info, "WorkThread:[%d] RecvMessage SessionID:[%d] Socket:[%lld], Len:[%d], Data:[%s].",
+	WRITE_LOG(LogLevel::Info, "WorkThread:[%d] RecvMessage SessionID:[%d] Socket:[%lld], Len:[%d], Data:[%s].",
 		m_WorkThreadID, socketData->SessionID, socketData->ConnectSocket, socketData->WsaBuffer.len, socketData->WsaBuffer.buf);
 
 	char responseMessage[256] = { 0 };
@@ -48,10 +48,10 @@ void WorkThread::HandleRecvMessage(SocketData* socketData)
 void WorkThread::SendTestMessage(int sessionID, const std::string& message)
 {
 	sprintf(m_MessageBuffer, "Message From TcpIOCPServer Data:[%s]", message.c_str());
-	WRITE_LOG(LogLayer::Normal, LogLevel::Info, "SendTestMessage, Len:[%d].", strlen(m_MessageBuffer));
+	WRITE_LOG(LogLevel::Info, "SendTestMessage, Len:[%d].", strlen(m_MessageBuffer));
 	if (!TcpIOCPServer::GetInstance().Send(sessionID, m_MessageBuffer, strlen(m_MessageBuffer)))
 	{
-		WRITE_LOG(LogLayer::Normal, LogLevel::Info, "Tcp Send Failed. On WorkThread:[%d], SessionID:[%d]", m_WorkThreadID, sessionID);
+		WRITE_LOG(LogLevel::Info, "Tcp Send Failed. On WorkThread:[%d], SessionID:[%d]", m_WorkThreadID, sessionID);
 		TcpIOCPServer::GetInstance().CloseConnect(sessionID);
 	}
 }

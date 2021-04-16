@@ -66,23 +66,23 @@ void TcpIOCPClient::Run()
     SocketData* socketData;
 
     auto bOK = IOCompletePort::GetInstance().GetStatus(&len, (PULONG_PTR)&socket, (LPOVERLAPPED*)&socketData, INFINITE);
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "CompletionKey:[%d], Len:[%d], Ret:[%d].", socket, len, bOK);
+    WRITE_LOG(LogLevel::Debug, "CompletionKey:[%d], Len:[%d], Ret:[%d].", socket, len, bOK);
     if (socketData == nullptr)
     {
-        WRITE_LOG(LogLayer::Normal, LogLevel::Info, "Thread Eixt. CompetionKey:[%d], SocketData is null.", socket);
+        WRITE_LOG(LogLevel::Info, "Thread Eixt. CompetionKey:[%d], SocketData is null.", socket);
         m_ShouldRun.store(false);
         return;
     }
     if (!bOK)
     {
         WRITE_ERROR_LOG(GetLastError(), "GetQueuedCompletionStatus Failed.");
-        WRITE_LOG(LogLayer::Normal, LogLevel::Warning, "GetQueuedCompletionStatus Failed. ErrorID:[%d] SOCKET:[%lld].", GetLastError(), socketData->ConnectSocket);
+        WRITE_LOG(LogLevel::Warning, "GetQueuedCompletionStatus Failed. ErrorID:[%d] SOCKET:[%lld].", GetLastError(), socketData->ConnectSocket);
         RemoveConnect(socketData);
         return;
     }
     if (len == 0 && (socketData->Operate == OperateType::Send || socketData->Operate == OperateType::Recv))
     {
-        WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "Disconnect SOCKET:[%lld].", socketData->ConnectSocket);
+        WRITE_LOG(LogLevel::Debug, "Disconnect SOCKET:[%lld].", socketData->ConnectSocket);
         RemoveConnect(socketData);
         return;
     }
@@ -103,7 +103,7 @@ void TcpIOCPClient::Run()
         break;
     case OperateType::Invalid:
     default:
-        WRITE_LOG(LogLayer::System, LogLevel::Error, "INVALID OPERATE TYPE[%d] SOCKET:[%lld].", socketData->Operate, socketData->ConnectSocket);
+        WRITE_LOG(LogLevel::Error, "INVALID OPERATE TYPE[%d] SOCKET:[%lld].", socketData->Operate, socketData->ConnectSocket);
         assert(false);
     }
 }
@@ -128,13 +128,13 @@ bool TcpIOCPClient::PostConnect()
     }
     if (bind(connectSocket, (const sockaddr*)&m_LocalAddress, sizeof(SOCKADDR_IN)) != 0)
     {
-        WRITE_LOG(LogLayer::System, LogLevel::Error, "Bind Failed. ErrorID:[%d], Socket:[%lld]", GetLastError(), connectSocket);
+        WRITE_LOG(LogLevel::Error, "Bind Failed. ErrorID:[%d], Socket:[%lld]", GetLastError(), connectSocket);
         closesocket(connectSocket);
         return false;
     }
     if (!IOCompletePort::GetInstance().AssociateDevice((HANDLE)connectSocket, connectSocket))
     {
-        WRITE_LOG(LogLayer::System, LogLevel::Error, "Associate CompletionPort Failed. ErrorID:[%d], Socket:[%lld]", GetLastError(), connectSocket);
+        WRITE_LOG(LogLevel::Error, "Associate CompletionPort Failed. ErrorID:[%d], Socket:[%lld]", GetLastError(), connectSocket);
         closesocket(connectSocket);
         return false;
     }
@@ -146,7 +146,7 @@ bool TcpIOCPClient::PostConnect()
     memset(socketData->Buffer, 0, sizeof(socketData->Buffer));
     socketData->Operate = OperateType::Connect;
 
-    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "PostConnect  SOCKET:[%lld].", socketData->ConnectSocket);
+    WRITE_LOG(LogLevel::Info, "PostConnect  SOCKET:[%lld].", socketData->ConnectSocket);
     DWORD transBytes = 0;
     if (!SocketApi::GetInstance().ConnectEx(socketData->ConnectSocket, (const sockaddr*)&m_ServerAddress, sizeof(SOCKADDR),
         NULL, 0, &transBytes, (LPOVERLAPPED)socketData) && WSAGetLastError() != ERROR_IO_PENDING)
@@ -158,7 +158,7 @@ bool TcpIOCPClient::PostConnect()
 }
 void TcpIOCPClient::OnConnectComplete(SocketData* socketData, int len)
 {
-    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "OnConnectComplete  SOCKET:[%lld] Len:[%d], WSALen:[%d].",
+    WRITE_LOG(LogLevel::Info, "OnConnectComplete  SOCKET:[%lld] Len:[%d], WSALen:[%d].",
         socketData->ConnectSocket, len, socketData->WsaBuffer.len);
 
     AddConnect(socketData);

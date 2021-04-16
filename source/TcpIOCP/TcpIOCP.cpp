@@ -29,7 +29,7 @@ bool TcpIOCP::Send(int sessionID, const char* data, int len)
     if (connectInfo == nullptr)
         return false;
     auto connectSocket = connectInfo->ConnectSocket;
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "SendMessage  sessionID:[%d] Socket:[%lld] Len:[%d].", sessionID, connectSocket, len);
+    WRITE_LOG(LogLevel::Debug, "SendMessage  sessionID:[%d] Socket:[%lld] Len:[%d].", sessionID, connectSocket, len);
     int sendLen = 0;
     while (len - sendLen > 0)
     {
@@ -56,7 +56,7 @@ void TcpIOCP::CloseConnect(int sessionID)
 void TcpIOCP::ThreadExit()
 {
     ThreadBase::ThreadExit();
-    WRITE_LOG(LogLayer::System, LogLevel::Info, "TotalSendLen:[%lld], TotalRecvLen:[%lld]", m_TotalSendLen, m_TotalRecvLen);
+    WRITE_LOG(LogLevel::Info, "TotalSendLen:[%lld], TotalRecvLen:[%lld]", m_TotalSendLen, m_TotalRecvLen);
 }
 
 SOCKET TcpIOCP::AllocateSocket()
@@ -73,7 +73,7 @@ bool TcpIOCP::PostSend(int sessionID, SOCKET sock, const char* data, int len, in
     DWORD transBytes = 0, flag = 0;
     sendLen = len >= MESSAGE_SIZE ? MESSAGE_SIZE : len;
 
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "PostSend Socket:[%lld]", sock);
+    WRITE_LOG(LogLevel::Debug, "PostSend Socket:[%lld]", sock);
     auto socketData = MemCacheTemplateSingleton<SocketData>::GetInstance().Allocate();
     socketData->SessionID = sessionID;
     socketData->ConnectSocket = sock;
@@ -92,7 +92,7 @@ bool TcpIOCP::PostSend(int sessionID, SOCKET sock, const char* data, int len, in
 }
 bool TcpIOCP::PostRecv(int sessionID, SOCKET sock)
 {
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "PostRecv SessionID:[%d] Socket:[%lld]", sessionID, sock);
+    WRITE_LOG(LogLevel::Debug, "PostRecv SessionID:[%d] Socket:[%lld]", sessionID, sock);
     auto socketData = MemCacheTemplateSingleton<SocketData>::GetInstance().Allocate();
     socketData->SessionID = sessionID;
     socketData->ConnectSocket = sock;
@@ -112,14 +112,14 @@ bool TcpIOCP::PostRecv(int sessionID, SOCKET sock)
 }
 bool TcpIOCP::PostDisConnect(SocketData* socketData)
 {
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "PostDisConnect For SessionID:[%d], Socket:[%lld].", socketData->SessionID, socketData->ConnectSocket);
+    WRITE_LOG(LogLevel::Debug, "PostDisConnect For SessionID:[%d], Socket:[%lld].", socketData->SessionID, socketData->ConnectSocket);
     socketData->Operate = OperateType::Disconnect;
     return IOCompletePort::GetInstance().PostStatus(0, socketData->ConnectSocket, socketData);
 }
 
 void TcpIOCP::OnSendComplete(SocketData* socketData, int len)
 {
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "OnSendComplete  SessionID:[%d] SOCKET:[%lld], WsaLen=[%d], Len=[%d].",
+    WRITE_LOG(LogLevel::Debug, "OnSendComplete  SessionID:[%d] SOCKET:[%lld], WsaLen=[%d], Len=[%d].",
         socketData->SessionID, socketData->ConnectSocket, socketData->WsaBuffer.len, len);
     m_TotalSendLen += len;
     if (len < socketData->WsaBuffer.len)
@@ -135,7 +135,7 @@ void TcpIOCP::OnSendComplete(SocketData* socketData, int len)
 }
 void TcpIOCP::OnRecvComplete(SocketData* socketData, int len)
 {
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "OnRecvComplete  SessionID:[%d] SOCKET:[%lld], WsaLen=[%d], Len=[%d].",
+    WRITE_LOG(LogLevel::Debug, "OnRecvComplete  SessionID:[%d] SOCKET:[%lld], WsaLen=[%d], Len=[%d].",
         socketData->SessionID, socketData->ConnectSocket, socketData->WsaBuffer.len, len);
     m_TotalRecvLen += len;
 
@@ -146,7 +146,7 @@ void TcpIOCP::OnRecvComplete(SocketData* socketData, int len)
     auto connectInfo = GetConnectInfo(socketData->SessionID);
     if (connectInfo == nullptr)
     {
-        WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "Cannot Find ConnectInfo, RemoveConnect. SessionID:[%d]", socketData->SessionID);
+        WRITE_LOG(LogLevel::Debug, "Cannot Find ConnectInfo, RemoveConnect. SessionID:[%d]", socketData->SessionID);
         RemoveConnect(socketData);
         return;
     }
@@ -154,7 +154,7 @@ void TcpIOCP::OnRecvComplete(SocketData* socketData, int len)
 }
 void TcpIOCP::AddConnect(SocketData* socketData)
 {
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "AddConnect  SessionID:[%d] Socket:[%lld].", socketData->SessionID, socketData->ConnectSocket);
+    WRITE_LOG(LogLevel::Debug, "AddConnect  SessionID:[%d] Socket:[%lld].", socketData->SessionID, socketData->ConnectSocket);
     socketData->SessionID = ++m_LastSessionID;
     PostRecv(socketData->SessionID, socketData->ConnectSocket);
 
@@ -165,7 +165,7 @@ void TcpIOCP::AddConnect(SocketData* socketData)
 }
 void TcpIOCP::RemoveConnect(SocketData* socketData)
 {
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "RemoveConnect  SessionID:[%d] Socket:[%lld].", socketData->SessionID, socketData->ConnectSocket);
+    WRITE_LOG(LogLevel::Debug, "RemoveConnect  SessionID:[%d] Socket:[%lld].", socketData->SessionID, socketData->ConnectSocket);
     
     SocketApi::GetInstance().DisconnectEx(socketData->ConnectSocket, NULL, TF_REUSE_SOCKET, 0);
     FreeSocket(socketData->ConnectSocket);

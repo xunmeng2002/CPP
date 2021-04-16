@@ -64,7 +64,7 @@ void TcpIOCPServer::ThreadInit()
     {
         if (!PostAccept())
         {
-            WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "ThreadInit PostAccept Failed.");
+            WRITE_LOG(LogLevel::Debug, "ThreadInit PostAccept Failed.");
             m_ShouldRun.store(false);
             break;
         }
@@ -77,10 +77,10 @@ void TcpIOCPServer::Run()
     SocketData* socketData;
 
     auto bOK = IOCompletePort::GetInstance().GetStatus(&len, (PULONG_PTR)&socket, (LPOVERLAPPED*)&socketData, INFINITE);
-    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "CompletionKey = [%d], Len = [%d], Ret = [%d].", socket, len, bOK);
+    WRITE_LOG(LogLevel::Info, "CompletionKey = [%d], Len = [%d], Ret = [%d].", socket, len, bOK);
     if (socketData == nullptr)
     {
-        WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "Thread Eixt. CompetionKey:[%d], SocketData is null.", socket);
+        WRITE_LOG(LogLevel::Debug, "Thread Eixt. CompetionKey:[%d], SocketData is null.", socket);
         m_ShouldRun.store(false);
         return;
     }
@@ -92,7 +92,7 @@ void TcpIOCPServer::Run()
     }
     if (len == 0 && (socketData->Operate == OperateType::Send || socketData->Operate == OperateType::Recv))
     {
-        WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "Disconnect SOCKET=[%d].", socketData->ConnectSocket);
+        WRITE_LOG(LogLevel::Debug, "Disconnect SOCKET=[%d].", socketData->ConnectSocket);
         RemoveConnect(socketData);
         return;
     }
@@ -113,7 +113,7 @@ void TcpIOCPServer::Run()
         break;
     case OperateType::Invalid:
     default:
-        WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "INVALID OPERATE TYPE[%d] SOCKET=[%d].", socketData->Operate, socketData->ConnectSocket);
+        WRITE_LOG(LogLevel::Debug, "INVALID OPERATE TYPE[%d] SOCKET=[%d].", socketData->Operate, socketData->ConnectSocket);
         assert(false);
     }
 }
@@ -140,7 +140,7 @@ bool TcpIOCPServer::Create(int nMaxConcurrency)
             WRITE_ERROR_LOG(WSAGetLastError(), "Create Socket Failed.");
             return false;
         }
-        WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "Create ServerSocket = [%d].", m_ServerSocket);
+        WRITE_LOG(LogLevel::Debug, "Create ServerSocket = [%d].", m_ServerSocket);
     }
     int on = 1;
     if (setsockopt(m_ServerSocket, SOL_SOCKET, SO_REUSEADDR, (const char*)&on, sizeof(on)) != 0)
@@ -150,7 +150,7 @@ bool TcpIOCPServer::Create(int nMaxConcurrency)
     }
     if (!IOCompletePort::GetInstance().Create())
     {
-        WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "Create IOCompletePort Failed.");
+        WRITE_LOG(LogLevel::Debug, "Create IOCompletePort Failed.");
         return false;
     }
     if (!IOCompletePort::GetInstance().AssociateDevice((HANDLE)m_ServerSocket, m_ServerSocket))
@@ -196,12 +196,12 @@ bool TcpIOCPServer::PostAccept()
     memset(socketData->Buffer, 0, sizeof(socketData->Buffer));
     socketData->Operate = OperateType::Accept;
 
-    WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "PostAccept SOCKET:[%lld].", socketData->ConnectSocket);
+    WRITE_LOG(LogLevel::Debug, "PostAccept SOCKET:[%lld].", socketData->ConnectSocket);
     DWORD transBytes = 0;
     if (!SocketApi::GetInstance().AcceptEx(m_ServerSocket, socketData->ConnectSocket, socketData->WsaBuffer.buf, 0,
         (sizeof(SOCKADDR_IN) + 16), (sizeof(SOCKADDR_IN) + 16), &transBytes, (LPOVERLAPPED)socketData) && WSAGetLastError() != ERROR_IO_PENDING)
     {
-        WRITE_LOG(LogLayer::Normal, LogLevel::Error, "Call AcceptEx Failed. Socket:[%lld]", socketData->ConnectSocket);
+        WRITE_LOG(LogLevel::Error, "Call AcceptEx Failed. Socket:[%lld]", socketData->ConnectSocket);
         WRITE_ERROR_LOG(WSAGetLastError(), "Call AcceptEx Failed.");
         return false;
     }
@@ -215,13 +215,13 @@ void TcpIOCPServer::OnAcceptComplete(SocketData* socketData, int len)
     SocketApi::GetInstance().GetAcceptExSockAddrs(socketData->WsaBuffer.buf, 0,
         (sizeof(SOCKADDR_IN) + 16), (sizeof(SOCKADDR_IN) + 16), (LPSOCKADDR*)&localAddr, &localLen, (LPSOCKADDR*)&remoteAddr, &remoteLen);
     
-    WRITE_LOG(LogLayer::Normal, LogLevel::Info, "OnAcceptComplete: From <%s:%d> SOCKET:[%lld] Len:[%d], WSALen:[%d].",
+    WRITE_LOG(LogLevel::Info, "OnAcceptComplete: From <%s:%d> SOCKET:[%lld] Len:[%d], WSALen:[%d].",
         inet_ntoa(remoteAddr->sin_addr), ntohs(remoteAddr->sin_port),
         socketData->ConnectSocket, len, socketData->WsaBuffer.len);
     
     if (!IOCompletePort::GetInstance().AssociateDevice((HANDLE)socketData->ConnectSocket, socketData->ConnectSocket))
     {
-        WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "Associate CompletionPort Failed, SessionID:[%d] Socket:[%lld]", socketData->SessionID, socketData->ConnectSocket);
+        WRITE_LOG(LogLevel::Debug, "Associate CompletionPort Failed, SessionID:[%d] Socket:[%lld]", socketData->SessionID, socketData->ConnectSocket);
     }
     AddConnect(socketData);
     PostAccept();

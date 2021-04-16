@@ -39,7 +39,7 @@ void WorkThread::HandleNewConnect(SocketData* socketData)
 void WorkThread::HandleRecvMessage(SocketData* socketData)
 {
 	socketData->FormatBuffer();
-	WRITE_LOG(LogLayer::Normal, LogLevel::Debug, "RecvMessage  WorkThread:[%d] SessionID:[%d] Socket:[%lld] Len:[%d] Data:[%s].",
+	WRITE_LOG(LogLevel::Debug, "RecvMessage  WorkThread:[%d] SessionID:[%d] Socket:[%lld] Len:[%d] Data:[%s].",
 		m_WorkThreadID, socketData->SessionID, socketData->ConnectSocket, socketData->WsaBuffer.len, socketData->WsaBuffer.buf);
 }
 
@@ -48,7 +48,7 @@ void WorkThread::SendTestMessage(int sessionID, const std::string& message)
 	sprintf(m_MessageBuffer, "Message From TcpIOCPClient, On WorkThread:[%d], SessionID:[%d] Message:[%s]", m_WorkThreadID, sessionID, message.c_str());
 	if (!TcpIOCPClient::GetInstance().Send(sessionID, m_MessageBuffer, strlen(m_MessageBuffer)))
 	{
-		WRITE_LOG(LogLayer::Normal, LogLevel::Warning, "Tcp Send Failed. On WorkThread:[%d], SessionID:[%d]", m_WorkThreadID, sessionID);
+		WRITE_LOG(LogLevel::Warning, "Tcp Send Failed. On WorkThread:[%d], SessionID:[%d]", m_WorkThreadID, sessionID);
 		TcpIOCPClient::GetInstance().CloseConnect(sessionID);
 	}
 }

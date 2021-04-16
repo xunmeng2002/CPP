@@ -45,9 +45,9 @@ void ThreadBase::ThreadFunc()
 }
 void ThreadBase::ThreadInit()
 {
-	WRITE_LOG(LogLayer::Normal, LogLevel::Info, "Thread[%d]:%s Start", m_ThreadID, m_ThreadName.c_str());
+	WRITE_LOG(LogLevel::Info, "Thread[%d]:%s Start", m_ThreadID, m_ThreadName.c_str());
 }
 void ThreadBase::ThreadExit()
 {
-	WRITE_LOG(LogLayer::Normal, LogLevel::Info, "Thread[%d]:%s Exit", m_ThreadID, m_ThreadName.c_str());
+	WRITE_LOG(LogLevel::Info, "Thread[%d]:%s Exit", m_ThreadID, m_ThreadName.c_str());
 }

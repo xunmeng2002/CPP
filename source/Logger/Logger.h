@@ -7,12 +7,6 @@
 #include "ThreadBase.h"
 #include "Buffer.h"
 
-enum class LogLayer : int
-{
-	System = 0,
-	Normal = 1,
-};
-
 enum class LogLevel : int
 {
 	None = 0,
@@ -39,7 +33,7 @@ namespace LogSpace
 	public:
 		static Logger& GetInstance();
 		bool Init(const char* fullProcessName);
-		void WriteLog(LogLayer layer, LogLevel level, const char* file, int line, const char* format, va_list va);
+		void WriteLog(LogLevel level, const char* file, int line, const char* format, va_list va);
 
 
 	protected:
@@ -61,18 +55,18 @@ namespace LogSpace
 		char m_ProcessName[128];
 		tm m_CreateLogFileTime;
 
-		std::map<LogLayer, LogData*> m_LogDatas;
+		LogData* m_LogData;
 	};
 
-	void Write(LogLayer layer, LogLevel level, const char* formatStr, va_list va);
+	void Write(LogLevel level, const char* formatStr, va_list va);
 
-	void WriteLog(LogLayer layer, LogLevel level, const char* file, int line, const char* formatStr, ...);
+	void WriteLog(LogLevel level, const char* file, int line, const char* formatStr, ...);
 
 	void WriteErrorLog(const char* file, int line, int errorID, const char* errorMsg);
 }
 
-#define WRITE_LOG(layer, level, formatStr, ...)\
-	LogSpace::WriteLog(layer, level, __FILE__, __LINE__, formatStr, ##__VA_ARGS__);
+#define WRITE_LOG(level, formatStr, ...)\
+	LogSpace::WriteLog(level, __FILE__, __LINE__, formatStr, ##__VA_ARGS__);
 
 #define WRITE_ERROR_LOG(errorID, errorMsg)\
 	LogSpace::WriteErrorLog(__FILE__, __LINE__, errorID, errorMsg);

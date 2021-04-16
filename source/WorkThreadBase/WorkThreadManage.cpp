@@ -50,7 +50,7 @@ void WorkThreadManage::Join()
 
 void WorkThreadManage::CloseConnects()
 {
-	WRITE_LOG(LogLayer::Normal, LogLevel::Info, "WorkThreadManage  CloseConnects.");
+	WRITE_LOG(LogLevel::Info, "WorkThreadManage  CloseConnects.");
 	for (auto workThread : m_WorkThreads)
 	{
 		workThread->CloseConnects();

@@ -39,7 +39,8 @@ Logger Logger::m_Instance;
 Logger::Logger()
 	:ThreadBase("Logger"), m_ProcessName("")
 {
-	gethostname(m_HostName, 128);
+	unsigned long buffSize = 128;
+	GetComputerName(m_HostName, &buffSize);
 	m_Pid = getpid();
 }
 Logger::~Logger()

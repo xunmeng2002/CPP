@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<fields>
+		<field name="RspInfo" type="CThostFtdcRspInfoField">
+			<item name="ErrorID" type="int"/>
+			<item name="ErrorMsg" type="string"/>
+		</field>
+	</fields>
+	<api>
+	</api>
+	<spi>
+		<func name="OnFrontConnected" retrun="void" type="On" sequence="0"/>
+		<func name="OnFrontDisconnected" retrun="void" type="On" sequence="1">
+			<param type="int" name="nReason"/>
+		</func>
+		<func name="OnHeartBeatWarning" retrun="void" type="On" sequence="2">
+			<param type="int" name="nTimeLapse"/>
+		</func>
+		<func name="OnRspAuthenticate" retrun="void" type="OnRsp" sequence="3">
+			<param type="CThostFtdcRspAuthenticateField" name="Authenticate"/>
+		</func>
+		<func name="OnRspUserLogin" retrun="void" type="OnRsp" sequence="4">
+			<param type="CThostFtdcRspUserLoginField" name="UserLogin"/>
+		</func>
+		<func name="OnRspUserLogout" retrun="void" type="OnRsp" sequence="5">
+			<param type="CThostFtdcUserLogoutField" name="UserLogout"/>
+		</func>
+		<func name="OnRspUserPasswordUpdate" retrun="void" type="OnRsp" sequence="6" >
+			<param type="CThostFtdcUserPasswordUpdateField" name="UserPasswordUpdate"/>
+		</func>
+		<func name="OnRspTradingAccountPasswordUpdate" retrun="void" type="OnRsp" sequence="7">
+			<param type="CThostFtdcTradingAccountPasswordUpdateField" name="TradingAccountPasswordUpdate"/>
+		</func>
+		<func name="OnRspUserAuthMethod" retrun="void" type="OnRsp" sequence="8">
+			<param type="CThostFtdcRspUserAuthMethodField" name="UserAuthMethod"/>
+		</func>
+		<func name="OnRspGenUserCaptcha" retrun="void" type="OnRsp" sequence="9">
+			<param type="CThostFtdcRspGenUserCaptchaField" name="GenUserCaptcha"/>
+		</func>
+		<func name="OnRspGenUserText" retrun="void" type="OnRsp" sequence="10">
+			<param type="CThostFtdcRspGenUserTextField" name="GenUserText"/>
+		</func>
+		<func name="OnRspOrderInsert" retrun="void" type="OnRsp" sequence="11">
+			<param type="CThostFtdcInputOrderField" name="InputOrder"/>
+		</func>
+		<func name="OnRspParkedOrderInsert" retrun="void" type="OnRsp" sequence="12">
+			<param type="CThostFtdcParkedOrderField" name="ParkedOrder"/>
+		</func>
+		<func name="OnRspParkedOrderAction" retrun="void" type="OnRsp" sequence="13">
+			<param type="CThostFtdcParkedOrderActionField" name="ParkedOrderAction"/>
+		</func>
+		<func name="OnRspOrderAction" retrun="void" type="OnRsp" sequence="14">
+			<param type="CThostFtdcInputOrderActionField" name="InputOrderAction"/>
+		</func>
+		<func name="OnRspQueryMaxOrderVolume" retrun="void" type="OnRsp" sequence="15">
+			<param type="CThostFtdcQueryMaxOrderVolumeField" name="QueryMaxOrderVolume"/>
+		</func>
+		<func name="OnRspSettlementInfoConfirm" retrun="void" type="OnRsp" sequence="16">
+			<param type="CThostFtdcSettlementInfoConfirmField" name="SettlementInfoConfirm"/>
+		</func>
+		<func name="OnRspRemoveParkedOrder" retrun="void" type="OnRsp" sequence="17">
+			<param type="CThostFtdcRemoveParkedOrderField" name="RemoveParkedOrder"/>
+		</func>
+		<func name="OnRspRemoveParkedOrderAction" retrun="void" type="OnRsp" sequence="18">
+			<param type="CThostFtdcRemoveParkedOrderActionField" name="RemoveParkedOrderAction"/>
+		</func>
+		<func name="OnRspExecOrderInsert" retrun="void" type="OnRsp" sequence="19">
+			<param type="CThostFtdcInputExecOrderField" name="InputExecOrder"/>
+		</func>
+		<func name="OnRspExecOrderAction" retrun="void" type="OnRsp" sequence="20">
+			<param type="CThostFtdcInputExecOrderField" name="InputExecOrder"/>
+		</func>
+		<func name="OnRspForQuoteInsert" retrun="void" type="OnRsp" sequence="21">
+			<param type="CThostFtdcInputForQuoteField" name="InputForQuote"/>
+		</func>
+		<func name="OnRspQuoteInsert" retrun="void" type="OnRsp" sequence="22">
+			<param type="CThostFtdcInputQuoteField" name="InputQuote"/>
+		</func>
+		<func name="OnRspQuoteAction" retrun="void" type="OnRsp" sequence="23">
+			<param type="CThostFtdcInputQuoteActionField" name="InputQuoteAction"/>
+		</func>
+		<func name="OnRspBatchOrderAction" retrun="void" type="OnRsp" sequence="24">
+			<param type="CThostFtdcInputBatchOrderActionField" name="InputBatchOrderAction"/>
+		</func>
+		<func name="OnRspOptionSelfCloseInsert" retrun="void" type="OnRsp" sequence="25">
+			<param type="CThostFtdcInputOptionSelfCloseField" name="InputOptionSelfClose"/>
+		</func>
+		<func name="OnRspOptionSelfCloseAction" retrun="void" type="OnRsp" sequence="26">
+			<param type="CThostFtdcInputOptionSelfCloseActionField" name="InputOptionSelfCloseAction"/>
+		</func>
+		<func name="OnRspCombActionInsert" retrun="void" type="OnRsp" sequence="27">
+			<param type="CThostFtdcInputCombActionField" name="InputCombAction"/>
+		</func>
+		<func name="OnRspQryOrder" retrun="void" type="OnRspQry" sequence="28">
+			<param type="CThostFtdcOrderField" name="Order"/>
+		</func>
+		<func name="OnRspQryTrade" retrun="void" type="OnRspQry" sequence="29">
+			<param type="CThostFtdcTradeField" name="Trade"/>
+		</func>
+		<func name="OnRspQryInvestorPosition" retrun="void" type="OnRspQry" sequence="30">
+			<param type="CThostFtdcInvestorPositionField" name="InvestorPosition"/>
+		</func>
+		<func name="OnRspQryTradingAccount" retrun="void" type="OnRspQry" sequence="31">
+			<param type="CThostFtdcTradingAccountField" name="TradingAccount"/>
+		</func>
+		<func name="OnRspQryInvestor" retrun="void" type="OnRspQry" sequence="32">
+			<param type="CThostFtdcInvestorField" name="Investor"/>
+		</func>
+		<func name="OnRspQryTradingCode" retrun="void" type="OnRspQry" sequence="33">
+			<param type="CThostFtdcTradingCodeField" name="TradingCode"/>
+		</func>
+		<func name="OnRspQryInstrumentMarginRate" retrun="void" type="OnRspQry" sequence="34">
+			<param type="CThostFtdcInstrumentMarginRateField" name="InstrumentMarginRate"/>
+		</func>
+		<func name="OnRspQryInstrumentCommissionRate" retrun="void" type="OnRspQry" sequence="35">
+			<param type="CThostFtdcInstrumentCommissionRateField" name="InstrumentCommissionRate"/>
+		</func>
+		<func name="OnRspQryExchange" retrun="void" type="OnRspQry" sequence="36">
+			<param type="CThostFtdcExchangeField" name="Exchange"/>
+		</func>
+		<func name="OnRspQryProduct" retrun="void" type="OnRspQry" sequence="37">
+			<param type="CThostFtdcProductField" name="Product"/>
+		</func>
+		<func name="OnRspQryInstrument" retrun="void" type="OnRspQry" sequence="38">
+			<param type="CThostFtdcInstrumentField" name="Instrument"/>
+		</func>
+		<func name="OnRspQryDepthMarketData" retrun="void" type="OnRspQry" sequence="39">
+			<param type="CThostFtdcDepthMarketDataField" name="DepthMarketData"/>
+		</func>
+		<func name="OnRspQrySettlementInfo" retrun="void" type="OnRspQry" sequence="40">
+			<param type="CThostFtdcSettlementInfoField" name="SettlementInfo"/>
+		</func>
+		<func name="OnRspQryTransferBank" retrun="void" type="OnRspQry" sequence="41">
+			<param type="CThostFtdcTransferBankField" name="TransferBank"/>
+		</func>
+		<func name="OnRspQryInvestorPositionDetail" retrun="void" type="OnRspQry" sequence="42">
+			<param type="CThostFtdcInvestorPositionDetailField" name="InvestorPositionDetail"/>
+		</func>
+		<func name="OnRspQryNotice" retrun="void" type="OnRspQry" sequence="43">
+			<param type="CThostFtdcNoticeField" name="Notice"/>
+		</func>
+		<func name="OnRspQrySettlementInfoConfirm" retrun="void" type="OnRspQry" sequence="44">
+			<param type="CThostFtdcSettlementInfoConfirmField" name="SettlementInfoConfirm"/>
+		</func>
+		<func name="OnRspQryInvestorPositionCombineDetail" retrun="void" type="OnRspQry" sequence="45">
+			<param type="CThostFtdcInvestorPositionCombineDetailField" name="InvestorPositionCombineDetail"/>
+		</func>
+		<func name="OnRspQryCFMMCTradingAccountKey" retrun="void" type="OnRspQry" sequence="46">
+			<param type="CThostFtdcCFMMCTradingAccountKeyField" name="CFMMCTradingAccountKey"/>
+		</func>
+		<func name="OnRspQryEWarrantOffset" retrun="void" type="OnRspQry" sequence="47">
+			<param type="CThostFtdcEWarrantOffsetField" name="EWarrantOffset"/>
+		</func>
+		<func name="OnRspQryInvestorProductGroupMargin" retrun="void" type="OnRspQry" sequence="48">
+			<param type="CThostFtdcInvestorProductGroupMarginField" name="InvestorProductGroupMargin"/>
+		</func>
+		<func name="OnRspQryExchangeMarginRate" retrun="void" type="OnRspQry" sequence="49">
+			<param type="CThostFtdcExchangeMarginRateField" name="ExchangeMarginRate"/>
+		</func>
+		<func name="OnRspQryExchangeMarginRateAdjust" retrun="void" type="OnRspQry" sequence="50">
+			<param type="CThostFtdcExchangeMarginRateAdjustField" name="ExchangeMarginRateAdjust"/>
+		</func>
+		<func name="OnRspQryExchangeRate" retrun="void" type="OnRspQry" sequence="51">
+			<param type="CThostFtdcExchangeRateField" name="ExchangeRate"/>
+		</func>
+		<func name="OnRspQrySecAgentACIDMap" retrun="void" type="OnRspQry" sequence="52">
+			<param type="CThostFtdcSecAgentACIDMapField" name="SecAgentACIDMap"/>
+		</func>
+		<func name="OnRspQryProductExchRate" retrun="void" type="OnRspQry" sequence="53">
+			<param type="CThostFtdcProductExchRateField" name="ProductExchRate"/>
+		</func>
+		<func name="OnRspQryProductGroup" retrun="void" type="OnRspQry" sequence="54">
+			<param type="CThostFtdcProductGroupField" name="ProductGroup"/>
+		</func>
+		<func name="OnRspQryMMInstrumentCommissionRate" retrun="void" type="OnRspQry" sequence="55">
+			<param type="CThostFtdcMMInstrumentCommissionRateField" name="MMInstrumentCommissionRate"/>
+		</func>
+		<func name="OnRspQryMMOptionInstrCommRate" retrun="void" type="OnRspQry" sequence="56">
+			<param type="CThostFtdcMMOptionInstrCommRateField" name="MMOptionInstrCommRate"/>
+		</func>
+		<func name="OnRspQryInstrumentOrderCommRate" retrun="void" type="OnRspQry" sequence="57">
+			<param type="CThostFtdcInstrumentOrderCommRateField" name="InstrumentOrderCommRate"/>
+		</func>
+		<func name="OnRspQrySecAgentTradingAccount" retrun="void" type="OnRspQry" sequence="58">
+			<param type="CThostFtdcTradingAccountField" name="TradingAccount"/>
+		</func>
+		<func name="OnRspQrySecAgentCheckMode" retrun="void" type="OnRspQry" sequence="59">
+			<param type="CThostFtdcSecAgentCheckModeField" name="SecAgentCheckMode"/>
+		</func>
+		<func name="OnRspQrySecAgentTradeInfo" retrun="void" type="OnRspQry" sequence="60">
+			<param type="CThostFtdcSecAgentTradeInfoField" name="SecAgentTradeInfo"/>
+		</func>
+		<func name="OnRspQryOptionInstrTradeCost" retrun="void" type="OnRspQry" sequence="61">
+			<param type="CThostFtdcOptionInstrTradeCostField" name="OptionInstrTradeCost"/>
+		</func>
+		<func name="OnRspQryOptionInstrCommRate" retrun="void" type="OnRspQry" sequence="62">
+			<param type="CThostFtdcOptionInstrCommRateField" name="OptionInstrCommRate"/>
+		</func>
+		<func name="OnRspQryExecOrder" retrun="void" type="OnRspQry" sequence="63">
+			<param type="CThostFtdcExecOrderField" name="ExecOrder"/>
+		</func>
+		<func name="OnRspQryForQuote" retrun="void" type="OnRspQry" sequence="64">
+			<param type="CThostFtdcForQuoteField" name="ForQuote"/>
+		</func>
+		<func name="OnRspQryQuote" retrun="void" type="OnRspQry" sequence="65">
+			<param type="CThostFtdcQuoteField" name="Quote"/>
+		</func>
+		<func name="OnRspQryOptionSelfClose" retrun="void" type="OnRspQry" sequence="66">
+			<param type="CThostFtdcOptionSelfCloseField" name="OptionSelfClose"/>
+		</func>
+		<func name="OnRspQryInvestUnit" retrun="void" type="OnRspQry" sequence="67">
+			<param type="CThostFtdcInvestUnitField" name="InvestUnit"/>
+		</func>
+		<func name="OnRspQryCombInstrumentGuard" retrun="void" type="OnRspQry" sequence="68">
+			<param type="CThostFtdcCombInstrumentGuardField" name="CombInstrumentGuard"/>
+		</func>
+		<func name="OnRspQryCombAction" retrun="void" type="OnRspQry" sequence="69">
+			<param type="CThostFtdcCombActionField" name="CombAction"/>
+		</func>
+		<func name="OnRspQryTransferSerial" retrun="void" type="OnRspQry" sequence="70">
+			<param type="CThostFtdcTransferSerialField" name="TransferSerial"/>
+		</func>
+		<func name="OnRspQryAccountregister" retrun="void" type="OnRspQry" sequence="71">
+			<param type="CThostFtdcAccountregisterField" name="Accountregister"/>
+		</func>
+		<func name="OnRspError" retrun="void" type="OnRsp" sequence="72"/>
+		<func name="OnRtnOrder" retrun="void" type="OnRtn" sequence="73">
+			<param type="CThostFtdcOrderField" name="Order"/>
+		</func>
+		<func name="OnRtnTrade" retrun="void" type="OnRtn" sequence="74">
+			<param type="CThostFtdcTradeField" name="Trade"/>
+		</func>
+		<func name="OnErrRtnOrderInsert" retrun="void" type="OnErrRtn" sequence="75">
+			<param type="CThostFtdcInputOrderField" name="InputOrder"/>
+		</func>
+		<func name="OnErrRtnOrderAction" retrun="void" type="OnErrRtn" sequence="76">
+			<param type="CThostFtdcOrderActionField" name="OrderAction"/>
+		</func>
+		<func name="OnRtnInstrumentStatus" retrun="void" type="OnRtn" sequence="77">
+			<param type="CThostFtdcInstrumentStatusField" name="InstrumentStatus"/>
+		</func>
+		<func name="OnRtnBulletin" retrun="void" type="OnRtn" sequence="78">
+			<param type="CThostFtdcBulletinField" name="Bulletin"/>
+		</func>
+		<func name="OnRtnTradingNotice" retrun="void" type="OnRtn" sequence="79">
+			<param type="CThostFtdcTradingNoticeInfoField" name="TradingNoticeInfo"/>
+		</func>
+		<func name="OnRtnErrorConditionalOrder" retrun="void" type="OnRtn" sequence="80">
+			<param type="CThostFtdcErrorConditionalOrderField" name="ErrorConditionalOrder"/>
+		</func>
+		<func name="OnRtnExecOrder" retrun="void" type="OnRtn" sequence="81">
+			<param type="CThostFtdcExecOrderField" name="ExecOrder"/>
+		</func>
+		<func name="OnErrRtnExecOrderInsert" retrun="void" type="OnErrRtn" sequence="82">
+			<param type="CThostFtdcInputExecOrderField" name="InputExecOrder"/>
+		</func>
+		<func name="OnErrRtnExecOrderAction" retrun="void" type="OnErrRtn" sequence="83">
+			<param type="CThostFtdcExecOrderActionField" name="ExecOrderAction"/>
+		</func>
+		<func name="OnErrRtnForQuoteInsert" retrun="void" type="OnErrRtn" sequence="84">
+			<param type="CThostFtdcInputForQuoteField" name="InputForQuote"/>
+		</func>
+		<func name="OnRtnQuote" retrun="void" type="OnRtn" sequence="85">
+			<param type="CThostFtdcQuoteField" name="Quote"/>
+		</func>
+		<func name="OnErrRtnQuoteInsert" retrun="void" type="OnErrRtn" sequence="86">
+			<param type="CThostFtdcInputQuoteField" name="InputQuote"/>
+		</func>
+		<func name="OnErrRtnQuoteAction" retrun="void" type="OnErrRtn" sequence="87">
+			<param type="CThostFtdcQuoteActionField" name="QuoteAction"/>
+		</func>
+		<func name="OnRtnForQuoteRsp" retrun="void" type="OnRtn" sequence="88">
+			<param type="CThostFtdcForQuoteRspField" name="ForQuoteRsp"/>
+		</func>
+		<func name="OnRtnCFMMCTradingAccountToken" retrun="void" type="OnRtn" sequence="89">
+			<param type="CThostFtdcCFMMCTradingAccountTokenField" name="CFMMCTradingAccountToken"/>
+		</func>
+		<func name="OnErrRtnBatchOrderAction" retrun="void" type="OnErrRtn" sequence="90">
+			<param type="CThostFtdcBatchOrderActionField" name="BatchOrderAction"/>
+		</func>
+		<func name="OnRtnOptionSelfClose" retrun="void" type="OnRtn" sequence="91">
+			<param type="CThostFtdcOptionSelfCloseField" name="OptionSelfClose"/>
+		</func>
+		<func name="OnErrRtnOptionSelfCloseInsert" retrun="void" type="OnErrRtn" sequence="92">
+			<param type="CThostFtdcInputOptionSelfCloseField" name="InputOptionSelfClose"/>
+		</func>
+		<func name="OnErrRtnOptionSelfCloseAction" retrun="void" type="OnErrRtn" sequence="93">
+			<param type="CThostFtdcOptionSelfCloseActionField" name="OptionSelfCloseAction"/>
+		</func>
+		<func name="OnRtnCombAction" retrun="void" type="OnRtn" sequence="94">
+			<param type="CThostFtdcCombActionField" name="CombAction"/>
+		</func>
+		<func name="OnErrRtnCombActionInsert" retrun="void" type="OnErrRtn" sequence="95">
+			<param type="CThostFtdcInputCombActionField" name="InputCombAction"/>
+		</func>
+		<func name="OnRspQryContractBank" retrun="void" type="OnRspQry" sequence="96">
+			<param type="CThostFtdcContractBankField" name="ContractBank"/>
+		</func>
+		<func name="OnRspQryParkedOrder" retrun="void" type="OnRspQry" sequence="97">
+			<param type="CThostFtdcParkedOrderField" name="ParkedOrder"/>
+		</func>
+		<func name="OnRspQryParkedOrderAction" retrun="void" type="OnRspQry" sequence="98">
+			<param type="CThostFtdcParkedOrderActionField" name="ParkedOrderAction"/>
+		</func>
+		<func name="OnRspQryTradingNotice" retrun="void" type="OnRspQry" sequence="99">
+			<param type="CThostFtdcTradingNoticeField" name="TradingNotice"/>
+		</func>
+		<func name="OnRspQryBrokerTradingParams" retrun="void" type="OnRspQry" sequence="100">
+			<param type="CThostFtdcBrokerTradingParamsField" name="BrokerTradingParams"/>
+		</func>
+		<func name="OnRspQryBrokerTradingAlgos" retrun="void" type="OnRspQry" sequence="101">
+			<param type="CThostFtdcBrokerTradingAlgosField" name="BrokerTradingAlgos"/>
+		</func>
+		<func name="OnRspQueryCFMMCTradingAccountToken" retrun="void" type="OnRspQry" sequence="102">
+			<param type="CThostFtdcQueryCFMMCTradingAccountTokenField" name="QueryCFMMCTradingAccountToken"/>
+		</func>
+		<func name="OnRtnFromBankToFutureByBank" retrun="void" type="OnRtn" sequence="103">
+			<param type="CThostFtdcRspTransferField" name="RspTransfer"/>
+		</func>
+		<func name="OnRtnFromFutureToBankByBank" retrun="void" type="OnRtn" sequence="104">
+			<param type="CThostFtdcRspTransferField" name="RspTransfer"/>
+		</func>
+		<func name="OnRtnRepealFromBankToFutureByBank" retrun="void" type="OnRtn" sequence="105">
+			<param type="CThostFtdcRspRepealField" name="RspRepeal"/>
+		</func>
+		<func name="OnRtnRepealFromFutureToBankByBank" retrun="void" type="OnRtn" sequence="106">
+			<param type="CThostFtdcRspRepealField" name="RspRepeal"/>
+		</func>
+		<func name="OnRtnFromBankToFutureByFuture" retrun="void" type="OnRtn" sequence="107">
+			<param type="CThostFtdcRspTransferField" name="RspTransfer"/>
+		</func>
+		<func name="OnRtnFromFutureToBankByFuture" retrun="void" type="OnRtn" sequence="108">
+			<param type="CThostFtdcRspTransferField" name="RspTransfer"/>
+		</func>
+		<func name="OnRtnRepealFromBankToFutureByFutureManual" retrun="void" type="OnRtn" sequence="109">
+			<param type="CThostFtdcRspRepealField" name="RspRepeal"/>
+		</func>
+		<func name="OnRtnRepealFromFutureToBankByFutureManual" retrun="void" type="OnRtn" sequence="110">
+			<param type="CThostFtdcRspRepealField" name="RspRepeal"/>
+		</func>
+		<func name="OnRtnQueryBankBalanceByFuture" retrun="void" type="OnRtn" sequence="111">
+			<param type="CThostFtdcNotifyQueryAccountField" name="NotifyQueryAccount"/>
+		</func>
+		<func name="OnErrRtnBankToFutureByFuture" retrun="void" type="OnErrRtn" sequence="112">
+			<param type="CThostFtdcReqTransferField" name="ReqTransfer"/>
+		</func>
+		<func name="OnErrRtnFutureToBankByFuture" retrun="void" type="OnErrRtn" sequence="113">
+			<param type="CThostFtdcReqTransferField" name="ReqTransfer"/>
+		</func>
+		<func name="OnErrRtnRepealBankToFutureByFutureManual" retrun="void" type="OnErrRtn" sequence="114">
+			<param type="CThostFtdcReqRepealField" name="ReqRepeal"/>
+		</func>
+		<func name="OnErrRtnRepealFutureToBankByFutureManual" retrun="void" type="OnErrRtn" sequence="115">
+			<param type="CThostFtdcReqRepealField" name="ReqRepeal"/>
+		</func>
+		<func name="OnErrRtnQueryBankBalanceByFuture" retrun="void" type="OnErrRtn" sequence="116">
+			<param type="CThostFtdcReqQueryAccountField" name="ReqQueryAccount"/>
+		</func>
+		<func name="OnRtnRepealFromBankToFutureByFuture" retrun="void" type="OnRtn" sequence="117">
+			<param type="CThostFtdcRspRepealField" name="RspRepeal"/>
+		</func>
+		<func name="OnRtnRepealFromFutureToBankByFuture" retrun="void" type="OnRtn" sequence="118">
+			<param type="CThostFtdcRspRepealField" name="RspRepeal"/>
+		</func>
+		<func name="OnRspFromBankToFutureByFuture" retrun="void" type="OnRsp" sequence="119">
+			<param type="CThostFtdcReqTransferField" name="ReqTransfer"/>
+		</func>
+		<func name="OnRspFromFutureToBankByFuture" retrun="void" type="OnRsp" sequence="120">
+			<param type="CThostFtdcReqTransferField" name="ReqTransfer"/>
+		</func>
+		<func name="OnRspQueryBankAccountMoneyByFuture" retrun="void" type="OnRsp" sequence="121">
+			<param type="CThostFtdcReqQueryAccountField" name="ReqQueryAccount"/>
+		</func>
+		<func name="OnRtnOpenAccountByBank" retrun="void" type="OnRtn" sequence="122">
+			<param type="CThostFtdcOpenAccountField" name="OpenAccount"/>
+		</func>
+		<func name="OnRtnCancelAccountByBank" retrun="void" type="OnRtn" sequence="123">
+			<param type="CThostFtdcCancelAccountField" name="CancelAccount"/>
+		</func>
+		<func name="OnRtnChangeAccountByBank" retrun="void" type="OnRtn" sequence="124">
+			<param type="CThostFtdcChangeAccountField" name="ChangeAccount"/>
+		</func>
+	</spi>
+</root>

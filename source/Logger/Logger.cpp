@@ -57,7 +57,7 @@ void Logger::WriteLog(LogLevel level, const char* file, int line, const char* fo
 	va_list va;
 	va_start(va, formatStr);
 	WriteLog(level, file, line, formatStr, va);
-	if (level >= LogLevel::Warning)
+	if (level <= LogLevel::Warning)
 	{
 		WriteToConsole(level, formatStr, va);
 	}

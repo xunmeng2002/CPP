@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 	Logger::GetInstance().Start();
 
 	WRITE_LOG(LogLevel::Info, "This is a Log Test.");
-	WRITE_LOG(LogLevel::Info, "True[%d]", true);
+	WRITE_LOG(LogLevel::Warning, "True[%d]", true);
 
 	Sleep(5000);
 	Logger::GetInstance().Stop();

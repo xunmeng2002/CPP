@@ -1,10 +1,13 @@
 #pragma once
 
 #include "ThostFtdcTraderApi.h"
+#include "UserData.h"
 
 class CThostFtdcTraderSpiImpl : public CThostFtdcTraderSpi
 {
 public:
+	CThostFtdcTraderSpiImpl(CThostFtdcTraderApi* traderApi);
+
 	virtual void OnFrontConnected();
 
 	virtual void OnFrontDisconnected(int nReason);
@@ -254,4 +257,24 @@ public:
 	virtual void OnRtnCancelAccountByBank(CThostFtdcCancelAccountField* pCancelAccount);
 
 	virtual void OnRtnChangeAccountByBank(CThostFtdcChangeAccountField* pChangeAccount);
+
+public:
+	void SetAccountInfo(AccountInfo* accountInfo);
+
+private:
+	void WriteRspInfo(CThostFtdcRspInfoField* pRspInfo);
+	void WriteAuthenticate(CThostFtdcRspAuthenticateField* authenticate);
+	void WriteUserLoginField(CThostFtdcRspUserLoginField* userLogin);
+	void WriteInstrumentStatus(CThostFtdcInstrumentStatusField* instrumentStatus);
+	void WriteInstrumentField(CThostFtdcInstrumentField* instrument);
+
+	void ReqAuthenticate();
+	void ReqUserLogin();
+	void ReqQryInstrument();
+
+private:
+	CThostFtdcTraderApi* m_TraderApi;
+	int m_RequestID;
+
+	AccountInfo* m_AccountInfo;
 };

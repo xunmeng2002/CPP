@@ -25,12 +25,16 @@ endmacro(add_package)
 
 
 add_package(src ./src)
+add_package(Utility ../../source/Utility)
+add_package(MemCache ../../source/MemCache)
+add_package(ThreadBase ../../source/ThreadBase)
+add_package(Logger ../../source/Logger)
 add_package(API ../../source/API)
 
 
 add_definitions("-D_CRT_SECURE_NO_WARNINGS")
 
-link_directories(${PROJECT_SOURCE_DIR}/../../source/API/6.3.15/win32)
+link_directories(${PROJECT_SOURCE_DIR}/../../source/API/6.3.15/win64)
 
 #添加工程
 add_executable(${PROJECT_NAME} ${all_file})

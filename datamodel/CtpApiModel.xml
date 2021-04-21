@@ -5,7 +5,7 @@
 			<item name="ErrorID" type="int"/>
 			<item name="ErrorMsg" type="string"/>
 		</field>
-		<field name="RspAuthenticateField">
+		<field name="RspAuthenticate">
 			<item name="BrokerID" type="string"/>
 			<item name="UserID" type="string"/>
 			<item name="UserProductInfo" type="string"/>
@@ -31,7 +31,7 @@
 			<item name="BrokerID" type="string"/>
 			<item name="UserID" type="string"/>
 		</field>
-		<field name="UserLogout">
+		<field name="UserPasswordUpdate">
 			<item name="BrokerID" type="string"/>
 			<item name="UserID" type="string"/>
 			<item name="OldPassword" type="string"/>
@@ -47,7 +47,7 @@
 		<field name="RspUserAuthMethod">
 			<item name="UsableAuthMethod" type="int"/>
 		</field>
-		<field name="RspUserAuthMethod">
+		<field name="RspGenUserCaptcha">
 			<item name="BrokerID" type="string"/>
 			<item name="UserID" type="string"/>
 			<item name="CaptchaInfoLen" type="int"/>
@@ -761,7 +761,7 @@
 			<item name="InvestUnitID" type="string"/>
 		</field>
 		<field name="Notice">
-			<item name="BankID" type="string"/>
+			<item name="BrokerID" type="string"/>
 			<item name="Content" type="string"/>
 			<item name="SequenceLabel" type="string"/>
 		</field>
@@ -1905,7 +1905,6 @@
 			<item name="BankPwdFlag" type="char"/>
 			<item name="SecuPwdFlag" type="char"/>
 			<item name="OperNo" type="string"/>
-			<item name="RequestID" type="int"/>
 			<item name="TID" type="int"/>
 			<item name="UserID" type="string"/>
 			<item name="ErrorID" type="int"/>
@@ -1967,7 +1966,7 @@
 			<param type="int" name="nTimeLapse"/>
 		</func>
 		<func name="OnRspAuthenticate" retrun="void" type="OnRsp" sequence="3">
-			<param type="CThostFtdcRspAuthenticateField" name="RspAuthenticateField"/>
+			<param type="CThostFtdcRspAuthenticateField" name="RspAuthenticate"/>
 		</func>
 		<func name="OnRspUserLogin" retrun="void" type="OnRsp" sequence="4">
 			<param type="CThostFtdcRspUserLoginField" name="RspUserLogin"/>

@@ -14,6 +14,7 @@ int main(int argc, char* argv[])
 	strcpy(accountInfo->UserProductInfo, "PBSDSV5400");
 	strcpy(accountInfo->AuthCode, "PRDCTPLZPTOFVEUE");
 	strcpy(accountInfo->AppID, "POBO_BYSDS_5.0.0");
+	he
 
 	CThostFtdcTraderApi* traderApi = CThostFtdcTraderApi::CreateFtdcTraderApi();
 	CThostFtdcTraderSpiImpl* traderSpi = new CThostFtdcTraderSpiImpl(traderApi);

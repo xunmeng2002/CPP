@@ -28,8 +28,40 @@ void CThostFtdcTraderSpiImpl::OnRspUserLogin(CThostFtdcRspUserLoginField* pRspUs
 void CThostFtdcTraderSpiImpl::OnRspQryInstrument(CThostFtdcInstrumentField* pInstrument, CThostFtdcRspInfoField* pRspInfo, int nRequestID, bool bIsLast)
 {
 	CThostFtdcTraderSpiMiddle::OnRspQryInstrument(pInstrument, pRspInfo, nRequestID, bIsLast);
+	if (bIsLast)
+	{
+		ReqQryTradingAccount();
+	}
 }
-
+void CThostFtdcTraderSpiImpl::OnRspQryTradingAccount(CThostFtdcTradingAccountField* TradingAccount, CThostFtdcRspInfoField* pRspInfo, int nRequestID, bool bIsLast)
+{
+	CThostFtdcTraderSpiMiddle::OnRspQryTradingAccount(TradingAccount, pRspInfo, nRequestID, bIsLast);
+	ReqQryInvestorPosition();
+}
+void CThostFtdcTraderSpiImpl::OnRspQryInvestorPosition(CThostFtdcInvestorPositionField* InvestorPosition, CThostFtdcRspInfoField* pRspInfo, int nRequestID, bool bIsLast)
+{
+	CThostFtdcTraderSpiMiddle::OnRspQryInvestorPosition(InvestorPosition, pRspInfo, nRequestID, bIsLast);
+	if (bIsLast)
+	{
+		ReqQryOrder();
+	}
+}
+void CThostFtdcTraderSpiImpl::OnRspQryOrder(CThostFtdcOrderField* Order, CThostFtdcRspInfoField* pRspInfo, int nRequestID, bool bIsLast)
+{
+	CThostFtdcTraderSpiMiddle::OnRspQryOrder(Order, pRspInfo, nRequestID, bIsLast);
+	if (bIsLast)
+	{
+		ReqQryTrade();
+	}
+}
+void CThostFtdcTraderSpiImpl::OnRspQryTrade(CThostFtdcTradeField* Trade, CThostFtdcRspInfoField* pRspInfo, int nRequestID, bool bIsLast)
+{
+	CThostFtdcTraderSpiMiddle::OnRspQryTrade(Trade, pRspInfo, nRequestID, bIsLast);
+	if (bIsLast)
+	{
+		
+	}
+}
 
 void CThostFtdcTraderSpiImpl::SetAccountInfo(AccountInfo* accountInfo)
 {
@@ -68,4 +100,32 @@ void CThostFtdcTraderSpiImpl::ReqQryInstrument()
 	::memset(&qryInstrument, 0, sizeof(qryInstrument));
 	int ret = m_TraderApi->ReqQryInstrument(&qryInstrument, m_RequestID++);
 	WRITE_LOG(LogLevel::Info, "ReqQryInstrument: ret[%d]", ret);
+}
+void CThostFtdcTraderSpiImpl::ReqQryTradingAccount()
+{
+	CThostFtdcQryTradingAccountField qryTradingAccount;
+	::memset(&qryTradingAccount, 0, sizeof(qryTradingAccount));
+	int ret = m_TraderApi->ReqQryTradingAccount(&qryTradingAccount, m_RequestID++);
+	WRITE_LOG(LogLevel::Info, "ReqQryTradingAccount: ret[%d]", ret);
+}
+void CThostFtdcTraderSpiImpl::ReqQryInvestorPosition()
+{
+	CThostFtdcQryInvestorPositionField qryInvestorPosition;
+	::memset(&qryInvestorPosition, 0, sizeof(qryInvestorPosition));
+	int ret = m_TraderApi->ReqQryInvestorPosition(&qryInvestorPosition, m_RequestID++);
+	WRITE_LOG(LogLevel::Info, "ReqQryInvestorPosition: ret[%d]", ret);
+}
+void CThostFtdcTraderSpiImpl::ReqQryOrder()
+{
+	CThostFtdcQryOrderField qryOrder;
+	::memset(&qryOrder, 0, sizeof(qryOrder));
+	int ret = m_TraderApi->ReqQryOrder(&qryOrder, m_RequestID++);
+	WRITE_LOG(LogLevel::Info, "ReqQryOrder: ret[%d]", ret);
+}
+void CThostFtdcTraderSpiImpl::ReqQryTrade()
+{
+	CThostFtdcQryTradeField qryTrade;
+	::memset(&qryTrade, 0, sizeof(qryTrade));
+	int ret = m_TraderApi->ReqQryTrade(&qryTrade, m_RequestID++);
+	WRITE_LOG(LogLevel::Info, "ReqQryTrade: ret[%d]", ret);
 }

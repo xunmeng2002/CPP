@@ -3,4 +3,3 @@ test/*/build/*
 pump_temp.py
 test/*/GenCode/*.cpp
 test/*/GenCode/*.h
-test/TradeApiTest/src/TradeApiTest.cpp

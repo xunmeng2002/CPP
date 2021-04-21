@@ -31,6 +31,7 @@ add_package(MemCache ../../source/MemCache)
 add_package(ThreadBase ../../source/ThreadBase)
 add_package(Logger ../../source/Logger)
 add_package(API ../../source/API)
+add_package(jsoncpp ../../source/jsoncpp)
 
 
 add_definitions("-D_CRT_SECURE_NO_WARNINGS")

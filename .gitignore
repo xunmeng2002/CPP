@@ -1,2 +1,5 @@
 target/*/build/*
 test/*/build/*
+pump_temp.py
+test/*/GenCode/*.cpp
+test/*/GenCode/*.h

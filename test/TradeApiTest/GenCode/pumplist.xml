@@ -1,0 +1,6 @@
+<pumplist>
+	<pump dest="StructWriteLogFunc.h" tpl="StructWriteLogFunc.h.tpl" model="../../../datamodel/CtpApiModel.xml"/>
+	<pump dest="StructWriteLogFunc.cpp" tpl="StructWriteLogFunc.cpp.tpl" model="../../../datamodel/CtpApiModel.xml"/>
+	<pump dest="ThostFtdcTraderSpiMiddle.h" tpl="ThostFtdcTraderSpiMiddle.h.tpl" model="../../../datamodel/CtpApiModel.xml"/>
+	<pump dest="ThostFtdcTraderSpiMiddle.cpp" tpl="ThostFtdcTraderSpiMiddle.cpp.tpl" model="../../../datamodel/CtpApiModel.xml"/>
+</pumplist>

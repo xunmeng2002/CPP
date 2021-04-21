@@ -25,6 +25,7 @@ endmacro(add_package)
 
 
 add_package(src ./src)
+add_package(GenCode ./GenCode)
 add_package(Utility ../../source/Utility)
 add_package(MemCache ../../source/MemCache)
 add_package(ThreadBase ../../source/ThreadBase)

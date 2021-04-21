@@ -72,21 +72,9 @@ def do_pump(file_name):
 				exit()
 	
 if __name__ == "__main__":
-	#旧的目录
-	olddir = os.getcwd()
-	
-	#首先生成Model
-	os.chdir("./datamodel")
-	if os.system("python gen.py") <> 0:
-		exit(-1)
-	
-	os.chdir(olddir)
 	exclude = ['inttools']
 	pumpfiles = search(".", "pumplist.xml", exclude)
 	if pumpfiles:
 		for file in pumpfiles:
 			do_pump(file)
 			
-	os.chdir("./sql")
-	if (os.system("python gensql.py")) <> 0:
-		exit(-1)

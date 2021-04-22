@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
 	Logger::GetInstance().Init(argv[0]);
 	Logger::GetInstance().Start();
 
-	string accountID = "12345678005";
+	string accountID = "71020537";
 	CThostFtdcTraderApi* traderApi = CThostFtdcTraderApi::CreateFtdcTraderApi();
 	CThostFtdcTraderSpiImpl* traderSpi = new CThostFtdcTraderSpiImpl(traderApi);
 	traderSpi->SetAccountInfo(accountInfos[accountID]);

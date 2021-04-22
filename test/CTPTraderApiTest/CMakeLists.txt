@@ -1,5 +1,5 @@
 #工程名
-SET(PROJECT_NAME "TradeApiTest")
+SET(PROJECT_NAME "CTPTraderApiTest")
 project(${PROJECT_NAME})
 enable_language(CXX)
 cmake_minimum_required(VERSION 2.8)

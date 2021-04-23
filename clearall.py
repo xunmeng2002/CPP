@@ -55,7 +55,3 @@ if __name__ == "__main__":
 		for file in pumpfiles:
 			clear(file)
 			
-	pumpfiles = search("tool","pumplist.xml")
-	if pumpfiles:
-		for file in pumpfiles:
-			clear(file)

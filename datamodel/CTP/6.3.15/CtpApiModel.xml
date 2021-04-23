@@ -1,0 +1,2333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<fields>
+		<field name="RspInfo">
+			<item name="ErrorID" type="int"/>
+			<item name="ErrorMsg" type="string"/>
+		</field>
+		<field name="RspAuthenticate">
+			<item name="BrokerID" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="UserProductInfo" type="string"/>
+			<item name="AppID" type="string"/>
+			<item name="AppType" type="char"/>
+		</field>
+		<field name="RspUserLogin">
+			<item name="TradingDay" type="string"/>
+			<item name="LoginTime" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="SystemName" type="string"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="MaxOrderRef" type="string"/>
+			<item name="SHFETime" type="string"/>
+			<item name="DCETime" type="string"/>
+			<item name="CZCETime" type="string"/>
+			<item name="FFEXTime" type="string"/>
+			<item name="INETime" type="string"/>
+		</field>
+		<field name="UserLogout">
+			<item name="BrokerID" type="string"/>
+			<item name="UserID" type="string"/>
+		</field>
+		<field name="UserPasswordUpdate">
+			<item name="BrokerID" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="OldPassword" type="string"/>
+			<item name="NewPassword" type="string"/>
+		</field>
+		<field name="TradingAccountPasswordUpdate">
+			<item name="BrokerID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="OldPassword" type="string"/>
+			<item name="NewPassword" type="string"/>
+			<item name="CurrencyID" type="string"/>
+		</field>
+		<field name="RspUserAuthMethod">
+			<item name="UsableAuthMethod" type="int"/>
+		</field>
+		<field name="RspGenUserCaptcha">
+			<item name="BrokerID" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="CaptchaInfoLen" type="int"/>
+			<item name="CaptchaInfo" type="string"/>
+		</field>
+		<field name="RspGenUserText">
+			<item name="UserTextSeq" type="int"/>
+		</field>
+		<field name="InputOrder">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="OrderRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="OrderPriceType" type="char"/>
+			<item name="Direction" type="char"/>
+			<item name="CombOffsetFlag" type="string"/>
+			<item name="CombHedgeFlag" type="string"/>
+			<item name="LimitPrice" type="double"/>
+			<item name="VolumeTotalOriginal" type="int"/>
+			<item name="TimeCondition" type="char"/>
+			<item name="GTDDate" type="string"/>
+			<item name="VolumeCondition" type="char"/>
+			<item name="MinVolume" type="int"/>
+			<item name="ContingentCondition" type="char"/>
+			<item name="StopPrice" type="double"/>
+			<item name="ForceCloseReason" type="char"/>
+			<item name="IsAutoSuspend" type="int"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="UserForceClose" type="int"/>
+			<item name="IsSwapOrder" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="ParkedOrder">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="OrderRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="OrderPriceType" type="char"/>
+			<item name="Direction" type="char"/>
+			<item name="CombOffsetFlag" type="string"/>
+			<item name="CombHedgeFlag" type="string"/>
+			<item name="LimitPrice" type="double"/>
+			<item name="VolumeTotalOriginal" type="int"/>
+			<item name="TimeCondition" type="char"/>
+			<item name="GTDDate" type="string"/>
+			<item name="VolumeCondition" type="char"/>
+			<item name="MinVolume" type="int"/>
+			<item name="ContingentCondition" type="char"/>
+			<item name="StopPrice" type="double"/>
+			<item name="ForceCloseReason" type="char"/>
+			<item name="IsAutoSuspend" type="int"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="UserForceClose" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ParkedOrderID" type="string"/>
+			<item name="UserType" type="char"/>
+			<item name="Status" type="char"/>
+			<item name="ErrorID" type="int"/>
+			<item name="ErrorMsg" type="string"/>
+			<item name="IsSwapOrder" type="int"/>
+			<item name="AccountID" type="string"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="ParkedOrderAction">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="OrderActionRef" type="int"/>
+			<item name="OrderRef" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="OrderSysID" type="string"/>
+			<item name="ActionFlag" type="char"/>
+			<item name="LimitPrice" type="double"/>
+			<item name="VolumeChange" type="int"/>
+			<item name="UserID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="ParkedOrderActionID" type="string"/>
+			<item name="UserType" type="char"/>
+			<item name="Status" type="char"/>
+			<item name="ErrorID" type="int"/>
+			<item name="ErrorMsg" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="InputOrderAction">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="OrderActionRef" type="int"/>
+			<item name="OrderRef" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="OrderSysID" type="string"/>
+			<item name="ActionFlag" type="char"/>
+			<item name="LimitPrice" type="double"/>
+			<item name="VolumeChange" type="int"/>
+			<item name="UserID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="QueryMaxOrderVolume">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="Direction" type="char"/>
+			<item name="OffsetFlag" type="char"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="MaxVolume" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="SettlementInfoConfirm">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="ConfirmDate" type="string"/>
+			<item name="ConfirmTime" type="string"/>
+			<item name="SettlementID" type="int"/>
+			<item name="AccountID" type="string"/>
+			<item name="CurrencyID" type="string"/>
+		</field>
+		<field name="RemoveParkedOrder">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="ParkedOrderID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="RemoveParkedOrderAction">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="ParkedOrderActionID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="InputExecOrder">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="ExecOrderRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="Volume" type="int"/>
+			<item name="RequestID" type="int"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="OffsetFlag" type="char"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="ActionType" type="char"/>
+			<item name="PosiDirection" type="char"/>
+			<item name="ReservePositionFlag" type="char"/>
+			<item name="CloseFlag" type="char"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="InputExecOrderAction">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="ExecOrderActionRef" type="int"/>
+			<item name="ExecOrderRef" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ExecOrderSysID" type="string"/>
+			<item name="ActionFlag" type="char"/>
+			<item name="UserID" type="string"/>
+			<item name="InstrumentID" type="int"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="InputForQuote">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="ForQuoteRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="InputQuote">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="QuoteRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="AskPrice" type="double"/>
+			<item name="BidPrice" type="double"/>
+			<item name="AskVolume" type="int"/>
+			<item name="BidVolume" type="int"/>
+			<item name="RequestID" type="int"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="AskOffsetFlag" type="char"/>
+			<item name="BidOffsetFlag" type="char"/>
+			<item name="AskHedgeFlag" type="char"/>
+			<item name="BidHedgeFlag" type="char"/>
+			<item name="AskOrderRef" type="string"/>
+			<item name="BidOrderRef" type="string"/>
+			<item name="ForQuoteSysID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="InputQuoteAction">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="QuoteActionRef" type="int"/>
+			<item name="QuoteRef" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="QuoteSysID" type="string"/>
+			<item name="ActionFlag" type="char"/>
+			<item name="UserID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="InputBatchOrderAction">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="OrderActionRef" type="int"/>
+			<item name="RequestID" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="InputOptionSelfClose">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="OptionSelfCloseRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="Volume" type="int"/>
+			<item name="RequestID" type="int"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="OptSelfCloseFlag" type="char"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="InputOptionSelfCloseAction">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="OptionSelfCloseActionRef" type="int"/>
+			<item name="OptionSelfCloseRef" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="OptionSelfCloseSysID" type="string"/>
+			<item name="ActionFlag" type="char"/>
+			<item name="UserID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="InputCombAction">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="int"/>
+			<item name="CombActionRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="Direction" type="char"/>
+			<item name="Volume" type="int"/>
+			<item name="CombDirection" type="char"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="Order">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="OrderRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="OrderPriceType" type="char"/>
+			<item name="Direction" type="char"/>
+			<item name="CombOffsetFlag" type="string"/>
+			<item name="CombHedgeFlag" type="string"/>
+			<item name="LimitPrice" type="double"/>
+			<item name="VolumeTotalOriginal" type="int"/>
+			<item name="TimeCondition" type="char"/>
+			<item name="GTDDate" type="string"/>
+			<item name="VolumeCondition" type="char"/>
+			<item name="MinVolume" type="int"/>
+			<item name="ContingentCondition" type="char"/>
+			<item name="StopPrice" type="double"/>
+			<item name="ForceCloseReason" type="char"/>
+			<item name="IsAutoSuspend" type="int"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="OrderLocalID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="ExchangeInstID" type="string"/>
+			<item name="TraderID" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="OrderSubmitStatus" type="char"/>
+			<item name="NotifySequence" type="int"/>
+			<item name="TradingDay" type="string"/>
+			<item name="SettlementID" type="int"/>
+			<item name="OrderSysID" type="string"/>
+			<item name="OrderSource" type="char"/>
+			<item name="OrderStatus" type="string"/>
+			<item name="OrderType" type="char"/>
+			<item name="VolumeTraded" type="int"/>
+			<item name="VolumeTotal" type="int"/>
+			<item name="InsertDate" type="string"/>
+			<item name="InsertTime" type="string"/>
+			<item name="ActiveTime" type="string"/>
+			<item name="SuspendTime" type="string"/>
+			<item name="UpdateTime" type="string"/>
+			<item name="CancelTime" type="string"/>
+			<item name="ActiveTraderID" type="string"/>
+			<item name="ClearingPartID" type="string"/>
+			<item name="SequenceNo" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="UserProductInfo" type="string"/>
+			<item name="StatusMsg" type="string"/>
+			<item name="UserForceClose" type="int"/>
+			<item name="ActiveUserID" type="string"/>
+			<item name="BrokerOrderSeq" type="int"/>
+			<item name="RelativeOrderSysID" type="string"/>
+			<item name="ZCETotalTradedVolume" type="int"/>
+			<item name="IsSwapOrder" type="int"/>
+			<item name="BranchID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="Trade">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="OrderRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="TradeID" type="string"/>
+			<item name="Direction" type="char"/>
+			<item name="OrderSysID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="TradingRole" type="char"/>
+			<item name="ExchangeInstID" type="string"/>
+			<item name="OffsetFlag" type="char"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="Price" type="double"/>
+			<item name="Volume" type="int"/>
+			<item name="TradeDate" type="string"/>
+			<item name="TradeTime" type="string"/>
+			<item name="TradeType" type="char"/>
+			<item name="PriceSource" type="char"/>
+			<item name="TraderID" type="string"/>
+			<item name="OrderLocalID" type="string"/>
+			<item name="ClearingPartID" type="string"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="SequenceNo" type="int"/>
+			<item name="TradingDay" type="string"/>
+			<item name="SettlementID" type="int"/>
+			<item name="BrokerOrderSeq" type="int"/>
+			<item name="TradeSource" type="char"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="InvestorPosition">
+			<item name="InstrumentID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="PosiDirection" type="char"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="PositionDate" type="char"/>
+			<item name="YdPosition" type="int"/>
+			<item name="Position" type="int"/>
+			<item name="LongFrozen" type="int"/>
+			<item name="ShortFrozen" type="int"/>
+			<item name="LongFrozenAmount" type="double"/>
+			<item name="ShortFrozenAmount" type="double"/>
+			<item name="OpenVolume" type="int"/>
+			<item name="CloseVolume" type="int"/>
+			<item name="OpenAmount" type="double"/>
+			<item name="CloseAmount" type="double"/>
+			<item name="PositionCost" type="double"/>
+			<item name="PreMargin" type="double"/>
+			<item name="UseMargin" type="double"/>
+			<item name="FrozenMargin" type="double"/>
+			<item name="FrozenCash" type="double"/>
+			<item name="FrozenCommission" type="double"/>
+			<item name="CashIn" type="double"/>
+			<item name="Commission" type="double"/>
+			<item name="CloseProfit" type="double"/>
+			<item name="PositionProfit" type="double"/>
+			<item name="PreSettlementPrice" type="double"/>
+			<item name="SettlementPrice" type="double"/>
+			<item name="TradingDay" type="string"/>
+			<item name="SettlementID" type="int"/>
+			<item name="OpenCost" type="double"/>
+			<item name="ExchangeMargin" type="double"/>
+			<item name="CombPosition" type="int"/>
+			<item name="CombLongFrozen" type="int"/>
+			<item name="CombShortFrozen" type="int"/>
+			<item name="CloseProfitByDate" type="double"/>
+			<item name="CloseProfitByTrade" type="double"/>
+			<item name="TodayPosition" type="int"/>
+			<item name="MarginRateByMoney" type="double"/>
+			<item name="MarginRateByVolume" type="double"/>
+			<item name="StrikeFrozen" type="int"/>
+			<item name="StrikeFrozenAmount" type="double"/>
+			<item name="AbandonFrozen" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="YdStrikeFrozen" type="int"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="PositionCostOffset" type="double"/>
+		</field>
+		<field name="TradingAccount">
+			<item name="BrokerID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="PreMortgage" type="double"/>
+			<item name="PreCredit" type="double"/>
+			<item name="PreDeposit" type="double"/>
+			<item name="PreBalance" type="double"/>
+			<item name="PreMargin" type="double"/>
+			<item name="InterestBase" type="double"/>
+			<item name="Interest" type="double"/>
+			<item name="Deposit" type="double"/>
+			<item name="Withdraw" type="double"/>
+			<item name="FrozenMargin" type="double"/>
+			<item name="FrozenCash" type="double"/>
+			<item name="FrozenCommission" type="double"/>
+			<item name="CurrMargin" type="double"/>
+			<item name="CashIn" type="double"/>
+			<item name="Commission" type="double"/>
+			<item name="CloseProfit" type="double"/>
+			<item name="PositionProfit" type="double"/>
+			<item name="Balance" type="double"/>
+			<item name="Available" type="double"/>
+			<item name="WithdrawQuota" type="double"/>
+			<item name="Reserve" type="double"/>
+			<item name="TradingDay" type="string"/>
+			<item name="SettlementID" type="int"/>
+			<item name="Credit" type="double"/>
+			<item name="Mortgage" type="double"/>
+			<item name="ExchangeMargin" type="double"/>
+			<item name="DeliveryMargin" type="double"/>
+			<item name="ExchangeDeliveryMargin" type="double"/>
+			<item name="ReserveBalance" type="double"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="PreFundMortgageIn" type="double"/>
+			<item name="PreFundMortgageOut" type="double"/>
+			<item name="FundMortgageIn" type="double"/>
+			<item name="FundMortgageOut" type="double"/>
+			<item name="FundMortgageAvailable" type="double"/>
+			<item name="MortgageableFund" type="double"/>
+			<item name="SpecProductMargin" type="double"/>
+			<item name="SpecProductFrozenMargin" type="double"/>
+			<item name="SpecProductCommission" type="double"/>
+			<item name="SpecProductFrozenCommission" type="double"/>
+			<item name="SpecProductPositionProfit" type="string"/>
+			<item name="SpecProductCloseProfit" type="double"/>
+			<item name="SpecProductPositionProfitByAlg" type="double"/>
+			<item name="SpecProductExchangeMargin" type="double"/>
+			<item name="BizType" type="char"/>
+			<item name="FrozenSwap" type="double"/>
+			<item name="RemainSwap" type="double"/>
+		</field>
+		<field name="Investor">
+			<item name="InvestorID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorGroupID" type="string"/>
+			<item name="InvestorName" type="string"/>
+			<item name="IdentifiedCardType" type="char"/>
+			<item name="IdentifiedCardNo" type="string"/>
+			<item name="IsActive" type="int"/>
+			<item name="Telephone" type="string"/>
+			<item name="Address" type="string"/>
+			<item name="OpenDate" type="string"/>
+			<item name="Mobile" type="string"/>
+			<item name="CommModelID" type="string"/>
+			<item name="MarginModelID" type="string"/>
+		</field>
+		<field name="TradingCode">
+			<item name="InvestorID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="IsActive" type="int"/>
+			<item name="ClientIDType" type="char"/>
+			<item name="BranchID" type="string"/>
+			<item name="BizType" type="char"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="InstrumentMarginRate">
+			<item name="InstrumentID" type="string"/>
+			<item name="InvestorRange" type="char"/>
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="LongMarginRatioByMoney" type="double"/>
+			<item name="LongMarginRatioByVolume" type="double"/>
+			<item name="ShortMarginRatioByMoney" type="double"/>
+			<item name="ShortMarginRatioByVolume" type="double"/>
+			<item name="IsRelative" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="InstrumentCommissionRate">
+			<item name="InstrumentID" type="string"/>
+			<item name="InvestorRange" type="char"/>
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="OpenRatioByMoney" type="double"/>
+			<item name="OpenRatioByVolume" type="double"/>
+			<item name="CloseRatioByMoney" type="double"/>
+			<item name="CloseRatioByVolume" type="double"/>
+			<item name="CloseTodayRatioByMoney" type="double"/>
+			<item name="CloseTodayRatioByVolume" type="double"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="BizType" type="char"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="Exchange">
+			<item name="ExchangeID" type="string"/>
+			<item name="ExchangeName" type="string"/>
+			<item name="ExchangeProperty" type="char"/>
+		</field>
+		<field name="Product">
+			<item name="ProductID" type="string"/>
+			<item name="ProductName" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ProductClass" type="char"/>
+			<item name="VolumeMultiple" type="int"/>
+			<item name="PriceTick" type="double"/>
+			<item name="MaxMarketOrderVolume" type="int"/>
+			<item name="MinMarketOrderVolume" type="int"/>
+			<item name="MaxLimitOrderVolume" type="int"/>
+			<item name="MinLimitOrderVolume" type="int"/>
+			<item name="PositionType" type="char"/>
+			<item name="PositionDateType" type="char"/>
+			<item name="CloseDealType" type="char"/>
+			<item name="TradeCurrencyID" type="string"/>
+			<item name="MortgageFundUseRange" type="char"/>
+			<item name="ExchangeProductID" type="string"/>
+			<item name="UnderlyingMultiple" type="double"/>
+		</field>
+		<field name="Instrument">
+			<item name="InstrumentID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="InstrumentName" type="string"/>
+			<item name="ExchangeInstID" type="string"/>
+			<item name="ProductID" type="string"/>
+			<item name="ProductClass" type="char"/>
+			<item name="DeliveryYear" type="int"/>
+			<item name="DeliveryMonth" type="int"/>
+			<item name="MaxMarketOrderVolume" type="int"/>
+			<item name="MinMarketOrderVolume" type="int"/>
+			<item name="MaxLimitOrderVolume" type="int"/>
+			<item name="MinLimitOrderVolume" type="int"/>
+			<item name="VolumeMultiple" type="int"/>
+			<item name="PriceTick" type="double"/>
+			<item name="CreateDate" type="string"/>
+			<item name="OpenDate" type="string"/>
+			<item name="ExpireDate" type="string"/>
+			<item name="StartDelivDate" type="string"/>
+			<item name="EndDelivDate" type="string"/>
+			<item name="InstLifePhase" type="char"/>
+			<item name="IsTrading" type="int"/>
+			<item name="PositionType" type="char"/>
+			<item name="PositionDateType" type="char"/>
+			<item name="LongMarginRatio" type="double"/>
+			<item name="ShortMarginRatio" type="double"/>
+			<item name="MaxMarginSideAlgorithm" type="char"/>
+			<item name="UnderlyingInstrID" type="string"/>
+			<item name="StrikePrice" type="double"/>
+			<item name="OptionsType" type="char"/>
+			<item name="UnderlyingMultiple" type="double"/>
+			<item name="CombinationType" type="char"/>
+		</field>
+		<field name="DepthMarketData">
+			<item name="TradingDay" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ExchangeInstID" type="string"/>
+			<item name="LastPrice" type="double"/>
+			<item name="PreSettlementPrice" type="double"/>
+			<item name="PreClosePrice" type="double"/>
+			<item name="PreOpenInterest" type="double"/>
+			<item name="OpenPrice" type="double"/>
+			<item name="HighestPrice" type="double"/>
+			<item name="LowestPrice" type="double"/>
+			<item name="Volume" type="int"/>
+			<item name="Turnover" type="double"/>
+			<item name="OpenInterest" type="double"/>
+			<item name="ClosePrice" type="double"/>
+			<item name="SettlementPrice" type="double"/>
+			<item name="UpperLimitPrice" type="double"/>
+			<item name="LowerLimitPrice" type="double"/>
+			<item name="PreDelta" type="double"/>
+			<item name="CurrDelta" type="double"/>
+			<item name="UpdateTime" type="string"/>
+			<item name="UpdateMillisec" type="int"/>
+			<item name="BidPrice1" type="double"/>
+			<item name="BidVolume1" type="int"/>
+			<item name="AskPrice1" type="double"/>
+			<item name="AskVolume1" type="int"/>
+			<item name="BidPrice2" type="double"/>
+			<item name="BidVolume2" type="int"/>
+			<item name="AskPrice2" type="double"/>
+			<item name="AskVolume2" type="int"/>
+			<item name="BidPrice3" type="double"/>
+			<item name="BidVolume3" type="int"/>
+			<item name="AskPrice3" type="double"/>
+			<item name="AskVolume3" type="int"/>
+			<item name="BidPrice4" type="double"/>
+			<item name="BidVolume4" type="int"/>
+			<item name="AskPrice4" type="double"/>
+			<item name="AskVolume4" type="int"/>
+			<item name="BidPrice5" type="double"/>
+			<item name="BidVolume5" type="int"/>
+			<item name="AskPrice5" type="double"/>
+			<item name="AskVolume5" type="int"/>
+			<item name="AveragePrice" type="double"/>
+			<item name="ActionDay" type="string"/>
+		</field>
+		<field name="SettlementInfo">
+			<item name="TradingDay" type="string"/>
+			<item name="SettlementID" type="int"/>
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="SequenceNo" type="int"/>
+			<item name="Content" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="CurrencyID" type="string"/>
+		</field>
+		<field name="TransferBank">
+			<item name="BankID" type="string"/>
+			<item name="BankBrchID" type="string"/>
+			<item name="BankName" type="string"/>
+			<item name="IsActive" type="int"/>
+		</field>
+		<field name="InvestorPositionDetail">
+			<item name="InstrumentID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="Direction" type="char"/>
+			<item name="OpenDate" type="string"/>
+			<item name="TradeID" type="string"/>
+			<item name="Volume" type="int"/>
+			<item name="OpenPrice" type="double"/>
+			<item name="TradingDay" type="string"/>
+			<item name="SettlementID" type="int"/>
+			<item name="TradeType" type="char"/>
+			<item name="CombInstrumentID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="CloseProfitByDate" type="double"/>
+			<item name="CloseProfitByTrade" type="double"/>
+			<item name="PositionProfitByDate" type="double"/>
+			<item name="PositionProfitByTrade" type="double"/>
+			<item name="Margin" type="double"/>
+			<item name="ExchMargin" type="double"/>
+			<item name="MarginRateByMoney" type="double"/>
+			<item name="MarginRateByVolume" type="double"/>
+			<item name="LastSettlementPrice" type="double"/>
+			<item name="SettlementPrice" type="double"/>
+			<item name="CloseVolume" type="int"/>
+			<item name="CloseAmount" type="double"/>
+			<item name="TimeFirstVolume" type="int"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="Notice">
+			<item name="BrokerID" type="string"/>
+			<item name="Content" type="string"/>
+			<item name="SequenceLabel" type="string"/>
+		</field>
+		<field name="InvestorPositionCombineDetail">
+			<item name="TradingDay" type="string"/>
+			<item name="OpenDate" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="SettlementID" type="int"/>
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="ComTradeID" type="string"/>
+			<item name="TradeID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="Direction" type="char"/>
+			<item name="TotalAmt" type="int"/>
+			<item name="Margin" type="double"/>
+			<item name="ExchMargin" type="double"/>
+			<item name="MarginRateByMoney" type="double"/>
+			<item name="MarginRateByVolume" type="double"/>
+			<item name="LegID" type="int"/>
+			<item name="LegMultiple" type="int"/>
+			<item name="CombInstrumentID" type="string"/>
+			<item name="TradeGroupID" type="int"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="CFMMCTradingAccountKey">
+			<item name="BrokerID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="KeyID" type="int"/>
+			<item name="CurrentKey" type="string"/>
+		</field>
+		<field name="EWarrantOffset">
+			<item name="TradingDay" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="Direction" type="char"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="Volume" type="int"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="InvestorProductGroupMargin">
+			<item name="ProductGroupID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="TradingDay" type="string"/>
+			<item name="SettlementID" type="int"/>
+			<item name="FrozenMargin" type="double"/>
+			<item name="LongFrozenMargin" type="double"/>
+			<item name="ShortFrozenMargin" type="double"/>
+			<item name="UseMargin" type="double"/>
+			<item name="LongUseMargin" type="double"/>
+			<item name="ShortUseMargin" type="double"/>
+			<item name="ExchMargin" type="double"/>
+			<item name="LongExchMargin" type="double"/>
+			<item name="ShortExchMargin" type="double"/>
+			<item name="CloseProfit" type="double"/>
+			<item name="FrozenCommission" type="double"/>
+			<item name="Commission" type="double"/>
+			<item name="FrozenCash" type="double"/>
+			<item name="CashIn" type="double"/>
+			<item name="PositionProfit" type="double"/>
+			<item name="OffsetAmount" type="double"/>
+			<item name="LongOffsetAmount" type="double"/>
+			<item name="ShortOffsetAmount" type="double"/>
+			<item name="ExchOffsetAmount" type="double"/>
+			<item name="LongExchOffsetAmount" type="double"/>
+			<item name="ShortExchOffsetAmount" type="double"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="ExchangeMarginRate">
+			<item name="BrokerID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="LongMarginRatioByMoney" type="double"/>
+			<item name="LongMarginRatioByVolume" type="double"/>
+			<item name="ShortMarginRatioByMoney" type="double"/>
+			<item name="ShortMarginRatioByVolume" type="double"/>
+			<item name="ExchangeID" type="string"/>
+		</field>
+		<field name="ExchangeMarginRateAdjust">
+			<item name="BrokerID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="LongMarginRatioByMoney" type="double"/>
+			<item name="LongMarginRatioByVolume" type="double"/>
+			<item name="ShortMarginRatioByMoney" type="double"/>
+			<item name="ShortMarginRatioByVolume" type="double"/>
+			<item name="ExchLongMarginRatioByMoney" type="double"/>
+			<item name="ExchLongMarginRatioByVolume" type="double"/>
+			<item name="ExchShortMarginRatioByMoney" type="double"/>
+			<item name="ExchShortMarginRatioByVolume" type="double"/>
+			<item name="NoLongMarginRatioByMoney" type="double"/>
+			<item name="NoLongMarginRatioByVolume" type="double"/>
+			<item name="NoShortMarginRatioByMoney" type="double"/>
+			<item name="NoShortMarginRatioByVolume" type="double"/>
+		</field>
+		<field name="ExchangeRate">
+			<item name="BrokerID" type="string"/>
+			<item name="FromCurrencyID" type="string"/>
+			<item name="FromCurrencyUnit" type="double"/>
+			<item name="ToCurrencyID" type="string"/>
+			<item name="ExchangeRate" type="double"/>
+		</field>
+		<field name="SecAgentACIDMap">
+			<item name="BrokerID" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="BrokerSecAgentID" type="string"/>
+		</field>
+		<field name="ProductExchRate">
+			<item name="ProductID" type="string"/>
+			<item name="QuoteCurrencyID" type="string"/>
+			<item name="ExchangeRate" type="double"/>
+			<item name="ExchangeID" type="string"/>
+		</field>
+		<field name="ProductGroup">
+			<item name="ProductID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ProductGroupID" type="string"/>
+		</field>
+		<field name="MMInstrumentCommissionRate">
+			<item name="InstrumentID" type="string"/>
+			<item name="InvestorRange" type="char"/>
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="OpenRatioByMoney" type="double"/>
+			<item name="OpenRatioByVolume" type="double"/>
+			<item name="CloseRatioByMoney" type="double"/>
+			<item name="CloseRatioByVolume" type="double"/>
+			<item name="CloseTodayRatioByMoney" type="double"/>
+			<item name="CloseTodayRatioByVolume" type="double"/>
+		</field>
+		<field name="MMOptionInstrCommRate">
+			<item name="InstrumentID" type="string"/>
+			<item name="InvestorRange" type="char"/>
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="OpenRatioByMoney" type="double"/>
+			<item name="OpenRatioByVolume" type="double"/>
+			<item name="CloseRatioByMoney" type="double"/>
+			<item name="CloseRatioByVolume" type="double"/>
+			<item name="CloseTodayRatioByMoney" type="double"/>
+			<item name="CloseTodayRatioByVolume" type="double"/>
+			<item name="StrikeRatioByMoney" type="double"/>
+			<item name="StrikeRatioByVolume" type="double"/>
+		</field>
+		<field name="InstrumentOrderCommRate">
+			<item name="InstrumentID" type="string"/>
+			<item name="InvestorRange" type="char"/>
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="OrderCommByVolume" type="double"/>
+			<item name="OrderActionCommByVolume" type="double"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="SecAgentCheckMode">
+			<item name="InvestorID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="BrokerSecAgentID" type="string"/>
+			<item name="CheckSelfAccount" type="int"/>
+		</field>
+		<field name="SecAgentTradeInfo">
+			<item name="BrokerID" type="string"/>
+			<item name="BrokerSecAgentID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="LongCustomerName" type="string"/>
+		</field>
+		<field name="OptionInstrTradeCost">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="FixedMargin" type="double"/>
+			<item name="MiniMargin" type="double"/>
+			<item name="Royalty" type="double"/>
+			<item name="ExchFixedMargin" type="double"/>
+			<item name="ExchMiniMargin" type="double"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="OptionInstrCommRate">
+			<item name="InstrumentID" type="string"/>
+			<item name="InvestorRange" type="char"/>
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="OpenRatioByMoney" type="double"/>
+			<item name="OpenRatioByVolume" type="double"/>
+			<item name="CloseRatioByMoney" type="double"/>
+			<item name="CloseRatioByVolume" type="double"/>
+			<item name="CloseTodayRatioByMoney" type="double"/>
+			<item name="CloseTodayRatioByVolume" type="double"/>
+			<item name="StrikeRatioByMoney" type="double"/>
+			<item name="StrikeRatioByVolume" type="double"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="ExecOrder">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="ExecOrderRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="Volume" type="int"/>
+			<item name="RequestID" type="int"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="OffsetFlag" type="char"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="ActionType" type="char"/>
+			<item name="PosiDirection" type="char"/>
+			<item name="ReservePositionFlag" type="char"/>
+			<item name="CloseFlag" type="char"/>
+			<item name="ExecOrderLocalID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="ExchangeInstID" type="string"/>
+			<item name="TraderID" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="OrderSubmitStatus" type="char"/>
+			<item name="NotifySequence" type="int"/>
+			<item name="TradingDay" type="string"/>
+			<item name="SettlementID" type="int"/>
+			<item name="ExecOrderSysID" type="string"/>
+			<item name="InsertDate" type="string"/>
+			<item name="InsertTime" type="string"/>
+			<item name="CancelTime" type="string"/>
+			<item name="ExecResult" type="char"/>
+			<item name="ClearingPartID" type="string"/>
+			<item name="SequenceNo" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="UserProductInfo" type="string"/>
+			<item name="StatusMsg" type="string"/>
+			<item name="ActiveUserID" type="string"/>
+			<item name="BrokerExecOrderSeq" type="int"/>
+			<item name="BranchID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="ForQuote">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="ForQuoteRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="ForQuoteLocalID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="ExchangeInstID" type="char"/>
+			<item name="TraderID" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="InsertDate" type="string"/>
+			<item name="InsertTime" type="string"/>
+			<item name="ForQuoteStatus" type="char"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="StatusMsg" type="string"/>
+			<item name="ActiveUserID" type="string"/>
+			<item name="BrokerForQutoSeq" type="int"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="Quote">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="QuoteRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="AskPrice" type="double"/>
+			<item name="BidPrice" type="double"/>
+			<item name="AskVolume" type="int"/>
+			<item name="BidVolume" type="int"/>
+			<item name="RequestID" type="int"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="AskOffsetFlag" type="char"/>
+			<item name="BidOffsetFlag" type="char"/>
+			<item name="AskHedgeFlag" type="char"/>
+			<item name="BidHedgeFlag" type="char"/>
+			<item name="QuoteLocalID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="ExchangeInstID" type="string"/>
+			<item name="TraderID" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="NotifySequence" type="int"/>
+			<item name="OrderSubmitStatus" type="char"/>
+			<item name="TradingDay" type="string"/>
+			<item name="SettlementID" type="int"/>
+			<item name="QuoteSysID" type="string"/>
+			<item name="InsertDate" type="string"/>
+			<item name="InsertTime" type="string"/>
+			<item name="CancelTime" type="string"/>
+			<item name="QuoteStatus" type="char"/>
+			<item name="ClearingPartID" type="string"/>
+			<item name="SequenceNo" type="int"/>
+			<item name="AskOrderSysID" type="string"/>
+			<item name="BidOrderSysID" type="string"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="UserProductInfo" type="string"/>
+			<item name="StatusMsg" type="string"/>
+			<item name="ActiveUserID" type="string"/>
+			<item name="BrokerQuoteSeq" type="int"/>
+			<item name="AskOrderRef" type="string"/>
+			<item name="BidOrderRef" type="string"/>
+			<item name="ForQuoteSysID" type="string"/>
+			<item name="BranchID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="OptionSelfClose">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="OptionSelfCloseRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="Volume" type="int"/>
+			<item name="RequestID" type="int"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="OptSelfCloseFlag" type="char"/>
+			<item name="OptionSelfCloseLocalID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="ExchangeInstID" type="string"/>
+			<item name="TraderID" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="OrderSubmitStatus" type="char"/>
+			<item name="NotifySequence" type="int"/>
+			<item name="TradingDay" type="string"/>
+			<item name="SettlementID" type="int"/>
+			<item name="OptionSelfCloseSysID" type="string"/>
+			<item name="InsertDate" type="string"/>
+			<item name="InsertTime" type="string"/>
+			<item name="CancelTime" type="string"/>
+			<item name="ExecResult" type="char"/>
+			<item name="ClearingPartID" type="string"/>
+			<item name="SequenceNo" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="UserProductInfo" type="string"/>
+			<item name="StatusMsg" type="string"/>
+			<item name="ActiveUserID" type="string"/>
+			<item name="BrokerOptionSelfCloseSeq" type="int"/>
+			<item name="BranchID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="InvestUnit">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="InvestorUnitName" type="string"/>
+			<item name="InvestorGroupID" type="string"/>
+			<item name="CommModelID" type="string"/>
+			<item name="MarginModelID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="CurrencyID" type="string"/>
+		</field>
+		<field name="CombInstrumentGuard">
+			<item name="BrokerID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="GuarantRatio" type="double"/>
+			<item name="ExchangeID" type="string"/>
+		</field>
+		<field name="CombAction">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="CombActionRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="Direction" type="char"/>
+			<item name="Volume" type="int"/>
+			<item name="CombDirection" type="char"/>
+			<item name="HedgeFlag" type="char"/>
+			<item name="ActionLocalID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="ExchangeInstID" type="string"/>
+			<item name="TraderID" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="ActionStatus" type="char"/>
+			<item name="NotifySequence" type="int"/>
+			<item name="TradingDay" type="string"/>
+			<item name="SettlementID" type="int"/>
+			<item name="SequenceNo" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="UserProductInfo" type="string"/>
+			<item name="StatusMsg" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+			<item name="ComTradeID" type="string"/>
+			<item name="BranchID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="TransferSerial">
+			<item name="PlateSerial" type="int"/>
+			<item name="TradeDate" type="string"/>
+			<item name="TradingDay" type="string"/>
+			<item name="TradeTime" type="string"/>
+			<item name="TradeCode" type="string"/>
+			<item name="SessionID" type="int"/>
+			<item name="BankID" type="string"/>
+			<item name="BankBranchID" type="string"/>
+			<item name="BankAccType" type="char"/>
+			<item name="BankAccount" type="string"/>
+			<item name="BankSerial" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="BrokerBranchID" type="string"/>
+			<item name="FutureAccType" type="char"/>
+			<item name="AccountID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="FutureSerial" type="int"/>
+			<item name="IdCardType" type="char"/>
+			<item name="IdentifiedCardNo" type="string"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="TradeAmount" type="double"/>
+			<item name="CustFee" type="double"/>
+			<item name="BrokerFee" type="double"/>
+			<item name="AvailabilityFlag" type="char"/>
+			<item name="OperatorCode" type="string"/>
+			<item name="BankNewAccount" type="string"/>
+			<item name="ErrorID" type="int"/>
+			<item name="ErrorMsg" type="string"/>
+		</field>
+		<field name="Accountregister">
+			<item name="TradeDay" type="string"/>
+			<item name="BankID" type="string"/>
+			<item name="BankBranchID" type="string"/>
+			<item name="BankAccount" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="BrokerBranchID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="IdCardType" type="char"/>
+			<item name="IdentifiedCardNo" type="string"/>
+			<item name="CustomerName" type="string"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="OpenOrDestroy" type="char"/>
+			<item name="RegDate" type="string"/>
+			<item name="OutDate" type="string"/>
+			<item name="TID" type="int"/>
+			<item name="CustType" type="char"/>
+			<item name="BankAccType" type="char"/>
+			<item name="LongCustomerName" type="char"/>
+		</field>
+		<field name="OrderAction">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="OrderActionRef" type="int"/>
+			<item name="OrderRef" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="OrderSysID" type="string"/>
+			<item name="ActionFlag" type="char"/>
+			<item name="LimitPrice" type="double"/>
+			<item name="VolumeChange" type="int"/>
+			<item name="ActionDate" type="string"/>
+			<item name="ActionTime" type="string"/>
+			<item name="TraderID" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="OrderLocalID" type="string"/>
+			<item name="ActionLocalID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="OrderActionStatus" type="char"/>
+			<item name="UserID" type="string"/>
+			<item name="StatusMsg" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="BranchID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="InstrumentStatus">
+			<item name="ExchangeID" type="string"/>
+			<item name="ExchangeInstID" type="string"/>
+			<item name="SettlementGroupID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="InstrumentStatus" type="char"/>
+			<item name="TradingSegmentSN" type="int"/>
+			<item name="EnterTime" type="string"/>
+			<item name="EnterReason" type="char"/>
+		</field>
+		<field name="Bulletin">
+			<item name="ExchangeID" type="string"/>
+			<item name="TradingDay" type="string"/>
+			<item name="BulletinID" type="int"/>
+			<item name="SequenceNo" type="int"/>
+			<item name="NewsType" type="string"/>
+			<item name="NewsUrgency" type="char"/>
+			<item name="SendTime" type="string"/>
+			<item name="Abstract" type="string"/>
+			<item name="ComeFrom" type="string"/>
+			<item name="Content" type="string"/>
+			<item name="URLLink" type="string"/>
+			<item name="MarketID" type="string"/>
+		</field>
+		<field name="TradingNoticeInfo">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="SendTime" type="string"/>
+			<item name="FieldContent" type="string"/>
+			<item name="SequenceSeries" type="short"/>
+			<item name="SequenceNo" type="int"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="ErrorConditionalOrder">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="OrderRef" type="string"/>
+			<item name="UserID" type="string"/>
+			<item name="OrderPriceType" type="char"/>
+			<item name="Direction" type="char"/>
+			<item name="CombOffsetFlag" type="string"/>
+			<item name="CombHedgeFlag" type="string"/>
+			<item name="LimitPrice" type="double"/>
+			<item name="VolumeTotalOriginal" type="int"/>
+			<item name="TimeCondition" type="char"/>
+			<item name="GTDDate" type="string"/>
+			<item name="VolumeCondition" type="char"/>
+			<item name="MinVolume" type="int"/>
+			<item name="ContingentCondition" type="char"/>
+			<item name="StopPrice" type="double"/>
+			<item name="ForceCloseReason" type="char"/>
+			<item name="IsAutoSuspend" type="int"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="OrderLocalID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="ExchangeInstID" type="string"/>
+			<item name="TraderID" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="OrderSubmitStatus" type="char"/>
+			<item name="NotifySequence" type="int"/>
+			<item name="TradingDay" type="string"/>
+			<item name="SettlementID" type="int"/>
+			<item name="OrderSysID" type="string"/>
+			<item name="OrderSource" type="char"/>
+			<item name="OrderStatus" type="char"/>
+			<item name="OrderType" type="char"/>
+			<item name="VolumeTraded" type="int"/>
+			<item name="VolumeTotal" type="int"/>
+			<item name="InsertDate" type="string"/>
+			<item name="InsertTime" type="string"/>
+			<item name="ActiveTime" type="string"/>
+			<item name="SuspendTime" type="string"/>
+			<item name="UpdateTime" type="string"/>
+			<item name="CancelTime" type="string"/>
+			<item name="ActiveTraderID" type="string"/>
+			<item name="ClearingPartID" type="string"/>
+			<item name="SequenceNo" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="UserProductInfo" type="string"/>
+			<item name="StatusMsg" type="string"/>
+			<item name="UserForceClose" type="int"/>
+			<item name="ActiveUserID" type="string"/>
+			<item name="BrokerOrderSeq" type="int"/>
+			<item name="RelativeOrderSysID" type="string"/>
+			<item name="ZCETotalTradedVolume" type="int"/>
+			<item name="ErrorID" type="int"/>
+			<item name="ErrorMsg" type="string"/>
+			<item name="IsSwapOrder" type="int"/>
+			<item name="BranchID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="ExecOrderAction">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="ExecOrderActionRef" type="int"/>
+			<item name="ExecOrderRef" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ExecOrderSysID" type="string"/>
+			<item name="ActionFlag" type="char"/>
+			<item name="ActionDate" type="string"/>
+			<item name="ActionTime" type="string"/>
+			<item name="TraderID" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="ExecOrderLocalID" type="string"/>
+			<item name="ActionLocalID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="OrderActionStatus" type="char"/>
+			<item name="UserID" type="string"/>
+			<item name="ActionType" type="char"/>
+			<item name="StatusMsg" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="BranchID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="QuoteAction">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="QuoteActionRef" type="int"/>
+			<item name="QuoteRef" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="QuoteSysID" type="string"/>
+			<item name="ActionFlag" type="char"/>
+			<item name="ActionDate" type="string"/>
+			<item name="ActionTime" type="string"/>
+			<item name="TraderID" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="QuoteLocalID" type="string"/>
+			<item name="ActionLocalID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="OrderActionStatus" type="char"/>
+			<item name="UserID" type="string"/>
+			<item name="StatusMsg" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="BranchID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="ForQuoteRsp">
+			<item name="TradingDay" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="ForQuoteSysID" type="string"/>
+			<item name="ForQuoteTime" type="string"/>
+			<item name="ActionDay" type="string"/>
+			<item name="ExchangeID" type="string"/>
+		</field>
+		<field name="CFMMCTradingAccountToken">
+			<item name="BrokerID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="KeyID" type="int"/>
+			<item name="Token" type="string"/>
+		</field>
+		<field name="BatchOrderAction">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="OrderActionRef" type="int"/>
+			<item name="RequestID" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="ActionDate" type="string"/>
+			<item name="ActionTime" type="string"/>
+			<item name="TraderID" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="ActionLocalID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="OrderActionStatus" type="char"/>
+			<item name="UserID" type="string"/>
+			<item name="StatusMsg" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="OptionSelfCloseAction">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="OptionSelfCloseActionRef" type="int"/>
+			<item name="OptionSelfCloseRef" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="FrontID" type="int"/>
+			<item name="SessionID" type="int"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="OptionSelfCloseSysID" type="string"/>
+			<item name="ActionFlag" type="char"/>
+			<item name="ActionDate" type="string"/>
+			<item name="ActionTime" type="string"/>
+			<item name="TraderID" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="OptionSelfCloseLocalID" type="string"/>
+			<item name="ActionLocalID" type="string"/>
+			<item name="ParticipantID" type="string"/>
+			<item name="ClientID" type="string"/>
+			<item name="BusinessUnit" type="string"/>
+			<item name="OrderActionStatus" type="char"/>
+			<item name="UserID" type="string"/>
+			<item name="StatusMsg" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="BranchID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+			<item name="IPAddress" type="string"/>
+			<item name="MacAddress" type="string"/>
+		</field>
+		<field name="ContractBank">
+			<item name="BrokerID" type="string"/>
+			<item name="BankID" type="string"/>
+			<item name="BankBrchID" type="string"/>
+			<item name="BankName" type="string"/>
+		</field>
+		<field name="TradingNotice">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorRange" type="char"/>
+			<item name="InvestorID" type="string"/>
+			<item name="SequenceSeries" type="short"/>
+			<item name="UserID" type="string"/>
+			<item name="SendTime" type="string"/>
+			<item name="SequenceNo" type="int"/>
+			<item name="FieldContent" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="BrokerTradingParams">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="MarginPriceType" type="char"/>
+			<item name="Algorithm" type="char"/>
+			<item name="AvailIncludeCloseProfit" type="char"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="OptionRoyaltyPriceType" type="char"/>
+			<item name="AccountID" type="string"/>
+		</field>
+		<field name="BrokerTradingAlgos">
+			<item name="BrokerID" type="string"/>
+			<item name="ExchangeID" type="string"/>
+			<item name="InstrumentID" type="string"/>
+			<item name="HandlePositionAlgoID" type="char"/>
+			<item name="FindMarginRateAlgoID" type="char"/>
+			<item name="HandleTradingAccountAlgoID" type="char"/>
+		</field>
+		<field name="QueryCFMMCTradingAccountToken">
+			<item name="BrokerID" type="string"/>
+			<item name="InvestorID" type="string"/>
+			<item name="InvestUnitID" type="string"/>
+		</field>
+		<field name="RspTransfer">
+			<item name="TradeCode" type="string"/>
+			<item name="BankID" type="string"/>
+			<item name="BankBranchID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="BrokerBranchID" type="string"/>
+			<item name="TradeDate" type="string"/>
+			<item name="TradeTime" type="string"/>
+			<item name="BankSerial" type="string"/>
+			<item name="TradingDay" type="string"/>
+			<item name="PlateSerial" type="int"/>
+			<item name="LastFragment" type="char"/>
+			<item name="SessionID" type="int"/>
+			<item name="CustomerName" type="string"/>
+			<item name="IdCardType" type="char"/>
+			<item name="IdentifiedCardNo" type="string"/>
+			<item name="CustType" type="char"/>
+			<item name="BankAccount" type="string"/>
+			<item name="BankPassWord" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="Password" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="FutureSerial" type="int"/>
+			<item name="UserID" type="string"/>
+			<item name="VerifyCertNoFlag" type="char"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="TradeAmount" type="double"/>
+			<item name="FutureFetchAmount" type="double"/>
+			<item name="FeePayFlag" type="char"/>
+			<item name="CustFee" type="double"/>
+			<item name="BrokerFee" type="double"/>
+			<item name="Message" type="string"/>
+			<item name="Digest" type="string"/>
+			<item name="BankAccType" type="char"/>
+			<item name="DeviceID" type="string"/>
+			<item name="BankSecuAccType" type="char"/>
+			<item name="BrokerIDByBank" type="string"/>
+			<item name="BankSecuAcc" type="string"/>
+			<item name="BankPwdFlag" type="char"/>
+			<item name="SecuPwdFlag" type="char"/>
+			<item name="OperNo" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="TID" type="int"/>
+			<item name="TransferStatus" type="char"/>
+			<item name="ErrorID" type="int"/>
+			<item name="ErrorMsg" type="string"/>
+			<item name="LongCustomerName" type="string"/>
+		</field>
+		<field name="RspRepeal">
+			<item name="RepealTimeInterval" type="int"/>
+			<item name="RepealedTimes" type="int"/>
+			<item name="BankRepealFlag" type="char"/>
+			<item name="BrokerRepealFlag" type="char"/>
+			<item name="PlateRepealSerial" type="int"/>
+			<item name="BankRepealSerial" type="string"/>
+			<item name="FutureRepealSerial" type="int"/>
+			<item name="TradeCode" type="string"/>
+			<item name="BankID" type="string"/>
+			<item name="BankBranchID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="BrokerBranchID" type="string"/>
+			<item name="TradeDate" type="string"/>
+			<item name="TradeTime" type="string"/>
+			<item name="BankSerial" type="string"/>
+			<item name="TradingDay" type="string"/>
+			<item name="PlateSerial" type="int"/>
+			<item name="LastFragment" type="char"/>
+			<item name="SessionID" type="int"/>
+			<item name="CustomerName" type="string"/>
+			<item name="IdCardType" type="char"/>
+			<item name="IdentifiedCardNo" type="string"/>
+			<item name="CustType" type="char"/>
+			<item name="BankAccount" type="string"/>
+			<item name="BankPassWord" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="Password" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="FutureSerial" type="int"/>
+			<item name="UserID" type="string"/>
+			<item name="VerifyCertNoFlag" type="char"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="TradeAmount" type="double"/>
+			<item name="FutureFetchAmount" type="double"/>
+			<item name="FeePayFlag" type="char"/>
+			<item name="CustFee" type="double"/>
+			<item name="BrokerFee" type="double"/>
+			<item name="Message" type="string"/>
+			<item name="Digest" type="string"/>
+			<item name="BankAccType" type="char"/>
+			<item name="DeviceID" type="string"/>
+			<item name="BankSecuAccType" type="char"/>
+			<item name="BrokerIDByBank" type="string"/>
+			<item name="BankSecuAcc" type="string"/>
+			<item name="BankPwdFlag" type="char"/>
+			<item name="SecuPwdFlag" type="char"/>
+			<item name="OperNo" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="TID" type="int"/>
+			<item name="TransferStatus" type="char"/>
+			<item name="ErrorID" type="int"/>
+			<item name="ErrorMsg" type="string"/>
+			<item name="LongCustomerName" type="string"/>
+		</field>
+		<field name="NotifyQueryAccount">
+			<item name="TradeCode" type="string"/>
+			<item name="BankID" type="string"/>
+			<item name="BankBranchID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="BrokerBranchID" type="string"/>
+			<item name="TradeDate" type="string"/>
+			<item name="TradeTime" type="string"/>
+			<item name="BankSerial" type="string"/>
+			<item name="TradingDay" type="string"/>
+			<item name="PlateSerial" type="int"/>
+			<item name="LastFragment" type="char"/>
+			<item name="SessionID" type="int"/>
+			<item name="CustomerName" type="string"/>
+			<item name="IdCardType" type="char"/>
+			<item name="IdentifiedCardNo" type="string"/>
+			<item name="CustType" type="char"/>
+			<item name="BankAccount" type="string"/>
+			<item name="BankPassWord" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="Password" type="string"/>
+			<item name="FutureSerial" type="int"/>
+			<item name="InstallID" type="int"/>
+			<item name="UserID" type="string"/>
+			<item name="VerifyCertNoFlag" type="char"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="Digest" type="string"/>
+			<item name="BankAccType" type="char"/>
+			<item name="DeviceID" type="string"/>
+			<item name="BankSecuAccType" type="char"/>
+			<item name="BrokerIDByBank" type="string"/>
+			<item name="BankSecuAcc" type="string"/>
+			<item name="BankPwdFlag" type="char"/>
+			<item name="SecuPwdFlag" type="char"/>
+			<item name="OperNo" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="TID" type="int"/>
+			<item name="BankUseAmount" type="double"/>
+			<item name="BankFetchAmount" type="double"/>
+			<item name="ErrorID" type="int"/>
+			<item name="ErrorMsg" type="string"/>
+			<item name="LongCustomerName" type="string"/>
+		</field>
+		<field name="ReqTransfer">
+			<item name="TradeCode" type="string"/>
+			<item name="BankID" type="string"/>
+			<item name="BankBranchID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="BrokerBranchID" type="string"/>
+			<item name="TradeDate" type="string"/>
+			<item name="TradeTime" type="string"/>
+			<item name="BankSerial" type="string"/>
+			<item name="TradingDay" type="string"/>
+			<item name="PlateSerial" type="int"/>
+			<item name="LastFragment" type="char"/>
+			<item name="SessionID" type="int"/>
+			<item name="CustomerName" type="string"/>
+			<item name="IdCardType" type="char"/>
+			<item name="IdentifiedCardNo" type="string"/>
+			<item name="CustType" type="char"/>
+			<item name="BankAccount" type="string"/>
+			<item name="BankPassWord" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="Password" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="FutureSerial" type="int"/>
+			<item name="UserID" type="string"/>
+			<item name="VerifyCertNoFlag" type="char"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="TradeAmount" type="double"/>
+			<item name="FutureFetchAmount" type="double"/>
+			<item name="FeePayFlag" type="char"/>
+			<item name="CustFee" type="double"/>
+			<item name="BrokerFee" type="double"/>
+			<item name="Message" type="string"/>
+			<item name="Digest" type="string"/>
+			<item name="BankAccType" type="char"/>
+			<item name="DeviceID" type="string"/>
+			<item name="BankSecuAccType" type="char"/>
+			<item name="BrokerIDByBank" type="string"/>
+			<item name="BankSecuAcc" type="string"/>
+			<item name="BankPwdFlag" type="char"/>
+			<item name="SecuPwdFlag" type="char"/>
+			<item name="OperNo" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="TID" type="int"/>
+			<item name="TransferStatus" type="char"/>
+			<item name="LongCustomerName" type="string"/>
+		</field>
+		<field name="ReqRepeal">
+			<item name="RepealTimeInterval" type="int"/>
+			<item name="RepealedTimes" type="int"/>
+			<item name="BankRepealFlag" type="char"/>
+			<item name="BrokerRepealFlag" type="char"/>
+			<item name="PlateRepealSerial" type="int"/>
+			<item name="BankRepealSerial" type="string"/>
+			<item name="FutureRepealSerial" type="int"/>
+			<item name="TradeCode" type="string"/>
+			<item name="BankID" type="string"/>
+			<item name="BankBranchID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="BrokerBranchID" type="string"/>
+			<item name="TradeDate" type="string"/>
+			<item name="TradeTime" type="string"/>
+			<item name="BankSerial" type="string"/>
+			<item name="TradingDay" type="string"/>
+			<item name="PlateSerial" type="int"/>
+			<item name="LastFragment" type="char"/>
+			<item name="SessionID" type="int"/>
+			<item name="CustomerName" type="string"/>
+			<item name="IdCardType" type="char"/>
+			<item name="IdentifiedCardNo" type="string"/>
+			<item name="CustType" type="char"/>
+			<item name="BankAccount" type="string"/>
+			<item name="BankPassWord" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="Password" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="FutureSerial" type="int"/>
+			<item name="UserID" type="string"/>
+			<item name="VerifyCertNoFlag" type="char"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="TradeAmount" type="double"/>
+			<item name="FutureFetchAmount" type="double"/>
+			<item name="FeePayFlag" type="char"/>
+			<item name="CustFee" type="double"/>
+			<item name="BrokerFee" type="double"/>
+			<item name="Message" type="string"/>
+			<item name="Digest" type="string"/>
+			<item name="BankAccType" type="char"/>
+			<item name="DeviceID" type="string"/>
+			<item name="BankSecuAccType" type="char"/>
+			<item name="BrokerIDByBank" type="string"/>
+			<item name="BankSecuAcc" type="string"/>
+			<item name="BankPwdFlag" type="char"/>
+			<item name="SecuPwdFlag" type="char"/>
+			<item name="OperNo" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="TID" type="int"/>
+			<item name="TransferStatus" type="char"/>
+			<item name="LongCustomerName" type="string"/>
+		</field>
+		<field name="ReqQueryAccount">
+			<item name="TradeCode" type="string"/>
+			<item name="BankID" type="string"/>
+			<item name="BankBranchID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="BrokerBranchID" type="string"/>
+			<item name="TradeDate" type="string"/>
+			<item name="TradeTime" type="string"/>
+			<item name="BankSerial" type="string"/>
+			<item name="TradingDay" type="string"/>
+			<item name="PlateSerial" type="int"/>
+			<item name="LastFragment" type="char"/>
+			<item name="SessionID" type="int"/>
+			<item name="CustomerName" type="string"/>
+			<item name="IdCardType" type="char"/>
+			<item name="IdentifiedCardNo" type="string"/>
+			<item name="CustType" type="char"/>
+			<item name="BankAccount" type="string"/>
+			<item name="BankPassWord" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="Password" type="string"/>
+			<item name="FutureSerial" type="int"/>
+			<item name="InstallID" type="int"/>
+			<item name="UserID" type="string"/>
+			<item name="VerifyCertNoFlag" type="char"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="Digest" type="string"/>
+			<item name="BankAccType" type="char"/>
+			<item name="DeviceID" type="string"/>
+			<item name="BankSecuAccType" type="char"/>
+			<item name="BrokerIDByBank" type="string"/>
+			<item name="BankSecuAcc" type="string"/>
+			<item name="BankPwdFlag" type="char"/>
+			<item name="SecuPwdFlag" type="char"/>
+			<item name="OperNo" type="string"/>
+			<item name="RequestID" type="int"/>
+			<item name="TID" type="int"/>
+			<item name="LongCustomerName" type="string"/>
+		</field>
+		<field name="OpenAccount">
+			<item name="TradeCode" type="string"/>
+			<item name="BankID" type="string"/>
+			<item name="BankBranchID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="BrokerBranchID" type="string"/>
+			<item name="TradeDate" type="string"/>
+			<item name="TradeTime" type="string"/>
+			<item name="BankSerial" type="string"/>
+			<item name="TradingDay" type="string"/>
+			<item name="PlateSerial" type="int"/>
+			<item name="LastFragment" type="char"/>
+			<item name="SessionID" type="int"/>
+			<item name="CustomerName" type="string"/>
+			<item name="IdCardType" type="char"/>
+			<item name="IdentifiedCardNo" type="string"/>
+			<item name="Gender" type="char"/>
+			<item name="CountryCode" type="string"/>
+			<item name="CustType" type="char"/>
+			<item name="Address" type="string"/>
+			<item name="ZipCode" type="string"/>
+			<item name="Telephone" type="string"/>
+			<item name="MobilePhone" type="string"/>
+			<item name="Fax" type="string"/>
+			<item name="EMail" type="string"/>
+			<item name="MoneyAccountStatus" type="char"/>
+			<item name="BankAccount" type="string"/>
+			<item name="BankPassWord" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="Password" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="VerifyCertNoFlag" type="char"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="CashExchangeCode" type="char"/>
+			<item name="Digest" type="string"/>
+			<item name="BankAccType" type="char"/>
+			<item name="DeviceID" type="string"/>
+			<item name="BankSecuAccType" type="char"/>
+			<item name="BrokerIDByBank" type="string"/>
+			<item name="BankSecuAcc" type="string"/>
+			<item name="BankPwdFlag" type="char"/>
+			<item name="SecuPwdFlag" type="char"/>
+			<item name="OperNo" type="string"/>
+			<item name="TID" type="int"/>
+			<item name="UserID" type="string"/>
+			<item name="ErrorID" type="int"/>
+			<item name="ErrorMsg" type="string"/>
+			<item name="LongCustomerName" type="string"/>
+		</field>
+		<field name="CancelAccount">
+			<item name="TradeCode" type="string"/>
+			<item name="BankID" type="string"/>
+			<item name="BankBranchID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="BrokerBranchID" type="string"/>
+			<item name="TradeDate" type="string"/>
+			<item name="TradeTime" type="string"/>
+			<item name="BankSerial" type="string"/>
+			<item name="TradingDay" type="string"/>
+			<item name="PlateSerial" type="int"/>
+			<item name="LastFragment" type="char"/>
+			<item name="SessionID" type="int"/>
+			<item name="CustomerName" type="string"/>
+			<item name="IdCardType" type="char"/>
+			<item name="IdentifiedCardNo" type="string"/>
+			<item name="Gender" type="char"/>
+			<item name="CountryCode" type="string"/>
+			<item name="CustType" type="char"/>
+			<item name="Address" type="string"/>
+			<item name="ZipCode" type="string"/>
+			<item name="Telephone" type="string"/>
+			<item name="MobilePhone" type="string"/>
+			<item name="Fax" type="string"/>
+			<item name="EMail" type="string"/>
+			<item name="MoneyAccountStatus" type="char"/>
+			<item name="BankAccount" type="string"/>
+			<item name="BankPassWord" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="Password" type="string"/>
+			<item name="InstallID" type="int"/>
+			<item name="VerifyCertNoFlag" type="char"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="CashExchangeCode" type="char"/>
+			<item name="Digest" type="string"/>
+			<item name="BankAccType" type="char"/>
+			<item name="DeviceID" type="string"/>
+			<item name="BankSecuAccType" type="char"/>
+			<item name="BrokerIDByBank" type="string"/>
+			<item name="BankSecuAcc" type="string"/>
+			<item name="BankPwdFlag" type="char"/>
+			<item name="SecuPwdFlag" type="char"/>
+			<item name="OperNo" type="string"/>
+			<item name="TID" type="int"/>
+			<item name="UserID" type="string"/>
+			<item name="ErrorID" type="int"/>
+			<item name="ErrorMsg" type="string"/>
+			<item name="LongCustomerName" type="string"/>
+		</field>
+		<field name="ChangeAccount">
+			<item name="TradeCode" type="string"/>
+			<item name="BankID" type="string"/>
+			<item name="BankBranchID" type="string"/>
+			<item name="BrokerID" type="string"/>
+			<item name="BrokerBranchID" type="string"/>
+			<item name="TradeDate" type="string"/>
+			<item name="TradeTime" type="string"/>
+			<item name="BankSerial" type="string"/>
+			<item name="TradingDay" type="string"/>
+			<item name="PlateSerial" type="int"/>
+			<item name="LastFragment" type="char"/>
+			<item name="SessionID" type="int"/>
+			<item name="CustomerName" type="string"/>
+			<item name="IdCardType" type="char"/>
+			<item name="IdentifiedCardNo" type="string"/>
+			<item name="Gender" type="char"/>
+			<item name="CountryCode" type="string"/>
+			<item name="CustType" type="char"/>
+			<item name="Address" type="string"/>
+			<item name="ZipCode" type="string"/>
+			<item name="Telephone" type="string"/>
+			<item name="MobilePhone" type="string"/>
+			<item name="Fax" type="string"/>
+			<item name="EMail" type="string"/>
+			<item name="MoneyAccountStatus" type="char"/>
+			<item name="BankAccount" type="string"/>
+			<item name="BankPassWord" type="string"/>
+			<item name="NewBankAccount" type="string"/>
+			<item name="NewBankPassWord" type="string"/>
+			<item name="AccountID" type="string"/>
+			<item name="Password" type="string"/>
+			<item name="BankAccType" type="char"/>
+			<item name="InstallID" type="int"/>
+			<item name="VerifyCertNoFlag" type="char"/>
+			<item name="CurrencyID" type="string"/>
+			<item name="BrokerIDByBank" type="string"/>
+			<item name="BankPwdFlag" type="char"/>
+			<item name="SecuPwdFlag" type="char"/>
+			<item name="TID" type="int"/>
+			<item name="Digest" type="string"/>
+			<item name="ErrorID" type="int"/>
+			<item name="ErrorMsg" type="string"/>
+			<item name="LongCustomerName" type="string"/>
+		</field>
+	</fields>
+	<spi>
+		<func name="OnFrontConnected" retrun="void" type="On" sequence="0"/>
+		<func name="OnFrontDisconnected" retrun="void" type="On" sequence="1">
+			<param type="int" name="nReason"/>
+		</func>
+		<func name="OnHeartBeatWarning" retrun="void" type="On" sequence="2">
+			<param type="int" name="nTimeLapse"/>
+		</func>
+		<func name="OnRspAuthenticate" retrun="void" type="OnRsp" sequence="3">
+			<param type="CThostFtdcRspAuthenticateField" name="RspAuthenticate"/>
+		</func>
+		<func name="OnRspUserLogin" retrun="void" type="OnRsp" sequence="4">
+			<param type="CThostFtdcRspUserLoginField" name="RspUserLogin"/>
+		</func>
+		<func name="OnRspUserLogout" retrun="void" type="OnRsp" sequence="5">
+			<param type="CThostFtdcUserLogoutField" name="UserLogout"/>
+		</func>
+		<func name="OnRspUserPasswordUpdate" retrun="void" type="OnRsp" sequence="6" >
+			<param type="CThostFtdcUserPasswordUpdateField" name="UserPasswordUpdate"/>
+		</func>
+		<func name="OnRspTradingAccountPasswordUpdate" retrun="void" type="OnRsp" sequence="7">
+			<param type="CThostFtdcTradingAccountPasswordUpdateField" name="TradingAccountPasswordUpdate"/>
+		</func>
+		<func name="OnRspUserAuthMethod" retrun="void" type="OnRsp" sequence="8">
+			<param type="CThostFtdcRspUserAuthMethodField" name="RspUserAuthMethod"/>
+		</func>
+		<func name="OnRspGenUserCaptcha" retrun="void" type="OnRsp" sequence="9">
+			<param type="CThostFtdcRspGenUserCaptchaField" name="RspGenUserCaptcha"/>
+		</func>
+		<func name="OnRspGenUserText" retrun="void" type="OnRsp" sequence="10">
+			<param type="CThostFtdcRspGenUserTextField" name="RspGenUserText"/>
+		</func>
+		<func name="OnRspOrderInsert" retrun="void" type="OnRsp" sequence="11">
+			<param type="CThostFtdcInputOrderField" name="InputOrder"/>
+		</func>
+		<func name="OnRspParkedOrderInsert" retrun="void" type="OnRsp" sequence="12">
+			<param type="CThostFtdcParkedOrderField" name="ParkedOrder"/>
+		</func>
+		<func name="OnRspParkedOrderAction" retrun="void" type="OnRsp" sequence="13">
+			<param type="CThostFtdcParkedOrderActionField" name="ParkedOrderAction"/>
+		</func>
+		<func name="OnRspOrderAction" retrun="void" type="OnRsp" sequence="14">
+			<param type="CThostFtdcInputOrderActionField" name="InputOrderAction"/>
+		</func>
+		<func name="OnRspQueryMaxOrderVolume" retrun="void" type="OnRsp" sequence="15">
+			<param type="CThostFtdcQueryMaxOrderVolumeField" name="QueryMaxOrderVolume"/>
+		</func>
+		<func name="OnRspSettlementInfoConfirm" retrun="void" type="OnRsp" sequence="16">
+			<param type="CThostFtdcSettlementInfoConfirmField" name="SettlementInfoConfirm"/>
+		</func>
+		<func name="OnRspRemoveParkedOrder" retrun="void" type="OnRsp" sequence="17">
+			<param type="CThostFtdcRemoveParkedOrderField" name="RemoveParkedOrder"/>
+		</func>
+		<func name="OnRspRemoveParkedOrderAction" retrun="void" type="OnRsp" sequence="18">
+			<param type="CThostFtdcRemoveParkedOrderActionField" name="RemoveParkedOrderAction"/>
+		</func>
+		<func name="OnRspExecOrderInsert" retrun="void" type="OnRsp" sequence="19">
+			<param type="CThostFtdcInputExecOrderField" name="InputExecOrder"/>
+		</func>
+		<func name="OnRspExecOrderAction" retrun="void" type="OnRsp" sequence="20">
+			<param type="CThostFtdcInputExecOrderField" name="InputExecOrderAction"/>
+		</func>
+		<func name="OnRspForQuoteInsert" retrun="void" type="OnRsp" sequence="21">
+			<param type="CThostFtdcInputForQuoteField" name="InputForQuote"/>
+		</func>
+		<func name="OnRspQuoteInsert" retrun="void" type="OnRsp" sequence="22">
+			<param type="CThostFtdcInputQuoteField" name="InputQuote"/>
+		</func>
+		<func name="OnRspQuoteAction" retrun="void" type="OnRsp" sequence="23">
+			<param type="CThostFtdcInputQuoteActionField" name="InputQuoteAction"/>
+		</func>
+		<func name="OnRspBatchOrderAction" retrun="void" type="OnRsp" sequence="24">
+			<param type="CThostFtdcInputBatchOrderActionField" name="InputBatchOrderAction"/>
+		</func>
+		<func name="OnRspOptionSelfCloseInsert" retrun="void" type="OnRsp" sequence="25">
+			<param type="CThostFtdcInputOptionSelfCloseField" name="InputOptionSelfClose"/>
+		</func>
+		<func name="OnRspOptionSelfCloseAction" retrun="void" type="OnRsp" sequence="26">
+			<param type="CThostFtdcInputOptionSelfCloseActionField" name="InputOptionSelfCloseAction"/>
+		</func>
+		<func name="OnRspCombActionInsert" retrun="void" type="OnRsp" sequence="27">
+			<param type="CThostFtdcInputCombActionField" name="InputCombAction"/>
+		</func>
+		<func name="OnRspQryOrder" retrun="void" type="OnRspQry" sequence="28">
+			<param type="CThostFtdcOrderField" name="Order"/>
+		</func>
+		<func name="OnRspQryTrade" retrun="void" type="OnRspQry" sequence="29">
+			<param type="CThostFtdcTradeField" name="Trade"/>
+		</func>
+		<func name="OnRspQryInvestorPosition" retrun="void" type="OnRspQry" sequence="30">
+			<param type="CThostFtdcInvestorPositionField" name="InvestorPosition"/>
+		</func>
+		<func name="OnRspQryTradingAccount" retrun="void" type="OnRspQry" sequence="31">
+			<param type="CThostFtdcTradingAccountField" name="TradingAccount"/>
+		</func>
+		<func name="OnRspQryInvestor" retrun="void" type="OnRspQry" sequence="32">
+			<param type="CThostFtdcInvestorField" name="Investor"/>
+		</func>
+		<func name="OnRspQryTradingCode" retrun="void" type="OnRspQry" sequence="33">
+			<param type="CThostFtdcTradingCodeField" name="TradingCode"/>
+		</func>
+		<func name="OnRspQryInstrumentMarginRate" retrun="void" type="OnRspQry" sequence="34">
+			<param type="CThostFtdcInstrumentMarginRateField" name="InstrumentMarginRate"/>
+		</func>
+		<func name="OnRspQryInstrumentCommissionRate" retrun="void" type="OnRspQry" sequence="35">
+			<param type="CThostFtdcInstrumentCommissionRateField" name="InstrumentCommissionRate"/>
+		</func>
+		<func name="OnRspQryExchange" retrun="void" type="OnRspQry" sequence="36">
+			<param type="CThostFtdcExchangeField" name="Exchange"/>
+		</func>
+		<func name="OnRspQryProduct" retrun="void" type="OnRspQry" sequence="37">
+			<param type="CThostFtdcProductField" name="Product"/>
+		</func>
+		<func name="OnRspQryInstrument" retrun="void" type="OnRspQry" sequence="38">
+			<param type="CThostFtdcInstrumentField" name="Instrument"/>
+		</func>
+		<func name="OnRspQryDepthMarketData" retrun="void" type="OnRspQry" sequence="39">
+			<param type="CThostFtdcDepthMarketDataField" name="DepthMarketData"/>
+		</func>
+		<func name="OnRspQrySettlementInfo" retrun="void" type="OnRspQry" sequence="40">
+			<param type="CThostFtdcSettlementInfoField" name="SettlementInfo"/>
+		</func>
+		<func name="OnRspQryTransferBank" retrun="void" type="OnRspQry" sequence="41">
+			<param type="CThostFtdcTransferBankField" name="TransferBank"/>
+		</func>
+		<func name="OnRspQryInvestorPositionDetail" retrun="void" type="OnRspQry" sequence="42">
+			<param type="CThostFtdcInvestorPositionDetailField" name="InvestorPositionDetail"/>
+		</func>
+		<func name="OnRspQryNotice" retrun="void" type="OnRspQry" sequence="43">
+			<param type="CThostFtdcNoticeField" name="Notice"/>
+		</func>
+		<func name="OnRspQrySettlementInfoConfirm" retrun="void" type="OnRspQry" sequence="44">
+			<param type="CThostFtdcSettlementInfoConfirmField" name="SettlementInfoConfirm"/>
+		</func>
+		<func name="OnRspQryInvestorPositionCombineDetail" retrun="void" type="OnRspQry" sequence="45">
+			<param type="CThostFtdcInvestorPositionCombineDetailField" name="InvestorPositionCombineDetail"/>
+		</func>
+		<func name="OnRspQryCFMMCTradingAccountKey" retrun="void" type="OnRspQry" sequence="46">
+			<param type="CThostFtdcCFMMCTradingAccountKeyField" name="CFMMCTradingAccountKey"/>
+		</func>
+		<func name="OnRspQryEWarrantOffset" retrun="void" type="OnRspQry" sequence="47">
+			<param type="CThostFtdcEWarrantOffsetField" name="EWarrantOffset"/>
+		</func>
+		<func name="OnRspQryInvestorProductGroupMargin" retrun="void" type="OnRspQry" sequence="48">
+			<param type="CThostFtdcInvestorProductGroupMarginField" name="InvestorProductGroupMargin"/>
+		</func>
+		<func name="OnRspQryExchangeMarginRate" retrun="void" type="OnRspQry" sequence="49">
+			<param type="CThostFtdcExchangeMarginRateField" name="ExchangeMarginRate"/>
+		</func>
+		<func name="OnRspQryExchangeMarginRateAdjust" retrun="void" type="OnRspQry" sequence="50">
+			<param type="CThostFtdcExchangeMarginRateAdjustField" name="ExchangeMarginRateAdjust"/>
+		</func>
+		<func name="OnRspQryExchangeRate" retrun="void" type="OnRspQry" sequence="51">
+			<param type="CThostFtdcExchangeRateField" name="ExchangeRate"/>
+		</func>
+		<func name="OnRspQrySecAgentACIDMap" retrun="void" type="OnRspQry" sequence="52">
+			<param type="CThostFtdcSecAgentACIDMapField" name="SecAgentACIDMap"/>
+		</func>
+		<func name="OnRspQryProductExchRate" retrun="void" type="OnRspQry" sequence="53">
+			<param type="CThostFtdcProductExchRateField" name="ProductExchRate"/>
+		</func>
+		<func name="OnRspQryProductGroup" retrun="void" type="OnRspQry" sequence="54">
+			<param type="CThostFtdcProductGroupField" name="ProductGroup"/>
+		</func>
+		<func name="OnRspQryMMInstrumentCommissionRate" retrun="void" type="OnRspQry" sequence="55">
+			<param type="CThostFtdcMMInstrumentCommissionRateField" name="MMInstrumentCommissionRate"/>
+		</func>
+		<func name="OnRspQryMMOptionInstrCommRate" retrun="void" type="OnRspQry" sequence="56">
+			<param type="CThostFtdcMMOptionInstrCommRateField" name="MMOptionInstrCommRate"/>
+		</func>
+		<func name="OnRspQryInstrumentOrderCommRate" retrun="void" type="OnRspQry" sequence="57">
+			<param type="CThostFtdcInstrumentOrderCommRateField" name="InstrumentOrderCommRate"/>
+		</func>
+		<func name="OnRspQrySecAgentTradingAccount" retrun="void" type="OnRspQry" sequence="58">
+			<param type="CThostFtdcTradingAccountField" name="TradingAccount"/>
+		</func>
+		<func name="OnRspQrySecAgentCheckMode" retrun="void" type="OnRspQry" sequence="59">
+			<param type="CThostFtdcSecAgentCheckModeField" name="SecAgentCheckMode"/>
+		</func>
+		<func name="OnRspQrySecAgentTradeInfo" retrun="void" type="OnRspQry" sequence="60">
+			<param type="CThostFtdcSecAgentTradeInfoField" name="SecAgentTradeInfo"/>
+		</func>
+		<func name="OnRspQryOptionInstrTradeCost" retrun="void" type="OnRspQry" sequence="61">
+			<param type="CThostFtdcOptionInstrTradeCostField" name="OptionInstrTradeCost"/>
+		</func>
+		<func name="OnRspQryOptionInstrCommRate" retrun="void" type="OnRspQry" sequence="62">
+			<param type="CThostFtdcOptionInstrCommRateField" name="OptionInstrCommRate"/>
+		</func>
+		<func name="OnRspQryExecOrder" retrun="void" type="OnRspQry" sequence="63">
+			<param type="CThostFtdcExecOrderField" name="ExecOrder"/>
+		</func>
+		<func name="OnRspQryForQuote" retrun="void" type="OnRspQry" sequence="64">
+			<param type="CThostFtdcForQuoteField" name="ForQuote"/>
+		</func>
+		<func name="OnRspQryQuote" retrun="void" type="OnRspQry" sequence="65">
+			<param type="CThostFtdcQuoteField" name="Quote"/>
+		</func>
+		<func name="OnRspQryOptionSelfClose" retrun="void" type="OnRspQry" sequence="66">
+			<param type="CThostFtdcOptionSelfCloseField" name="OptionSelfClose"/>
+		</func>
+		<func name="OnRspQryInvestUnit" retrun="void" type="OnRspQry" sequence="67">
+			<param type="CThostFtdcInvestUnitField" name="InvestUnit"/>
+		</func>
+		<func name="OnRspQryCombInstrumentGuard" retrun="void" type="OnRspQry" sequence="68">
+			<param type="CThostFtdcCombInstrumentGuardField" name="CombInstrumentGuard"/>
+		</func>
+		<func name="OnRspQryCombAction" retrun="void" type="OnRspQry" sequence="69">
+			<param type="CThostFtdcCombActionField" name="CombAction"/>
+		</func>
+		<func name="OnRspQryTransferSerial" retrun="void" type="OnRspQry" sequence="70">
+			<param type="CThostFtdcTransferSerialField" name="TransferSerial"/>
+		</func>
+		<func name="OnRspQryAccountregister" retrun="void" type="OnRspQry" sequence="71">
+			<param type="CThostFtdcAccountregisterField" name="Accountregister"/>
+		</func>
+		<func name="OnRspError" retrun="void" type="OnRsp" sequence="72"/>
+		<func name="OnRtnOrder" retrun="void" type="OnRtn" sequence="73">
+			<param type="CThostFtdcOrderField" name="Order"/>
+		</func>
+		<func name="OnRtnTrade" retrun="void" type="OnRtn" sequence="74">
+			<param type="CThostFtdcTradeField" name="Trade"/>
+		</func>
+		<func name="OnErrRtnOrderInsert" retrun="void" type="OnErrRtn" sequence="75">
+			<param type="CThostFtdcInputOrderField" name="InputOrder"/>
+		</func>
+		<func name="OnErrRtnOrderAction" retrun="void" type="OnErrRtn" sequence="76">
+			<param type="CThostFtdcOrderActionField" name="OrderAction"/>
+		</func>
+		<func name="OnRtnInstrumentStatus" retrun="void" type="OnRtn" sequence="77">
+			<param type="CThostFtdcInstrumentStatusField" name="InstrumentStatus"/>
+		</func>
+		<func name="OnRtnBulletin" retrun="void" type="OnRtn" sequence="78">
+			<param type="CThostFtdcBulletinField" name="Bulletin"/>
+		</func>
+		<func name="OnRtnTradingNotice" retrun="void" type="OnRtn" sequence="79">
+			<param type="CThostFtdcTradingNoticeInfoField" name="TradingNoticeInfo"/>
+		</func>
+		<func name="OnRtnErrorConditionalOrder" retrun="void" type="OnRtn" sequence="80">
+			<param type="CThostFtdcErrorConditionalOrderField" name="ErrorConditionalOrder"/>
+		</func>
+		<func name="OnRtnExecOrder" retrun="void" type="OnRtn" sequence="81">
+			<param type="CThostFtdcExecOrderField" name="ExecOrder"/>
+		</func>
+		<func name="OnErrRtnExecOrderInsert" retrun="void" type="OnErrRtn" sequence="82">
+			<param type="CThostFtdcInputExecOrderField" name="InputExecOrder"/>
+		</func>
+		<func name="OnErrRtnExecOrderAction" retrun="void" type="OnErrRtn" sequence="83">
+			<param type="CThostFtdcExecOrderActionField" name="ExecOrderAction"/>
+		</func>
+		<func name="OnErrRtnForQuoteInsert" retrun="void" type="OnErrRtn" sequence="84">
+			<param type="CThostFtdcInputForQuoteField" name="InputForQuote"/>
+		</func>
+		<func name="OnRtnQuote" retrun="void" type="OnRtn" sequence="85">
+			<param type="CThostFtdcQuoteField" name="Quote"/>
+		</func>
+		<func name="OnErrRtnQuoteInsert" retrun="void" type="OnErrRtn" sequence="86">
+			<param type="CThostFtdcInputQuoteField" name="InputQuote"/>
+		</func>
+		<func name="OnErrRtnQuoteAction" retrun="void" type="OnErrRtn" sequence="87">
+			<param type="CThostFtdcQuoteActionField" name="QuoteAction"/>
+		</func>
+		<func name="OnRtnForQuoteRsp" retrun="void" type="OnRtn" sequence="88">
+			<param type="CThostFtdcForQuoteRspField" name="ForQuoteRsp"/>
+		</func>
+		<func name="OnRtnCFMMCTradingAccountToken" retrun="void" type="OnRtn" sequence="89">
+			<param type="CThostFtdcCFMMCTradingAccountTokenField" name="CFMMCTradingAccountToken"/>
+		</func>
+		<func name="OnErrRtnBatchOrderAction" retrun="void" type="OnErrRtn" sequence="90">
+			<param type="CThostFtdcBatchOrderActionField" name="BatchOrderAction"/>
+		</func>
+		<func name="OnRtnOptionSelfClose" retrun="void" type="OnRtn" sequence="91">
+			<param type="CThostFtdcOptionSelfCloseField" name="OptionSelfClose"/>
+		</func>
+		<func name="OnErrRtnOptionSelfCloseInsert" retrun="void" type="OnErrRtn" sequence="92">
+			<param type="CThostFtdcInputOptionSelfCloseField" name="InputOptionSelfClose"/>
+		</func>
+		<func name="OnErrRtnOptionSelfCloseAction" retrun="void" type="OnErrRtn" sequence="93">
+			<param type="CThostFtdcOptionSelfCloseActionField" name="OptionSelfCloseAction"/>
+		</func>
+		<func name="OnRtnCombAction" retrun="void" type="OnRtn" sequence="94">
+			<param type="CThostFtdcCombActionField" name="CombAction"/>
+		</func>
+		<func name="OnErrRtnCombActionInsert" retrun="void" type="OnErrRtn" sequence="95">
+			<param type="CThostFtdcInputCombActionField" name="InputCombAction"/>
+		</func>
+		<func name="OnRspQryContractBank" retrun="void" type="OnRspQry" sequence="96">
+			<param type="CThostFtdcContractBankField" name="ContractBank"/>
+		</func>
+		<func name="OnRspQryParkedOrder" retrun="void" type="OnRspQry" sequence="97">
+			<param type="CThostFtdcParkedOrderField" name="ParkedOrder"/>
+		</func>
+		<func name="OnRspQryParkedOrderAction" retrun="void" type="OnRspQry" sequence="98">
+			<param type="CThostFtdcParkedOrderActionField" name="ParkedOrderAction"/>
+		</func>
+		<func name="OnRspQryTradingNotice" retrun="void" type="OnRspQry" sequence="99">
+			<param type="CThostFtdcTradingNoticeField" name="TradingNotice"/>
+		</func>
+		<func name="OnRspQryBrokerTradingParams" retrun="void" type="OnRspQry" sequence="100">
+			<param type="CThostFtdcBrokerTradingParamsField" name="BrokerTradingParams"/>
+		</func>
+		<func name="OnRspQryBrokerTradingAlgos" retrun="void" type="OnRspQry" sequence="101">
+			<param type="CThostFtdcBrokerTradingAlgosField" name="BrokerTradingAlgos"/>
+		</func>
+		<func name="OnRspQueryCFMMCTradingAccountToken" retrun="void" type="OnRspQry" sequence="102">
+			<param type="CThostFtdcQueryCFMMCTradingAccountTokenField" name="QueryCFMMCTradingAccountToken"/>
+		</func>
+		<func name="OnRtnFromBankToFutureByBank" retrun="void" type="OnRtn" sequence="103">
+			<param type="CThostFtdcRspTransferField" name="RspTransfer"/>
+		</func>
+		<func name="OnRtnFromFutureToBankByBank" retrun="void" type="OnRtn" sequence="104">
+			<param type="CThostFtdcRspTransferField" name="RspTransfer"/>
+		</func>
+		<func name="OnRtnRepealFromBankToFutureByBank" retrun="void" type="OnRtn" sequence="105">
+			<param type="CThostFtdcRspRepealField" name="RspRepeal"/>
+		</func>
+		<func name="OnRtnRepealFromFutureToBankByBank" retrun="void" type="OnRtn" sequence="106">
+			<param type="CThostFtdcRspRepealField" name="RspRepeal"/>
+		</func>
+		<func name="OnRtnFromBankToFutureByFuture" retrun="void" type="OnRtn" sequence="107">
+			<param type="CThostFtdcRspTransferField" name="RspTransfer"/>
+		</func>
+		<func name="OnRtnFromFutureToBankByFuture" retrun="void" type="OnRtn" sequence="108">
+			<param type="CThostFtdcRspTransferField" name="RspTransfer"/>
+		</func>
+		<func name="OnRtnRepealFromBankToFutureByFutureManual" retrun="void" type="OnRtn" sequence="109">
+			<param type="CThostFtdcRspRepealField" name="RspRepeal"/>
+		</func>
+		<func name="OnRtnRepealFromFutureToBankByFutureManual" retrun="void" type="OnRtn" sequence="110">
+			<param type="CThostFtdcRspRepealField" name="RspRepeal"/>
+		</func>
+		<func name="OnRtnQueryBankBalanceByFuture" retrun="void" type="OnRtn" sequence="111">
+			<param type="CThostFtdcNotifyQueryAccountField" name="NotifyQueryAccount"/>
+		</func>
+		<func name="OnErrRtnBankToFutureByFuture" retrun="void" type="OnErrRtn" sequence="112">
+			<param type="CThostFtdcReqTransferField" name="ReqTransfer"/>
+		</func>
+		<func name="OnErrRtnFutureToBankByFuture" retrun="void" type="OnErrRtn" sequence="113">
+			<param type="CThostFtdcReqTransferField" name="ReqTransfer"/>
+		</func>
+		<func name="OnErrRtnRepealBankToFutureByFutureManual" retrun="void" type="OnErrRtn" sequence="114">
+			<param type="CThostFtdcReqRepealField" name="ReqRepeal"/>
+		</func>
+		<func name="OnErrRtnRepealFutureToBankByFutureManual" retrun="void" type="OnErrRtn" sequence="115">
+			<param type="CThostFtdcReqRepealField" name="ReqRepeal"/>
+		</func>
+		<func name="OnErrRtnQueryBankBalanceByFuture" retrun="void" type="OnErrRtn" sequence="116">
+			<param type="CThostFtdcReqQueryAccountField" name="ReqQueryAccount"/>
+		</func>
+		<func name="OnRtnRepealFromBankToFutureByFuture" retrun="void" type="OnRtn" sequence="117">
+			<param type="CThostFtdcRspRepealField" name="RspRepeal"/>
+		</func>
+		<func name="OnRtnRepealFromFutureToBankByFuture" retrun="void" type="OnRtn" sequence="118">
+			<param type="CThostFtdcRspRepealField" name="RspRepeal"/>
+		</func>
+		<func name="OnRspFromBankToFutureByFuture" retrun="void" type="OnRsp" sequence="119">
+			<param type="CThostFtdcReqTransferField" name="ReqTransfer"/>
+		</func>
+		<func name="OnRspFromFutureToBankByFuture" retrun="void" type="OnRsp" sequence="120">
+			<param type="CThostFtdcReqTransferField" name="ReqTransfer"/>
+		</func>
+		<func name="OnRspQueryBankAccountMoneyByFuture" retrun="void" type="OnRsp" sequence="121">
+			<param type="CThostFtdcReqQueryAccountField" name="ReqQueryAccount"/>
+		</func>
+		<func name="OnRtnOpenAccountByBank" retrun="void" type="OnRtn" sequence="122">
+			<param type="CThostFtdcOpenAccountField" name="OpenAccount"/>
+		</func>
+		<func name="OnRtnCancelAccountByBank" retrun="void" type="OnRtn" sequence="123">
+			<param type="CThostFtdcCancelAccountField" name="CancelAccount"/>
+		</func>
+		<func name="OnRtnChangeAccountByBank" retrun="void" type="OnRtn" sequence="124">
+			<param type="CThostFtdcChangeAccountField" name="ChangeAccount"/>
+		</func>
+	</spi>
+</root>

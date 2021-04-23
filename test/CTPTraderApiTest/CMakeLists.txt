@@ -1,5 +1,6 @@
 #工程名
 SET(PROJECT_NAME "CTPTraderApiTest")
+SET(APIVersion "6.5.1")
 project(${PROJECT_NAME})
 enable_language(CXX)
 cmake_minimum_required(VERSION 2.8)
@@ -25,18 +26,18 @@ endmacro(add_package)
 
 
 add_package(src ./src)
-add_package(GenCode ./GenCode)
+add_package(GenCode ./GenCode/${APIVersion})
 add_package(Utility ../../source/Utility)
 add_package(MemCache ../../source/MemCache)
 add_package(ThreadBase ../../source/ThreadBase)
 add_package(Logger ../../source/Logger)
-add_package(API ../../source/API/CTP)
+add_package(API ../../source/API/CTP/${APIVersion}/include)
 add_package(jsoncpp ../../source/jsoncpp)
 
 
 add_definitions("-D_CRT_SECURE_NO_WARNINGS")
 
-link_directories(${PROJECT_SOURCE_DIR}/../../source/API/CTP/6.3.15/win64)
+link_directories(${PROJECT_SOURCE_DIR}/../../source/API/CTP/${APIVersion}/win64)
 
 #添加工程
 add_executable(${PROJECT_NAME} ${all_file})

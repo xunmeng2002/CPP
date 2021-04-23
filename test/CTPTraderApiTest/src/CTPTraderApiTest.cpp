@@ -61,6 +61,7 @@ int main(int argc, char* argv[])
 
 	string accountID = "71020537";
 	CThostFtdcTraderApi* traderApi = CThostFtdcTraderApi::CreateFtdcTraderApi();
+	cout << "API Version:" << traderApi->GetApiVersion() << endl;
 	CThostFtdcTraderSpiImpl* traderSpi = new CThostFtdcTraderSpiImpl(traderApi);
 	traderSpi->SetAccountInfo(accountInfos[accountID]);
 	traderApi->RegisterSpi(traderSpi);

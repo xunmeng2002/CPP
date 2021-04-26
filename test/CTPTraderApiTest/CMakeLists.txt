@@ -1,6 +1,6 @@
 #工程名
 SET(PROJECT_NAME "CTPTraderApiTest")
-SET(APIVersion "6.5.1")
+SET(APIVersion "6.3.15")
 project(${PROJECT_NAME})
 enable_language(CXX)
 cmake_minimum_required(VERSION 2.8)

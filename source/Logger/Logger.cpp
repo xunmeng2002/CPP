@@ -56,7 +56,7 @@ void Logger::WriteLog(LogLevel level, const char* file, int line, const char* fo
 {
 	va_list va;
 	va_start(va, formatStr);
-	WriteLog(level, file, line, formatStr, va);
+	WriteToLog(level, file, line, formatStr, va);
 	if (level <= LogLevel::Warning)
 	{
 		WriteToConsole(level, formatStr, va);
@@ -122,7 +122,7 @@ void Logger::FlushBuffers()
 	fflush(m_LogData->LogFile);
 }
 
-void Logger::WriteLog(LogLevel level, const char* file, int line, const char* format, va_list va)
+void Logger::WriteToLog(LogLevel level, const char* file, int line, const char* format, va_list va)
 {
 	for (auto p = file; *p != '\0'; p++)
 		if (*p == '\\' || *p == '/')

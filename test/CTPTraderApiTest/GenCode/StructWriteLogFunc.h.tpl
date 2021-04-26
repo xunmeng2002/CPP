@@ -4,7 +4,7 @@
 
 !!entry fields!!
 !!travel!!
-void Write!!@name!!(CThostFtdc!!@name!!Field* !!@name!!);
+void Write!!@shortname!!(!!@name!!* !!@shortname!!);
 
 !!leave!!
 !!leave!!

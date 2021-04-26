@@ -1,0 +1,4 @@
+<parseLists>
+	<item destFile="source/API/CTP/6.3.15/CtpApiModel.xml" dataTypeFile="source/API/CTP/6.3.15/include/ThostFtdcUserApiDataType.h" structFile="source/API/CTP/6.3.15/include/ThostFtdcUserApiStruct.h" apiFile="source/API/CTP/6.3.15/include/ThostFtdcTraderApi.h"/>
+	<item destFile="source/API/CTP/6.5.1/CtpApiModel.xml" dataTypeFile="source/API/CTP/6.5.1/include/ThostFtdcUserApiDataType.h" structFile="source/API/CTP/6.5.1/include/ThostFtdcUserApiStruct.h" apiFile="source/API/CTP/6.5.1/include/ThostFtdcTraderApi.h"/>
+</parseLists>

@@ -4,28 +4,32 @@
 import xml.dom.minidom
 import xml.etree.ElementTree as ET
 
-def ParseDataType(dom, root, filename):
+def ParseDataType(dom, root, filename, types):
     sourceFile = open(filename, "r")
     for line in sourceFile:
         if line.startswith("typedef"):
+            typeNode = dom.createElement('type')
             line = line.strip()
-            type = dom.createElement('type')
             items = line.split(" ")
+            name = items[2][0 : items[2].rfind("Type") + 4]
+            baseType = ""
             if items[1] == "short" or items[1] == "int" or items[1] == "double":
-                type.setAttribute("type", items[1])
+                baseType = items[1]
             elif items[1] == "char":
                 if items[2].endswith("];"):
-                    type.setAttribute("type", "string")
-                    type.setAttribute("size", items[2][items[2].rfind("[")+1 : items[2].rfind("]")])
+                    baseType = "string"
+                    typeNode.setAttribute("size", items[2][items[2].rfind("[")+1 : items[2].rfind("]")])
                 else:
-                    type.setAttribute("type", "char")
+                    baseType = "char"
             else:
                 print line
-            type.setAttribute("name", items[2][0 : items[2].rfind("Type") + 4])
-            root.appendChild(type)
+            typeNode.setAttribute("name", name)
+            typeNode.setAttribute("basetype", baseType)
+            root.appendChild(typeNode)
+            types[name] = baseType
     sourceFile.close()
 
-def ParseStruct(dom, root, filename):
+def ParseStruct(dom, root, filename, types):
     sourceFile = open(filename, "r")
     isInstruct = False
     field = ""
@@ -42,6 +46,7 @@ def ParseStruct(dom, root, filename):
                 item = dom.createElement('item')
                 item.setAttribute("name", items[1][:-1])
                 item.setAttribute("type", items[0])
+                item.setAttribute("basetype", types[items[0]])
                 field.appendChild(item)
         elif line.startswith("struct"):
             isInstruct = True
@@ -49,7 +54,7 @@ def ParseStruct(dom, root, filename):
             fieldName = line.split(" ")[1]
             shortName = fieldName[10 : fieldName.rfind("Field")]
             field.setAttribute("name", fieldName)
-            field.setAttribute("shortName", shortName)
+            field.setAttribute("shortname", shortName)
 
     sourceFile.close()
 
@@ -62,10 +67,11 @@ def ParseFuncParams(dom, func, line):
         item = item.strip()
         attributes = item.split(" ")
         type = attributes[0]
-        custom = "True"
-        if not type.startswith("CThostFtdc"):
-            custom = "False"
-        name = attributes[1].replace("*p", "")
+        name = attributes[1]
+        custom = "False"
+        if type.startswith("CThostFtdc"):
+            custom = "True"
+            name = type[10 : type.rfind("Field")]
         param = dom.createElement('param')
         param.setAttribute("type", type)
         param.setAttribute("name", name)
@@ -112,15 +118,16 @@ def Parse(destFile, dataTypeFile, structFile, apiFile):
     impl = xml.dom.minidom.getDOMImplementation()
     dom = impl.createDocument(None, 'root', None)
     root = dom.documentElement
-    types = dom.createElement('types')
-    fields = dom.createElement('fields')
-    spi = dom.createElement('spi')
-    ParseDataType(dom, types, dataTypeFile)
-    ParseStruct(dom, fields, structFile)
-    ParseSpiFunc(dom, spi, apiFile)
-    root.appendChild(types)
-    root.appendChild(fields)
-    root.appendChild(spi)
+    typeNodes = dom.createElement('types')
+    fieldNodes = dom.createElement('fields')
+    spiNodes = dom.createElement('spi')
+    types = {}
+    ParseDataType(dom, typeNodes, dataTypeFile, types)
+    ParseStruct(dom, fieldNodes, structFile, types)
+    ParseSpiFunc(dom, spiNodes, apiFile)
+    root.appendChild(typeNodes)
+    root.appendChild(fieldNodes)
+    root.appendChild(spiNodes)
     f = open(destFile, 'w')
     dom.writexml(f, indent="", addindent='\t', newl='\n', encoding="utf8")
     f.close()

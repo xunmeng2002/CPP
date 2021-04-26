@@ -2,7 +2,6 @@
 #!coding:utf-8
 
 import xml.dom.minidom
-import xml.etree.ElementTree as ET
 
 def ParseDataType(dom, root, filename, types):
     sourceFile = open(filename, "r")
@@ -114,10 +113,11 @@ def ParseSpiFunc(dom, root, filename):
             isInclass = True
     sourceFile.close()
 
-def Parse(destFile, dataTypeFile, structFile, apiFile):
+def Parse(destFile, dataTypeFile, structFile, apiFile, apiVersion):
     impl = xml.dom.minidom.getDOMImplementation()
     dom = impl.createDocument(None, 'root', None)
     root = dom.documentElement
+    root.setAttribute("apiversion", apiVersion)
     typeNodes = dom.createElement('types')
     fieldNodes = dom.createElement('fields')
     spiNodes = dom.createElement('spi')
@@ -133,14 +133,18 @@ def Parse(destFile, dataTypeFile, structFile, apiFile):
     f.close()
 
 def main():
-    parseLists = ET.parse("ParseList.xml").getroot()
-    for parseList in parseLists:
-        destFile = parseList.get("destFile")
-        dataTypeFile = parseList.get("dataTypeFile")
-        structFile = parseList.get("structFile")
-        apiFile = parseList.get("apiFile")
-        print destFile, dataTypeFile, structFile, apiFile
-        Parse(destFile, dataTypeFile, structFile, apiFile)
+    apiPath = "source/API/CTP/"
+    dataTypeFile="/include/ThostFtdcUserApiDataType.h"
+    structFile="/include/ThostFtdcUserApiStruct.h"
+    apiFile="/include/ThostFtdcTraderApi.h"
+    apiVersions = ["6.3.15", "6.5.1"]
+    for apiVersion in apiVersions:
+        fullDestFile = apiPath + "CtpApiModel_" + apiVersion + ".xml"
+        fullDataTypeFile = apiPath + apiVersion + dataTypeFile
+        fullStructFile = apiPath + apiVersion + structFile
+        fullApiFile = apiPath + apiVersion + apiFile
+        print fullDestFile, fullDataTypeFile, fullStructFile, fullApiFile
+        Parse(fullDestFile, fullDataTypeFile, fullStructFile, fullApiFile, apiVersion)
 
 if __name__ == '__main__':
     main()

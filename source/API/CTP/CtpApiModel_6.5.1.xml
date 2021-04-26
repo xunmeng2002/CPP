@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf8"?>
-<root>
+<root apiversion="6.5.1">
 	<types>
 		<type basetype="string" name="TThostFtdcTraderIDType" size="21"/>
 		<type basetype="string" name="TThostFtdcInvestorIDType" size="13"/>

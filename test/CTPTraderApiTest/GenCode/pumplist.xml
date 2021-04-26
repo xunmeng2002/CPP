@@ -1,11 +1,11 @@
 <pumplist>
-	<pump dest="6.3.15/StructWriteLogFunc.h" tpl="StructWriteLogFunc.h.tpl" model="../../../source/API/CTP/6.3.15/CtpApiModel.xml"/>
-	<pump dest="6.3.15/StructWriteLogFunc.cpp" tpl="StructWriteLogFunc.cpp.tpl" model="../../../source/API/CTP/6.3.15/CtpApiModel.xml"/>
-	<pump dest="6.3.15/ThostFtdcTraderSpiMiddle.h" tpl="ThostFtdcTraderSpiMiddle.h.tpl" model="../../../source/API/CTP/6.3.15/CtpApiModel.xml"/>
-	<pump dest="6.3.15/ThostFtdcTraderSpiMiddle.cpp" tpl="ThostFtdcTraderSpiMiddle.cpp.tpl" model="../../../source/API/CTP/6.3.15/CtpApiModel.xml"/>
+	<pump dest="6.3.15/StructWriteLogFunc.h" tpl="StructWriteLogFunc.h.tpl" model="../../../source/API/CTP/CtpApiModel_6.3.15.xml"/>
+	<pump dest="6.3.15/StructWriteLogFunc.cpp" tpl="StructWriteLogFunc.cpp.tpl" model="../../../source/API/CTP/CtpApiModel_6.3.15.xml"/>
+	<pump dest="6.3.15/ThostFtdcTraderSpiMiddle.h" tpl="ThostFtdcTraderSpiMiddle.h.tpl" model="../../../source/API/CTP/CtpApiModel_6.3.15.xml"/>
+	<pump dest="6.3.15/ThostFtdcTraderSpiMiddle.cpp" tpl="ThostFtdcTraderSpiMiddle.cpp.tpl" model="../../../source/API/CTP/CtpApiModel_6.3.15.xml"/>
 	
-	<pump dest="6.5.1/StructWriteLogFunc.h" tpl="StructWriteLogFunc.h.tpl" model="../../../source/API/CTP/6.5.1/CtpApiModel.xml"/>
-	<pump dest="6.5.1/StructWriteLogFunc.cpp" tpl="StructWriteLogFunc.cpp.tpl" model="../../../source/API/CTP/6.5.1/CtpApiModel.xml"/>
-	<pump dest="6.5.1/ThostFtdcTraderSpiMiddle.h" tpl="ThostFtdcTraderSpiMiddle.h.tpl" model="../../../source/API/CTP/6.5.1/CtpApiModel.xml"/>
-	<pump dest="6.5.1/ThostFtdcTraderSpiMiddle.cpp" tpl="ThostFtdcTraderSpiMiddle.cpp.tpl" model="../../../source/API/CTP/6.5.1/CtpApiModel.xml"/>
+	<pump dest="6.5.1/StructWriteLogFunc.h" tpl="StructWriteLogFunc.h.tpl" model="../../../source/API/CTP/CtpApiModel_6.5.1.xml"/>
+	<pump dest="6.5.1/StructWriteLogFunc.cpp" tpl="StructWriteLogFunc.cpp.tpl" model="../../../source/API/CTP/CtpApiModel_6.5.1.xml"/>
+	<pump dest="6.5.1/ThostFtdcTraderSpiMiddle.h" tpl="ThostFtdcTraderSpiMiddle.h.tpl" model="../../../source/API/CTP/CtpApiModel_6.5.1.xml"/>
+	<pump dest="6.5.1/ThostFtdcTraderSpiMiddle.cpp" tpl="ThostFtdcTraderSpiMiddle.cpp.tpl" model="../../../source/API/CTP/CtpApiModel_6.5.1.xml"/>
 </pumplist>

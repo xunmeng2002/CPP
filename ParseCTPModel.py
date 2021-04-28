@@ -64,38 +64,65 @@ def ParseFuncParams(dom, func, line):
     items = paramsString.split(",")
     for item in items:
         item = item.strip()
-        attributes = item.split(" ")
-        type = attributes[0]
-        name = attributes[1]
+        type = ""
+        basetype = ""
+        name = ""
         custom = "False"
-        if type.startswith("CThostFtdc"):
-            custom = "True"
+        if item.startswith("CThostFtdc"):
+            attributes = item.split("*")
+            type = attributes[0].strip()
+            basetype = ""
             name = type[10 : type.rfind("Field")]
+            custom = "True"
+        elif item.startswith("THOST_TE"):
+            attributes = item.split(" ")
+            type = attributes[0].strip()
+            basetype = "enum"
+            name = attributes[1].strip()
+        elif item.startswith("char *") or item.startswith("const char *") :
+            type = item[0 : item.find("*")+1]
+            basetype = "string"
+            name = item[item.find("*")+1:]
+        else:
+            attributes = item.split(" ")
+            type = attributes[0]
+            basetype = type
+            name = attributes[1]
+
         param = dom.createElement('param')
         param.setAttribute("type", type)
+        param.setAttribute("basetype", basetype)
         param.setAttribute("name", name)
         param.setAttribute("custom", custom)
         func.appendChild(param)
 
-def ParseFuncAttrib(dom, root, line):
-    items = line.split(" ")
+def ParseFuncAttrib(dom, root, line): 
     func = dom.createElement('func')
-    func.setAttribute("return", items[1])
-    func.setAttribute("name", items[2][0 : items[2].find("(")])
-    if items[2].startswith("OnErrRtn"):
-        func.setAttribute("type", "OnErrRtn")
-    elif items[2].startswith("OnRtn"):
-        func.setAttribute("type", "OnRtn")
-    elif items[2].startswith("OnRspQry"):
-        func.setAttribute("type", "OnRspQry")
-    elif items[2].startswith("OnRsp"):
-        func.setAttribute("type", "OnRsp")
-    elif items[2].startswith("On"):
-        func.setAttribute("type", "On")
+    if line.startswith("virtual const char *"):
+        func.setAttribute("return", "const char *")
+        func.setAttribute("name", line[line.find("*")+1 : line.find("(")])
     else:
-        func.setAttribute("type", "None")
+        items = line.split(" ")
+        func.setAttribute("return", items[1])
+        func.setAttribute("name", items[2][0 : items[2].find("(")])
     ParseFuncParams(dom, func, line)
     root.appendChild(func)
+
+def ParseApiFunc(dom, root, filename):
+    sourceFile = open(filename, "r")
+    isInclass = False
+    func = ""
+    for line in sourceFile:
+        line = line.strip()
+        if isInclass and line.startswith("};"):
+            break
+        elif line.startswith("class") and line.endswith("TraderApi"):
+            isInclass = True
+        if isInclass:
+            if line.startswith("virtual"):
+                line = line.replace("\t", " ")
+                ParseFuncAttrib(dom, root, line)
+    sourceFile.close()
 
 def ParseSpiFunc(dom, root, filename):
     sourceFile = open(filename, "r")
@@ -105,12 +132,12 @@ def ParseSpiFunc(dom, root, filename):
         line = line.strip()
         if isInclass and line.startswith("};"):
             break
+        elif line.startswith("class") and line.endswith("TraderSpi"):
+            isInclass = True
         if isInclass:
             if line.startswith("virtual"):
                 line = line.replace("\t", " ")
                 ParseFuncAttrib(dom, root, line)
-        elif line.startswith("class") and line.endswith("TraderSpi"):
-            isInclass = True
     sourceFile.close()
 
 def Parse(destFile, dataTypeFile, structFile, apiFile, apiVersion):
@@ -120,13 +147,16 @@ def Parse(destFile, dataTypeFile, structFile, apiFile, apiVersion):
     root.setAttribute("apiversion", apiVersion)
     typeNodes = dom.createElement('types')
     fieldNodes = dom.createElement('fields')
+    apiNodes = dom.createElement('api')
     spiNodes = dom.createElement('spi')
     types = {}
     ParseDataType(dom, typeNodes, dataTypeFile, types)
     ParseStruct(dom, fieldNodes, structFile, types)
+    ParseApiFunc(dom, apiNodes, apiFile)
     ParseSpiFunc(dom, spiNodes, apiFile)
     root.appendChild(typeNodes)
     root.appendChild(fieldNodes)
+    root.appendChild(apiNodes)
     root.appendChild(spiNodes)
     f = open(destFile, 'w')
     dom.writexml(f, indent="", addindent='\t', newl='\n', encoding="utf8")

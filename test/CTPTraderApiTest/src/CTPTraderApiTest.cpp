@@ -1,3 +1,4 @@
+#include "ThostFtdcTraderApiMiddle.h"
 #include "ThostFtdcTraderSpiImpl.h"
 #include "Logger.h"
 #include "json/json.h"
@@ -60,7 +61,7 @@ int main(int argc, char* argv[])
 	Logger::GetInstance().Start();
 
 	string accountID = "71020537";
-	CThostFtdcTraderApi* traderApi = CThostFtdcTraderApi::CreateFtdcTraderApi();
+	CThostFtdcTraderApi* traderApi = CThostFtdcTraderApiMiddle::CreateFtdcTraderApi();
 	cout << "API Version:" << traderApi->GetApiVersion() << endl;
 	CThostFtdcTraderSpiImpl* traderSpi = new CThostFtdcTraderSpiImpl(traderApi);
 	traderSpi->SetAccountInfo(accountInfos[accountID]);

@@ -5622,646 +5622,1012 @@
 			<item basetype="double" name="Xparameter" type="TThostFtdcDiscountRatioType"/>
 		</field>
 	</fields>
+	<api>
+		<func name="Release" return="void"/>
+		<func name="Init" return="void"/>
+		<func name="Join" return="int"/>
+		<func name="GetTradingDay" return="const char *"/>
+		<func name="RegisterFront" return="void">
+			<param basetype="string" custom="False" name="pszFrontAddress" type="char *"/>
+		</func>
+		<func name="RegisterNameServer" return="void">
+			<param basetype="string" custom="False" name="pszNsAddress" type="char *"/>
+		</func>
+		<func name="RegisterFensUserInfo" return="void">
+			<param basetype="" custom="True" name="FensUserInfo" type="CThostFtdcFensUserInfoField"/>
+		</func>
+		<func name="RegisterSpi" return="void">
+			<param basetype="" custom="True" name="TraderSp" type="CThostFtdcTraderSpi"/>
+		</func>
+		<func name="SubscribePrivateTopic" return="void">
+			<param basetype="enum" custom="False" name="nResumeType" type="THOST_TE_RESUME_TYPE"/>
+		</func>
+		<func name="SubscribePublicTopic" return="void">
+			<param basetype="enum" custom="False" name="nResumeType" type="THOST_TE_RESUME_TYPE"/>
+		</func>
+		<func name="ReqAuthenticate" return="int">
+			<param basetype="" custom="True" name="ReqAuthenticate" type="CThostFtdcReqAuthenticateField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="RegisterUserSystemInfo" return="int">
+			<param basetype="" custom="True" name="UserSystemInfo" type="CThostFtdcUserSystemInfoField"/>
+		</func>
+		<func name="SubmitUserSystemInfo" return="int">
+			<param basetype="" custom="True" name="UserSystemInfo" type="CThostFtdcUserSystemInfoField"/>
+		</func>
+		<func name="ReqUserLogin" return="int">
+			<param basetype="" custom="True" name="ReqUserLogin" type="CThostFtdcReqUserLoginField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqUserLogout" return="int">
+			<param basetype="" custom="True" name="UserLogout" type="CThostFtdcUserLogoutField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqUserPasswordUpdate" return="int">
+			<param basetype="" custom="True" name="UserPasswordUpdate" type="CThostFtdcUserPasswordUpdateField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqTradingAccountPasswordUpdate" return="int">
+			<param basetype="" custom="True" name="TradingAccountPasswordUpdate" type="CThostFtdcTradingAccountPasswordUpdateField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqUserAuthMethod" return="int">
+			<param basetype="" custom="True" name="ReqUserAuthMethod" type="CThostFtdcReqUserAuthMethodField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqGenUserCaptcha" return="int">
+			<param basetype="" custom="True" name="ReqGenUserCaptcha" type="CThostFtdcReqGenUserCaptchaField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqGenUserText" return="int">
+			<param basetype="" custom="True" name="ReqGenUserText" type="CThostFtdcReqGenUserTextField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqUserLoginWithCaptcha" return="int">
+			<param basetype="" custom="True" name="ReqUserLoginWithCaptcha" type="CThostFtdcReqUserLoginWithCaptchaField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqUserLoginWithText" return="int">
+			<param basetype="" custom="True" name="ReqUserLoginWithText" type="CThostFtdcReqUserLoginWithTextField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqUserLoginWithOTP" return="int">
+			<param basetype="" custom="True" name="ReqUserLoginWithOTP" type="CThostFtdcReqUserLoginWithOTPField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqOrderInsert" return="int">
+			<param basetype="" custom="True" name="InputOrder" type="CThostFtdcInputOrderField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqParkedOrderInsert" return="int">
+			<param basetype="" custom="True" name="ParkedOrder" type="CThostFtdcParkedOrderField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqParkedOrderAction" return="int">
+			<param basetype="" custom="True" name="ParkedOrderAction" type="CThostFtdcParkedOrderActionField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqOrderAction" return="int">
+			<param basetype="" custom="True" name="InputOrderAction" type="CThostFtdcInputOrderActionField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryMaxOrderVolume" return="int">
+			<param basetype="" custom="True" name="QryMaxOrderVolume" type="CThostFtdcQryMaxOrderVolumeField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqSettlementInfoConfirm" return="int">
+			<param basetype="" custom="True" name="SettlementInfoConfirm" type="CThostFtdcSettlementInfoConfirmField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqRemoveParkedOrder" return="int">
+			<param basetype="" custom="True" name="RemoveParkedOrder" type="CThostFtdcRemoveParkedOrderField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqRemoveParkedOrderAction" return="int">
+			<param basetype="" custom="True" name="RemoveParkedOrderAction" type="CThostFtdcRemoveParkedOrderActionField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqExecOrderInsert" return="int">
+			<param basetype="" custom="True" name="InputExecOrder" type="CThostFtdcInputExecOrderField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqExecOrderAction" return="int">
+			<param basetype="" custom="True" name="InputExecOrderAction" type="CThostFtdcInputExecOrderActionField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqForQuoteInsert" return="int">
+			<param basetype="" custom="True" name="InputForQuote" type="CThostFtdcInputForQuoteField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQuoteInsert" return="int">
+			<param basetype="" custom="True" name="InputQuote" type="CThostFtdcInputQuoteField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQuoteAction" return="int">
+			<param basetype="" custom="True" name="InputQuoteAction" type="CThostFtdcInputQuoteActionField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqBatchOrderAction" return="int">
+			<param basetype="" custom="True" name="InputBatchOrderAction" type="CThostFtdcInputBatchOrderActionField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqOptionSelfCloseInsert" return="int">
+			<param basetype="" custom="True" name="InputOptionSelfClose" type="CThostFtdcInputOptionSelfCloseField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqOptionSelfCloseAction" return="int">
+			<param basetype="" custom="True" name="InputOptionSelfCloseAction" type="CThostFtdcInputOptionSelfCloseActionField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqCombActionInsert" return="int">
+			<param basetype="" custom="True" name="InputCombAction" type="CThostFtdcInputCombActionField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryOrder" return="int">
+			<param basetype="" custom="True" name="QryOrder" type="CThostFtdcQryOrderField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryTrade" return="int">
+			<param basetype="" custom="True" name="QryTrade" type="CThostFtdcQryTradeField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryInvestorPosition" return="int">
+			<param basetype="" custom="True" name="QryInvestorPosition" type="CThostFtdcQryInvestorPositionField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryTradingAccount" return="int">
+			<param basetype="" custom="True" name="QryTradingAccount" type="CThostFtdcQryTradingAccountField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryInvestor" return="int">
+			<param basetype="" custom="True" name="QryInvestor" type="CThostFtdcQryInvestorField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryTradingCode" return="int">
+			<param basetype="" custom="True" name="QryTradingCode" type="CThostFtdcQryTradingCodeField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryInstrumentMarginRate" return="int">
+			<param basetype="" custom="True" name="QryInstrumentMarginRate" type="CThostFtdcQryInstrumentMarginRateField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryInstrumentCommissionRate" return="int">
+			<param basetype="" custom="True" name="QryInstrumentCommissionRate" type="CThostFtdcQryInstrumentCommissionRateField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryExchange" return="int">
+			<param basetype="" custom="True" name="QryExchange" type="CThostFtdcQryExchangeField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryProduct" return="int">
+			<param basetype="" custom="True" name="QryProduct" type="CThostFtdcQryProductField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryInstrument" return="int">
+			<param basetype="" custom="True" name="QryInstrument" type="CThostFtdcQryInstrumentField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryDepthMarketData" return="int">
+			<param basetype="" custom="True" name="QryDepthMarketData" type="CThostFtdcQryDepthMarketDataField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQrySettlementInfo" return="int">
+			<param basetype="" custom="True" name="QrySettlementInfo" type="CThostFtdcQrySettlementInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryTransferBank" return="int">
+			<param basetype="" custom="True" name="QryTransferBank" type="CThostFtdcQryTransferBankField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryInvestorPositionDetail" return="int">
+			<param basetype="" custom="True" name="QryInvestorPositionDetail" type="CThostFtdcQryInvestorPositionDetailField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryNotice" return="int">
+			<param basetype="" custom="True" name="QryNotice" type="CThostFtdcQryNoticeField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQrySettlementInfoConfirm" return="int">
+			<param basetype="" custom="True" name="QrySettlementInfoConfirm" type="CThostFtdcQrySettlementInfoConfirmField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryInvestorPositionCombineDetail" return="int">
+			<param basetype="" custom="True" name="QryInvestorPositionCombineDetail" type="CThostFtdcQryInvestorPositionCombineDetailField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryCFMMCTradingAccountKey" return="int">
+			<param basetype="" custom="True" name="QryCFMMCTradingAccountKey" type="CThostFtdcQryCFMMCTradingAccountKeyField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryEWarrantOffset" return="int">
+			<param basetype="" custom="True" name="QryEWarrantOffset" type="CThostFtdcQryEWarrantOffsetField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryInvestorProductGroupMargin" return="int">
+			<param basetype="" custom="True" name="QryInvestorProductGroupMargin" type="CThostFtdcQryInvestorProductGroupMarginField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryExchangeMarginRate" return="int">
+			<param basetype="" custom="True" name="QryExchangeMarginRate" type="CThostFtdcQryExchangeMarginRateField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryExchangeMarginRateAdjust" return="int">
+			<param basetype="" custom="True" name="QryExchangeMarginRateAdjust" type="CThostFtdcQryExchangeMarginRateAdjustField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryExchangeRate" return="int">
+			<param basetype="" custom="True" name="QryExchangeRate" type="CThostFtdcQryExchangeRateField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQrySecAgentACIDMap" return="int">
+			<param basetype="" custom="True" name="QrySecAgentACIDMap" type="CThostFtdcQrySecAgentACIDMapField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryProductExchRate" return="int">
+			<param basetype="" custom="True" name="QryProductExchRate" type="CThostFtdcQryProductExchRateField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryProductGroup" return="int">
+			<param basetype="" custom="True" name="QryProductGroup" type="CThostFtdcQryProductGroupField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryMMInstrumentCommissionRate" return="int">
+			<param basetype="" custom="True" name="QryMMInstrumentCommissionRate" type="CThostFtdcQryMMInstrumentCommissionRateField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryMMOptionInstrCommRate" return="int">
+			<param basetype="" custom="True" name="QryMMOptionInstrCommRate" type="CThostFtdcQryMMOptionInstrCommRateField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryInstrumentOrderCommRate" return="int">
+			<param basetype="" custom="True" name="QryInstrumentOrderCommRate" type="CThostFtdcQryInstrumentOrderCommRateField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQrySecAgentTradingAccount" return="int">
+			<param basetype="" custom="True" name="QryTradingAccount" type="CThostFtdcQryTradingAccountField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQrySecAgentCheckMode" return="int">
+			<param basetype="" custom="True" name="QrySecAgentCheckMode" type="CThostFtdcQrySecAgentCheckModeField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQrySecAgentTradeInfo" return="int">
+			<param basetype="" custom="True" name="QrySecAgentTradeInfo" type="CThostFtdcQrySecAgentTradeInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryOptionInstrTradeCost" return="int">
+			<param basetype="" custom="True" name="QryOptionInstrTradeCost" type="CThostFtdcQryOptionInstrTradeCostField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryOptionInstrCommRate" return="int">
+			<param basetype="" custom="True" name="QryOptionInstrCommRate" type="CThostFtdcQryOptionInstrCommRateField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryExecOrder" return="int">
+			<param basetype="" custom="True" name="QryExecOrder" type="CThostFtdcQryExecOrderField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryForQuote" return="int">
+			<param basetype="" custom="True" name="QryForQuote" type="CThostFtdcQryForQuoteField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryQuote" return="int">
+			<param basetype="" custom="True" name="QryQuote" type="CThostFtdcQryQuoteField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryOptionSelfClose" return="int">
+			<param basetype="" custom="True" name="QryOptionSelfClose" type="CThostFtdcQryOptionSelfCloseField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryInvestUnit" return="int">
+			<param basetype="" custom="True" name="QryInvestUnit" type="CThostFtdcQryInvestUnitField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryCombInstrumentGuard" return="int">
+			<param basetype="" custom="True" name="QryCombInstrumentGuard" type="CThostFtdcQryCombInstrumentGuardField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryCombAction" return="int">
+			<param basetype="" custom="True" name="QryCombAction" type="CThostFtdcQryCombActionField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryTransferSerial" return="int">
+			<param basetype="" custom="True" name="QryTransferSerial" type="CThostFtdcQryTransferSerialField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryAccountregister" return="int">
+			<param basetype="" custom="True" name="QryAccountregister" type="CThostFtdcQryAccountregisterField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryContractBank" return="int">
+			<param basetype="" custom="True" name="QryContractBank" type="CThostFtdcQryContractBankField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryParkedOrder" return="int">
+			<param basetype="" custom="True" name="QryParkedOrder" type="CThostFtdcQryParkedOrderField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryParkedOrderAction" return="int">
+			<param basetype="" custom="True" name="QryParkedOrderAction" type="CThostFtdcQryParkedOrderActionField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryTradingNotice" return="int">
+			<param basetype="" custom="True" name="QryTradingNotice" type="CThostFtdcQryTradingNoticeField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryBrokerTradingParams" return="int">
+			<param basetype="" custom="True" name="QryBrokerTradingParams" type="CThostFtdcQryBrokerTradingParamsField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryBrokerTradingAlgos" return="int">
+			<param basetype="" custom="True" name="QryBrokerTradingAlgos" type="CThostFtdcQryBrokerTradingAlgosField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQueryCFMMCTradingAccountToken" return="int">
+			<param basetype="" custom="True" name="QueryCFMMCTradingAccountToken" type="CThostFtdcQueryCFMMCTradingAccountTokenField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqFromBankToFutureByFuture" return="int">
+			<param basetype="" custom="True" name="ReqTransfer" type="CThostFtdcReqTransferField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqFromFutureToBankByFuture" return="int">
+			<param basetype="" custom="True" name="ReqTransfer" type="CThostFtdcReqTransferField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQueryBankAccountMoneyByFuture" return="int">
+			<param basetype="" custom="True" name="ReqQueryAccount" type="CThostFtdcReqQueryAccountField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryClassifiedInstrument" return="int">
+			<param basetype="" custom="True" name="QryClassifiedInstrument" type="CThostFtdcQryClassifiedInstrumentField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+		<func name="ReqQryCombPromotionParam" return="int">
+			<param basetype="" custom="True" name="QryCombPromotionParam" type="CThostFtdcQryCombPromotionParamField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+		</func>
+	</api>
 	<spi>
-		<func name="OnFrontConnected" return="void" type="On"/>
-		<func name="OnFrontDisconnected" return="void" type="On">
-			<param custom="False" name="nReason" type="int"/>
-		</func>
-		<func name="OnHeartBeatWarning" return="void" type="On">
-			<param custom="False" name="nTimeLapse" type="int"/>
-		</func>
-		<func name="OnRspAuthenticate" return="void" type="OnRsp">
-			<param custom="True" name="RspAuthenticate" type="CThostFtdcRspAuthenticateField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspUserLogin" return="void" type="OnRsp">
-			<param custom="True" name="RspUserLogin" type="CThostFtdcRspUserLoginField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspUserLogout" return="void" type="OnRsp">
-			<param custom="True" name="UserLogout" type="CThostFtdcUserLogoutField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspUserPasswordUpdate" return="void" type="OnRsp">
-			<param custom="True" name="UserPasswordUpdate" type="CThostFtdcUserPasswordUpdateField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspTradingAccountPasswordUpdate" return="void" type="OnRsp">
-			<param custom="True" name="TradingAccountPasswordUpdate" type="CThostFtdcTradingAccountPasswordUpdateField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspUserAuthMethod" return="void" type="OnRsp">
-			<param custom="True" name="RspUserAuthMethod" type="CThostFtdcRspUserAuthMethodField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspGenUserCaptcha" return="void" type="OnRsp">
-			<param custom="True" name="RspGenUserCaptcha" type="CThostFtdcRspGenUserCaptchaField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspGenUserText" return="void" type="OnRsp">
-			<param custom="True" name="RspGenUserText" type="CThostFtdcRspGenUserTextField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspOrderInsert" return="void" type="OnRsp">
-			<param custom="True" name="InputOrder" type="CThostFtdcInputOrderField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspParkedOrderInsert" return="void" type="OnRsp">
-			<param custom="True" name="ParkedOrder" type="CThostFtdcParkedOrderField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspParkedOrderAction" return="void" type="OnRsp">
-			<param custom="True" name="ParkedOrderAction" type="CThostFtdcParkedOrderActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspOrderAction" return="void" type="OnRsp">
-			<param custom="True" name="InputOrderAction" type="CThostFtdcInputOrderActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryMaxOrderVolume" return="void" type="OnRspQry">
-			<param custom="True" name="QryMaxOrderVolume" type="CThostFtdcQryMaxOrderVolumeField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspSettlementInfoConfirm" return="void" type="OnRsp">
-			<param custom="True" name="SettlementInfoConfirm" type="CThostFtdcSettlementInfoConfirmField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspRemoveParkedOrder" return="void" type="OnRsp">
-			<param custom="True" name="RemoveParkedOrder" type="CThostFtdcRemoveParkedOrderField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspRemoveParkedOrderAction" return="void" type="OnRsp">
-			<param custom="True" name="RemoveParkedOrderAction" type="CThostFtdcRemoveParkedOrderActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspExecOrderInsert" return="void" type="OnRsp">
-			<param custom="True" name="InputExecOrder" type="CThostFtdcInputExecOrderField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspExecOrderAction" return="void" type="OnRsp">
-			<param custom="True" name="InputExecOrderAction" type="CThostFtdcInputExecOrderActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspForQuoteInsert" return="void" type="OnRsp">
-			<param custom="True" name="InputForQuote" type="CThostFtdcInputForQuoteField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQuoteInsert" return="void" type="OnRsp">
-			<param custom="True" name="InputQuote" type="CThostFtdcInputQuoteField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQuoteAction" return="void" type="OnRsp">
-			<param custom="True" name="InputQuoteAction" type="CThostFtdcInputQuoteActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspBatchOrderAction" return="void" type="OnRsp">
-			<param custom="True" name="InputBatchOrderAction" type="CThostFtdcInputBatchOrderActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspOptionSelfCloseInsert" return="void" type="OnRsp">
-			<param custom="True" name="InputOptionSelfClose" type="CThostFtdcInputOptionSelfCloseField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspOptionSelfCloseAction" return="void" type="OnRsp">
-			<param custom="True" name="InputOptionSelfCloseAction" type="CThostFtdcInputOptionSelfCloseActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspCombActionInsert" return="void" type="OnRsp">
-			<param custom="True" name="InputCombAction" type="CThostFtdcInputCombActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryOrder" return="void" type="OnRspQry">
-			<param custom="True" name="Order" type="CThostFtdcOrderField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryTrade" return="void" type="OnRspQry">
-			<param custom="True" name="Trade" type="CThostFtdcTradeField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryInvestorPosition" return="void" type="OnRspQry">
-			<param custom="True" name="InvestorPosition" type="CThostFtdcInvestorPositionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryTradingAccount" return="void" type="OnRspQry">
-			<param custom="True" name="TradingAccount" type="CThostFtdcTradingAccountField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryInvestor" return="void" type="OnRspQry">
-			<param custom="True" name="Investor" type="CThostFtdcInvestorField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryTradingCode" return="void" type="OnRspQry">
-			<param custom="True" name="TradingCode" type="CThostFtdcTradingCodeField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryInstrumentMarginRate" return="void" type="OnRspQry">
-			<param custom="True" name="InstrumentMarginRate" type="CThostFtdcInstrumentMarginRateField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryInstrumentCommissionRate" return="void" type="OnRspQry">
-			<param custom="True" name="InstrumentCommissionRate" type="CThostFtdcInstrumentCommissionRateField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryExchange" return="void" type="OnRspQry">
-			<param custom="True" name="Exchange" type="CThostFtdcExchangeField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryProduct" return="void" type="OnRspQry">
-			<param custom="True" name="Product" type="CThostFtdcProductField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryInstrument" return="void" type="OnRspQry">
-			<param custom="True" name="Instrument" type="CThostFtdcInstrumentField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryDepthMarketData" return="void" type="OnRspQry">
-			<param custom="True" name="DepthMarketData" type="CThostFtdcDepthMarketDataField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQrySettlementInfo" return="void" type="OnRspQry">
-			<param custom="True" name="SettlementInfo" type="CThostFtdcSettlementInfoField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryTransferBank" return="void" type="OnRspQry">
-			<param custom="True" name="TransferBank" type="CThostFtdcTransferBankField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryInvestorPositionDetail" return="void" type="OnRspQry">
-			<param custom="True" name="InvestorPositionDetail" type="CThostFtdcInvestorPositionDetailField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryNotice" return="void" type="OnRspQry">
-			<param custom="True" name="Notice" type="CThostFtdcNoticeField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQrySettlementInfoConfirm" return="void" type="OnRspQry">
-			<param custom="True" name="SettlementInfoConfirm" type="CThostFtdcSettlementInfoConfirmField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryInvestorPositionCombineDetail" return="void" type="OnRspQry">
-			<param custom="True" name="InvestorPositionCombineDetail" type="CThostFtdcInvestorPositionCombineDetailField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryCFMMCTradingAccountKey" return="void" type="OnRspQry">
-			<param custom="True" name="CFMMCTradingAccountKey" type="CThostFtdcCFMMCTradingAccountKeyField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryEWarrantOffset" return="void" type="OnRspQry">
-			<param custom="True" name="EWarrantOffset" type="CThostFtdcEWarrantOffsetField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryInvestorProductGroupMargin" return="void" type="OnRspQry">
-			<param custom="True" name="InvestorProductGroupMargin" type="CThostFtdcInvestorProductGroupMarginField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryExchangeMarginRate" return="void" type="OnRspQry">
-			<param custom="True" name="ExchangeMarginRate" type="CThostFtdcExchangeMarginRateField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryExchangeMarginRateAdjust" return="void" type="OnRspQry">
-			<param custom="True" name="ExchangeMarginRateAdjust" type="CThostFtdcExchangeMarginRateAdjustField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryExchangeRate" return="void" type="OnRspQry">
-			<param custom="True" name="ExchangeRate" type="CThostFtdcExchangeRateField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQrySecAgentACIDMap" return="void" type="OnRspQry">
-			<param custom="True" name="SecAgentACIDMap" type="CThostFtdcSecAgentACIDMapField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryProductExchRate" return="void" type="OnRspQry">
-			<param custom="True" name="ProductExchRate" type="CThostFtdcProductExchRateField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryProductGroup" return="void" type="OnRspQry">
-			<param custom="True" name="ProductGroup" type="CThostFtdcProductGroupField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryMMInstrumentCommissionRate" return="void" type="OnRspQry">
-			<param custom="True" name="MMInstrumentCommissionRate" type="CThostFtdcMMInstrumentCommissionRateField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryMMOptionInstrCommRate" return="void" type="OnRspQry">
-			<param custom="True" name="MMOptionInstrCommRate" type="CThostFtdcMMOptionInstrCommRateField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryInstrumentOrderCommRate" return="void" type="OnRspQry">
-			<param custom="True" name="InstrumentOrderCommRate" type="CThostFtdcInstrumentOrderCommRateField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQrySecAgentTradingAccount" return="void" type="OnRspQry">
-			<param custom="True" name="TradingAccount" type="CThostFtdcTradingAccountField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQrySecAgentCheckMode" return="void" type="OnRspQry">
-			<param custom="True" name="SecAgentCheckMode" type="CThostFtdcSecAgentCheckModeField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQrySecAgentTradeInfo" return="void" type="OnRspQry">
-			<param custom="True" name="SecAgentTradeInfo" type="CThostFtdcSecAgentTradeInfoField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryOptionInstrTradeCost" return="void" type="OnRspQry">
-			<param custom="True" name="OptionInstrTradeCost" type="CThostFtdcOptionInstrTradeCostField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryOptionInstrCommRate" return="void" type="OnRspQry">
-			<param custom="True" name="OptionInstrCommRate" type="CThostFtdcOptionInstrCommRateField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryExecOrder" return="void" type="OnRspQry">
-			<param custom="True" name="ExecOrder" type="CThostFtdcExecOrderField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryForQuote" return="void" type="OnRspQry">
-			<param custom="True" name="ForQuote" type="CThostFtdcForQuoteField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryQuote" return="void" type="OnRspQry">
-			<param custom="True" name="Quote" type="CThostFtdcQuoteField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryOptionSelfClose" return="void" type="OnRspQry">
-			<param custom="True" name="OptionSelfClose" type="CThostFtdcOptionSelfCloseField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryInvestUnit" return="void" type="OnRspQry">
-			<param custom="True" name="InvestUnit" type="CThostFtdcInvestUnitField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryCombInstrumentGuard" return="void" type="OnRspQry">
-			<param custom="True" name="CombInstrumentGuard" type="CThostFtdcCombInstrumentGuardField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryCombAction" return="void" type="OnRspQry">
-			<param custom="True" name="CombAction" type="CThostFtdcCombActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryTransferSerial" return="void" type="OnRspQry">
-			<param custom="True" name="TransferSerial" type="CThostFtdcTransferSerialField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryAccountregister" return="void" type="OnRspQry">
-			<param custom="True" name="Accountregister" type="CThostFtdcAccountregisterField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspError" return="void" type="OnRsp">
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRtnOrder" return="void" type="OnRtn">
-			<param custom="True" name="Order" type="CThostFtdcOrderField"/>
-		</func>
-		<func name="OnRtnTrade" return="void" type="OnRtn">
-			<param custom="True" name="Trade" type="CThostFtdcTradeField"/>
-		</func>
-		<func name="OnErrRtnOrderInsert" return="void" type="OnErrRtn">
-			<param custom="True" name="InputOrder" type="CThostFtdcInputOrderField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnErrRtnOrderAction" return="void" type="OnErrRtn">
-			<param custom="True" name="OrderAction" type="CThostFtdcOrderActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnRtnInstrumentStatus" return="void" type="OnRtn">
-			<param custom="True" name="InstrumentStatus" type="CThostFtdcInstrumentStatusField"/>
-		</func>
-		<func name="OnRtnBulletin" return="void" type="OnRtn">
-			<param custom="True" name="Bulletin" type="CThostFtdcBulletinField"/>
-		</func>
-		<func name="OnRtnTradingNotice" return="void" type="OnRtn">
-			<param custom="True" name="TradingNoticeInfo" type="CThostFtdcTradingNoticeInfoField"/>
-		</func>
-		<func name="OnRtnErrorConditionalOrder" return="void" type="OnRtn">
-			<param custom="True" name="ErrorConditionalOrder" type="CThostFtdcErrorConditionalOrderField"/>
-		</func>
-		<func name="OnRtnExecOrder" return="void" type="OnRtn">
-			<param custom="True" name="ExecOrder" type="CThostFtdcExecOrderField"/>
-		</func>
-		<func name="OnErrRtnExecOrderInsert" return="void" type="OnErrRtn">
-			<param custom="True" name="InputExecOrder" type="CThostFtdcInputExecOrderField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnErrRtnExecOrderAction" return="void" type="OnErrRtn">
-			<param custom="True" name="ExecOrderAction" type="CThostFtdcExecOrderActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnErrRtnForQuoteInsert" return="void" type="OnErrRtn">
-			<param custom="True" name="InputForQuote" type="CThostFtdcInputForQuoteField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnRtnQuote" return="void" type="OnRtn">
-			<param custom="True" name="Quote" type="CThostFtdcQuoteField"/>
-		</func>
-		<func name="OnErrRtnQuoteInsert" return="void" type="OnErrRtn">
-			<param custom="True" name="InputQuote" type="CThostFtdcInputQuoteField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnErrRtnQuoteAction" return="void" type="OnErrRtn">
-			<param custom="True" name="QuoteAction" type="CThostFtdcQuoteActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnRtnForQuoteRsp" return="void" type="OnRtn">
-			<param custom="True" name="ForQuoteRsp" type="CThostFtdcForQuoteRspField"/>
-		</func>
-		<func name="OnRtnCFMMCTradingAccountToken" return="void" type="OnRtn">
-			<param custom="True" name="CFMMCTradingAccountToken" type="CThostFtdcCFMMCTradingAccountTokenField"/>
-		</func>
-		<func name="OnErrRtnBatchOrderAction" return="void" type="OnErrRtn">
-			<param custom="True" name="BatchOrderAction" type="CThostFtdcBatchOrderActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnRtnOptionSelfClose" return="void" type="OnRtn">
-			<param custom="True" name="OptionSelfClose" type="CThostFtdcOptionSelfCloseField"/>
-		</func>
-		<func name="OnErrRtnOptionSelfCloseInsert" return="void" type="OnErrRtn">
-			<param custom="True" name="InputOptionSelfClose" type="CThostFtdcInputOptionSelfCloseField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnErrRtnOptionSelfCloseAction" return="void" type="OnErrRtn">
-			<param custom="True" name="OptionSelfCloseAction" type="CThostFtdcOptionSelfCloseActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnRtnCombAction" return="void" type="OnRtn">
-			<param custom="True" name="CombAction" type="CThostFtdcCombActionField"/>
-		</func>
-		<func name="OnErrRtnCombActionInsert" return="void" type="OnErrRtn">
-			<param custom="True" name="InputCombAction" type="CThostFtdcInputCombActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnRspQryContractBank" return="void" type="OnRspQry">
-			<param custom="True" name="ContractBank" type="CThostFtdcContractBankField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryParkedOrder" return="void" type="OnRspQry">
-			<param custom="True" name="ParkedOrder" type="CThostFtdcParkedOrderField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryParkedOrderAction" return="void" type="OnRspQry">
-			<param custom="True" name="ParkedOrderAction" type="CThostFtdcParkedOrderActionField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryTradingNotice" return="void" type="OnRspQry">
-			<param custom="True" name="TradingNotice" type="CThostFtdcTradingNoticeField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryBrokerTradingParams" return="void" type="OnRspQry">
-			<param custom="True" name="BrokerTradingParams" type="CThostFtdcBrokerTradingParamsField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryBrokerTradingAlgos" return="void" type="OnRspQry">
-			<param custom="True" name="BrokerTradingAlgos" type="CThostFtdcBrokerTradingAlgosField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQueryCFMMCTradingAccountToken" return="void" type="OnRsp">
-			<param custom="True" name="QueryCFMMCTradingAccountToken" type="CThostFtdcQueryCFMMCTradingAccountTokenField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRtnFromBankToFutureByBank" return="void" type="OnRtn">
-			<param custom="True" name="RspTransfer" type="CThostFtdcRspTransferField"/>
-		</func>
-		<func name="OnRtnFromFutureToBankByBank" return="void" type="OnRtn">
-			<param custom="True" name="RspTransfer" type="CThostFtdcRspTransferField"/>
-		</func>
-		<func name="OnRtnRepealFromBankToFutureByBank" return="void" type="OnRtn">
-			<param custom="True" name="RspRepeal" type="CThostFtdcRspRepealField"/>
-		</func>
-		<func name="OnRtnRepealFromFutureToBankByBank" return="void" type="OnRtn">
-			<param custom="True" name="RspRepeal" type="CThostFtdcRspRepealField"/>
-		</func>
-		<func name="OnRtnFromBankToFutureByFuture" return="void" type="OnRtn">
-			<param custom="True" name="RspTransfer" type="CThostFtdcRspTransferField"/>
-		</func>
-		<func name="OnRtnFromFutureToBankByFuture" return="void" type="OnRtn">
-			<param custom="True" name="RspTransfer" type="CThostFtdcRspTransferField"/>
-		</func>
-		<func name="OnRtnRepealFromBankToFutureByFutureManual" return="void" type="OnRtn">
-			<param custom="True" name="RspRepeal" type="CThostFtdcRspRepealField"/>
-		</func>
-		<func name="OnRtnRepealFromFutureToBankByFutureManual" return="void" type="OnRtn">
-			<param custom="True" name="RspRepeal" type="CThostFtdcRspRepealField"/>
-		</func>
-		<func name="OnRtnQueryBankBalanceByFuture" return="void" type="OnRtn">
-			<param custom="True" name="NotifyQueryAccount" type="CThostFtdcNotifyQueryAccountField"/>
-		</func>
-		<func name="OnErrRtnBankToFutureByFuture" return="void" type="OnErrRtn">
-			<param custom="True" name="ReqTransfer" type="CThostFtdcReqTransferField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnErrRtnFutureToBankByFuture" return="void" type="OnErrRtn">
-			<param custom="True" name="ReqTransfer" type="CThostFtdcReqTransferField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnErrRtnRepealBankToFutureByFutureManual" return="void" type="OnErrRtn">
-			<param custom="True" name="ReqRepeal" type="CThostFtdcReqRepealField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnErrRtnRepealFutureToBankByFutureManual" return="void" type="OnErrRtn">
-			<param custom="True" name="ReqRepeal" type="CThostFtdcReqRepealField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnErrRtnQueryBankBalanceByFuture" return="void" type="OnErrRtn">
-			<param custom="True" name="ReqQueryAccount" type="CThostFtdcReqQueryAccountField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-		</func>
-		<func name="OnRtnRepealFromBankToFutureByFuture" return="void" type="OnRtn">
-			<param custom="True" name="RspRepeal" type="CThostFtdcRspRepealField"/>
-		</func>
-		<func name="OnRtnRepealFromFutureToBankByFuture" return="void" type="OnRtn">
-			<param custom="True" name="RspRepeal" type="CThostFtdcRspRepealField"/>
-		</func>
-		<func name="OnRspFromBankToFutureByFuture" return="void" type="OnRsp">
-			<param custom="True" name="ReqTransfer" type="CThostFtdcReqTransferField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspFromFutureToBankByFuture" return="void" type="OnRsp">
-			<param custom="True" name="ReqTransfer" type="CThostFtdcReqTransferField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQueryBankAccountMoneyByFuture" return="void" type="OnRsp">
-			<param custom="True" name="ReqQueryAccount" type="CThostFtdcReqQueryAccountField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRtnOpenAccountByBank" return="void" type="OnRtn">
-			<param custom="True" name="OpenAccount" type="CThostFtdcOpenAccountField"/>
-		</func>
-		<func name="OnRtnCancelAccountByBank" return="void" type="OnRtn">
-			<param custom="True" name="CancelAccount" type="CThostFtdcCancelAccountField"/>
-		</func>
-		<func name="OnRtnChangeAccountByBank" return="void" type="OnRtn">
-			<param custom="True" name="ChangeAccount" type="CThostFtdcChangeAccountField"/>
-		</func>
-		<func name="OnRspQryClassifiedInstrument" return="void" type="OnRspQry">
-			<param custom="True" name="Instrument" type="CThostFtdcInstrumentField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
-		</func>
-		<func name="OnRspQryCombPromotionParam" return="void" type="OnRspQry">
-			<param custom="True" name="CombPromotionParam" type="CThostFtdcCombPromotionParamField"/>
-			<param custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
-			<param custom="False" name="nRequestID" type="int"/>
-			<param custom="False" name="bIsLast" type="bool"/>
+		<func name="OnFrontConnected" return="void"/>
+		<func name="OnFrontDisconnected" return="void">
+			<param basetype="int" custom="False" name="nReason" type="int"/>
+		</func>
+		<func name="OnHeartBeatWarning" return="void">
+			<param basetype="int" custom="False" name="nTimeLapse" type="int"/>
+		</func>
+		<func name="OnRspAuthenticate" return="void">
+			<param basetype="" custom="True" name="RspAuthenticate" type="CThostFtdcRspAuthenticateField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspUserLogin" return="void">
+			<param basetype="" custom="True" name="RspUserLogin" type="CThostFtdcRspUserLoginField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspUserLogout" return="void">
+			<param basetype="" custom="True" name="UserLogout" type="CThostFtdcUserLogoutField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspUserPasswordUpdate" return="void">
+			<param basetype="" custom="True" name="UserPasswordUpdate" type="CThostFtdcUserPasswordUpdateField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspTradingAccountPasswordUpdate" return="void">
+			<param basetype="" custom="True" name="TradingAccountPasswordUpdate" type="CThostFtdcTradingAccountPasswordUpdateField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspUserAuthMethod" return="void">
+			<param basetype="" custom="True" name="RspUserAuthMethod" type="CThostFtdcRspUserAuthMethodField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspGenUserCaptcha" return="void">
+			<param basetype="" custom="True" name="RspGenUserCaptcha" type="CThostFtdcRspGenUserCaptchaField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspGenUserText" return="void">
+			<param basetype="" custom="True" name="RspGenUserText" type="CThostFtdcRspGenUserTextField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspOrderInsert" return="void">
+			<param basetype="" custom="True" name="InputOrder" type="CThostFtdcInputOrderField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspParkedOrderInsert" return="void">
+			<param basetype="" custom="True" name="ParkedOrder" type="CThostFtdcParkedOrderField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspParkedOrderAction" return="void">
+			<param basetype="" custom="True" name="ParkedOrderAction" type="CThostFtdcParkedOrderActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspOrderAction" return="void">
+			<param basetype="" custom="True" name="InputOrderAction" type="CThostFtdcInputOrderActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryMaxOrderVolume" return="void">
+			<param basetype="" custom="True" name="QryMaxOrderVolume" type="CThostFtdcQryMaxOrderVolumeField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspSettlementInfoConfirm" return="void">
+			<param basetype="" custom="True" name="SettlementInfoConfirm" type="CThostFtdcSettlementInfoConfirmField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspRemoveParkedOrder" return="void">
+			<param basetype="" custom="True" name="RemoveParkedOrder" type="CThostFtdcRemoveParkedOrderField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspRemoveParkedOrderAction" return="void">
+			<param basetype="" custom="True" name="RemoveParkedOrderAction" type="CThostFtdcRemoveParkedOrderActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspExecOrderInsert" return="void">
+			<param basetype="" custom="True" name="InputExecOrder" type="CThostFtdcInputExecOrderField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspExecOrderAction" return="void">
+			<param basetype="" custom="True" name="InputExecOrderAction" type="CThostFtdcInputExecOrderActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspForQuoteInsert" return="void">
+			<param basetype="" custom="True" name="InputForQuote" type="CThostFtdcInputForQuoteField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQuoteInsert" return="void">
+			<param basetype="" custom="True" name="InputQuote" type="CThostFtdcInputQuoteField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQuoteAction" return="void">
+			<param basetype="" custom="True" name="InputQuoteAction" type="CThostFtdcInputQuoteActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspBatchOrderAction" return="void">
+			<param basetype="" custom="True" name="InputBatchOrderAction" type="CThostFtdcInputBatchOrderActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspOptionSelfCloseInsert" return="void">
+			<param basetype="" custom="True" name="InputOptionSelfClose" type="CThostFtdcInputOptionSelfCloseField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspOptionSelfCloseAction" return="void">
+			<param basetype="" custom="True" name="InputOptionSelfCloseAction" type="CThostFtdcInputOptionSelfCloseActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspCombActionInsert" return="void">
+			<param basetype="" custom="True" name="InputCombAction" type="CThostFtdcInputCombActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryOrder" return="void">
+			<param basetype="" custom="True" name="Order" type="CThostFtdcOrderField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryTrade" return="void">
+			<param basetype="" custom="True" name="Trade" type="CThostFtdcTradeField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryInvestorPosition" return="void">
+			<param basetype="" custom="True" name="InvestorPosition" type="CThostFtdcInvestorPositionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryTradingAccount" return="void">
+			<param basetype="" custom="True" name="TradingAccount" type="CThostFtdcTradingAccountField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryInvestor" return="void">
+			<param basetype="" custom="True" name="Investor" type="CThostFtdcInvestorField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryTradingCode" return="void">
+			<param basetype="" custom="True" name="TradingCode" type="CThostFtdcTradingCodeField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryInstrumentMarginRate" return="void">
+			<param basetype="" custom="True" name="InstrumentMarginRate" type="CThostFtdcInstrumentMarginRateField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryInstrumentCommissionRate" return="void">
+			<param basetype="" custom="True" name="InstrumentCommissionRate" type="CThostFtdcInstrumentCommissionRateField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryExchange" return="void">
+			<param basetype="" custom="True" name="Exchange" type="CThostFtdcExchangeField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryProduct" return="void">
+			<param basetype="" custom="True" name="Product" type="CThostFtdcProductField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryInstrument" return="void">
+			<param basetype="" custom="True" name="Instrument" type="CThostFtdcInstrumentField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryDepthMarketData" return="void">
+			<param basetype="" custom="True" name="DepthMarketData" type="CThostFtdcDepthMarketDataField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQrySettlementInfo" return="void">
+			<param basetype="" custom="True" name="SettlementInfo" type="CThostFtdcSettlementInfoField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryTransferBank" return="void">
+			<param basetype="" custom="True" name="TransferBank" type="CThostFtdcTransferBankField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryInvestorPositionDetail" return="void">
+			<param basetype="" custom="True" name="InvestorPositionDetail" type="CThostFtdcInvestorPositionDetailField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryNotice" return="void">
+			<param basetype="" custom="True" name="Notice" type="CThostFtdcNoticeField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQrySettlementInfoConfirm" return="void">
+			<param basetype="" custom="True" name="SettlementInfoConfirm" type="CThostFtdcSettlementInfoConfirmField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryInvestorPositionCombineDetail" return="void">
+			<param basetype="" custom="True" name="InvestorPositionCombineDetail" type="CThostFtdcInvestorPositionCombineDetailField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryCFMMCTradingAccountKey" return="void">
+			<param basetype="" custom="True" name="CFMMCTradingAccountKey" type="CThostFtdcCFMMCTradingAccountKeyField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryEWarrantOffset" return="void">
+			<param basetype="" custom="True" name="EWarrantOffset" type="CThostFtdcEWarrantOffsetField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryInvestorProductGroupMargin" return="void">
+			<param basetype="" custom="True" name="InvestorProductGroupMargin" type="CThostFtdcInvestorProductGroupMarginField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryExchangeMarginRate" return="void">
+			<param basetype="" custom="True" name="ExchangeMarginRate" type="CThostFtdcExchangeMarginRateField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryExchangeMarginRateAdjust" return="void">
+			<param basetype="" custom="True" name="ExchangeMarginRateAdjust" type="CThostFtdcExchangeMarginRateAdjustField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryExchangeRate" return="void">
+			<param basetype="" custom="True" name="ExchangeRate" type="CThostFtdcExchangeRateField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQrySecAgentACIDMap" return="void">
+			<param basetype="" custom="True" name="SecAgentACIDMap" type="CThostFtdcSecAgentACIDMapField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryProductExchRate" return="void">
+			<param basetype="" custom="True" name="ProductExchRate" type="CThostFtdcProductExchRateField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryProductGroup" return="void">
+			<param basetype="" custom="True" name="ProductGroup" type="CThostFtdcProductGroupField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryMMInstrumentCommissionRate" return="void">
+			<param basetype="" custom="True" name="MMInstrumentCommissionRate" type="CThostFtdcMMInstrumentCommissionRateField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryMMOptionInstrCommRate" return="void">
+			<param basetype="" custom="True" name="MMOptionInstrCommRate" type="CThostFtdcMMOptionInstrCommRateField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryInstrumentOrderCommRate" return="void">
+			<param basetype="" custom="True" name="InstrumentOrderCommRate" type="CThostFtdcInstrumentOrderCommRateField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQrySecAgentTradingAccount" return="void">
+			<param basetype="" custom="True" name="TradingAccount" type="CThostFtdcTradingAccountField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQrySecAgentCheckMode" return="void">
+			<param basetype="" custom="True" name="SecAgentCheckMode" type="CThostFtdcSecAgentCheckModeField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQrySecAgentTradeInfo" return="void">
+			<param basetype="" custom="True" name="SecAgentTradeInfo" type="CThostFtdcSecAgentTradeInfoField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryOptionInstrTradeCost" return="void">
+			<param basetype="" custom="True" name="OptionInstrTradeCost" type="CThostFtdcOptionInstrTradeCostField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryOptionInstrCommRate" return="void">
+			<param basetype="" custom="True" name="OptionInstrCommRate" type="CThostFtdcOptionInstrCommRateField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryExecOrder" return="void">
+			<param basetype="" custom="True" name="ExecOrder" type="CThostFtdcExecOrderField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryForQuote" return="void">
+			<param basetype="" custom="True" name="ForQuote" type="CThostFtdcForQuoteField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryQuote" return="void">
+			<param basetype="" custom="True" name="Quote" type="CThostFtdcQuoteField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryOptionSelfClose" return="void">
+			<param basetype="" custom="True" name="OptionSelfClose" type="CThostFtdcOptionSelfCloseField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryInvestUnit" return="void">
+			<param basetype="" custom="True" name="InvestUnit" type="CThostFtdcInvestUnitField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryCombInstrumentGuard" return="void">
+			<param basetype="" custom="True" name="CombInstrumentGuard" type="CThostFtdcCombInstrumentGuardField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryCombAction" return="void">
+			<param basetype="" custom="True" name="CombAction" type="CThostFtdcCombActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryTransferSerial" return="void">
+			<param basetype="" custom="True" name="TransferSerial" type="CThostFtdcTransferSerialField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryAccountregister" return="void">
+			<param basetype="" custom="True" name="Accountregister" type="CThostFtdcAccountregisterField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspError" return="void">
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRtnOrder" return="void">
+			<param basetype="" custom="True" name="Order" type="CThostFtdcOrderField"/>
+		</func>
+		<func name="OnRtnTrade" return="void">
+			<param basetype="" custom="True" name="Trade" type="CThostFtdcTradeField"/>
+		</func>
+		<func name="OnErrRtnOrderInsert" return="void">
+			<param basetype="" custom="True" name="InputOrder" type="CThostFtdcInputOrderField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnErrRtnOrderAction" return="void">
+			<param basetype="" custom="True" name="OrderAction" type="CThostFtdcOrderActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnRtnInstrumentStatus" return="void">
+			<param basetype="" custom="True" name="InstrumentStatus" type="CThostFtdcInstrumentStatusField"/>
+		</func>
+		<func name="OnRtnBulletin" return="void">
+			<param basetype="" custom="True" name="Bulletin" type="CThostFtdcBulletinField"/>
+		</func>
+		<func name="OnRtnTradingNotice" return="void">
+			<param basetype="" custom="True" name="TradingNoticeInfo" type="CThostFtdcTradingNoticeInfoField"/>
+		</func>
+		<func name="OnRtnErrorConditionalOrder" return="void">
+			<param basetype="" custom="True" name="ErrorConditionalOrder" type="CThostFtdcErrorConditionalOrderField"/>
+		</func>
+		<func name="OnRtnExecOrder" return="void">
+			<param basetype="" custom="True" name="ExecOrder" type="CThostFtdcExecOrderField"/>
+		</func>
+		<func name="OnErrRtnExecOrderInsert" return="void">
+			<param basetype="" custom="True" name="InputExecOrder" type="CThostFtdcInputExecOrderField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnErrRtnExecOrderAction" return="void">
+			<param basetype="" custom="True" name="ExecOrderAction" type="CThostFtdcExecOrderActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnErrRtnForQuoteInsert" return="void">
+			<param basetype="" custom="True" name="InputForQuote" type="CThostFtdcInputForQuoteField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnRtnQuote" return="void">
+			<param basetype="" custom="True" name="Quote" type="CThostFtdcQuoteField"/>
+		</func>
+		<func name="OnErrRtnQuoteInsert" return="void">
+			<param basetype="" custom="True" name="InputQuote" type="CThostFtdcInputQuoteField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnErrRtnQuoteAction" return="void">
+			<param basetype="" custom="True" name="QuoteAction" type="CThostFtdcQuoteActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnRtnForQuoteRsp" return="void">
+			<param basetype="" custom="True" name="ForQuoteRsp" type="CThostFtdcForQuoteRspField"/>
+		</func>
+		<func name="OnRtnCFMMCTradingAccountToken" return="void">
+			<param basetype="" custom="True" name="CFMMCTradingAccountToken" type="CThostFtdcCFMMCTradingAccountTokenField"/>
+		</func>
+		<func name="OnErrRtnBatchOrderAction" return="void">
+			<param basetype="" custom="True" name="BatchOrderAction" type="CThostFtdcBatchOrderActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnRtnOptionSelfClose" return="void">
+			<param basetype="" custom="True" name="OptionSelfClose" type="CThostFtdcOptionSelfCloseField"/>
+		</func>
+		<func name="OnErrRtnOptionSelfCloseInsert" return="void">
+			<param basetype="" custom="True" name="InputOptionSelfClose" type="CThostFtdcInputOptionSelfCloseField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnErrRtnOptionSelfCloseAction" return="void">
+			<param basetype="" custom="True" name="OptionSelfCloseAction" type="CThostFtdcOptionSelfCloseActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnRtnCombAction" return="void">
+			<param basetype="" custom="True" name="CombAction" type="CThostFtdcCombActionField"/>
+		</func>
+		<func name="OnErrRtnCombActionInsert" return="void">
+			<param basetype="" custom="True" name="InputCombAction" type="CThostFtdcInputCombActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnRspQryContractBank" return="void">
+			<param basetype="" custom="True" name="ContractBank" type="CThostFtdcContractBankField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryParkedOrder" return="void">
+			<param basetype="" custom="True" name="ParkedOrder" type="CThostFtdcParkedOrderField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryParkedOrderAction" return="void">
+			<param basetype="" custom="True" name="ParkedOrderAction" type="CThostFtdcParkedOrderActionField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryTradingNotice" return="void">
+			<param basetype="" custom="True" name="TradingNotice" type="CThostFtdcTradingNoticeField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryBrokerTradingParams" return="void">
+			<param basetype="" custom="True" name="BrokerTradingParams" type="CThostFtdcBrokerTradingParamsField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryBrokerTradingAlgos" return="void">
+			<param basetype="" custom="True" name="BrokerTradingAlgos" type="CThostFtdcBrokerTradingAlgosField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQueryCFMMCTradingAccountToken" return="void">
+			<param basetype="" custom="True" name="QueryCFMMCTradingAccountToken" type="CThostFtdcQueryCFMMCTradingAccountTokenField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRtnFromBankToFutureByBank" return="void">
+			<param basetype="" custom="True" name="RspTransfer" type="CThostFtdcRspTransferField"/>
+		</func>
+		<func name="OnRtnFromFutureToBankByBank" return="void">
+			<param basetype="" custom="True" name="RspTransfer" type="CThostFtdcRspTransferField"/>
+		</func>
+		<func name="OnRtnRepealFromBankToFutureByBank" return="void">
+			<param basetype="" custom="True" name="RspRepeal" type="CThostFtdcRspRepealField"/>
+		</func>
+		<func name="OnRtnRepealFromFutureToBankByBank" return="void">
+			<param basetype="" custom="True" name="RspRepeal" type="CThostFtdcRspRepealField"/>
+		</func>
+		<func name="OnRtnFromBankToFutureByFuture" return="void">
+			<param basetype="" custom="True" name="RspTransfer" type="CThostFtdcRspTransferField"/>
+		</func>
+		<func name="OnRtnFromFutureToBankByFuture" return="void">
+			<param basetype="" custom="True" name="RspTransfer" type="CThostFtdcRspTransferField"/>
+		</func>
+		<func name="OnRtnRepealFromBankToFutureByFutureManual" return="void">
+			<param basetype="" custom="True" name="RspRepeal" type="CThostFtdcRspRepealField"/>
+		</func>
+		<func name="OnRtnRepealFromFutureToBankByFutureManual" return="void">
+			<param basetype="" custom="True" name="RspRepeal" type="CThostFtdcRspRepealField"/>
+		</func>
+		<func name="OnRtnQueryBankBalanceByFuture" return="void">
+			<param basetype="" custom="True" name="NotifyQueryAccount" type="CThostFtdcNotifyQueryAccountField"/>
+		</func>
+		<func name="OnErrRtnBankToFutureByFuture" return="void">
+			<param basetype="" custom="True" name="ReqTransfer" type="CThostFtdcReqTransferField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnErrRtnFutureToBankByFuture" return="void">
+			<param basetype="" custom="True" name="ReqTransfer" type="CThostFtdcReqTransferField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnErrRtnRepealBankToFutureByFutureManual" return="void">
+			<param basetype="" custom="True" name="ReqRepeal" type="CThostFtdcReqRepealField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnErrRtnRepealFutureToBankByFutureManual" return="void">
+			<param basetype="" custom="True" name="ReqRepeal" type="CThostFtdcReqRepealField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnErrRtnQueryBankBalanceByFuture" return="void">
+			<param basetype="" custom="True" name="ReqQueryAccount" type="CThostFtdcReqQueryAccountField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+		</func>
+		<func name="OnRtnRepealFromBankToFutureByFuture" return="void">
+			<param basetype="" custom="True" name="RspRepeal" type="CThostFtdcRspRepealField"/>
+		</func>
+		<func name="OnRtnRepealFromFutureToBankByFuture" return="void">
+			<param basetype="" custom="True" name="RspRepeal" type="CThostFtdcRspRepealField"/>
+		</func>
+		<func name="OnRspFromBankToFutureByFuture" return="void">
+			<param basetype="" custom="True" name="ReqTransfer" type="CThostFtdcReqTransferField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspFromFutureToBankByFuture" return="void">
+			<param basetype="" custom="True" name="ReqTransfer" type="CThostFtdcReqTransferField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQueryBankAccountMoneyByFuture" return="void">
+			<param basetype="" custom="True" name="ReqQueryAccount" type="CThostFtdcReqQueryAccountField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRtnOpenAccountByBank" return="void">
+			<param basetype="" custom="True" name="OpenAccount" type="CThostFtdcOpenAccountField"/>
+		</func>
+		<func name="OnRtnCancelAccountByBank" return="void">
+			<param basetype="" custom="True" name="CancelAccount" type="CThostFtdcCancelAccountField"/>
+		</func>
+		<func name="OnRtnChangeAccountByBank" return="void">
+			<param basetype="" custom="True" name="ChangeAccount" type="CThostFtdcChangeAccountField"/>
+		</func>
+		<func name="OnRspQryClassifiedInstrument" return="void">
+			<param basetype="" custom="True" name="Instrument" type="CThostFtdcInstrumentField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
+		</func>
+		<func name="OnRspQryCombPromotionParam" return="void">
+			<param basetype="" custom="True" name="CombPromotionParam" type="CThostFtdcCombPromotionParamField"/>
+			<param basetype="" custom="True" name="RspInfo" type="CThostFtdcRspInfoField"/>
+			<param basetype="int" custom="False" name="nRequestID" type="int"/>
+			<param basetype="bool" custom="False" name="bIsLast" type="bool"/>
 		</func>
 	</spi>
 </root>

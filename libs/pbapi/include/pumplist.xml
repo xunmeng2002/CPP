@@ -1,0 +1,3 @@
+<pumplist>
+	<pump dest="stepdef.h" tpl="stepdef.h.tpl" model="../macros.xml"/>
+</pumplist>

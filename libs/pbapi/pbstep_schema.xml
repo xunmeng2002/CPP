@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pbstep>
+	<packages>
+		<package name="ReqSecurityVerity" funcid="4" desc="客户端校验请求">
+			<field name="ReqSecurityVerity"/>
+		</package>
+		<package name="RspSecurityVerity" funcid="4" desc="客户端校验回报">
+			<field name="RspSecurityVerity"/>
+		</package>
+		<package name="ReqLogin" funcid="6011" desc="登录请求">
+			<field name="ReqLogin"/>
+		</package>
+		<package name="RspLogin" funcid="6011" desc="登录回报">
+			<field name="RspLogin"/>
+		</package>
+		<package name="ReqConfirmSettlement" funcid="6071" desc="确认结算单请求" >
+			<field name="ReqConfirmSettlement"/>
+		</package>
+		<package name="RspConfirmSettlement" funcid="6071" desc="确认结算单应答" >
+			<field name="RspConfirmSettlement"/>
+		</package>
+		<package name="ReqInsertOrder" funcid="6021" desc="委托请求" >
+			<field name="ReqInsertOrder"/>
+		</package>
+		<package name="RspInsertOrder" funcid="6021" desc="委托应答" >
+			<field name="RspInsertOrder"/>
+		</package>
+		<package name="ReqCancelOrder" funcid="6022" desc="委托撤单请求" >
+			<field name="ReqCancelOrder"/>
+		</package>
+		<package name="RspCancelOrder" funcid="6022" desc="委托撤单应答" >
+			<field name="RspCancelOrder"/>
+		</package>
+		<package name="ReqQryPosition" funcid="6014" desc="查询持仓请求">
+			<field name="QryPosition"/>
+		</package>
+		<package name="RspQryPosition" funcid="6014" desc="查询持仓回报">
+			<field name="Position"/>
+		</package>
+		<package name="ReqQryPositionDetail" funcid="6074" desc="查询持仓明细请求" >
+			<field name="QryPositionDetail"/>
+		</package>
+		<package name="RspQryPositionDetail" funcid="6074" desc="查询持仓明细应答" >
+			<field name="PositionDetail"/>
+		</package>
+		<package name="ReqQryTodayOrder" funcid="6019" desc="查询当日委托">
+			<field name="QryTodayOrder"/>
+		</package>
+		<package name="RspQryTodayOrder" funcid="6019" desc="查询当日委托应答">
+			<field name="TodayOrder"/>
+		</package>
+		<package name="ReqQryOneOrder" funcid="56019" desc="查询单笔委托">
+			<field name="QryTodayOrder"/>
+		</package>
+		<package name="RspQryOneOrder" funcid="56019" desc="查询单笔委托回报">
+			<field name="TodayOrder"/>
+		</package>
+		<package name="ReqQryTodayTrade" funcid="6013" desc="查询当日成交请求">
+			<field name="QryTodayTrade"/>
+		</package>
+		<package name="RspQryTodayTrade" funcid="6013" desc="查询当日成交回报">
+			<field name="TodayTrade"/>
+		</package>
+		<package name="ReqQryCapital" funcid="6012" desc="查询资金请求">
+			<field name="QryCapital"/>
+		</package>
+		<package name="RspQryCapital" funcid="6012" desc="查询资金回报">
+			<field name="Capital"/>
+		</package>
+		<package name="ReqQryHolderAccount" funcid="6040" desc="查询席位请求" >
+			<field name="QryHolderAccount"/>
+		</package>
+		<package name="RspQryHolderAccount" funcid="6040" desc="查询席位应答" >
+			<field name="HolderAccount"/>
+		</package>
+		<package name="ReqQryInstrument" funcid="6018" desc="查询合约请求">
+			<field name="QryInstrument"/>
+		</package>
+		<package name="RspQryInstrument" funcid="6018" desc="查询合约回报">
+			<field name="Instrument"/>
+		</package>
+		<package name="ReqQrySystemStatus" funcid="6027" desc="查询期货交易所状态请求">
+			<field name="QrySystemStatus"/>
+		</package>
+		<package name="RspQrySystemStatus" funcid="6027" desc="查询期货交易所状态回报">
+			<field name="SystemStatus"/>
+		</package>
+		<package name="ReqQrySettlement" funcid="6072" desc="查询结算单请求" >
+			<field name="QrySettlement"/>
+		</package>
+		<package name="RspQrySettlement" funcid="6072" desc="查询结算单应答" >
+			<field name="Settlement"/>
+		</package>
+		<package name="ReqQryTodayExecOrder" funcid="6103" desc="查询行权请求">
+			<field name="QryTodayExecOrder"/>
+		</package>
+		<package name="RspQryTodayExecOrder" funcid="6103" desc="查询行权应答">
+			<field name="TodayExecOrder"/>
+		</package>
+		<package name="ReqExecOrder" funcid="6100" desc="行权请求" >
+			<field name="ReqExecOrder"/>
+		</package>
+		<package name="RspExecOrder" funcid="6100" desc="行权应答" >
+			<field name="RspExecOrder"/>
+		</package>
+		<package name="ReqCancelExecOrder" funcid="6101" desc="行权撤单请求">
+			<field name="ReqCancelExecOrder"/>
+		</package>
+		<package name="RspCancelExecOrder" funcid="6101" desc="行权撤单应答">
+			<field name="RspCancelExecOrder"/>
+		</package>		
+		<package name="ReqInquiry" funcid="6075" desc="询价请求" >
+			<field name="ReqInquiry"/>
+		</package>
+		<package name="RspInquiry" funcid="6075" desc="询价应答" >
+			<field name="RspInquiry"/>
+		</package>
+		<package name="ReqQryFutureCommissionRate" funcid="6078" desc="查询期货手续费率请求" >
+			<field name="QryFutureCommissionRate"/>
+		</package>
+		<package name="RspQryFutureCommissionRate" funcid="6078" desc="查询期货手续费率应答" >
+			<field name="FutureCommissionRate"/>
+		</package>
+		<package name="ReqQryFutureMarginRate" funcid="6079" desc="查询期货保证金率请求" >
+			<field name="QryFutureMarginRate"/>
+		</package>
+		<package name="RspQryFutureMarginRate" funcid="6079" desc="查询期货保证金率应答" >
+			<field name="FutureMarginRate"/>
+		</package>
+		<package name="ReqQryTransferMoney" funcid="6205" desc="查询银证转账流水请求">
+			<field name="QryTransferMoney"/>
+		</package>
+		<package name="RspQryTransferMoney" funcid="6205" desc="查询银证转账流水应答">
+			<field name="TransferMoney"/>
+		</package>
+		<package name="ReqQryIncTrade" funcid="6016" desc="查询成交增量请求">
+			<field name="QryIncTrade"/>
+		</package>
+		<package name="RspQryIncTrade" funcid="6016" desc="查询成交增量应答">
+			<field name="TodayTrade"/>
+		</package>
+		<package name="ReqQryIncOrder" funcid="6020" desc="查询委托增量请求">
+			<field name="QryIncOrder"/>
+		</package>
+		<package name="RspQryIncOrder" funcid="6020" desc="查询委托增量应答">
+			<field name="TodayOrder"/>
+		</package>
+		<package name="ReqQryLockAvailable" funcid="6104" desc="查询备兑证券锁定或解锁数量请求">
+			<field name="QryLockAvailable"/>
+		</package>
+		<package name="RspQryLockAvailable" funcid="6104" desc="查询备兑证券锁定或解锁数量应答">
+			<field name="LockAvailable"/>
+		</package>
+		<package name="ReqLockSecurityOrder" funcid="6105" desc="备兑证券锁定或解锁请求">
+			<field name="ReqLockSecurityOrder"/>
+		</package>
+		<package name="RspLockSecurityOrder" funcid="6105" desc="备兑证券锁定或解锁应答">
+			<field name="RspLockSecurityOrder"/>
+		</package>
+		<package name="RtnSystemStatus" funcid="56001" desc="系统状态推送">
+			<field name="SystemStatus"/>
+		</package>
+		<package name="RtnOrder" funcid="56005" desc="委托推送">
+			<field name="Order"/>
+		</package>
+		<package name="RtnTrade" funcid="56006" desc="成交推送">
+			<field name="Trade"/>
+		</package>
+		<package name="RtnExecOrder" funcid="56103" desc="行权委托推送">
+			<field name="ExecOrder"/>
+		</package>
+	</packages> 
+	<fields>
+		<field name="RspError" desc="应答错误">
+			<item id="1"/>
+			<item id="2"/>
+		</field>
+		<field name="UserInfo" desc="用户信息">
+			<item id="992"/>
+			<item id="993"/>
+			<item id="7017"/>
+			<item id="7021"/>
+			<item id="7031"/>
+		</field>
+		<field name="ReqSecurityVerity" desc="客户端校验请求">
+			<item id="2066"/>
+		</field>
+		<field name="RspSecurityVerity" desc="客户端校验回报">
+			<item id="7052"/>
+			<item id="7063"/>
+		</field>
+		<field name="ReqLogin" desc="登录请求">
+			<item id="62"/>
+			<item id="61"/>
+			<item id="70"/>
+			<item id="71"/> 
+			<item id="72"/>
+			<item id="73"/>
+			<item id="67"/>
+			<item id="69"/>
+			<item id="68"/>
+			<item id="53"/> 
+			<item id="249"/>
+			<item id="355"/>
+			<item id="349"/>
+			<item id="350"/>
+			<item id="351"/>
+			<item id="352"/>
+			<item id="445"/>
+			<item id="485"/>
+			<item id="486"/>
+			<item id="444"/>
+			<item id="254"/>
+			<item id="255"/>
+			<item id="281"/>
+			<item id="896"/>
+			<item id="914"/>
+			<item id="1000"/>
+			<item id="2067"/>
+			<item id="7040"/>
+			<item id="7041"/>
+			<item id="7042"/>
+			<item id="7053"/>
+			<item id="7054"/>
+			<item id="7058"/>
+		</field>
+		<field name="RspLogin" desc="登录回报">
+			<item id="51"/>
+			<item id="75"/>
+			<item id="76"/>
+			<item id="86"/>
+			<item id="87"/>
+			<item id="7007"/>
+			<item id="7052"/>
+		</field>
+		<field name="QryCapital" desc="查询资金">
+			<item id="56"/>
+			<item id="347"/>
+		</field>
+		<field name="Capital" desc="资金">
+			<item id="51"/>
+			<item id="56"/>
+			<item id="92"/>
+			<item id="93"/>
+			<item id="97"/>
+			<item id="104"/>
+			<item id="182"/>
+			<item id="110"/>
+			<item id="442"/>
+		</field>
+		<field name="QryTodayTrade" desc="查询当日成交">
+			<item id="65"/>
+			<item id="66"/>
+			<item id="7012"/>
+		</field>
+		<field name="TodayTrade" desc="当日成交">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="64"/>
+			<item id="112"/>
+			<item id="117"/>
+			<item id="119"/>
+			<item id="116"/>
+			<item id="65"/>
+			<item id="113"/>
+			<item id="114"/>
+			<item id="66"/>
+			<item id="125"/>
+			<item id="173"/>
+			<item id="131"/>
+			<item id="7011"/>
+			<item id="7013"/>
+			<item id="830"/>
+		</field>
+		<field name="QryPosition" desc="查询持仓">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="979"/>
+		</field>
+		<field name="Position" desc="持仓">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="135"/>
+			<item id="136"/>
+			<item id="139"/>
+			<item id="52"/>
+			<item id="56"/>
+			<item id="125"/>
+			<item id="112"/>
+			<item id="119"/>
+		</field>
+		<field name="QryInstrument" desc="查询合约">
+			<item id="689"/>
+		</field>
+		<field name="Instrument" desc="合约">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="244"/>
+			<item id="245"/>
+			<item id="64"/>
+			<item id="246"/>
+			<item id="247"/>
+			<item id="280"/>
+			<item id="436"/>
+			<item id="754"/>
+			<item id="756"/>
+			<item id="364"/>
+			<item id="999"/>
+			<item id="131"/>
+			<item id="121"/>
+			<item id="122"/>
+			<item id="269"/>
+		</field>
+		<field name="QryTodayOrder" desc="查询当日委托">
+			<item id="65"/>
+			<item id="977"/>
+			<item id="7012"/>
+		</field>
+		<field name="TodayOrder" desc="查询当日委托">
+			<item id="54"/>
+			<item id="65"/>
+			<item id="63"/>
+			<item id="156"/>
+			<item id="112"/>
+			<item id="130"/>
+			<item id="129"/>
+			<item id="113"/>
+			<item id="158"/>
+			<item id="159"/>
+			<item id="127"/>
+			<item id="52"/>
+			<item id="160"/>
+			<item id="117"/>
+			<item id="119"/>
+			<item id="125"/>
+			<item id="163"/>
+			<item id="40"/>
+			<item id="41"/>
+			<item id="42"/>
+			<item id="43"/>
+			<item id="44"/>
+			<item id="495"/>
+			<item id="516"/>
+			<item id="315"/>
+			<item id="7008"/>
+			<item id="7007"/>
+			<item id="7011"/>
+			<item id="994"/>
+		</field>
+		<field name="ReqInsertOrder" desc="委托请求">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="112"/>
+			<item id="117"/>
+			<item id="119"/>
+			<item id="130"/>
+			<item id="129"/>
+			<item id="52"/>
+			<item id="161"/>
+			<item id="127"/>
+			<item id="125"/>
+			<item id="40"/>
+			<item id="41"/>
+			<item id="42"/>
+			<item id="43"/>
+			<item id="495"/>
+			<item id="683"/>
+			<item id="315"/>
+			<item id="7008"/>
+			<item id="7007"/>
+		</field>
+		<field name="RspInsertOrder" desc="委托应答">
+			<item id="65"/>
+			<item id="7008"/>
+			<item id="7007"/>
+		</field>
+		<field name="ReqCancelOrder" desc="委托撤单请求">
+			<item id="65"/>
+			<item id="52"/>
+			<item id="161"/>
+			<item id="54"/>
+			<item id="44"/>
+			<item id="63"/>
+			<item id="160"/>
+			<item id="162"/>
+		</field>
+		<field name="RspCancelOrder" desc="委托撤单应答">
+		</field>
+		<field name="QryHolderAccount" desc="查询席位请求">
+		</field>
+		<field name="HolderAccount" desc="查询席位应答">
+			<item id="54"/>
+			<item id="55"/>
+			<item id="52"/>
+			<item id="168"/>
+			<item id="119"/>
+			<item id="161"/>
+			<item id="45"/>
+			<item id="922"/>
+		</field>
+		<field name="ReqConfirmSettlement" desc="确认结算单请求">
+			<item id="248"/>
+		</field>
+		<field name="RspConfirmSettlement" desc="确认结算单应答">
+		</field>
+		<field name="QrySettlement" desc="查询结算单请求">
+			<item id="229"/>
+			<item id="171"/>
+			<item id="172"/>
+		</field>
+		<field name="Settlement" desc="查询结算单应答">
+			<item id="360"/>
+			<item id="362"/>
+		</field>
+		<field name="QryPositionDetail" desc="查询持仓明细请求">
+			<item id="54"/>
+			<item id="63"/>
+		</field>
+		<field name="PositionDetail" desc="查询持仓明细应答">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="135"/>
+			<item id="139"/>
+			<item id="112"/>
+			<item id="119"/>
+			<item id="152"/>
+			<item id="147"/>
+			<item id="56"/>
+			<item id="66"/>
+		</field>
+		<field name="QryFutureCommissionRate" desc="查询期货手续费率请求">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="436"/>
+		</field>
+		<field name="FutureCommissionRate" desc="查询期货手续费率应答">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="119"/>
+			<item id="747"/>
+			<item id="748"/>
+			<item id="749"/>
+			<item id="750"/>
+			<item id="751"/>
+			<item id="752"/>
+		</field>
+		<field name="QryFutureMarginRate" desc="查询期货保证金率请求">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="119"/>
+		</field>
+		<field name="FutureMarginRate" desc="查询期货保证金率应答">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="119"/>
+			<item id="112"/>
+			<item id="747"/>
+			<item id="750"/>
+		</field>
+		<field name="ReqExecOrder" desc="行权请求">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="230"/>
+			<item id="52"/>
+			<item id="161"/>
+			<item id="261"/>
+			<item id="117"/>
+			<item id="119"/>
+			<item id="633"/>
+			<item id="7008"/>
+			<item id="7007"/>
+		</field>
+		<field name="RspExecOrder" desc="行权应答">
+			<item id="65"/>
+			<item id="7008"/>
+			<item id="7007"/>
+		</field>
+		<field name="ReqInquiry" desc="询价请求">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="52"/>
+			<item id="161"/>
+		</field>
+		<field name="RspInquiry" desc="询价应答">
+			<item id="634"/>
+		</field>
+		<field name="ReqCancelExecOrder" desc="行权撤单请求">
+			<item id="65"/>
+			<item id="54"/>
+			<item id="161"/>
+			<item id="162"/>
+			<item id="52"/>
+			<item id="44"/>
+		</field>
+		<field name="RspCancelExecOrder" desc="行权撤单应答">
+		</field>
+		<field name="QryTodayExecOrder" desc="查询当日行权请求">
+		</field>
+		<field name="TodayExecOrder" desc="查询当日行权应答">
+			<item id="54"/>
+			<item id="65"/>
+			<item id="63"/>
+			<item id="156"/>
+			<item id="129"/>
+			<item id="130"/>
+			<item id="159"/>
+			<item id="263"/>
+			<item id="161"/>
+			<item id="162"/>
+			<item id="261"/>
+			<item id="119"/>
+			<item id="44"/>
+		</field>
+		<field name="ExecOrder" desc="查询行权应答">
+			<item id="54"/>
+			<item id="65"/>
+			<item id="63"/>
+			<item id="156"/>
+			<item id="130"/>
+			<item id="159"/>
+			<item id="161"/>
+			<item id="163"/>
+			<item id="261"/>
+			<item id="119"/>
+			<item id="44"/>
+			<item id="7008"/>
+			<item id="7007"/>
+		</field>
+		<field name="QrySystemStatus" desc="查询期货交易所状态请求">
+			<item id="54"/>
+			<item id="63"/>
+		</field>
+		<field name="SystemStatus" desc="期货交易所状态">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="84"/>
+			<item id="7130"/>
+		</field>
+		<field name="Order" desc="委托">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="52"/>
+			<item id="112"/>
+			<item id="117"/>
+			<item id="119"/>
+			<item id="156"/>
+			<item id="354"/>
+			<item id="159"/>
+			<item id="516"/>
+			<item id="65"/>
+			<item id="120"/>
+			<item id="130"/>
+			<item id="113"/>
+			<item id="684"/>
+			<item id="160"/>
+			<item id="248"/>
+			<item id="129"/>
+			<item id="683"/>
+			<item id="40"/>
+			<item id="41"/>
+			<item id="42"/>
+			<item id="43"/>
+			<item id="495"/>
+			<item id="44"/>
+			<item id="131"/>
+			<item id="125"/>
+			<item id="158"/>
+			<item id="163"/>
+			<item id="127"/>
+			<item id="7008"/>
+			<item id="7007"/>
+		</field>
+		<field name="Trade" desc="成交">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="64"/>
+			<item id="112"/>
+			<item id="117"/>
+			<item id="119"/>
+			<item id="116"/>
+			<item id="65"/>
+			<item id="113"/>
+			<item id="114"/>
+			<item id="66"/>
+			<item id="125"/>
+			<item id="173"/>
+			<item id="131"/>
+		</field>
+		<field name="QryTransferMoney" desc="查询银证转账流水">
+			<item id="200"/>
+		</field>
+		<field name="TransferMoney" desc="银证转账流水">
+			<item id="200"/>
+			<item id="220"/>
+			<item id="56"/>
+			<item id="206"/>
+			<item id="210"/>
+			<item id="227"/>
+			<item id="228"/>
+			<item id="226"/>
+		</field>
+		<field name="QryIncTrade" desc="查询成交增量">
+			<item id="7011"/>
+			<item id="7014"/>
+			<item id="7012"/>
+		</field>
+		<field name="QryIncOrder" desc="查询委托增量">
+			<item id="7011"/>
+			<item id="7014"/>
+			<item id="7012"/>
+		</field>
+		<field name="QryLockAvailable" desc="查询备兑证券锁定或解锁数量">
+			<item id="161"/>
+			<item id="54"/>
+			<item id="63"/>
+			<item id="252"/>
+			<item id="52"/>
+		</field>
+		<field name="LockAvailable" desc="备兑证券锁定或解锁数量">
+			<item id="250"/>
+			<item id="54"/>
+			<item id="63"/>
+			<item id="252"/>
+		</field>
+		<field name="ReqLockSecurityOrder" desc="备兑证券锁定或解锁请求">
+			<item id="54"/>
+			<item id="63"/>
+			<item id="130"/>
+			<item id="52"/>
+			<item id="161"/>
+			<item id="252"/>
+		</field>
+		<field name="RspLockSecurityOrder" desc="备兑证券锁定或解锁应答">
+			<item id="65"/>
+			<item id="159"/>
+		</field>
+	</fields>
+</pbstep>

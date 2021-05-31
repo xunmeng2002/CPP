@@ -1,5 +1,6 @@
 #工程名
-project(openssl_test2)
+SET(PROJECT_NAME "OpensslTest")
+project(${PROJECT_NAME})
 enable_language(CXX)
 cmake_minimum_required(VERSION 2.8)
 if(UNIX)
@@ -38,7 +39,7 @@ if(WIN32)
         CMAKE_C_FLAGS_RELEASE
         )
 	foreach(CompilerFlag ${CompilerFlags})
-		string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+		string(REPLACE "/MT" "/MD" ${CompilerFlag} "${${CompilerFlag}}")
 	endforeach()
 	
 	#release版本下，产生pdb文件
@@ -50,22 +51,22 @@ if(WIN32)
 endif(WIN32)
 
 
-add_package(openssl_test2 ./src)
-add_package(openssl_c ../../source/openssl_c/include)
+add_package(src ./src)
+add_package(openssl_c ../../libs/openssl/include)
 
 #添加库目录
 if(WIN32)
-	link_directories(${PROJECT_SOURCE_DIR}/../../source/openssl_c/win64_static)
+	link_directories(${PROJECT_SOURCE_DIR}/../../libs/openssl/win64_static)
 elseif(UNIX)
-	link_directories(${PROJECT_SOURCE_DIR}/../../source/openssl_c/linux_static)
+	link_directories(${PROJECT_SOURCE_DIR}/../../libs/openssl/linux_static)
 endif()
 
 #添加工程
-add_executable(openssl_test2 ${all_file})
+add_executable(${PROJECT_NAME} ${all_file})
 
 #链接库
 if(WIN32)
-	target_link_libraries(openssl_test2 WS2_32.LIB CRYPT32.LIB libcrypto libssl)
+	target_link_libraries(${PROJECT_NAME} WS2_32.LIB CRYPT32.LIB libcrypto libssl)
 elseif(UNIX)
-	target_link_libraries(openssl_test2 crypto ssl)
+	target_link_libraries(${PROJECT_NAME} crypto ssl)
 endif()

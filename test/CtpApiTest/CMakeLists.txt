@@ -31,13 +31,13 @@ add_package(Utility ../../source/Utility)
 add_package(MemCache ../../source/MemCache)
 add_package(ThreadBase ../../source/ThreadBase)
 add_package(Logger ../../source/Logger)
-add_package(API ../../source/API/CTP/${APIVersion}/include)
+add_package(API ../../libs/ctp/${APIVersion}/include)
 add_package(jsoncpp ../../source/jsoncpp)
 
 
 add_definitions("-D_CRT_SECURE_NO_WARNINGS")
 
-link_directories(${PROJECT_SOURCE_DIR}/../../source/API/CTP/${APIVersion}/win64)
+link_directories(${PROJECT_SOURCE_DIR}/../../libs/ctp/${APIVersion}/win64)
 
 #添加工程
 add_executable(${PROJECT_NAME} ${all_file})

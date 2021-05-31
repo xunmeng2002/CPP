@@ -1,5 +1,5 @@
 #工程名
-SET(PROJECT_NAME "CTPTraderApiTest")
+SET(PROJECT_NAME "CtpApiTest")
 SET(APIVersion "6.3.15")
 project(${PROJECT_NAME})
 enable_language(CXX)
@@ -31,7 +31,7 @@ add_package(Utility ../../source/Utility)
 add_package(MemCache ../../source/MemCache)
 add_package(ThreadBase ../../source/ThreadBase)
 add_package(Logger ../../source/Logger)
-add_package(API ../../libs/ctp/${APIVersion}/include)
+add_package(ctp ../../libs/ctp/${APIVersion}/include)
 add_package(jsoncpp ../../source/jsoncpp)
 
 

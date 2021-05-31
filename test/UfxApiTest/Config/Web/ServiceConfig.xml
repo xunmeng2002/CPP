@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+ <Trades>
+  <Server ServerKey="td_hs_sim1" QuoteKey="md_hs_sim1" SystemType="2" BusinType="3" ApiType="0" Name="恒生电子_期货UAT" AppID="HS_MT_1.0" AuthCode="20190910MT" EntrustType="7" LicenseFile="Config\\Web\\Trade\\license-futu-uat.dat" IP="101.71.12.144:9006"/>
+  <Server ServerKey="td_hs_sim2" QuoteKey="md_hs_sim2" SystemType="1" BusinType="4" ApiType="0" Name="恒生电子_股票期权UAT" AppID="HS_MT_1.0" AuthCode="bYPVkxuYMAphvUbg" EntrustType="7" LicenseFile="Config\\Web\\Trade\\license-sopt-uat.dat" IP="101.71.12.149:8102"/>
+
+  <Server ServerKey="td_hs_sim4" QuoteKey="md_hs_sim4" SystemType="3" BusinType="2" ApiType="0" Name="恒生电子_现货UAT" AppID="" AuthCode="" EntrustType="7" LicenseFile="Config\\Web\\Trade\\license-sopt-uat.dat" IP="101.71.12.149:9202"/>
+  <Server ServerKey="td_hs_sim5" QuoteKey="md_hs_sim5" SystemType="2" BusinType="3" ApiType="0" Name="恒生电子_机构版UAT(资金账户）" AppID="HS_MT_1.0" AuthCode="bYPVkxuYMAphvUbg" EntrustType
+  ="7" LicenseFile="Config\\Web\\Trade\\license-vip-uat.dat" IP="101.71.12.155:9006"/>
+  <Server ServerKey="td_hs_sim6" QuoteKey="md_hs_sim6" SystemType="5" BusinType="" ApiType="" Version="3" Name="恒生电子_机构版UAT(交易员）" AppID="HS_MT_1.0" AuthCode="bYPVkxuYMAphvUbg" EntrustType="7" LicenseFile="Config\\Web\\Trade\\license-vip-uat.dat" IP="101.71.12.155:9006"/>
+ </Trades>
+ <Quotes>
+  <Server ServerKey="md_hs_sim1" SystemType="2" BusinType="3" ApiType="0" EntrustType="7" LicenseFile="Config\\Web\\HQ\\license-futu-uat.dat" IP="101.71.12.144:9006"/>
+  <Server ServerKey="md_hs_sim2" SystemType="1" BusinType="4" ApiType="0" EntrustType="7" LicenseFile="Config\\Web\\HQ\\license-sopt-uat.dat" IP="101.71.12.149:8102"/>
+  <Server ServerKey="md_hs_sim3" SystemType="3" BusinType="2" ApiType="0" EntrustType="7" LicenseFile="Config\\Web\\HQ\\license-sopt-uat.dat" IP="101.71.12.149:8102"/>
+  <Server ServerKey="md_hs_sim4" SystemType="3" BusinType="2" ApiType="0" EntrustType="7" LicenseFile="Config\\Web\\HQ\\license-sopt-uat.dat" IP="101.71.12.149:9202"/>
+  <Server ServerKey="md_hs_sim5" SystemType="2" BusinType="3" ApiType="0" EntrustType="7" LicenseFile="Config\\Web\\HQ\\license-vip-uat.dat" IP="101.71.12.155:9106"/>
+  <Server ServerKey="md_hs_sim6" SystemType="5" BusinType="" ApiType="" EntrustType="7" LicenseFile="Config\\Web\\HQ\\license-vip-uat.dat" IP="101.71.12.155:9106"/>
+ </Quotes>
+ <ExtQuotes>
+ </ExtQuotes>
+ <HisQuotes>
+  <Server ServerKey="his" SystemType="0" LicenseFile="" IP="" AppKey="d88bc071-4dec-4945-98b9-5cfbb7adb5d5" AppSecret="" IUVConfigFile="Config\\QuoteConfig.xml"/>
+ </HisQuotes>
+ <UpdateServer>http://www.update.mt.hs.net:8417//all_sim_hs//</UpdateServer>
+</root>

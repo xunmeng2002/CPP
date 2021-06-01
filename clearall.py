@@ -6,27 +6,28 @@ import sys
 import re
 import os
 
-def search(path, word):
-    found = []
-    for filename in os.listdir(path):
-        fp = os.path.join(path, filename)
-        if os.path.isfile(fp) and word in filename:
-            found.append(fp)
-        elif os.path.isdir(fp):
-            found.extend( search(fp, word))
-    return found
+
+def Search(path, destFileName, exclude, destPaths):
+    for fileName in os.listdir(path):
+        if fileName in exclude:
+            continue
+        fullFileName = os.path.join(path, fileName)
+        if os.path.isfile(fullFileName) and fileName == destFileName:
+            destPaths.append(fullFileName)
+        if os.path.isdir(fullFileName):
+            Search(fullFileName, destFileName, exclude, destPaths)
 			
-def clear(file_name):
-    dir = os.path.dirname(file_name)
-    dir = dir.replace("\\", "/")
-    root = ET.parse(file_name).getroot()
-    for p in root:
-        dest = dir + "/" + p.get("dest")
+def clear(pumpfile):
+    root = ET.parse(pumpfile).getroot()
+    for node in root:
+        dest = node.get("dest")
         if os.path.exists(dest):
             print("delete %s" % dest)
             os.remove(dest)
 	
 if __name__ == "__main__":
-    pumpfiles = search(".","pumplist.xml")
-    for file in pumpfiles:
-        clear(file)
+    exclude = ['inttools']
+    pumpfiles = []
+    Search(".","pumplist.xml", exclude, pumpfiles)
+    for pumpfile in pumpfiles:
+        clear(pumpfile)

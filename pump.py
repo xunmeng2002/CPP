@@ -127,7 +127,7 @@ if __name__ == "__main__":
     _indent_cnt = 0                
         
     if len(sys.argv) < 4:
-        print("usage: pump dest_file template_file xml_file")
+        print("usage: pump destFile templateFile modelFile")
         
     #第一个参数：输出文件名
     #第二个参数：模板文件 

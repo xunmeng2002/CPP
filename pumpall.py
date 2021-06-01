@@ -70,8 +70,8 @@ def do_pump(file_name):
                 modelnew = True
                 break
         if modelnew or filenewer(tpl, dest):
-            print "pump %s %s %s" % (dest, tpl, modelstr)
-            if os.system("python pump.py %s %s %s" % (dest, tpl, modelstr)) <> 0:
+            print("pump %s %s %s" % (dest, tpl, modelstr))
+            if os.system("python pump.py %s %s %s" % (dest, tpl, modelstr)) != 0:
                 exit()
 
 

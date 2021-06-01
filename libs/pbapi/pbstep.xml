@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf8"?><pbstep>
+<?xml version="1.0" encoding="utf-8"?><pbstep>
 	<packages>
 		<package desc="客户端校验请求" funcid="4" name="ReqSecurityVerity">
 			<field name="ReqSecurityVerity"/>

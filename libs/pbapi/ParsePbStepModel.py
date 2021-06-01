@@ -40,7 +40,7 @@ def CreatePbStepModel(destFile, schemaFile, macros):
             item.setAttribute("desc", macro.Desc)
             item.setAttribute("length", macro.Length)
     f = open(destFile, 'w')
-    dom.writexml(f, indent="", addindent='', newl='', encoding="utf8")
+    dom.writexml(f, indent="", addindent='', newl='', encoding="utf-8")
     f.close()
 	
 if __name__ == "__main__":

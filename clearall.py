@@ -27,6 +27,11 @@ def clear(pumpfile):
 	
 if __name__ == "__main__":
     exclude = ['inttools']
+    parsefiles = []
+    Search(".","parselist.xml", exclude, parsefiles)
+    for parsefile in parsefiles:
+        clear(parsefile)
+
     pumpfiles = []
     Search(".","pumplist.xml", exclude, pumpfiles)
     for pumpfile in pumpfiles:

@@ -6,7 +6,6 @@ import sys
 import re
 import os
 
-
 def NeedPump(model, tpl, dest):
     if not os.path.exists(dest):
         return True
@@ -28,20 +27,21 @@ def Search(path, destFileName, exclude, destPaths):
         if os.path.isdir(fullFileName):
             Search(fullFileName, destFileName, exclude, destPaths)
 
-def DoPump(fileName):
+def DoParse(fileName):
     root = ET.parse(fileName).getroot()
     for node in root:
-        model = node.get("model")
-        tpl = node.get("tpl")
+        script = node.get("script")
+        sources = node.get("sources")
         dest = node.get("dest")
-        if NeedPump(model, tpl, dest):
-            print("pump.py %s %s %s" % (dest, tpl, model))
-            if os.system("python pump.py %s %s %s" % (dest, tpl, model)) != 0:
+        if NeedPump(sources, script, dest):
+            print("%s %s %s" % (script, dest, sources))
+            if os.system("python %s %s %s" % (script, dest, sources)) != 0:
                 exit()
+
 
 if __name__ == "__main__":
     exclude = ['inttools']
-    pumpfiles = []
-    Search(".", "pumplist.xml", exclude, pumpfiles)
-    for pumpfile in pumpfiles:
-        DoPump(pumpfile)
+    parsefiles = []
+    Search(".", "parselist.xml", exclude, parsefiles)
+    for parsefile in parsefiles:
+        DoParse(parsefile)

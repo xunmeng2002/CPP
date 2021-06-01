@@ -1,6 +1,6 @@
 #!python2
 #!coding:utf-8
-
+import sys
 import xml.dom.minidom
 
 def ParseDataType(dom, root, filename, types):
@@ -140,11 +140,10 @@ def ParseSpiFunc(dom, root, filename):
                 ParseFuncAttrib(dom, root, line)
     sourceFile.close()
 
-def Parse(destFile, dataTypeFile, structFile, apiFile, apiVersion):
+def Parse(destFile, dataTypeFile, structFile, apiFile):
     impl = xml.dom.minidom.getDOMImplementation()
     dom = impl.createDocument(None, 'root', None)
     root = dom.documentElement
-    root.setAttribute("apiversion", apiVersion)
     typeNodes = dom.createElement('types')
     fieldNodes = dom.createElement('fields')
     apiNodes = dom.createElement('api')
@@ -162,19 +161,11 @@ def Parse(destFile, dataTypeFile, structFile, apiFile, apiVersion):
     dom.writexml(f, indent="", addindent='\t', newl='\n', encoding="utf8")
     f.close()
 
-def main():
-    apiPath = "./"
-    dataTypeFile="/include/ThostFtdcUserApiDataType.h"
-    structFile="/include/ThostFtdcUserApiStruct.h"
-    apiFile="/include/ThostFtdcTraderApi.h"
-    apiVersions = ["6.3.15", "6.5.1"]
-    for apiVersion in apiVersions:
-        fullDestFile = apiPath + "CtpApiModel_" + apiVersion + ".xml"
-        fullDataTypeFile = apiPath + apiVersion + dataTypeFile
-        fullStructFile = apiPath + apiVersion + structFile
-        fullApiFile = apiPath + apiVersion + apiFile
-        print fullDestFile, fullDataTypeFile, fullStructFile, fullApiFile
-        Parse(fullDestFile, fullDataTypeFile, fullStructFile, fullApiFile, apiVersion)
-
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) < 5:
+        print("usage: ParseCTPModel.py destFile apiDataTypeFile apiStructFile, apiHeadFile")
+    destFile = sys.argv[1]
+    apiDataTypeFile = sys.argv[2]
+    apiStructFile = sys.argv[3]
+    apiHeadFile = sys.argv[4]
+    Parse(destFile, apiDataTypeFile, apiStructFile, apiHeadFile)

@@ -12,43 +12,119 @@ class Macro:
         self.Name = ""
         self.Desc = ""
         self.Length = "64"
-    def __str__(self):
-        return ("ID[%s] Name[%s] Desc[%s] Length[%s]" % (self.ID, self.Name, self.Desc, self.Length))
 
-def get_macros(macroFile):
+class Field:
+    def __init__(self):
+        self.Name = ""
+        self.Desc = ""
+        self.Items = []
+
+class Package:
+    def __init__(self):
+        self.FuncID = ""
+        self.Name = ""
+        self.Desc = ""
+        self.Fields = []
+
+def getMacros(macroFile):
     dom = xml.dom.minidom.parse(macroFile)
     root = dom.documentElement
     macros = {}
-    for node in root.getElementsByTagName("macro"):
+    for macroNode in root.getElementsByTagName("macro"):
         macro = Macro()
-        macro.ID = node.getAttribute("id")
-        macro.Name = node.getAttribute("name")
-        macro.Desc = node.getAttribute("desc")
-        if node.hasAttribute("length"):
-            macro.Length = node.getAttribute("length")
+        macro.ID = macroNode.getAttribute("id")
+        macro.Name = macroNode.getAttribute("name")
+        macro.Desc = macroNode.getAttribute("desc")
+        if macroNode.hasAttribute("length"):
+            macro.Length = macroNode.getAttribute("length")
         macros[macro.ID] = macro
     return macros
-	
-def CreatePbStepModel(destFile, schemaFile, macros):
+
+def getFields(schemaFile, macros):
     dom = xml.dom.minidom.parse(schemaFile)
     root = dom.documentElement
-    fields = dom.getElementsByTagName("fields")[0]
-    for field in fields.getElementsByTagName("field"):
-        for item in field.getElementsByTagName("item"):
-            macro = macros[item.getAttribute("id")]
-            item.setAttribute("name", macro.Name)
-            item.setAttribute("desc", macro.Desc)
-            item.setAttribute("length", macro.Length)
+    fields = {}
+    fieldsNode = root.getElementsByTagName("fields")[0]
+    for fieldNode in fieldsNode.getElementsByTagName("field"):
+        fieldName = fieldNode.getAttribute("name")
+        field = Field()
+        field.Name = fieldName
+        field.Desc = fieldNode.getAttribute("desc")
+        for itemNode in fieldNode.getElementsByTagName("item"):
+            field.Items.append(macros[itemNode.getAttribute("id")])
+        fields[fieldName] = field
+    return fields
+
+def getPackages(schemaFile, fields):
+    dom = xml.dom.minidom.parse(schemaFile)
+    root = dom.documentElement
+    packages = []
+    packagesNode = root.getElementsByTagName("packages")[0]
+    for packageNode in packagesNode.getElementsByTagName("package"):
+        packageName = packageNode.getAttribute("name")
+        package = Package()
+        package.FuncID = packageNode.getAttribute("funcid")
+        package.Name = packageNode.getAttribute("name")
+        package.Desc = packageNode.getAttribute("desc")
+        for fieldNode in packageNode.getElementsByTagName("field"):
+            package.Fields.append(fields[fieldNode.getAttribute("name")])
+        packages.append(package)
+    return packages
+	
+def AddItemNode(dom, parentNode, item):
+    itemNode = dom.createElement('item')
+    itemNode.setAttribute("id", item.ID)
+    itemNode.setAttribute("name", item.Name)
+    itemNode.setAttribute("desc", item.Desc)
+    itemNode.setAttribute("length", item.Length)
+    parentNode.appendChild(itemNode)
+
+def AddFieldNode(dom, parentNode, field):
+    fieldNode = dom.createElement('field')
+    fieldNode.setAttribute("name", field.Name)
+    fieldNode.setAttribute("desc", field.Desc)
+    for item in field.Items:
+        AddItemNode(dom, fieldNode, item)
+    parentNode.appendChild(fieldNode)
+
+def AddPackageNode(dom, parentNode, package):
+    packageNode = dom.createElement('package')
+    packageNode.setAttribute("funcid", package.FuncID)
+    packageNode.setAttribute("name", package.Name)
+    packageNode.setAttribute("desc", package.Desc)
+    for field in package.Fields:
+        AddFieldNode(dom, packageNode, field)
+    parentNode.appendChild(packageNode)
+
+def CreatePbStepModel(destFile, macros, fields, packages):
+    impl = xml.dom.minidom.getDOMImplementation()
+    dom = impl.createDocument(None, 'root', None)
+    root = dom.documentElement
+
+    packagesNode = dom.createElement('packages')
+    for package in packages:
+        AddPackageNode(dom, packagesNode, package)
+    root.appendChild(packagesNode)
+
+    fieldsNode = dom.createElement('fields')
+    for field in fields.values():
+        AddFieldNode(dom, fieldsNode, field)
+    root.appendChild(fieldsNode)
+
     f = open(destFile, 'w')
-    dom.writexml(f, indent="", addindent='', newl='', encoding="utf-8")
+    dom.writexml(f, indent="", addindent='\t', newl='\n', encoding="utf-8")
     f.close()
 	
 if __name__ == "__main__":
     if len(sys.argv) < 4:
         print("Usage: ParsePbStepModel.py destFile schema.xml macros.xml")
-        exit(-1)
+        exit(-1) 
     destFile = sys.argv[1]
     schemaFile = sys.argv[2]
     macrosFile = sys.argv[3]
-    macros = get_macros(macrosFile)
-    CreatePbStepModel(destFile, schemaFile, macros)
+    macros = getMacros(macrosFile)
+    fields = getFields(schemaFile, macros)
+    packages = getPackages(schemaFile, fields)
+    print(len(packages))
+    
+    CreatePbStepModel(destFile, macros, fields, packages)

@@ -1,0 +1,4 @@
+<pumplist>
+	<pump script="./libs/ctp/ParseCTPModel.py" dest="./libs/ctp/CtpApiModel_6.3.15.xml" sources="./libs/ctp/6.3.15/include/ThostFtdcUserApiDataType.h ./libs/ctp/6.3.15/include/ThostFtdcUserApiStruct.h ./libs/ctp/6.3.15/include/ThostFtdcTraderApi.h"/>
+	<pump script="./libs/ctp/ParseCTPModel.py" dest="./libs/ctp/CtpApiModel_6.5.1.xml" sources="./libs/ctp/6.5.1/include/ThostFtdcUserApiDataType.h ./libs/ctp/6.5.1/include/ThostFtdcUserApiStruct.h ./libs/ctp/6.5.1/include/ThostFtdcTraderApi.h"/>
+</pumplist>

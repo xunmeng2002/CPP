@@ -163,7 +163,7 @@ def Parse(destFile, dataTypeFile, structFile, apiFile, apiVersion):
     f.close()
 
 def main():
-    apiPath = "source/API/CTP/"
+    apiPath = "./"
     dataTypeFile="/include/ThostFtdcUserApiDataType.h"
     structFile="/include/ThostFtdcUserApiStruct.h"
     apiFile="/include/ThostFtdcTraderApi.h"

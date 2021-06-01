@@ -21,7 +21,7 @@ def ParseDataType(dom, root, filename, types):
                 else:
                     baseType = "char"
             else:
-                print line
+                print(line)
             typeNode.setAttribute("name", name)
             typeNode.setAttribute("basetype", baseType)
             root.appendChild(typeNode)

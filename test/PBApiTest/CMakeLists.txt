@@ -24,14 +24,16 @@ macro(add_package name dir)
 endmacro(add_package)
 
 add_package(src ./src)
-#add_package(gtest ../../libs/gtest/include)
-#include_directories(gtest ../../libs/gtest/include)
+add_package(GenCode ./GenCode)
+add_package(StepApiFunc ./StepApiFunc)
+add_package(Utility ../../source/Utility)
+add_package(MemCache ../../source/MemCache)
+add_package(ThreadBase ../../source/ThreadBase)
+add_package(Logger ../../source/Logger)
+add_package(jsoncpp ../../source/jsoncpp)
+add_package(pbapi ../../libs/pbapi/include)
+
 
 add_definitions("-D_CRT_SECURE_NO_WARNINGS")
 
-
-#link_directories(${PROJECT_SOURCE_DIR}/../../libs/gtest/win64)
-
 add_executable(${PROJECT_NAME} ${all_file})
-
-#target_link_libraries(${PROJECT_NAME} gtestd gtest_maind)

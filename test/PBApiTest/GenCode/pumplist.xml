@@ -1,0 +1,11 @@
+<pumplist>
+	<pump dest="./test/PBApiTest/GenCode/PBApiDataStruct.h" tpl="./test/PBApiTest/GenCode/PBApiDataStruct.h.tpl" model="./libs/pbapi/pbstep.xml"/>
+	<pump dest="./test/PBApiTest/GenCode/PBStepApi.h" tpl="./test/PBApiTest/GenCode/PBStepApi.h.tpl" model="./libs/pbapi/pbstep.xml"/>
+	<pump dest="./test/PBApiTest/GenCode/PBStepApi.cpp" tpl="./test/PBApiTest/GenCode/PBStepApi.cpp.tpl" model="./libs/pbapi/pbstep.xml"/>
+	
+	<pump dest="./test/PBApiTest/GenCode/PBStepSpi.h" tpl="./test/PBApiTest/GenCode/PBStepSpi.h.tpl" model="./libs/pbapi/pbstep.xml"/>
+	<pump dest="./test/PBApiTest/GenCode/PBStepSpi.cpp" tpl="./test/PBApiTest/GenCode/PBStepSpi.cpp.tpl" model="./libs/pbapi/pbstep.xml"/>
+	
+	<pump dest="./test/PBApiTest/GenCode/PBStepCallback.h" tpl="./test/PBApiTest/GenCode/PBStepCallback.h.tpl" model="./libs/pbapi/pbstep.xml"/>
+	<pump dest="./test/PBApiTest/GenCode/PBStepCallback.cpp" tpl="./test/PBApiTest/GenCode/PBStepCallback.cpp.tpl" model="./libs/pbapi/pbstep.xml"/>
+</pumplist>

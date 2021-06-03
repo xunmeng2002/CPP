@@ -2,9 +2,6 @@
 #include "ThostFtdcTraderSpiImpl.h"
 #include "AccountInfo.h"
 #include "Logger.h"
-#include "json/json.h"
-#include <fstream>
-#include <sstream>
 #include <iostream>
 #include <map>
 
@@ -13,12 +10,11 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-	map<string, AccountInfo*> accountInfos;
-	ReadAccountInfo(accountInfos);
-
 	Logger::GetInstance().Init(argv[0]);
 	Logger::GetInstance().Start();
 
+	map<string, AccountInfo*> accountInfos;
+	ReadAccountInfo(accountInfos);
 	string accountID = "71020537";
 	CThostFtdcTraderApi* traderApi = CThostFtdcTraderApiMiddle::CreateFtdcTraderApi();
 	cout << "API Version:" << traderApi->GetApiVersion() << endl;

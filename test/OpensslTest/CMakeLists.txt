@@ -52,13 +52,13 @@ endif(WIN32)
 
 
 add_package(src ./src)
-add_package(openssl_c ../../libs/openssl/include)
+add_package(openssl ../../libs/openssl/include)
 
 #添加库目录
 if(WIN32)
-	link_directories(${PROJECT_SOURCE_DIR}/../../libs/openssl/win64_static)
+	link_directories(${PROJECT_SOURCE_DIR}/../../libs/openssl/win64)
 elseif(UNIX)
-	link_directories(${PROJECT_SOURCE_DIR}/../../libs/openssl/linux_static)
+	link_directories(${PROJECT_SOURCE_DIR}/../../libs/openssl/linux)
 endif()
 
 #添加工程

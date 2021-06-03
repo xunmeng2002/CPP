@@ -1,68 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
 	<packages>
+		<package desc="设置用户数据请求" funcid="10100" name="ReqSetUserInfo">
+			<field desc="" name="ReqSetUserInfo">
+				<item desc="请求标志" encrypt="0" id="992" length="64" name="QQBZ"/>
+				<item desc="日志路径" encrypt="0" id="993" length="64" name="RZLJ"/>
+				<item desc="授权文件" encrypt="0" id="7017" length="64" name="SQWJ"/>
+				<item desc="配置文件" encrypt="0" id="7021" length="64" name="PZWJ"/>
+				<item desc="日志ID" encrypt="0" id="2063" length="64" name="LOGID"/>
+				<item desc="RSA公钥" encrypt="0" id="7029" length="64" name="RSAKEY"/>
+				<item desc="穿透式授权码文件" encrypt="0" id="7031" length="64" name="RZMWJ"/>
+				<item desc="交易柜台" encrypt="0" id="813" length="64" name="JYGT"/>
+			</field>
+		</package>
+		<package desc="设置用户数据应答" funcid="10100" name="RspSetUserInfo">
+			<field desc="" name="RspSetUserInfo"/>
+		</package>
 		<package desc="客户端校验请求" funcid="4" name="ReqSecurityVerity">
 			<field desc="客户端校验请求" name="ReqSecurityVerity">
-				<item desc="客户端密钥" id="2066" length="2048" name="MYKL"/>
+				<item desc="客户端密钥" encrypt="0" id="2066" length="2048" name="MYKL"/>
 			</field>
 		</package>
 		<package desc="客户端校验回报" funcid="4" name="RspSecurityVerity">
 			<field desc="客户端校验回报" name="RspSecurityVerity">
-				<item desc="安全密钥" id="7052" length="256" name="AQMY"/>
-				<item desc="时间间隔" id="7063" length="64" name="SJJGS"/>
+				<item desc="安全密钥" encrypt="0" id="7052" length="256" name="AQMY"/>
+				<item desc="时间间隔" encrypt="0" id="7063" length="64" name="SJJGS"/>
 			</field>
 		</package>
 		<package desc="登录请求" funcid="6011" name="ReqLogin">
 			<field desc="登录请求" name="ReqLogin">
-				<item desc="营业部代码" id="62" length="64" name="YYBDM"/>
-				<item desc="券商代码" id="61" length="64" name="QSDM"/>
-				<item desc="硬盘编号" id="70" length="64" name="YPBH"/>
-				<item desc="客户端本机IP地址" id="71" length="64" name="LOCAL_IP"/>
-				<item desc="客户端MAC地址" id="72" length="64" name="LOCAL_MAC"/>
-				<item desc="客户端版本号" id="73" length="64" name="VERSION"/>
-				<item desc="登录类别" id="67" length="64" name="DLLB"/>
-				<item desc="动态密码" id="69" length="64" name="DTMM"/>
-				<item desc="动态密码类别" id="68" length="64" name="DTMMLB"/>
-				<item desc="帐号类别" id="53" length="64" name="ZHLB"/>
-				<item desc="登录帐号" id="249" length="64" name="DLZH"/>
-				<item desc="获取短信口令标志" id="355" length="64" name="HQDXKL"/>
-				<item desc="核心认证类别" id="349" length="64" name="HXRZ"/>
-				<item desc="核心认证密码" id="350" length="64" name="HXMM"/>
-				<item desc="CPU" id="351" length="64" name="CPU"/>
-				<item desc="主板日期" id="352" length="64" name="ZBRQ"/>
-				<item desc="客户端唯一识别码" id="445" length="64" name="UNIQUE_ID"/>
-				<item desc="硬盘分区" id="485" length="64" name="YPFQ"/>
-				<item desc="计算机名" id="486" length="64" name="JSJM"/>
-				<item desc="期货所用的BrokerID" id="444" length="64" name="BROKER_ID"/>
-				<item desc="产品" id="254" length="64" name="CP"/>
-				<item desc="平台" id="255" length="64" name="PT"/>
-				<item desc="手机号码" id="281" length="64" name="SJHM"/>
-				<item desc="核心帐号" id="896" length="64" name="HXZH"/>
-				<item desc="指纹数据" id="914" length="64" name="ZWSJ"/>
-				<item desc="手机的IMSI" id="1000" length="64" name="IMSI"/>
-				<item desc="穿透式监管终端硬件信息" id="2067" length="3000" name="LOCAL_INFO"/>
-				<item desc="穿透式监管异常标志" id="7040" length="16" name="YCBS"/>
-				<item desc="穿透式监管信息完整度" id="7041" length="2048" name="XXWZD"/>
-				<item desc="穿透式密钥版本" id="7042" length="1024" name="CTSMYBB"/>
-				<item desc="穿透式密钥版本" id="7053" length="64" name="SQM"/>
-				<item desc="穿透式版本" id="7054" length="128" name="CTSBB"/>
-				<item desc="终端APPID" id="7058" length="64" name="APPID"/>
+				<item desc="营业部代码" encrypt="0" id="62" length="64" name="YYBDM"/>
+				<item desc="券商代码" encrypt="0" id="61" length="64" name="QSDM"/>
+				<item desc="硬盘编号" encrypt="0" id="70" length="64" name="YPBH"/>
+				<item desc="客户端本机IP地址" encrypt="0" id="71" length="64" name="LOCAL_IP"/>
+				<item desc="客户端MAC地址" encrypt="0" id="72" length="64" name="LOCAL_MAC"/>
+				<item desc="客户端版本号" encrypt="0" id="73" length="64" name="VERSION"/>
+				<item desc="登录类别" encrypt="0" id="67" length="64" name="DLLB"/>
+				<item desc="动态密码" encrypt="1" id="69" length="64" name="DTMM"/>
+				<item desc="动态密码类别" encrypt="0" id="68" length="64" name="DTMMLB"/>
+				<item desc="帐号类别" encrypt="0" id="53" length="64" name="ZHLB"/>
+				<item desc="登录帐号" encrypt="0" id="249" length="64" name="DLZH"/>
+				<item desc="获取短信口令标志" encrypt="0" id="355" length="64" name="HQDXKL"/>
+				<item desc="核心认证类别" encrypt="0" id="349" length="64" name="HXRZ"/>
+				<item desc="核心认证密码" encrypt="1" id="350" length="64" name="HXMM"/>
+				<item desc="CPU" encrypt="0" id="351" length="64" name="CPU"/>
+				<item desc="主板日期" encrypt="0" id="352" length="64" name="ZBRQ"/>
+				<item desc="客户端唯一识别码" encrypt="0" id="445" length="64" name="UNIQUE_ID"/>
+				<item desc="硬盘分区" encrypt="0" id="485" length="64" name="YPFQ"/>
+				<item desc="计算机名" encrypt="0" id="486" length="64" name="JSJM"/>
+				<item desc="期货所用的BrokerID" encrypt="0" id="444" length="64" name="BROKER_ID"/>
+				<item desc="产品" encrypt="0" id="254" length="64" name="CP"/>
+				<item desc="平台" encrypt="0" id="255" length="64" name="PT"/>
+				<item desc="手机号码" encrypt="0" id="281" length="64" name="SJHM"/>
+				<item desc="核心帐号" encrypt="0" id="896" length="64" name="HXZH"/>
+				<item desc="指纹数据" encrypt="0" id="914" length="64" name="ZWSJ"/>
+				<item desc="手机的IMSI" encrypt="0" id="1000" length="64" name="IMSI"/>
+				<item desc="穿透式监管终端硬件信息" encrypt="0" id="2067" length="3000" name="LOCAL_INFO"/>
+				<item desc="穿透式监管异常标志" encrypt="0" id="7040" length="16" name="YCBS"/>
+				<item desc="穿透式监管信息完整度" encrypt="0" id="7041" length="2048" name="XXWZD"/>
+				<item desc="穿透式密钥版本" encrypt="0" id="7042" length="1024" name="CTSMYBB"/>
+				<item desc="穿透式密钥版本" encrypt="0" id="7053" length="64" name="SQM"/>
+				<item desc="穿透式版本" encrypt="0" id="7054" length="128" name="CTSBB"/>
+				<item desc="终端APPID" encrypt="0" id="7058" length="64" name="APPID"/>
 			</field>
 		</package>
 		<package desc="登录回报" funcid="6011" name="RspLogin">
 			<field desc="登录回报" name="RspLogin">
-				<item desc="资金帐号" id="51" length="64" name="ZJZH"/>
-				<item desc="当前交易日" id="75" length="64" name="TRADE_DATE"/>
-				<item desc="上一交易日" id="76" length="64" name="LAST_TRADE_DATE"/>
-				<item desc="登录标志" id="86" length="64" name="LOGIN_FLAG"/>
-				<item desc="修改密码提示信息" id="87" length="64" name="XGMMTS"/>
-				<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
-				<item desc="安全密钥" id="7052" length="256" name="AQMY"/>
+				<item desc="资金帐号" encrypt="0" id="51" length="64" name="ZJZH"/>
+				<item desc="当前交易日" encrypt="0" id="75" length="64" name="TRADE_DATE"/>
+				<item desc="上一交易日" encrypt="0" id="76" length="64" name="LAST_TRADE_DATE"/>
+				<item desc="登录标志" encrypt="0" id="86" length="64" name="LOGIN_FLAG"/>
+				<item desc="修改密码提示信息" encrypt="0" id="87" length="64" name="XGMMTS"/>
+				<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
+				<item desc="安全密钥" encrypt="0" id="7052" length="256" name="AQMY"/>
 			</field>
 		</package>
 		<package desc="确认结算单请求" funcid="6071" name="ReqConfirmSettlement">
 			<field desc="确认结算单请求" name="ReqConfirmSettlement">
-				<item desc="交易日期" id="248" length="64" name="JYRQ"/>
+				<item desc="交易日期" encrypt="0" id="248" length="64" name="JYRQ"/>
 			</field>
 		</package>
 		<package desc="确认结算单应答" funcid="6071" name="RspConfirmSettlement">
@@ -70,45 +85,45 @@
 		</package>
 		<package desc="委托请求" funcid="6021" name="ReqInsertOrder">
 			<field desc="委托请求" name="ReqInsertOrder">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-				<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="委托数量" id="130" length="64" name="WTSL"/>
-				<item desc="委托价格" id="129" length="64" name="WTJG"/>
-				<item desc="股东号" id="52" length="64" name="GDH"/>
-				<item desc="席位号" id="161" length="64" name="XWH"/>
-				<item desc="市价委托类别" id="127" length="64" name="SJWTLB"/>
-				<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-				<item desc="价格类型" id="40" length="64" name="JGLB"/>
-				<item desc="有效期" id="41" length="64" name="YXQLX"/>
-				<item desc="成交量类型" id="42" length="64" name="CJLLX"/>
-				<item desc="最小成交量" id="43" length="64" name="ZXCJL"/>
-				<item desc="触发条件" id="495" length="64" name="CFTJ"/>
-				<item desc="组合类型" id="683" length="64" name="WTZHLX"/>
-				<item desc="有效日期" id="315" length="64" name="YXRQ"/>
-				<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-				<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+				<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="委托数量" encrypt="0" id="130" length="64" name="WTSL"/>
+				<item desc="委托价格" encrypt="0" id="129" length="64" name="WTJG"/>
+				<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+				<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+				<item desc="市价委托类别" encrypt="0" id="127" length="64" name="SJWTLB"/>
+				<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+				<item desc="价格类型" encrypt="0" id="40" length="64" name="JGLB"/>
+				<item desc="有效期" encrypt="0" id="41" length="64" name="YXQLX"/>
+				<item desc="成交量类型" encrypt="0" id="42" length="64" name="CJLLX"/>
+				<item desc="最小成交量" encrypt="0" id="43" length="64" name="ZXCJL"/>
+				<item desc="触发条件" encrypt="0" id="495" length="64" name="CFTJ"/>
+				<item desc="组合类型" encrypt="0" id="683" length="64" name="WTZHLX"/>
+				<item desc="有效日期" encrypt="0" id="315" length="64" name="YXRQ"/>
+				<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+				<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
 			</field>
 		</package>
 		<package desc="委托应答" funcid="6021" name="RspInsertOrder">
 			<field desc="委托应答" name="RspInsertOrder">
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-				<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+				<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
 			</field>
 		</package>
 		<package desc="委托撤单请求" funcid="6022" name="ReqCancelOrder">
 			<field desc="委托撤单请求" name="ReqCancelOrder">
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="股东号" id="52" length="64" name="GDH"/>
-				<item desc="席位号" id="161" length="64" name="XWH"/>
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="扩展字段" id="44" length="64" name="KZZD"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="委托日期" id="160" length="64" name="WTRQ"/>
-				<item desc="下单席位" id="162" length="64" name="XDXW"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+				<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="扩展字段" encrypt="0" id="44" length="64" name="KZZD"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="委托日期" encrypt="0" id="160" length="64" name="WTRQ"/>
+				<item desc="下单席位" encrypt="0" id="162" length="64" name="XDXW"/>
 			</field>
 		</package>
 		<package desc="委托撤单应答" funcid="6022" name="RspCancelOrder">
@@ -116,170 +131,170 @@
 		</package>
 		<package desc="查询持仓请求" funcid="6014" name="ReqQryPosition">
 			<field desc="查询持仓" name="QryPosition">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="查询标志" id="979" length="64" name="CXBZ"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="查询标志" encrypt="0" id="979" length="64" name="CXBZ"/>
 			</field>
 		</package>
 		<package desc="查询持仓回报" funcid="6014" name="RspQryPosition">
 			<field desc="持仓" name="Position">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="当前数量" id="135" length="64" name="DQSL"/>
-				<item desc="买入均价" id="136" length="64" name="MRJJ"/>
-				<item desc="成本价" id="139" length="64" name="CBJ"/>
-				<item desc="股东号" id="52" length="64" name="GDH"/>
-				<item desc="货币代码" id="56" length="64" name="HBDM"/>
-				<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-				<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="当前数量" encrypt="0" id="135" length="64" name="DQSL"/>
+				<item desc="买入均价" encrypt="0" id="136" length="64" name="MRJJ"/>
+				<item desc="成本价" encrypt="0" id="139" length="64" name="CBJ"/>
+				<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+				<item desc="货币代码" encrypt="0" id="56" length="64" name="HBDM"/>
+				<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+				<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
 			</field>
 		</package>
 		<package desc="查询持仓明细请求" funcid="6074" name="ReqQryPositionDetail">
 			<field desc="查询持仓明细请求" name="QryPositionDetail">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
 			</field>
 		</package>
 		<package desc="查询持仓明细应答" funcid="6074" name="RspQryPositionDetail">
 			<field desc="查询持仓明细应答" name="PositionDetail">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="当前数量" id="135" length="64" name="DQSL"/>
-				<item desc="成本价" id="139" length="64" name="CBJ"/>
-				<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="保证金" id="152" length="64" name="BZJ"/>
-				<item desc="开仓日期" id="147" length="64" name="KCRQ"/>
-				<item desc="货币代码" id="56" length="64" name="HBDM"/>
-				<item desc="成交编号" id="66" length="64" name="CJBH"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="当前数量" encrypt="0" id="135" length="64" name="DQSL"/>
+				<item desc="成本价" encrypt="0" id="139" length="64" name="CBJ"/>
+				<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="保证金" encrypt="0" id="152" length="64" name="BZJ"/>
+				<item desc="开仓日期" encrypt="0" id="147" length="64" name="KCRQ"/>
+				<item desc="货币代码" encrypt="0" id="56" length="64" name="HBDM"/>
+				<item desc="成交编号" encrypt="0" id="66" length="64" name="CJBH"/>
 			</field>
 		</package>
 		<package desc="查询当日委托" funcid="6019" name="ReqQryTodayOrder">
 			<field desc="查询当日委托" name="QryTodayOrder">
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="委托列表" id="977" length="64" name="WTHLB"/>
-				<item desc="撤销标志" id="7012" length="64" name="CDBZ"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="委托列表" encrypt="0" id="977" length="64" name="WTHLB"/>
+				<item desc="撤销标志" encrypt="0" id="7012" length="64" name="CDBZ"/>
 			</field>
 		</package>
 		<package desc="查询当日委托应答" funcid="6019" name="RspQryTodayOrder">
 			<field desc="查询当日委托" name="TodayOrder">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="委托状态" id="156" length="64" name="WTZT"/>
-				<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-				<item desc="委托数量" id="130" length="64" name="WTSL"/>
-				<item desc="委托价格" id="129" length="64" name="WTJG"/>
-				<item desc="成交数量" id="113" length="64" name="CJSL"/>
-				<item desc="撤单数量" id="158" length="64" name="CDSL"/>
-				<item desc="委托时间" id="159" length="64" name="WTSJ"/>
-				<item desc="市价委托类别" id="127" length="64" name="SJWTLB"/>
-				<item desc="股东号" id="52" length="64" name="GDH"/>
-				<item desc="委托日期" id="160" length="64" name="WTRQ"/>
-				<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-				<item desc="备注信息" id="163" length="64" name="BZXX"/>
-				<item desc="价格类型" id="40" length="64" name="JGLB"/>
-				<item desc="有效期" id="41" length="64" name="YXQLX"/>
-				<item desc="成交量类型" id="42" length="64" name="CJLLX"/>
-				<item desc="最小成交量" id="43" length="64" name="ZXCJL"/>
-				<item desc="扩展字段" id="44" length="64" name="KZZD"/>
-				<item desc="触发条件" id="495" length="64" name="CFTJ"/>
-				<item desc="撤单时间" id="516" length="64" name="CDSJ"/>
-				<item desc="有效日期" id="315" length="64" name="YXRQ"/>
-				<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-				<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
-				<item desc="柜台定位串" id="7011" length="64" name="GTDWC"/>
-				<item desc="委托类型" id="994" length="64" name="WTLX"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="委托状态" encrypt="0" id="156" length="64" name="WTZT"/>
+				<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+				<item desc="委托数量" encrypt="0" id="130" length="64" name="WTSL"/>
+				<item desc="委托价格" encrypt="0" id="129" length="64" name="WTJG"/>
+				<item desc="成交数量" encrypt="0" id="113" length="64" name="CJSL"/>
+				<item desc="撤单数量" encrypt="0" id="158" length="64" name="CDSL"/>
+				<item desc="委托时间" encrypt="0" id="159" length="64" name="WTSJ"/>
+				<item desc="市价委托类别" encrypt="0" id="127" length="64" name="SJWTLB"/>
+				<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+				<item desc="委托日期" encrypt="0" id="160" length="64" name="WTRQ"/>
+				<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+				<item desc="备注信息" encrypt="0" id="163" length="64" name="BZXX"/>
+				<item desc="价格类型" encrypt="0" id="40" length="64" name="JGLB"/>
+				<item desc="有效期" encrypt="0" id="41" length="64" name="YXQLX"/>
+				<item desc="成交量类型" encrypt="0" id="42" length="64" name="CJLLX"/>
+				<item desc="最小成交量" encrypt="0" id="43" length="64" name="ZXCJL"/>
+				<item desc="扩展字段" encrypt="0" id="44" length="64" name="KZZD"/>
+				<item desc="触发条件" encrypt="0" id="495" length="64" name="CFTJ"/>
+				<item desc="撤单时间" encrypt="0" id="516" length="64" name="CDSJ"/>
+				<item desc="有效日期" encrypt="0" id="315" length="64" name="YXRQ"/>
+				<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+				<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
+				<item desc="柜台定位串" encrypt="0" id="7011" length="64" name="GTDWC"/>
+				<item desc="委托类型" encrypt="0" id="994" length="64" name="WTLX"/>
 			</field>
 		</package>
 		<package desc="查询单笔委托" funcid="56019" name="ReqQryOneOrder">
 			<field desc="查询当日委托" name="QryTodayOrder">
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="委托列表" id="977" length="64" name="WTHLB"/>
-				<item desc="撤销标志" id="7012" length="64" name="CDBZ"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="委托列表" encrypt="0" id="977" length="64" name="WTHLB"/>
+				<item desc="撤销标志" encrypt="0" id="7012" length="64" name="CDBZ"/>
 			</field>
 		</package>
 		<package desc="查询单笔委托回报" funcid="56019" name="RspQryOneOrder">
 			<field desc="查询当日委托" name="TodayOrder">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="委托状态" id="156" length="64" name="WTZT"/>
-				<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-				<item desc="委托数量" id="130" length="64" name="WTSL"/>
-				<item desc="委托价格" id="129" length="64" name="WTJG"/>
-				<item desc="成交数量" id="113" length="64" name="CJSL"/>
-				<item desc="撤单数量" id="158" length="64" name="CDSL"/>
-				<item desc="委托时间" id="159" length="64" name="WTSJ"/>
-				<item desc="市价委托类别" id="127" length="64" name="SJWTLB"/>
-				<item desc="股东号" id="52" length="64" name="GDH"/>
-				<item desc="委托日期" id="160" length="64" name="WTRQ"/>
-				<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-				<item desc="备注信息" id="163" length="64" name="BZXX"/>
-				<item desc="价格类型" id="40" length="64" name="JGLB"/>
-				<item desc="有效期" id="41" length="64" name="YXQLX"/>
-				<item desc="成交量类型" id="42" length="64" name="CJLLX"/>
-				<item desc="最小成交量" id="43" length="64" name="ZXCJL"/>
-				<item desc="扩展字段" id="44" length="64" name="KZZD"/>
-				<item desc="触发条件" id="495" length="64" name="CFTJ"/>
-				<item desc="撤单时间" id="516" length="64" name="CDSJ"/>
-				<item desc="有效日期" id="315" length="64" name="YXRQ"/>
-				<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-				<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
-				<item desc="柜台定位串" id="7011" length="64" name="GTDWC"/>
-				<item desc="委托类型" id="994" length="64" name="WTLX"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="委托状态" encrypt="0" id="156" length="64" name="WTZT"/>
+				<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+				<item desc="委托数量" encrypt="0" id="130" length="64" name="WTSL"/>
+				<item desc="委托价格" encrypt="0" id="129" length="64" name="WTJG"/>
+				<item desc="成交数量" encrypt="0" id="113" length="64" name="CJSL"/>
+				<item desc="撤单数量" encrypt="0" id="158" length="64" name="CDSL"/>
+				<item desc="委托时间" encrypt="0" id="159" length="64" name="WTSJ"/>
+				<item desc="市价委托类别" encrypt="0" id="127" length="64" name="SJWTLB"/>
+				<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+				<item desc="委托日期" encrypt="0" id="160" length="64" name="WTRQ"/>
+				<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+				<item desc="备注信息" encrypt="0" id="163" length="64" name="BZXX"/>
+				<item desc="价格类型" encrypt="0" id="40" length="64" name="JGLB"/>
+				<item desc="有效期" encrypt="0" id="41" length="64" name="YXQLX"/>
+				<item desc="成交量类型" encrypt="0" id="42" length="64" name="CJLLX"/>
+				<item desc="最小成交量" encrypt="0" id="43" length="64" name="ZXCJL"/>
+				<item desc="扩展字段" encrypt="0" id="44" length="64" name="KZZD"/>
+				<item desc="触发条件" encrypt="0" id="495" length="64" name="CFTJ"/>
+				<item desc="撤单时间" encrypt="0" id="516" length="64" name="CDSJ"/>
+				<item desc="有效日期" encrypt="0" id="315" length="64" name="YXRQ"/>
+				<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+				<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
+				<item desc="柜台定位串" encrypt="0" id="7011" length="64" name="GTDWC"/>
+				<item desc="委托类型" encrypt="0" id="994" length="64" name="WTLX"/>
 			</field>
 		</package>
 		<package desc="查询当日成交请求" funcid="6013" name="ReqQryTodayTrade">
 			<field desc="查询当日成交" name="QryTodayTrade">
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="成交编号" id="66" length="64" name="CJBH"/>
-				<item desc="撤销标志" id="7012" length="64" name="CDBZ"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="成交编号" encrypt="0" id="66" length="64" name="CJBH"/>
+				<item desc="撤销标志" encrypt="0" id="7012" length="64" name="CDBZ"/>
 			</field>
 		</package>
 		<package desc="查询当日成交回报" funcid="6013" name="RspQryTodayTrade">
 			<field desc="当日成交" name="TodayTrade">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="合约名称" id="64" length="64" name="HYDMMC"/>
-				<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-				<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="成交时间" id="116" length="64" name="CJSJ"/>
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="成交数量" id="113" length="64" name="CJSL"/>
-				<item desc="成交价格" id="114" length="64" name="CJJG"/>
-				<item desc="成交编号" id="66" length="64" name="CJBH"/>
-				<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-				<item desc="成交日期" id="173" length="64" name="CJRQ"/>
-				<item desc="合约类别" id="131" length="64" name="HYLB"/>
-				<item desc="柜台定位串" id="7011" length="64" name="GTDWC"/>
-				<item desc="成交类型" id="7013" length="64" name="CJLX"/>
-				<item desc="原委托号" id="830" length="64" name="YWTH"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="合约名称" encrypt="0" id="64" length="64" name="HYDMMC"/>
+				<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+				<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="成交时间" encrypt="0" id="116" length="64" name="CJSJ"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="成交数量" encrypt="0" id="113" length="64" name="CJSL"/>
+				<item desc="成交价格" encrypt="0" id="114" length="64" name="CJJG"/>
+				<item desc="成交编号" encrypt="0" id="66" length="64" name="CJBH"/>
+				<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+				<item desc="成交日期" encrypt="0" id="173" length="64" name="CJRQ"/>
+				<item desc="合约类别" encrypt="0" id="131" length="64" name="HYLB"/>
+				<item desc="柜台定位串" encrypt="0" id="7011" length="64" name="GTDWC"/>
+				<item desc="成交类型" encrypt="0" id="7013" length="64" name="CJLX"/>
+				<item desc="原委托号" encrypt="0" id="830" length="64" name="YWTH"/>
 			</field>
 		</package>
 		<package desc="查询资金请求" funcid="6012" name="ReqQryCapital">
 			<field desc="查询资金" name="QryCapital">
-				<item desc="货币代码" id="56" length="64" name="HBDM"/>
-				<item desc="查询可取资金" id="347" length="64" name="KQBZ"/>
+				<item desc="货币代码" encrypt="0" id="56" length="64" name="HBDM"/>
+				<item desc="查询可取资金" encrypt="0" id="347" length="64" name="KQBZ"/>
 			</field>
 		</package>
 		<package desc="查询资金回报" funcid="6012" name="RspQryCapital">
 			<field desc="资金" name="Capital">
-				<item desc="资金帐号" id="51" length="64" name="ZJZH"/>
-				<item desc="货币代码" id="56" length="64" name="HBDM"/>
-				<item desc="期初余额" id="92" length="64" name="QCYE"/>
-				<item desc="可用资金" id="93" length="64" name="KYZJ"/>
-				<item desc="总资产(当前权益)" id="97" length="64" name="ZZC"/>
-				<item desc="平仓盯市盈亏" id="104" length="64" name="PCDSYK"/>
-				<item desc="手续费" id="182" length="64" name="SXF"/>
-				<item desc="现金资产" id="110" length="64" name="XJZC"/>
-				<item desc="出入金" id="442" length="64" name="CRJ"/>
+				<item desc="资金帐号" encrypt="0" id="51" length="64" name="ZJZH"/>
+				<item desc="货币代码" encrypt="0" id="56" length="64" name="HBDM"/>
+				<item desc="期初余额" encrypt="0" id="92" length="64" name="QCYE"/>
+				<item desc="可用资金" encrypt="0" id="93" length="64" name="KYZJ"/>
+				<item desc="总资产(当前权益)" encrypt="0" id="97" length="64" name="ZZC"/>
+				<item desc="平仓盯市盈亏" encrypt="0" id="104" length="64" name="PCDSYK"/>
+				<item desc="手续费" encrypt="0" id="182" length="64" name="SXF"/>
+				<item desc="现金资产" encrypt="0" id="110" length="64" name="XJZC"/>
+				<item desc="出入金" encrypt="0" id="442" length="64" name="CRJ"/>
 			</field>
 		</package>
 		<package desc="查询席位请求" funcid="6040" name="ReqQryHolderAccount">
@@ -287,67 +302,67 @@
 		</package>
 		<package desc="查询席位应答" funcid="6040" name="RspQryHolderAccount">
 			<field desc="查询席位应答" name="HolderAccount">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="市场名称" id="55" length="64" name="SCMC"/>
-				<item desc="股东号" id="52" length="64" name="GDH"/>
-				<item desc="主帐号标志" id="168" length="64" name="ZZHBZ"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="席位号" id="161" length="64" name="XWH"/>
-				<item desc="市场信息" id="45" length="64" name="SCXX"/>
-				<item desc="外盘标志" id="922" length="64" name="WPBZ"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="市场名称" encrypt="0" id="55" length="64" name="SCMC"/>
+				<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+				<item desc="主帐号标志" encrypt="0" id="168" length="64" name="ZZHBZ"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+				<item desc="市场信息" encrypt="0" id="45" length="64" name="SCXX"/>
+				<item desc="外盘标志" encrypt="0" id="922" length="64" name="WPBZ"/>
 			</field>
 		</package>
 		<package desc="查询合约请求" funcid="6018" name="ReqQryInstrument">
 			<field desc="查询合约" name="QryInstrument">
-				<item desc="市场列表" id="689" length="64" name="SCLB"/>
+				<item desc="市场列表" encrypt="0" id="689" length="64" name="SCLB"/>
 			</field>
 		</package>
 		<package desc="查询合约回报" funcid="6018" name="RspQryInstrument">
 			<field desc="合约" name="Instrument">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="合约乘数" id="244" length="64" name="HYCS"/>
-				<item desc="最小变动价位" id="245" length="64" name="ZXBDJW"/>
-				<item desc="合约名称" id="64" length="64" name="HYDMMC"/>
-				<item desc="限价单最大下单量" id="246" length="64" name="WTSX"/>
-				<item desc="市价单最大下单量" id="247" length="64" name="ZCSX"/>
-				<item desc="单位保证金" id="280" length="64" name="DWBZJ"/>
-				<item desc="市场类型" id="436" length="64" name="SCLX"/>
-				<item desc="到期日" id="754" length="64" name="DQR"/>
-				<item desc="单边保证金优惠" id="756" length="64" name="DBYH"/>
-				<item desc="品种代码" id="364" length="64" name="PZDM"/>
-				<item desc="自动净仓标志" id="999" length="64" name="ZDJC"/>
-				<item desc="合约类别" id="131" length="64" name="HYLB"/>
-				<item desc="标的代码" id="121" length="64" name="BDDM"/>
-				<item desc="标的名称" id="122" length="64" name="BDMC"/>
-				<item desc="行权价格" id="269" length="64" name="XQJG"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="合约乘数" encrypt="0" id="244" length="64" name="HYCS"/>
+				<item desc="最小变动价位" encrypt="0" id="245" length="64" name="ZXBDJW"/>
+				<item desc="合约名称" encrypt="0" id="64" length="64" name="HYDMMC"/>
+				<item desc="限价单最大下单量" encrypt="0" id="246" length="64" name="WTSX"/>
+				<item desc="市价单最大下单量" encrypt="0" id="247" length="64" name="ZCSX"/>
+				<item desc="单位保证金" encrypt="0" id="280" length="64" name="DWBZJ"/>
+				<item desc="市场类型" encrypt="0" id="436" length="64" name="SCLX"/>
+				<item desc="到期日" encrypt="0" id="754" length="64" name="DQR"/>
+				<item desc="单边保证金优惠" encrypt="0" id="756" length="64" name="DBYH"/>
+				<item desc="品种代码" encrypt="0" id="364" length="64" name="PZDM"/>
+				<item desc="自动净仓标志" encrypt="0" id="999" length="64" name="ZDJC"/>
+				<item desc="合约类别" encrypt="0" id="131" length="64" name="HYLB"/>
+				<item desc="标的代码" encrypt="0" id="121" length="64" name="BDDM"/>
+				<item desc="标的名称" encrypt="0" id="122" length="64" name="BDMC"/>
+				<item desc="行权价格" encrypt="0" id="269" length="64" name="XQJG"/>
 			</field>
 		</package>
 		<package desc="查询期货交易所状态请求" funcid="6027" name="ReqQrySystemStatus">
 			<field desc="查询期货交易所状态请求" name="QrySystemStatus">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
 			</field>
 		</package>
 		<package desc="查询期货交易所状态回报" funcid="6027" name="RspQrySystemStatus">
 			<field desc="期货交易所状态" name="SystemStatus">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="系统状态" id="84" length="64" name="XTZT"/>
-				<item desc="交易子状态" id="7130" length="64" name="JYZZT"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="系统状态" encrypt="0" id="84" length="64" name="XTZT"/>
+				<item desc="交易子状态" encrypt="0" id="7130" length="64" name="JYZZT"/>
 			</field>
 		</package>
 		<package desc="查询结算单请求" funcid="6072" name="ReqQrySettlement">
 			<field desc="查询结算单请求" name="QrySettlement">
-				<item desc="结算单查询类别（期货）" id="229" length="64" name="JSDCXLB"/>
-				<item desc="起始日期" id="171" length="64" name="QSRQ"/>
-				<item desc="终止日期" id="172" length="64" name="ZZRQ"/>
+				<item desc="结算单查询类别（期货）" encrypt="0" id="229" length="64" name="JSDCXLB"/>
+				<item desc="起始日期" encrypt="0" id="171" length="64" name="QSRQ"/>
+				<item desc="终止日期" encrypt="0" id="172" length="64" name="ZZRQ"/>
 			</field>
 		</package>
 		<package desc="查询结算单应答" funcid="6072" name="RspQrySettlement">
 			<field desc="查询结算单应答" name="Settlement">
-				<item desc="结算单" id="360" length="64" name="JSD"/>
-				<item desc="结算单确认标志" id="362" length="64" name="QRBZ"/>
+				<item desc="结算单" encrypt="0" id="360" length="64" name="JSD"/>
+				<item desc="结算单确认标志" encrypt="0" id="362" length="64" name="QRBZ"/>
 			</field>
 		</package>
 		<package desc="查询行权请求" funcid="6103" name="ReqQryTodayExecOrder">
@@ -355,51 +370,51 @@
 		</package>
 		<package desc="查询行权应答" funcid="6103" name="RspQryTodayExecOrder">
 			<field desc="查询当日行权应答" name="TodayExecOrder">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="委托状态" id="156" length="64" name="WTZT"/>
-				<item desc="委托价格" id="129" length="64" name="WTJG"/>
-				<item desc="委托数量" id="130" length="64" name="WTSL"/>
-				<item desc="委托时间" id="159" length="64" name="WTSJ"/>
-				<item desc="申报时间" id="263" length="64" name="SBSJ"/>
-				<item desc="席位号" id="161" length="64" name="XWH"/>
-				<item desc="下单席位" id="162" length="64" name="XDXW"/>
-				<item desc="非交易申请类别" id="261" length="64" name="FJYSQLB"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="扩展字段" id="44" length="64" name="KZZD"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="委托状态" encrypt="0" id="156" length="64" name="WTZT"/>
+				<item desc="委托价格" encrypt="0" id="129" length="64" name="WTJG"/>
+				<item desc="委托数量" encrypt="0" id="130" length="64" name="WTSL"/>
+				<item desc="委托时间" encrypt="0" id="159" length="64" name="WTSJ"/>
+				<item desc="申报时间" encrypt="0" id="263" length="64" name="SBSJ"/>
+				<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+				<item desc="下单席位" encrypt="0" id="162" length="64" name="XDXW"/>
+				<item desc="非交易申请类别" encrypt="0" id="261" length="64" name="FJYSQLB"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="扩展字段" encrypt="0" id="44" length="64" name="KZZD"/>
 			</field>
 		</package>
 		<package desc="行权请求" funcid="6100" name="ReqExecOrder">
 			<field desc="行权请求" name="ReqExecOrder">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="行权数量" id="230" length="64" name="XQSL"/>
-				<item desc="股东号" id="52" length="64" name="GDH"/>
-				<item desc="席位号" id="161" length="64" name="XWH"/>
-				<item desc="非交易申请类别" id="261" length="64" name="FJYSQLB"/>
-				<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="期权行权后期货自动自动对冲" id="633" length="64" name="QHZDC"/>
-				<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-				<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="行权数量" encrypt="0" id="230" length="64" name="XQSL"/>
+				<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+				<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+				<item desc="非交易申请类别" encrypt="0" id="261" length="64" name="FJYSQLB"/>
+				<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="期权行权后期货自动自动对冲" encrypt="0" id="633" length="64" name="QHZDC"/>
+				<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+				<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
 			</field>
 		</package>
 		<package desc="行权应答" funcid="6100" name="RspExecOrder">
 			<field desc="行权应答" name="RspExecOrder">
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-				<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+				<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
 			</field>
 		</package>
 		<package desc="行权撤单请求" funcid="6101" name="ReqCancelExecOrder">
 			<field desc="行权撤单请求" name="ReqCancelExecOrder">
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="席位号" id="161" length="64" name="XWH"/>
-				<item desc="下单席位" id="162" length="64" name="XDXW"/>
-				<item desc="股东号" id="52" length="64" name="GDH"/>
-				<item desc="扩展字段" id="44" length="64" name="KZZD"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+				<item desc="下单席位" encrypt="0" id="162" length="64" name="XDXW"/>
+				<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+				<item desc="扩展字段" encrypt="0" id="44" length="64" name="KZZD"/>
 			</field>
 		</package>
 		<package desc="行权撤单应答" funcid="6101" name="RspCancelExecOrder">
@@ -407,710 +422,721 @@
 		</package>
 		<package desc="询价请求" funcid="6075" name="ReqInquiry">
 			<field desc="询价请求" name="ReqInquiry">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="股东号" id="52" length="64" name="GDH"/>
-				<item desc="席位号" id="161" length="64" name="XWH"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+				<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
 			</field>
 		</package>
 		<package desc="询价应答" funcid="6075" name="RspInquiry">
 			<field desc="询价应答" name="RspInquiry">
-				<item desc="询价编号" id="634" length="64" name="XJBH"/>
+				<item desc="询价编号" encrypt="0" id="634" length="64" name="XJBH"/>
 			</field>
 		</package>
 		<package desc="查询期货手续费率请求" funcid="6078" name="ReqQryFutureCommissionRate">
 			<field desc="查询期货手续费率请求" name="QryFutureCommissionRate">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="市场类型" id="436" length="64" name="SCLX"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="市场类型" encrypt="0" id="436" length="64" name="SCLX"/>
 			</field>
 		</package>
 		<package desc="查询期货手续费率应答" funcid="6078" name="RspQryFutureCommissionRate">
 			<field desc="查询期货手续费率应答" name="FutureCommissionRate">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="开仓金额比例" id="747" length="64" name="KCJEBL"/>
-				<item desc="平仓金额比例" id="748" length="64" name="PCJEBL"/>
-				<item desc="平今金额比例" id="749" length="64" name="PJJEBL"/>
-				<item desc="开仓单位金额" id="750" length="64" name="KCDWJE"/>
-				<item desc="平仓单位金额" id="751" length="64" name="PCDWJE"/>
-				<item desc="平今单位金额" id="752" length="64" name="PJDWJE"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="开仓金额比例" encrypt="0" id="747" length="64" name="KCJEBL"/>
+				<item desc="平仓金额比例" encrypt="0" id="748" length="64" name="PCJEBL"/>
+				<item desc="平今金额比例" encrypt="0" id="749" length="64" name="PJJEBL"/>
+				<item desc="开仓单位金额" encrypt="0" id="750" length="64" name="KCDWJE"/>
+				<item desc="平仓单位金额" encrypt="0" id="751" length="64" name="PCDWJE"/>
+				<item desc="平今单位金额" encrypt="0" id="752" length="64" name="PJDWJE"/>
 			</field>
 		</package>
 		<package desc="查询期货保证金率请求" funcid="6079" name="ReqQryFutureMarginRate">
 			<field desc="查询期货保证金率请求" name="QryFutureMarginRate">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
 			</field>
 		</package>
 		<package desc="查询期货保证金率应答" funcid="6079" name="RspQryFutureMarginRate">
 			<field desc="查询期货保证金率应答" name="FutureMarginRate">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-				<item desc="开仓金额比例" id="747" length="64" name="KCJEBL"/>
-				<item desc="开仓单位金额" id="750" length="64" name="KCDWJE"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+				<item desc="开仓金额比例" encrypt="0" id="747" length="64" name="KCJEBL"/>
+				<item desc="开仓单位金额" encrypt="0" id="750" length="64" name="KCDWJE"/>
 			</field>
 		</package>
 		<package desc="查询银证转账流水请求" funcid="6205" name="ReqQryTransferMoney">
 			<field desc="查询银证转账流水" name="QryTransferMoney">
-				<item desc="流水序号" id="200" length="64" name="LSXH"/>
+				<item desc="流水序号" encrypt="0" id="200" length="64" name="LSXH"/>
 			</field>
 		</package>
 		<package desc="查询银证转账流水应答" funcid="6205" name="RspQryTransferMoney">
 			<field desc="银证转账流水" name="TransferMoney">
-				<item desc="流水序号" id="200" length="64" name="LSXH"/>
-				<item desc="转账金额" id="220" length="64" name="ZZJE"/>
-				<item desc="货币代码" id="56" length="64" name="HBDM"/>
-				<item desc="银证业务标识" id="206" length="64" name="YZYWBZ"/>
-				<item desc="银证业务状态" id="210" length="64" name="YZYWZT"/>
-				<item desc="转帐日期或申请日期" id="227" length="64" name="SQRQ"/>
-				<item desc="转帐时间或者申请时间" id="228" length="64" name="SQSJ"/>
-				<item desc="结果说明" id="226" length="64" name="JGSM"/>
+				<item desc="流水序号" encrypt="0" id="200" length="64" name="LSXH"/>
+				<item desc="转账金额" encrypt="0" id="220" length="64" name="ZZJE"/>
+				<item desc="货币代码" encrypt="0" id="56" length="64" name="HBDM"/>
+				<item desc="银证业务标识" encrypt="0" id="206" length="64" name="YZYWBZ"/>
+				<item desc="银证业务状态" encrypt="0" id="210" length="64" name="YZYWZT"/>
+				<item desc="转帐日期或申请日期" encrypt="0" id="227" length="64" name="SQRQ"/>
+				<item desc="转帐时间或者申请时间" encrypt="0" id="228" length="64" name="SQSJ"/>
+				<item desc="结果说明" encrypt="0" id="226" length="64" name="JGSM"/>
 			</field>
 		</package>
 		<package desc="查询成交增量请求" funcid="6016" name="ReqQryIncTrade">
 			<field desc="查询成交增量" name="QryIncTrade">
-				<item desc="柜台定位串" id="7011" length="64" name="GTDWC"/>
-				<item desc="请求行数" id="7014" length="64" name="QQHS"/>
-				<item desc="撤销标志" id="7012" length="64" name="CDBZ"/>
+				<item desc="柜台定位串" encrypt="0" id="7011" length="64" name="GTDWC"/>
+				<item desc="请求行数" encrypt="0" id="7014" length="64" name="QQHS"/>
+				<item desc="撤销标志" encrypt="0" id="7012" length="64" name="CDBZ"/>
 			</field>
 		</package>
 		<package desc="查询成交增量应答" funcid="6016" name="RspQryIncTrade">
 			<field desc="当日成交" name="TodayTrade">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="合约名称" id="64" length="64" name="HYDMMC"/>
-				<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-				<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="成交时间" id="116" length="64" name="CJSJ"/>
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="成交数量" id="113" length="64" name="CJSL"/>
-				<item desc="成交价格" id="114" length="64" name="CJJG"/>
-				<item desc="成交编号" id="66" length="64" name="CJBH"/>
-				<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-				<item desc="成交日期" id="173" length="64" name="CJRQ"/>
-				<item desc="合约类别" id="131" length="64" name="HYLB"/>
-				<item desc="柜台定位串" id="7011" length="64" name="GTDWC"/>
-				<item desc="成交类型" id="7013" length="64" name="CJLX"/>
-				<item desc="原委托号" id="830" length="64" name="YWTH"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="合约名称" encrypt="0" id="64" length="64" name="HYDMMC"/>
+				<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+				<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="成交时间" encrypt="0" id="116" length="64" name="CJSJ"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="成交数量" encrypt="0" id="113" length="64" name="CJSL"/>
+				<item desc="成交价格" encrypt="0" id="114" length="64" name="CJJG"/>
+				<item desc="成交编号" encrypt="0" id="66" length="64" name="CJBH"/>
+				<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+				<item desc="成交日期" encrypt="0" id="173" length="64" name="CJRQ"/>
+				<item desc="合约类别" encrypt="0" id="131" length="64" name="HYLB"/>
+				<item desc="柜台定位串" encrypt="0" id="7011" length="64" name="GTDWC"/>
+				<item desc="成交类型" encrypt="0" id="7013" length="64" name="CJLX"/>
+				<item desc="原委托号" encrypt="0" id="830" length="64" name="YWTH"/>
 			</field>
 		</package>
 		<package desc="查询委托增量请求" funcid="6020" name="ReqQryIncOrder">
 			<field desc="查询委托增量" name="QryIncOrder">
-				<item desc="柜台定位串" id="7011" length="64" name="GTDWC"/>
-				<item desc="请求行数" id="7014" length="64" name="QQHS"/>
-				<item desc="撤销标志" id="7012" length="64" name="CDBZ"/>
+				<item desc="柜台定位串" encrypt="0" id="7011" length="64" name="GTDWC"/>
+				<item desc="请求行数" encrypt="0" id="7014" length="64" name="QQHS"/>
+				<item desc="撤销标志" encrypt="0" id="7012" length="64" name="CDBZ"/>
 			</field>
 		</package>
 		<package desc="查询委托增量应答" funcid="6020" name="RspQryIncOrder">
 			<field desc="查询当日委托" name="TodayOrder">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="委托状态" id="156" length="64" name="WTZT"/>
-				<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-				<item desc="委托数量" id="130" length="64" name="WTSL"/>
-				<item desc="委托价格" id="129" length="64" name="WTJG"/>
-				<item desc="成交数量" id="113" length="64" name="CJSL"/>
-				<item desc="撤单数量" id="158" length="64" name="CDSL"/>
-				<item desc="委托时间" id="159" length="64" name="WTSJ"/>
-				<item desc="市价委托类别" id="127" length="64" name="SJWTLB"/>
-				<item desc="股东号" id="52" length="64" name="GDH"/>
-				<item desc="委托日期" id="160" length="64" name="WTRQ"/>
-				<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-				<item desc="备注信息" id="163" length="64" name="BZXX"/>
-				<item desc="价格类型" id="40" length="64" name="JGLB"/>
-				<item desc="有效期" id="41" length="64" name="YXQLX"/>
-				<item desc="成交量类型" id="42" length="64" name="CJLLX"/>
-				<item desc="最小成交量" id="43" length="64" name="ZXCJL"/>
-				<item desc="扩展字段" id="44" length="64" name="KZZD"/>
-				<item desc="触发条件" id="495" length="64" name="CFTJ"/>
-				<item desc="撤单时间" id="516" length="64" name="CDSJ"/>
-				<item desc="有效日期" id="315" length="64" name="YXRQ"/>
-				<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-				<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
-				<item desc="柜台定位串" id="7011" length="64" name="GTDWC"/>
-				<item desc="委托类型" id="994" length="64" name="WTLX"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="委托状态" encrypt="0" id="156" length="64" name="WTZT"/>
+				<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+				<item desc="委托数量" encrypt="0" id="130" length="64" name="WTSL"/>
+				<item desc="委托价格" encrypt="0" id="129" length="64" name="WTJG"/>
+				<item desc="成交数量" encrypt="0" id="113" length="64" name="CJSL"/>
+				<item desc="撤单数量" encrypt="0" id="158" length="64" name="CDSL"/>
+				<item desc="委托时间" encrypt="0" id="159" length="64" name="WTSJ"/>
+				<item desc="市价委托类别" encrypt="0" id="127" length="64" name="SJWTLB"/>
+				<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+				<item desc="委托日期" encrypt="0" id="160" length="64" name="WTRQ"/>
+				<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+				<item desc="备注信息" encrypt="0" id="163" length="64" name="BZXX"/>
+				<item desc="价格类型" encrypt="0" id="40" length="64" name="JGLB"/>
+				<item desc="有效期" encrypt="0" id="41" length="64" name="YXQLX"/>
+				<item desc="成交量类型" encrypt="0" id="42" length="64" name="CJLLX"/>
+				<item desc="最小成交量" encrypt="0" id="43" length="64" name="ZXCJL"/>
+				<item desc="扩展字段" encrypt="0" id="44" length="64" name="KZZD"/>
+				<item desc="触发条件" encrypt="0" id="495" length="64" name="CFTJ"/>
+				<item desc="撤单时间" encrypt="0" id="516" length="64" name="CDSJ"/>
+				<item desc="有效日期" encrypt="0" id="315" length="64" name="YXRQ"/>
+				<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+				<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
+				<item desc="柜台定位串" encrypt="0" id="7011" length="64" name="GTDWC"/>
+				<item desc="委托类型" encrypt="0" id="994" length="64" name="WTLX"/>
 			</field>
 		</package>
 		<package desc="查询备兑证券锁定或解锁数量请求" funcid="6104" name="ReqQryLockAvailable">
 			<field desc="查询备兑证券锁定或解锁数量" name="QryLockAvailable">
-				<item desc="席位号" id="161" length="64" name="XWH"/>
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="锁定方向" id="252" length="64" name="SDFX"/>
-				<item desc="股东号" id="52" length="64" name="GDH"/>
+				<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="锁定方向" encrypt="0" id="252" length="64" name="SDFX"/>
+				<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
 			</field>
 		</package>
 		<package desc="查询备兑证券锁定或解锁数量应答" funcid="6104" name="RspQryLockAvailable">
 			<field desc="备兑证券锁定或解锁数量" name="LockAvailable">
-				<item desc="可委托数量" id="250" length="64" name="KMSL"/>
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="锁定方向" id="252" length="64" name="SDFX"/>
+				<item desc="可委托数量" encrypt="0" id="250" length="64" name="KMSL"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="锁定方向" encrypt="0" id="252" length="64" name="SDFX"/>
 			</field>
 		</package>
 		<package desc="备兑证券锁定或解锁请求" funcid="6105" name="ReqLockSecurityOrder">
 			<field desc="备兑证券锁定或解锁请求" name="ReqLockSecurityOrder">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="委托数量" id="130" length="64" name="WTSL"/>
-				<item desc="股东号" id="52" length="64" name="GDH"/>
-				<item desc="席位号" id="161" length="64" name="XWH"/>
-				<item desc="锁定方向" id="252" length="64" name="SDFX"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="委托数量" encrypt="0" id="130" length="64" name="WTSL"/>
+				<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+				<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+				<item desc="锁定方向" encrypt="0" id="252" length="64" name="SDFX"/>
 			</field>
 		</package>
 		<package desc="备兑证券锁定或解锁应答" funcid="6105" name="RspLockSecurityOrder">
 			<field desc="备兑证券锁定或解锁应答" name="RspLockSecurityOrder">
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="委托时间" id="159" length="64" name="WTSJ"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="委托时间" encrypt="0" id="159" length="64" name="WTSJ"/>
 			</field>
 		</package>
 		<package desc="系统状态推送" funcid="56001" name="RtnSystemStatus">
 			<field desc="期货交易所状态" name="SystemStatus">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="系统状态" id="84" length="64" name="XTZT"/>
-				<item desc="交易子状态" id="7130" length="64" name="JYZZT"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="系统状态" encrypt="0" id="84" length="64" name="XTZT"/>
+				<item desc="交易子状态" encrypt="0" id="7130" length="64" name="JYZZT"/>
 			</field>
 		</package>
 		<package desc="委托推送" funcid="56005" name="RtnOrder">
 			<field desc="委托" name="Order">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="股东号" id="52" length="64" name="GDH"/>
-				<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-				<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="委托状态" id="156" length="64" name="WTZT"/>
-				<item desc="强平标志" id="354" length="64" name="QPBZ"/>
-				<item desc="委托时间" id="159" length="64" name="WTSJ"/>
-				<item desc="撤单时间" id="516" length="64" name="CDSJ"/>
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="委托系统号" id="120" length="64" name="WTXTH"/>
-				<item desc="委托数量" id="130" length="64" name="WTSL"/>
-				<item desc="成交数量" id="113" length="64" name="CJSL"/>
-				<item desc="未成交数量" id="684" length="64" name="WCJSL"/>
-				<item desc="委托日期" id="160" length="64" name="WTRQ"/>
-				<item desc="交易日期" id="248" length="64" name="JYRQ"/>
-				<item desc="委托价格" id="129" length="64" name="WTJG"/>
-				<item desc="组合类型" id="683" length="64" name="WTZHLX"/>
-				<item desc="价格类型" id="40" length="64" name="JGLB"/>
-				<item desc="有效期" id="41" length="64" name="YXQLX"/>
-				<item desc="成交量类型" id="42" length="64" name="CJLLX"/>
-				<item desc="最小成交量" id="43" length="64" name="ZXCJL"/>
-				<item desc="触发条件" id="495" length="64" name="CFTJ"/>
-				<item desc="扩展字段" id="44" length="64" name="KZZD"/>
-				<item desc="合约类别" id="131" length="64" name="HYLB"/>
-				<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-				<item desc="撤单数量" id="158" length="64" name="CDSL"/>
-				<item desc="备注信息" id="163" length="64" name="BZXX"/>
-				<item desc="市价委托类别" id="127" length="64" name="SJWTLB"/>
-				<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-				<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+				<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+				<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="委托状态" encrypt="0" id="156" length="64" name="WTZT"/>
+				<item desc="强平标志" encrypt="0" id="354" length="64" name="QPBZ"/>
+				<item desc="委托时间" encrypt="0" id="159" length="64" name="WTSJ"/>
+				<item desc="撤单时间" encrypt="0" id="516" length="64" name="CDSJ"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="委托系统号" encrypt="0" id="120" length="64" name="WTXTH"/>
+				<item desc="委托数量" encrypt="0" id="130" length="64" name="WTSL"/>
+				<item desc="成交数量" encrypt="0" id="113" length="64" name="CJSL"/>
+				<item desc="未成交数量" encrypt="0" id="684" length="64" name="WCJSL"/>
+				<item desc="委托日期" encrypt="0" id="160" length="64" name="WTRQ"/>
+				<item desc="交易日期" encrypt="0" id="248" length="64" name="JYRQ"/>
+				<item desc="委托价格" encrypt="0" id="129" length="64" name="WTJG"/>
+				<item desc="组合类型" encrypt="0" id="683" length="64" name="WTZHLX"/>
+				<item desc="价格类型" encrypt="0" id="40" length="64" name="JGLB"/>
+				<item desc="有效期" encrypt="0" id="41" length="64" name="YXQLX"/>
+				<item desc="成交量类型" encrypt="0" id="42" length="64" name="CJLLX"/>
+				<item desc="最小成交量" encrypt="0" id="43" length="64" name="ZXCJL"/>
+				<item desc="触发条件" encrypt="0" id="495" length="64" name="CFTJ"/>
+				<item desc="扩展字段" encrypt="0" id="44" length="64" name="KZZD"/>
+				<item desc="合约类别" encrypt="0" id="131" length="64" name="HYLB"/>
+				<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+				<item desc="撤单数量" encrypt="0" id="158" length="64" name="CDSL"/>
+				<item desc="备注信息" encrypt="0" id="163" length="64" name="BZXX"/>
+				<item desc="市价委托类别" encrypt="0" id="127" length="64" name="SJWTLB"/>
+				<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+				<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
 			</field>
 		</package>
 		<package desc="成交推送" funcid="56006" name="RtnTrade">
 			<field desc="成交" name="Trade">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="合约名称" id="64" length="64" name="HYDMMC"/>
-				<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-				<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="成交时间" id="116" length="64" name="CJSJ"/>
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="成交数量" id="113" length="64" name="CJSL"/>
-				<item desc="成交价格" id="114" length="64" name="CJJG"/>
-				<item desc="成交编号" id="66" length="64" name="CJBH"/>
-				<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-				<item desc="成交日期" id="173" length="64" name="CJRQ"/>
-				<item desc="合约类别" id="131" length="64" name="HYLB"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="合约名称" encrypt="0" id="64" length="64" name="HYDMMC"/>
+				<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+				<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="成交时间" encrypt="0" id="116" length="64" name="CJSJ"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="成交数量" encrypt="0" id="113" length="64" name="CJSL"/>
+				<item desc="成交价格" encrypt="0" id="114" length="64" name="CJJG"/>
+				<item desc="成交编号" encrypt="0" id="66" length="64" name="CJBH"/>
+				<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+				<item desc="成交日期" encrypt="0" id="173" length="64" name="CJRQ"/>
+				<item desc="合约类别" encrypt="0" id="131" length="64" name="HYLB"/>
 			</field>
 		</package>
 		<package desc="行权委托推送" funcid="56103" name="RtnExecOrder">
 			<field desc="查询行权应答" name="ExecOrder">
-				<item desc="市场代码" id="54" length="64" name="SCDM"/>
-				<item desc="委托编号" id="65" length="64" name="WTBH"/>
-				<item desc="合约代码" id="63" length="64" name="HYDM"/>
-				<item desc="委托状态" id="156" length="64" name="WTZT"/>
-				<item desc="委托数量" id="130" length="64" name="WTSL"/>
-				<item desc="委托时间" id="159" length="64" name="WTSJ"/>
-				<item desc="席位号" id="161" length="64" name="XWH"/>
-				<item desc="备注信息" id="163" length="64" name="BZXX"/>
-				<item desc="非交易申请类别" id="261" length="64" name="FJYSQLB"/>
-				<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-				<item desc="扩展字段" id="44" length="64" name="KZZD"/>
-				<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-				<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
+				<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+				<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+				<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+				<item desc="委托状态" encrypt="0" id="156" length="64" name="WTZT"/>
+				<item desc="委托数量" encrypt="0" id="130" length="64" name="WTSL"/>
+				<item desc="委托时间" encrypt="0" id="159" length="64" name="WTSJ"/>
+				<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+				<item desc="备注信息" encrypt="0" id="163" length="64" name="BZXX"/>
+				<item desc="非交易申请类别" encrypt="0" id="261" length="64" name="FJYSQLB"/>
+				<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+				<item desc="扩展字段" encrypt="0" id="44" length="64" name="KZZD"/>
+				<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+				<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
 			</field>
 		</package>
 	</packages>
 	<fields>
 		<field desc="备兑证券锁定或解锁应答" name="RspLockSecurityOrder">
-			<item desc="委托编号" id="65" length="64" name="WTBH"/>
-			<item desc="委托时间" id="159" length="64" name="WTSJ"/>
+			<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+			<item desc="委托时间" encrypt="0" id="159" length="64" name="WTSJ"/>
 		</field>
 		<field desc="查询期货手续费率请求" name="QryFutureCommissionRate">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="市场类型" id="436" length="64" name="SCLX"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="市场类型" encrypt="0" id="436" length="64" name="SCLX"/>
 		</field>
 		<field desc="应答错误" name="RspError">
-			<item desc="错误代码" id="1" length="64" name="CODE"/>
-			<item desc="错误信息" id="2" length="512" name="MSG"/>
+			<item desc="错误代码" encrypt="0" id="1" length="64" name="CODE"/>
+			<item desc="错误信息" encrypt="0" id="2" length="512" name="MSG"/>
 		</field>
 		<field desc="查询期货手续费率应答" name="FutureCommissionRate">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-			<item desc="开仓金额比例" id="747" length="64" name="KCJEBL"/>
-			<item desc="平仓金额比例" id="748" length="64" name="PCJEBL"/>
-			<item desc="平今金额比例" id="749" length="64" name="PJJEBL"/>
-			<item desc="开仓单位金额" id="750" length="64" name="KCDWJE"/>
-			<item desc="平仓单位金额" id="751" length="64" name="PCDWJE"/>
-			<item desc="平今单位金额" id="752" length="64" name="PJDWJE"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+			<item desc="开仓金额比例" encrypt="0" id="747" length="64" name="KCJEBL"/>
+			<item desc="平仓金额比例" encrypt="0" id="748" length="64" name="PCJEBL"/>
+			<item desc="平今金额比例" encrypt="0" id="749" length="64" name="PJJEBL"/>
+			<item desc="开仓单位金额" encrypt="0" id="750" length="64" name="KCDWJE"/>
+			<item desc="平仓单位金额" encrypt="0" id="751" length="64" name="PCDWJE"/>
+			<item desc="平今单位金额" encrypt="0" id="752" length="64" name="PJDWJE"/>
 		</field>
 		<field desc="查询席位请求" name="QryHolderAccount"/>
 		<field desc="备兑证券锁定或解锁请求" name="ReqLockSecurityOrder">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="委托数量" id="130" length="64" name="WTSL"/>
-			<item desc="股东号" id="52" length="64" name="GDH"/>
-			<item desc="席位号" id="161" length="64" name="XWH"/>
-			<item desc="锁定方向" id="252" length="64" name="SDFX"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="委托数量" encrypt="0" id="130" length="64" name="WTSL"/>
+			<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+			<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+			<item desc="锁定方向" encrypt="0" id="252" length="64" name="SDFX"/>
 		</field>
 		<field desc="查询席位应答" name="HolderAccount">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="市场名称" id="55" length="64" name="SCMC"/>
-			<item desc="股东号" id="52" length="64" name="GDH"/>
-			<item desc="主帐号标志" id="168" length="64" name="ZZHBZ"/>
-			<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-			<item desc="席位号" id="161" length="64" name="XWH"/>
-			<item desc="市场信息" id="45" length="64" name="SCXX"/>
-			<item desc="外盘标志" id="922" length="64" name="WPBZ"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="市场名称" encrypt="0" id="55" length="64" name="SCMC"/>
+			<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+			<item desc="主帐号标志" encrypt="0" id="168" length="64" name="ZZHBZ"/>
+			<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+			<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+			<item desc="市场信息" encrypt="0" id="45" length="64" name="SCXX"/>
+			<item desc="外盘标志" encrypt="0" id="922" length="64" name="WPBZ"/>
 		</field>
 		<field desc="委托撤单请求" name="ReqCancelOrder">
-			<item desc="委托编号" id="65" length="64" name="WTBH"/>
-			<item desc="股东号" id="52" length="64" name="GDH"/>
-			<item desc="席位号" id="161" length="64" name="XWH"/>
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="扩展字段" id="44" length="64" name="KZZD"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="委托日期" id="160" length="64" name="WTRQ"/>
-			<item desc="下单席位" id="162" length="64" name="XDXW"/>
+			<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+			<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+			<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="扩展字段" encrypt="0" id="44" length="64" name="KZZD"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="委托日期" encrypt="0" id="160" length="64" name="WTRQ"/>
+			<item desc="下单席位" encrypt="0" id="162" length="64" name="XDXW"/>
 		</field>
 		<field desc="合约" name="Instrument">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="合约乘数" id="244" length="64" name="HYCS"/>
-			<item desc="最小变动价位" id="245" length="64" name="ZXBDJW"/>
-			<item desc="合约名称" id="64" length="64" name="HYDMMC"/>
-			<item desc="限价单最大下单量" id="246" length="64" name="WTSX"/>
-			<item desc="市价单最大下单量" id="247" length="64" name="ZCSX"/>
-			<item desc="单位保证金" id="280" length="64" name="DWBZJ"/>
-			<item desc="市场类型" id="436" length="64" name="SCLX"/>
-			<item desc="到期日" id="754" length="64" name="DQR"/>
-			<item desc="单边保证金优惠" id="756" length="64" name="DBYH"/>
-			<item desc="品种代码" id="364" length="64" name="PZDM"/>
-			<item desc="自动净仓标志" id="999" length="64" name="ZDJC"/>
-			<item desc="合约类别" id="131" length="64" name="HYLB"/>
-			<item desc="标的代码" id="121" length="64" name="BDDM"/>
-			<item desc="标的名称" id="122" length="64" name="BDMC"/>
-			<item desc="行权价格" id="269" length="64" name="XQJG"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="合约乘数" encrypt="0" id="244" length="64" name="HYCS"/>
+			<item desc="最小变动价位" encrypt="0" id="245" length="64" name="ZXBDJW"/>
+			<item desc="合约名称" encrypt="0" id="64" length="64" name="HYDMMC"/>
+			<item desc="限价单最大下单量" encrypt="0" id="246" length="64" name="WTSX"/>
+			<item desc="市价单最大下单量" encrypt="0" id="247" length="64" name="ZCSX"/>
+			<item desc="单位保证金" encrypt="0" id="280" length="64" name="DWBZJ"/>
+			<item desc="市场类型" encrypt="0" id="436" length="64" name="SCLX"/>
+			<item desc="到期日" encrypt="0" id="754" length="64" name="DQR"/>
+			<item desc="单边保证金优惠" encrypt="0" id="756" length="64" name="DBYH"/>
+			<item desc="品种代码" encrypt="0" id="364" length="64" name="PZDM"/>
+			<item desc="自动净仓标志" encrypt="0" id="999" length="64" name="ZDJC"/>
+			<item desc="合约类别" encrypt="0" id="131" length="64" name="HYLB"/>
+			<item desc="标的代码" encrypt="0" id="121" length="64" name="BDDM"/>
+			<item desc="标的名称" encrypt="0" id="122" length="64" name="BDMC"/>
+			<item desc="行权价格" encrypt="0" id="269" length="64" name="XQJG"/>
 		</field>
 		<field desc="询价应答" name="RspInquiry">
-			<item desc="询价编号" id="634" length="64" name="XJBH"/>
+			<item desc="询价编号" encrypt="0" id="634" length="64" name="XJBH"/>
 		</field>
 		<field desc="登录回报" name="RspLogin">
-			<item desc="资金帐号" id="51" length="64" name="ZJZH"/>
-			<item desc="当前交易日" id="75" length="64" name="TRADE_DATE"/>
-			<item desc="上一交易日" id="76" length="64" name="LAST_TRADE_DATE"/>
-			<item desc="登录标志" id="86" length="64" name="LOGIN_FLAG"/>
-			<item desc="修改密码提示信息" id="87" length="64" name="XGMMTS"/>
-			<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
-			<item desc="安全密钥" id="7052" length="256" name="AQMY"/>
+			<item desc="资金帐号" encrypt="0" id="51" length="64" name="ZJZH"/>
+			<item desc="当前交易日" encrypt="0" id="75" length="64" name="TRADE_DATE"/>
+			<item desc="上一交易日" encrypt="0" id="76" length="64" name="LAST_TRADE_DATE"/>
+			<item desc="登录标志" encrypt="0" id="86" length="64" name="LOGIN_FLAG"/>
+			<item desc="修改密码提示信息" encrypt="0" id="87" length="64" name="XGMMTS"/>
+			<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
+			<item desc="安全密钥" encrypt="0" id="7052" length="256" name="AQMY"/>
 		</field>
 		<field desc="资金" name="Capital">
-			<item desc="资金帐号" id="51" length="64" name="ZJZH"/>
-			<item desc="货币代码" id="56" length="64" name="HBDM"/>
-			<item desc="期初余额" id="92" length="64" name="QCYE"/>
-			<item desc="可用资金" id="93" length="64" name="KYZJ"/>
-			<item desc="总资产(当前权益)" id="97" length="64" name="ZZC"/>
-			<item desc="平仓盯市盈亏" id="104" length="64" name="PCDSYK"/>
-			<item desc="手续费" id="182" length="64" name="SXF"/>
-			<item desc="现金资产" id="110" length="64" name="XJZC"/>
-			<item desc="出入金" id="442" length="64" name="CRJ"/>
+			<item desc="资金帐号" encrypt="0" id="51" length="64" name="ZJZH"/>
+			<item desc="货币代码" encrypt="0" id="56" length="64" name="HBDM"/>
+			<item desc="期初余额" encrypt="0" id="92" length="64" name="QCYE"/>
+			<item desc="可用资金" encrypt="0" id="93" length="64" name="KYZJ"/>
+			<item desc="总资产(当前权益)" encrypt="0" id="97" length="64" name="ZZC"/>
+			<item desc="平仓盯市盈亏" encrypt="0" id="104" length="64" name="PCDSYK"/>
+			<item desc="手续费" encrypt="0" id="182" length="64" name="SXF"/>
+			<item desc="现金资产" encrypt="0" id="110" length="64" name="XJZC"/>
+			<item desc="出入金" encrypt="0" id="442" length="64" name="CRJ"/>
 		</field>
 		<field desc="行权应答" name="RspExecOrder">
-			<item desc="委托编号" id="65" length="64" name="WTBH"/>
-			<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-			<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
+			<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+			<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+			<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
 		</field>
 		<field desc="查询当日行权应答" name="TodayExecOrder">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="委托编号" id="65" length="64" name="WTBH"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="委托状态" id="156" length="64" name="WTZT"/>
-			<item desc="委托价格" id="129" length="64" name="WTJG"/>
-			<item desc="委托数量" id="130" length="64" name="WTSL"/>
-			<item desc="委托时间" id="159" length="64" name="WTSJ"/>
-			<item desc="申报时间" id="263" length="64" name="SBSJ"/>
-			<item desc="席位号" id="161" length="64" name="XWH"/>
-			<item desc="下单席位" id="162" length="64" name="XDXW"/>
-			<item desc="非交易申请类别" id="261" length="64" name="FJYSQLB"/>
-			<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-			<item desc="扩展字段" id="44" length="64" name="KZZD"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="委托状态" encrypt="0" id="156" length="64" name="WTZT"/>
+			<item desc="委托价格" encrypt="0" id="129" length="64" name="WTJG"/>
+			<item desc="委托数量" encrypt="0" id="130" length="64" name="WTSL"/>
+			<item desc="委托时间" encrypt="0" id="159" length="64" name="WTSJ"/>
+			<item desc="申报时间" encrypt="0" id="263" length="64" name="SBSJ"/>
+			<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+			<item desc="下单席位" encrypt="0" id="162" length="64" name="XDXW"/>
+			<item desc="非交易申请类别" encrypt="0" id="261" length="64" name="FJYSQLB"/>
+			<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+			<item desc="扩展字段" encrypt="0" id="44" length="64" name="KZZD"/>
+		</field>
+		<field desc="查询当日委托" name="TodayOrder">
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="委托状态" encrypt="0" id="156" length="64" name="WTZT"/>
+			<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+			<item desc="委托数量" encrypt="0" id="130" length="64" name="WTSL"/>
+			<item desc="委托价格" encrypt="0" id="129" length="64" name="WTJG"/>
+			<item desc="成交数量" encrypt="0" id="113" length="64" name="CJSL"/>
+			<item desc="撤单数量" encrypt="0" id="158" length="64" name="CDSL"/>
+			<item desc="委托时间" encrypt="0" id="159" length="64" name="WTSJ"/>
+			<item desc="市价委托类别" encrypt="0" id="127" length="64" name="SJWTLB"/>
+			<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+			<item desc="委托日期" encrypt="0" id="160" length="64" name="WTRQ"/>
+			<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+			<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+			<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+			<item desc="备注信息" encrypt="0" id="163" length="64" name="BZXX"/>
+			<item desc="价格类型" encrypt="0" id="40" length="64" name="JGLB"/>
+			<item desc="有效期" encrypt="0" id="41" length="64" name="YXQLX"/>
+			<item desc="成交量类型" encrypt="0" id="42" length="64" name="CJLLX"/>
+			<item desc="最小成交量" encrypt="0" id="43" length="64" name="ZXCJL"/>
+			<item desc="扩展字段" encrypt="0" id="44" length="64" name="KZZD"/>
+			<item desc="触发条件" encrypt="0" id="495" length="64" name="CFTJ"/>
+			<item desc="撤单时间" encrypt="0" id="516" length="64" name="CDSJ"/>
+			<item desc="有效日期" encrypt="0" id="315" length="64" name="YXRQ"/>
+			<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+			<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
+			<item desc="柜台定位串" encrypt="0" id="7011" length="64" name="GTDWC"/>
+			<item desc="委托类型" encrypt="0" id="994" length="64" name="WTLX"/>
 		</field>
 		<field desc="查询行权应答" name="ExecOrder">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="委托编号" id="65" length="64" name="WTBH"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="委托状态" id="156" length="64" name="WTZT"/>
-			<item desc="委托数量" id="130" length="64" name="WTSL"/>
-			<item desc="委托时间" id="159" length="64" name="WTSJ"/>
-			<item desc="席位号" id="161" length="64" name="XWH"/>
-			<item desc="备注信息" id="163" length="64" name="BZXX"/>
-			<item desc="非交易申请类别" id="261" length="64" name="FJYSQLB"/>
-			<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-			<item desc="扩展字段" id="44" length="64" name="KZZD"/>
-			<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-			<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="委托状态" encrypt="0" id="156" length="64" name="WTZT"/>
+			<item desc="委托数量" encrypt="0" id="130" length="64" name="WTSL"/>
+			<item desc="委托时间" encrypt="0" id="159" length="64" name="WTSJ"/>
+			<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+			<item desc="备注信息" encrypt="0" id="163" length="64" name="BZXX"/>
+			<item desc="非交易申请类别" encrypt="0" id="261" length="64" name="FJYSQLB"/>
+			<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+			<item desc="扩展字段" encrypt="0" id="44" length="64" name="KZZD"/>
+			<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+			<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
 		</field>
 		<field desc="询价请求" name="ReqInquiry">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="股东号" id="52" length="64" name="GDH"/>
-			<item desc="席位号" id="161" length="64" name="XWH"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+			<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
 		</field>
 		<field desc="委托应答" name="RspInsertOrder">
-			<item desc="委托编号" id="65" length="64" name="WTBH"/>
-			<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-			<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
+			<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+			<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+			<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
 		</field>
 		<field desc="确认结算单应答" name="RspConfirmSettlement"/>
 		<field desc="行权撤单请求" name="ReqCancelExecOrder">
-			<item desc="委托编号" id="65" length="64" name="WTBH"/>
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="席位号" id="161" length="64" name="XWH"/>
-			<item desc="下单席位" id="162" length="64" name="XDXW"/>
-			<item desc="股东号" id="52" length="64" name="GDH"/>
-			<item desc="扩展字段" id="44" length="64" name="KZZD"/>
+			<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+			<item desc="下单席位" encrypt="0" id="162" length="64" name="XDXW"/>
+			<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+			<item desc="扩展字段" encrypt="0" id="44" length="64" name="KZZD"/>
 		</field>
 		<field desc="查询期货交易所状态请求" name="QrySystemStatus">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
 		</field>
 		<field desc="委托" name="Order">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="股东号" id="52" length="64" name="GDH"/>
-			<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-			<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-			<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-			<item desc="委托状态" id="156" length="64" name="WTZT"/>
-			<item desc="强平标志" id="354" length="64" name="QPBZ"/>
-			<item desc="委托时间" id="159" length="64" name="WTSJ"/>
-			<item desc="撤单时间" id="516" length="64" name="CDSJ"/>
-			<item desc="委托编号" id="65" length="64" name="WTBH"/>
-			<item desc="委托系统号" id="120" length="64" name="WTXTH"/>
-			<item desc="委托数量" id="130" length="64" name="WTSL"/>
-			<item desc="成交数量" id="113" length="64" name="CJSL"/>
-			<item desc="未成交数量" id="684" length="64" name="WCJSL"/>
-			<item desc="委托日期" id="160" length="64" name="WTRQ"/>
-			<item desc="交易日期" id="248" length="64" name="JYRQ"/>
-			<item desc="委托价格" id="129" length="64" name="WTJG"/>
-			<item desc="组合类型" id="683" length="64" name="WTZHLX"/>
-			<item desc="价格类型" id="40" length="64" name="JGLB"/>
-			<item desc="有效期" id="41" length="64" name="YXQLX"/>
-			<item desc="成交量类型" id="42" length="64" name="CJLLX"/>
-			<item desc="最小成交量" id="43" length="64" name="ZXCJL"/>
-			<item desc="触发条件" id="495" length="64" name="CFTJ"/>
-			<item desc="扩展字段" id="44" length="64" name="KZZD"/>
-			<item desc="合约类别" id="131" length="64" name="HYLB"/>
-			<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-			<item desc="撤单数量" id="158" length="64" name="CDSL"/>
-			<item desc="备注信息" id="163" length="64" name="BZXX"/>
-			<item desc="市价委托类别" id="127" length="64" name="SJWTLB"/>
-			<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-			<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+			<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+			<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+			<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+			<item desc="委托状态" encrypt="0" id="156" length="64" name="WTZT"/>
+			<item desc="强平标志" encrypt="0" id="354" length="64" name="QPBZ"/>
+			<item desc="委托时间" encrypt="0" id="159" length="64" name="WTSJ"/>
+			<item desc="撤单时间" encrypt="0" id="516" length="64" name="CDSJ"/>
+			<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+			<item desc="委托系统号" encrypt="0" id="120" length="64" name="WTXTH"/>
+			<item desc="委托数量" encrypt="0" id="130" length="64" name="WTSL"/>
+			<item desc="成交数量" encrypt="0" id="113" length="64" name="CJSL"/>
+			<item desc="未成交数量" encrypt="0" id="684" length="64" name="WCJSL"/>
+			<item desc="委托日期" encrypt="0" id="160" length="64" name="WTRQ"/>
+			<item desc="交易日期" encrypt="0" id="248" length="64" name="JYRQ"/>
+			<item desc="委托价格" encrypt="0" id="129" length="64" name="WTJG"/>
+			<item desc="组合类型" encrypt="0" id="683" length="64" name="WTZHLX"/>
+			<item desc="价格类型" encrypt="0" id="40" length="64" name="JGLB"/>
+			<item desc="有效期" encrypt="0" id="41" length="64" name="YXQLX"/>
+			<item desc="成交量类型" encrypt="0" id="42" length="64" name="CJLLX"/>
+			<item desc="最小成交量" encrypt="0" id="43" length="64" name="ZXCJL"/>
+			<item desc="触发条件" encrypt="0" id="495" length="64" name="CFTJ"/>
+			<item desc="扩展字段" encrypt="0" id="44" length="64" name="KZZD"/>
+			<item desc="合约类别" encrypt="0" id="131" length="64" name="HYLB"/>
+			<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+			<item desc="撤单数量" encrypt="0" id="158" length="64" name="CDSL"/>
+			<item desc="备注信息" encrypt="0" id="163" length="64" name="BZXX"/>
+			<item desc="市价委托类别" encrypt="0" id="127" length="64" name="SJWTLB"/>
+			<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+			<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
 		</field>
 		<field desc="行权撤单应答" name="RspCancelExecOrder"/>
 		<field desc="查询持仓" name="QryPosition">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="查询标志" id="979" length="64" name="CXBZ"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="查询标志" encrypt="0" id="979" length="64" name="CXBZ"/>
 		</field>
 		<field desc="委托请求" name="ReqInsertOrder">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-			<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-			<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-			<item desc="委托数量" id="130" length="64" name="WTSL"/>
-			<item desc="委托价格" id="129" length="64" name="WTJG"/>
-			<item desc="股东号" id="52" length="64" name="GDH"/>
-			<item desc="席位号" id="161" length="64" name="XWH"/>
-			<item desc="市价委托类别" id="127" length="64" name="SJWTLB"/>
-			<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-			<item desc="价格类型" id="40" length="64" name="JGLB"/>
-			<item desc="有效期" id="41" length="64" name="YXQLX"/>
-			<item desc="成交量类型" id="42" length="64" name="CJLLX"/>
-			<item desc="最小成交量" id="43" length="64" name="ZXCJL"/>
-			<item desc="触发条件" id="495" length="64" name="CFTJ"/>
-			<item desc="组合类型" id="683" length="64" name="WTZHLX"/>
-			<item desc="有效日期" id="315" length="64" name="YXRQ"/>
-			<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-			<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+			<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+			<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+			<item desc="委托数量" encrypt="0" id="130" length="64" name="WTSL"/>
+			<item desc="委托价格" encrypt="0" id="129" length="64" name="WTJG"/>
+			<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+			<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+			<item desc="市价委托类别" encrypt="0" id="127" length="64" name="SJWTLB"/>
+			<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+			<item desc="价格类型" encrypt="0" id="40" length="64" name="JGLB"/>
+			<item desc="有效期" encrypt="0" id="41" length="64" name="YXQLX"/>
+			<item desc="成交量类型" encrypt="0" id="42" length="64" name="CJLLX"/>
+			<item desc="最小成交量" encrypt="0" id="43" length="64" name="ZXCJL"/>
+			<item desc="触发条件" encrypt="0" id="495" length="64" name="CFTJ"/>
+			<item desc="组合类型" encrypt="0" id="683" length="64" name="WTZHLX"/>
+			<item desc="有效日期" encrypt="0" id="315" length="64" name="YXRQ"/>
+			<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+			<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
 		</field>
 		<field desc="期货交易所状态" name="SystemStatus">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="系统状态" id="84" length="64" name="XTZT"/>
-			<item desc="交易子状态" id="7130" length="64" name="JYZZT"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="系统状态" encrypt="0" id="84" length="64" name="XTZT"/>
+			<item desc="交易子状态" encrypt="0" id="7130" length="64" name="JYZZT"/>
 		</field>
 		<field desc="登录请求" name="ReqLogin">
-			<item desc="营业部代码" id="62" length="64" name="YYBDM"/>
-			<item desc="券商代码" id="61" length="64" name="QSDM"/>
-			<item desc="硬盘编号" id="70" length="64" name="YPBH"/>
-			<item desc="客户端本机IP地址" id="71" length="64" name="LOCAL_IP"/>
-			<item desc="客户端MAC地址" id="72" length="64" name="LOCAL_MAC"/>
-			<item desc="客户端版本号" id="73" length="64" name="VERSION"/>
-			<item desc="登录类别" id="67" length="64" name="DLLB"/>
-			<item desc="动态密码" id="69" length="64" name="DTMM"/>
-			<item desc="动态密码类别" id="68" length="64" name="DTMMLB"/>
-			<item desc="帐号类别" id="53" length="64" name="ZHLB"/>
-			<item desc="登录帐号" id="249" length="64" name="DLZH"/>
-			<item desc="获取短信口令标志" id="355" length="64" name="HQDXKL"/>
-			<item desc="核心认证类别" id="349" length="64" name="HXRZ"/>
-			<item desc="核心认证密码" id="350" length="64" name="HXMM"/>
-			<item desc="CPU" id="351" length="64" name="CPU"/>
-			<item desc="主板日期" id="352" length="64" name="ZBRQ"/>
-			<item desc="客户端唯一识别码" id="445" length="64" name="UNIQUE_ID"/>
-			<item desc="硬盘分区" id="485" length="64" name="YPFQ"/>
-			<item desc="计算机名" id="486" length="64" name="JSJM"/>
-			<item desc="期货所用的BrokerID" id="444" length="64" name="BROKER_ID"/>
-			<item desc="产品" id="254" length="64" name="CP"/>
-			<item desc="平台" id="255" length="64" name="PT"/>
-			<item desc="手机号码" id="281" length="64" name="SJHM"/>
-			<item desc="核心帐号" id="896" length="64" name="HXZH"/>
-			<item desc="指纹数据" id="914" length="64" name="ZWSJ"/>
-			<item desc="手机的IMSI" id="1000" length="64" name="IMSI"/>
-			<item desc="穿透式监管终端硬件信息" id="2067" length="3000" name="LOCAL_INFO"/>
-			<item desc="穿透式监管异常标志" id="7040" length="16" name="YCBS"/>
-			<item desc="穿透式监管信息完整度" id="7041" length="2048" name="XXWZD"/>
-			<item desc="穿透式密钥版本" id="7042" length="1024" name="CTSMYBB"/>
-			<item desc="穿透式密钥版本" id="7053" length="64" name="SQM"/>
-			<item desc="穿透式版本" id="7054" length="128" name="CTSBB"/>
-			<item desc="终端APPID" id="7058" length="64" name="APPID"/>
+			<item desc="营业部代码" encrypt="0" id="62" length="64" name="YYBDM"/>
+			<item desc="券商代码" encrypt="0" id="61" length="64" name="QSDM"/>
+			<item desc="硬盘编号" encrypt="0" id="70" length="64" name="YPBH"/>
+			<item desc="客户端本机IP地址" encrypt="0" id="71" length="64" name="LOCAL_IP"/>
+			<item desc="客户端MAC地址" encrypt="0" id="72" length="64" name="LOCAL_MAC"/>
+			<item desc="客户端版本号" encrypt="0" id="73" length="64" name="VERSION"/>
+			<item desc="登录类别" encrypt="0" id="67" length="64" name="DLLB"/>
+			<item desc="动态密码" encrypt="1" id="69" length="64" name="DTMM"/>
+			<item desc="动态密码类别" encrypt="0" id="68" length="64" name="DTMMLB"/>
+			<item desc="帐号类别" encrypt="0" id="53" length="64" name="ZHLB"/>
+			<item desc="登录帐号" encrypt="0" id="249" length="64" name="DLZH"/>
+			<item desc="获取短信口令标志" encrypt="0" id="355" length="64" name="HQDXKL"/>
+			<item desc="核心认证类别" encrypt="0" id="349" length="64" name="HXRZ"/>
+			<item desc="核心认证密码" encrypt="1" id="350" length="64" name="HXMM"/>
+			<item desc="CPU" encrypt="0" id="351" length="64" name="CPU"/>
+			<item desc="主板日期" encrypt="0" id="352" length="64" name="ZBRQ"/>
+			<item desc="客户端唯一识别码" encrypt="0" id="445" length="64" name="UNIQUE_ID"/>
+			<item desc="硬盘分区" encrypt="0" id="485" length="64" name="YPFQ"/>
+			<item desc="计算机名" encrypt="0" id="486" length="64" name="JSJM"/>
+			<item desc="期货所用的BrokerID" encrypt="0" id="444" length="64" name="BROKER_ID"/>
+			<item desc="产品" encrypt="0" id="254" length="64" name="CP"/>
+			<item desc="平台" encrypt="0" id="255" length="64" name="PT"/>
+			<item desc="手机号码" encrypt="0" id="281" length="64" name="SJHM"/>
+			<item desc="核心帐号" encrypt="0" id="896" length="64" name="HXZH"/>
+			<item desc="指纹数据" encrypt="0" id="914" length="64" name="ZWSJ"/>
+			<item desc="手机的IMSI" encrypt="0" id="1000" length="64" name="IMSI"/>
+			<item desc="穿透式监管终端硬件信息" encrypt="0" id="2067" length="3000" name="LOCAL_INFO"/>
+			<item desc="穿透式监管异常标志" encrypt="0" id="7040" length="16" name="YCBS"/>
+			<item desc="穿透式监管信息完整度" encrypt="0" id="7041" length="2048" name="XXWZD"/>
+			<item desc="穿透式密钥版本" encrypt="0" id="7042" length="1024" name="CTSMYBB"/>
+			<item desc="穿透式密钥版本" encrypt="0" id="7053" length="64" name="SQM"/>
+			<item desc="穿透式版本" encrypt="0" id="7054" length="128" name="CTSBB"/>
+			<item desc="终端APPID" encrypt="0" id="7058" length="64" name="APPID"/>
 		</field>
 		<field desc="查询持仓明细请求" name="QryPositionDetail">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
 		</field>
 		<field desc="客户端校验请求" name="ReqSecurityVerity">
-			<item desc="客户端密钥" id="2066" length="2048" name="MYKL"/>
+			<item desc="客户端密钥" encrypt="0" id="2066" length="2048" name="MYKL"/>
 		</field>
 		<field desc="确认结算单请求" name="ReqConfirmSettlement">
-			<item desc="交易日期" id="248" length="64" name="JYRQ"/>
+			<item desc="交易日期" encrypt="0" id="248" length="64" name="JYRQ"/>
 		</field>
 		<field desc="查询当日行权请求" name="QryTodayExecOrder"/>
 		<field desc="查询资金" name="QryCapital">
-			<item desc="货币代码" id="56" length="64" name="HBDM"/>
-			<item desc="查询可取资金" id="347" length="64" name="KQBZ"/>
+			<item desc="货币代码" encrypt="0" id="56" length="64" name="HBDM"/>
+			<item desc="查询可取资金" encrypt="0" id="347" length="64" name="KQBZ"/>
 		</field>
 		<field desc="查询期货保证金率应答" name="FutureMarginRate">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-			<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-			<item desc="开仓金额比例" id="747" length="64" name="KCJEBL"/>
-			<item desc="开仓单位金额" id="750" length="64" name="KCDWJE"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+			<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+			<item desc="开仓金额比例" encrypt="0" id="747" length="64" name="KCJEBL"/>
+			<item desc="开仓单位金额" encrypt="0" id="750" length="64" name="KCDWJE"/>
 		</field>
 		<field desc="查询成交增量" name="QryIncTrade">
-			<item desc="柜台定位串" id="7011" length="64" name="GTDWC"/>
-			<item desc="请求行数" id="7014" length="64" name="QQHS"/>
-			<item desc="撤销标志" id="7012" length="64" name="CDBZ"/>
+			<item desc="柜台定位串" encrypt="0" id="7011" length="64" name="GTDWC"/>
+			<item desc="请求行数" encrypt="0" id="7014" length="64" name="QQHS"/>
+			<item desc="撤销标志" encrypt="0" id="7012" length="64" name="CDBZ"/>
 		</field>
 		<field desc="查询合约" name="QryInstrument">
-			<item desc="市场列表" id="689" length="64" name="SCLB"/>
+			<item desc="市场列表" encrypt="0" id="689" length="64" name="SCLB"/>
 		</field>
 		<field desc="持仓" name="Position">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="当前数量" id="135" length="64" name="DQSL"/>
-			<item desc="买入均价" id="136" length="64" name="MRJJ"/>
-			<item desc="成本价" id="139" length="64" name="CBJ"/>
-			<item desc="股东号" id="52" length="64" name="GDH"/>
-			<item desc="货币代码" id="56" length="64" name="HBDM"/>
-			<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-			<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-			<item desc="投保标志" id="119" length="64" name="TBBZ"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="当前数量" encrypt="0" id="135" length="64" name="DQSL"/>
+			<item desc="买入均价" encrypt="0" id="136" length="64" name="MRJJ"/>
+			<item desc="成本价" encrypt="0" id="139" length="64" name="CBJ"/>
+			<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+			<item desc="货币代码" encrypt="0" id="56" length="64" name="HBDM"/>
+			<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+			<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+			<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
 		</field>
 		<field desc="查询当日成交" name="QryTodayTrade">
-			<item desc="委托编号" id="65" length="64" name="WTBH"/>
-			<item desc="成交编号" id="66" length="64" name="CJBH"/>
-			<item desc="撤销标志" id="7012" length="64" name="CDBZ"/>
+			<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+			<item desc="成交编号" encrypt="0" id="66" length="64" name="CJBH"/>
+			<item desc="撤销标志" encrypt="0" id="7012" length="64" name="CDBZ"/>
 		</field>
 		<field desc="当日成交" name="TodayTrade">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="合约名称" id="64" length="64" name="HYDMMC"/>
-			<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-			<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-			<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-			<item desc="成交时间" id="116" length="64" name="CJSJ"/>
-			<item desc="委托编号" id="65" length="64" name="WTBH"/>
-			<item desc="成交数量" id="113" length="64" name="CJSL"/>
-			<item desc="成交价格" id="114" length="64" name="CJJG"/>
-			<item desc="成交编号" id="66" length="64" name="CJBH"/>
-			<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-			<item desc="成交日期" id="173" length="64" name="CJRQ"/>
-			<item desc="合约类别" id="131" length="64" name="HYLB"/>
-			<item desc="柜台定位串" id="7011" length="64" name="GTDWC"/>
-			<item desc="成交类型" id="7013" length="64" name="CJLX"/>
-			<item desc="原委托号" id="830" length="64" name="YWTH"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="合约名称" encrypt="0" id="64" length="64" name="HYDMMC"/>
+			<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+			<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+			<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+			<item desc="成交时间" encrypt="0" id="116" length="64" name="CJSJ"/>
+			<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+			<item desc="成交数量" encrypt="0" id="113" length="64" name="CJSL"/>
+			<item desc="成交价格" encrypt="0" id="114" length="64" name="CJJG"/>
+			<item desc="成交编号" encrypt="0" id="66" length="64" name="CJBH"/>
+			<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+			<item desc="成交日期" encrypt="0" id="173" length="64" name="CJRQ"/>
+			<item desc="合约类别" encrypt="0" id="131" length="64" name="HYLB"/>
+			<item desc="柜台定位串" encrypt="0" id="7011" length="64" name="GTDWC"/>
+			<item desc="成交类型" encrypt="0" id="7013" length="64" name="CJLX"/>
+			<item desc="原委托号" encrypt="0" id="830" length="64" name="YWTH"/>
 		</field>
 		<field desc="查询银证转账流水" name="QryTransferMoney">
-			<item desc="流水序号" id="200" length="64" name="LSXH"/>
+			<item desc="流水序号" encrypt="0" id="200" length="64" name="LSXH"/>
 		</field>
 		<field desc="查询委托增量" name="QryIncOrder">
-			<item desc="柜台定位串" id="7011" length="64" name="GTDWC"/>
-			<item desc="请求行数" id="7014" length="64" name="QQHS"/>
-			<item desc="撤销标志" id="7012" length="64" name="CDBZ"/>
+			<item desc="柜台定位串" encrypt="0" id="7011" length="64" name="GTDWC"/>
+			<item desc="请求行数" encrypt="0" id="7014" length="64" name="QQHS"/>
+			<item desc="撤销标志" encrypt="0" id="7012" length="64" name="CDBZ"/>
 		</field>
 		<field desc="查询当日委托" name="QryTodayOrder">
-			<item desc="委托编号" id="65" length="64" name="WTBH"/>
-			<item desc="委托列表" id="977" length="64" name="WTHLB"/>
-			<item desc="撤销标志" id="7012" length="64" name="CDBZ"/>
+			<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+			<item desc="委托列表" encrypt="0" id="977" length="64" name="WTHLB"/>
+			<item desc="撤销标志" encrypt="0" id="7012" length="64" name="CDBZ"/>
 		</field>
 		<field desc="银证转账流水" name="TransferMoney">
-			<item desc="流水序号" id="200" length="64" name="LSXH"/>
-			<item desc="转账金额" id="220" length="64" name="ZZJE"/>
-			<item desc="货币代码" id="56" length="64" name="HBDM"/>
-			<item desc="银证业务标识" id="206" length="64" name="YZYWBZ"/>
-			<item desc="银证业务状态" id="210" length="64" name="YZYWZT"/>
-			<item desc="转帐日期或申请日期" id="227" length="64" name="SQRQ"/>
-			<item desc="转帐时间或者申请时间" id="228" length="64" name="SQSJ"/>
-			<item desc="结果说明" id="226" length="64" name="JGSM"/>
+			<item desc="流水序号" encrypt="0" id="200" length="64" name="LSXH"/>
+			<item desc="转账金额" encrypt="0" id="220" length="64" name="ZZJE"/>
+			<item desc="货币代码" encrypt="0" id="56" length="64" name="HBDM"/>
+			<item desc="银证业务标识" encrypt="0" id="206" length="64" name="YZYWBZ"/>
+			<item desc="银证业务状态" encrypt="0" id="210" length="64" name="YZYWZT"/>
+			<item desc="转帐日期或申请日期" encrypt="0" id="227" length="64" name="SQRQ"/>
+			<item desc="转帐时间或者申请时间" encrypt="0" id="228" length="64" name="SQSJ"/>
+			<item desc="结果说明" encrypt="0" id="226" length="64" name="JGSM"/>
 		</field>
 		<field desc="查询期货保证金率请求" name="QryFutureMarginRate">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="投保标志" id="119" length="64" name="TBBZ"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
 		</field>
 		<field desc="委托撤单应答" name="RspCancelOrder"/>
-		<field desc="查询当日委托" name="TodayOrder">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="委托编号" id="65" length="64" name="WTBH"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="委托状态" id="156" length="64" name="WTZT"/>
-			<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-			<item desc="委托数量" id="130" length="64" name="WTSL"/>
-			<item desc="委托价格" id="129" length="64" name="WTJG"/>
-			<item desc="成交数量" id="113" length="64" name="CJSL"/>
-			<item desc="撤单数量" id="158" length="64" name="CDSL"/>
-			<item desc="委托时间" id="159" length="64" name="WTSJ"/>
-			<item desc="市价委托类别" id="127" length="64" name="SJWTLB"/>
-			<item desc="股东号" id="52" length="64" name="GDH"/>
-			<item desc="委托日期" id="160" length="64" name="WTRQ"/>
-			<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-			<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-			<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-			<item desc="备注信息" id="163" length="64" name="BZXX"/>
-			<item desc="价格类型" id="40" length="64" name="JGLB"/>
-			<item desc="有效期" id="41" length="64" name="YXQLX"/>
-			<item desc="成交量类型" id="42" length="64" name="CJLLX"/>
-			<item desc="最小成交量" id="43" length="64" name="ZXCJL"/>
-			<item desc="扩展字段" id="44" length="64" name="KZZD"/>
-			<item desc="触发条件" id="495" length="64" name="CFTJ"/>
-			<item desc="撤单时间" id="516" length="64" name="CDSJ"/>
-			<item desc="有效日期" id="315" length="64" name="YXRQ"/>
-			<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-			<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
-			<item desc="柜台定位串" id="7011" length="64" name="GTDWC"/>
-			<item desc="委托类型" id="994" length="64" name="WTLX"/>
+		<field desc="" name="ReqSetUserInfo">
+			<item desc="请求标志" encrypt="0" id="992" length="64" name="QQBZ"/>
+			<item desc="日志路径" encrypt="0" id="993" length="64" name="RZLJ"/>
+			<item desc="授权文件" encrypt="0" id="7017" length="64" name="SQWJ"/>
+			<item desc="配置文件" encrypt="0" id="7021" length="64" name="PZWJ"/>
+			<item desc="日志ID" encrypt="0" id="2063" length="64" name="LOGID"/>
+			<item desc="RSA公钥" encrypt="0" id="7029" length="64" name="RSAKEY"/>
+			<item desc="穿透式授权码文件" encrypt="0" id="7031" length="64" name="RZMWJ"/>
+			<item desc="交易柜台" encrypt="0" id="813" length="64" name="JYGT"/>
 		</field>
 		<field desc="查询备兑证券锁定或解锁数量" name="QryLockAvailable">
-			<item desc="席位号" id="161" length="64" name="XWH"/>
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="锁定方向" id="252" length="64" name="SDFX"/>
-			<item desc="股东号" id="52" length="64" name="GDH"/>
+			<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="锁定方向" encrypt="0" id="252" length="64" name="SDFX"/>
+			<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
 		</field>
 		<field desc="行权请求" name="ReqExecOrder">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="行权数量" id="230" length="64" name="XQSL"/>
-			<item desc="股东号" id="52" length="64" name="GDH"/>
-			<item desc="席位号" id="161" length="64" name="XWH"/>
-			<item desc="非交易申请类别" id="261" length="64" name="FJYSQLB"/>
-			<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-			<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-			<item desc="期权行权后期货自动自动对冲" id="633" length="64" name="QHZDC"/>
-			<item desc="本地报单序号" id="7008" length="64" name="BDBDXH"/>
-			<item desc="柜台会话标识" id="7007" length="64" name="GTHHBZ"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="行权数量" encrypt="0" id="230" length="64" name="XQSL"/>
+			<item desc="股东号" encrypt="0" id="52" length="64" name="GDH"/>
+			<item desc="席位号" encrypt="0" id="161" length="64" name="XWH"/>
+			<item desc="非交易申请类别" encrypt="0" id="261" length="64" name="FJYSQLB"/>
+			<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+			<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+			<item desc="期权行权后期货自动自动对冲" encrypt="0" id="633" length="64" name="QHZDC"/>
+			<item desc="本地报单序号" encrypt="0" id="7008" length="64" name="BDBDXH"/>
+			<item desc="柜台会话标识" encrypt="0" id="7007" length="64" name="GTHHBZ"/>
 		</field>
 		<field desc="成交" name="Trade">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="合约名称" id="64" length="64" name="HYDMMC"/>
-			<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-			<item desc="开平仓标志" id="117" length="64" name="KPBZ"/>
-			<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-			<item desc="成交时间" id="116" length="64" name="CJSJ"/>
-			<item desc="委托编号" id="65" length="64" name="WTBH"/>
-			<item desc="成交数量" id="113" length="64" name="CJSL"/>
-			<item desc="成交价格" id="114" length="64" name="CJJG"/>
-			<item desc="成交编号" id="66" length="64" name="CJBH"/>
-			<item desc="期权备兑标志" id="125" length="64" name="BDBZ"/>
-			<item desc="成交日期" id="173" length="64" name="CJRQ"/>
-			<item desc="合约类别" id="131" length="64" name="HYLB"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="合约名称" encrypt="0" id="64" length="64" name="HYDMMC"/>
+			<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+			<item desc="开平仓标志" encrypt="0" id="117" length="64" name="KPBZ"/>
+			<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+			<item desc="成交时间" encrypt="0" id="116" length="64" name="CJSJ"/>
+			<item desc="委托编号" encrypt="0" id="65" length="64" name="WTBH"/>
+			<item desc="成交数量" encrypt="0" id="113" length="64" name="CJSL"/>
+			<item desc="成交价格" encrypt="0" id="114" length="64" name="CJJG"/>
+			<item desc="成交编号" encrypt="0" id="66" length="64" name="CJBH"/>
+			<item desc="期权备兑标志" encrypt="0" id="125" length="64" name="BDBZ"/>
+			<item desc="成交日期" encrypt="0" id="173" length="64" name="CJRQ"/>
+			<item desc="合约类别" encrypt="0" id="131" length="64" name="HYLB"/>
 		</field>
 		<field desc="客户端校验回报" name="RspSecurityVerity">
-			<item desc="安全密钥" id="7052" length="256" name="AQMY"/>
-			<item desc="时间间隔" id="7063" length="64" name="SJJGS"/>
+			<item desc="安全密钥" encrypt="0" id="7052" length="256" name="AQMY"/>
+			<item desc="时间间隔" encrypt="0" id="7063" length="64" name="SJJGS"/>
 		</field>
+		<field desc="" name="RspSetUserInfo"/>
 		<field desc="用户信息" name="UserInfo">
-			<item desc="请求标志" id="992" length="64" name="QQBZ"/>
-			<item desc="日志路径" id="993" length="64" name="RZLJ"/>
-			<item desc="授权文件" id="7017" length="64" name="SQWJ"/>
-			<item desc="配置文件" id="7021" length="64" name="PZWJ"/>
-			<item desc="穿透式授权码文件" id="7031" length="64" name="RZMWJ"/>
+			<item desc="请求标志" encrypt="0" id="992" length="64" name="QQBZ"/>
+			<item desc="日志路径" encrypt="0" id="993" length="64" name="RZLJ"/>
+			<item desc="授权文件" encrypt="0" id="7017" length="64" name="SQWJ"/>
+			<item desc="配置文件" encrypt="0" id="7021" length="64" name="PZWJ"/>
+			<item desc="穿透式授权码文件" encrypt="0" id="7031" length="64" name="RZMWJ"/>
 		</field>
 		<field desc="查询持仓明细应答" name="PositionDetail">
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="当前数量" id="135" length="64" name="DQSL"/>
-			<item desc="成本价" id="139" length="64" name="CBJ"/>
-			<item desc="买卖类别" id="112" length="64" name="MMLB"/>
-			<item desc="投保标志" id="119" length="64" name="TBBZ"/>
-			<item desc="保证金" id="152" length="64" name="BZJ"/>
-			<item desc="开仓日期" id="147" length="64" name="KCRQ"/>
-			<item desc="货币代码" id="56" length="64" name="HBDM"/>
-			<item desc="成交编号" id="66" length="64" name="CJBH"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="当前数量" encrypt="0" id="135" length="64" name="DQSL"/>
+			<item desc="成本价" encrypt="0" id="139" length="64" name="CBJ"/>
+			<item desc="买卖类别" encrypt="0" id="112" length="64" name="MMLB"/>
+			<item desc="投保标志" encrypt="0" id="119" length="64" name="TBBZ"/>
+			<item desc="保证金" encrypt="0" id="152" length="64" name="BZJ"/>
+			<item desc="开仓日期" encrypt="0" id="147" length="64" name="KCRQ"/>
+			<item desc="货币代码" encrypt="0" id="56" length="64" name="HBDM"/>
+			<item desc="成交编号" encrypt="0" id="66" length="64" name="CJBH"/>
 		</field>
 		<field desc="查询结算单应答" name="Settlement">
-			<item desc="结算单" id="360" length="64" name="JSD"/>
-			<item desc="结算单确认标志" id="362" length="64" name="QRBZ"/>
+			<item desc="结算单" encrypt="0" id="360" length="64" name="JSD"/>
+			<item desc="结算单确认标志" encrypt="0" id="362" length="64" name="QRBZ"/>
 		</field>
 		<field desc="查询结算单请求" name="QrySettlement">
-			<item desc="结算单查询类别（期货）" id="229" length="64" name="JSDCXLB"/>
-			<item desc="起始日期" id="171" length="64" name="QSRQ"/>
-			<item desc="终止日期" id="172" length="64" name="ZZRQ"/>
+			<item desc="结算单查询类别（期货）" encrypt="0" id="229" length="64" name="JSDCXLB"/>
+			<item desc="起始日期" encrypt="0" id="171" length="64" name="QSRQ"/>
+			<item desc="终止日期" encrypt="0" id="172" length="64" name="ZZRQ"/>
 		</field>
 		<field desc="备兑证券锁定或解锁数量" name="LockAvailable">
-			<item desc="可委托数量" id="250" length="64" name="KMSL"/>
-			<item desc="市场代码" id="54" length="64" name="SCDM"/>
-			<item desc="合约代码" id="63" length="64" name="HYDM"/>
-			<item desc="锁定方向" id="252" length="64" name="SDFX"/>
+			<item desc="可委托数量" encrypt="0" id="250" length="64" name="KMSL"/>
+			<item desc="市场代码" encrypt="0" id="54" length="64" name="SCDM"/>
+			<item desc="合约代码" encrypt="0" id="63" length="64" name="HYDM"/>
+			<item desc="锁定方向" encrypt="0" id="252" length="64" name="SDFX"/>
 		</field>
 	</fields>
 </root>

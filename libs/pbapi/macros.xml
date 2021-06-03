@@ -43,7 +43,7 @@
 	<macro id="66" name="CJBH" desc="成交编号"/>
 	<macro id="67" name="DLLB" desc="登录类别"/>
 	<macro id="68" name="DTMMLB" desc="动态密码类别"/>
-	<macro id="69" name="DTMM" desc="动态密码"/>
+	<macro id="69" name="DTMM" desc="动态密码" encrypt="1"/>
 	<macro id="70" name="YPBH" desc="硬盘编号"/>
 	<macro id="71" name="LOCAL_IP" desc="客户端本机IP地址"/>
 	<macro id="72" name="LOCAL_MAC" desc="客户端MAC地址"/>
@@ -310,7 +310,7 @@
 	<macro id="347" name="KQBZ" desc="查询可取资金"/>
 	<macro id="348" name="TBBZMC" desc="投保标志名称"/>
 	<macro id="349" name="HXRZ" desc="核心认证类别"/>
-	<macro id="350" name="HXMM" desc="核心认证密码"/>
+	<macro id="350" name="HXMM" desc="核心认证密码" encrypt="1"/>
 	<macro id="351" name="CPU" desc="CPU"/>
 	<macro id="352" name="ZBRQ" desc="主板日期"/>
 	<macro id="353" name="YHFZXDM" desc="银行分中心代码"/>
@@ -1012,6 +1012,7 @@
 	<macro id="2058" name="JGSL" desc="交割卖量"/>
 	<macro id="2059" name="ZLCBL" desc="中立仓买量"/>
 	<macro id="2060" name="ZLCSL" desc="中立仓卖量"/>
+	<macro id="2063" name="LOGID" desc="日志ID"/>
 	<macro id="2066" name="MYKL" length="2048" desc="客户端密钥"/>
 	<macro id="2067" name="LOCAL_INFO" length="3000" desc="穿透式监管终端硬件信息"/>
 	<macro id="3001" name="POBO5_RECONNECT" desc="博易5CTP重连使用"/>
@@ -1042,6 +1043,7 @@
 	<macro id="7016" name="CJBS" desc="成交笔数"/>
 	<macro id="7017" name="SQWJ" desc="授权文件"/>
 	<macro id="7021" name="PZWJ" desc="配置文件"/>
+	<macro id="7029" name="RSAKEY" desc="RSA公钥"/>
 	<macro id="7030" name="JYSDBZ" desc="交易时段标志"/>
 	<macro id="7031" name="RZMWJ" desc="穿透式授权码文件"/>
 	<macro id="7040" name="YCBS" length="16" desc="穿透式监管异常标志"/>

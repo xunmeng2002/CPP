@@ -24,6 +24,7 @@ bool PBStepApi::Init(const char* address)
 !!if @name.startswith("Req"):!!
 !!inc indent!!
 !!packageName=@name!!
+!!funcID=@funcid!!
 !!entry field!!
 int PBStepApi::!!$packageName!!(PBStep!!@name!!Field& !!@name!!, int& reqNo)
 {
@@ -31,12 +32,30 @@ int PBStepApi::!!$packageName!!(PBStep!!@name!!Field& !!@name!!, int& reqNo)
 	HANDLE_RESPONSE response = StepApi_CreateResponseHandle(m_User);
 	StepApi_PBSTEP_Init(request);
 	StepApi_PBSTEP_Init(response);
-	StepApi_PBSTEP_AppendRecord(request);
 	SetBaseInfo(request, !!@name!!.BaseInfo);
+	StepApi_PBSTEP_SetBaseRecFieldValueINT(request, STEP_FUNC, !!$funcID!!);
+!!if $packageName=="ReqLogin":!!
+!!inc indent!!
+	char JYMM[256] = { 0 };
+	int JYMMLen = sizeof(JYMM);
+	StepApi_PBSTEP_EncryptValueString(m_User, ReqLogin.HXMM, JYMM, JYMMLen, ReqLogin.DLZH);
+	StepApi_PBSTEP_SetBaseRecFieldValueString(request, STEP_JYMM, JYMM);
+!!dec indent!!
 	
+	StepApi_PBSTEP_AppendRecord(request);
 !!fieldName=@name!!
 !!travel!!
+!!if @encrypt=='1':!!
+!!inc indent!!
+	char !!@name!![256] = { 0 };
+	int !!@name!!Len = sizeof(!!@name!!);
+	StepApi_PBSTEP_EncryptValueString(m_User, !!$fieldName!!.!!@name!!, !!@name!!, !!@name!!Len, !!$fieldName!!.!!@name!!);
+	StepApi_PBSTEP_AddFieldValueString(request, STEP_!!@name!!, !!@name!!);
+!!dec indent!!
+!!else:!!
+!!inc indent!!
 	StepApi_PBSTEP_AddFieldValueString(request, STEP_!!@name!!, !!$fieldName!!.!!@name!!);
+!!dec indent!!
 !!leave!!
 	
 	StepApi_Request(m_User, request, response);

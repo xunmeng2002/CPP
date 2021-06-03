@@ -12,6 +12,7 @@ class Macro:
         self.Name = ""
         self.Desc = ""
         self.Length = "64"
+        self.Encrypt = "0"
 
 class Field:
     def __init__(self):
@@ -37,6 +38,8 @@ def getMacros(macroFile):
         macro.Desc = macroNode.getAttribute("desc")
         if macroNode.hasAttribute("length"):
             macro.Length = macroNode.getAttribute("length")
+        if macroNode.hasAttribute("encrypt"):
+            macro.Encrypt = macroNode.getAttribute("encrypt")
         macros[macro.ID] = macro
     return macros
 
@@ -77,6 +80,7 @@ def AddItemNode(dom, parentNode, item):
     itemNode.setAttribute("name", item.Name)
     itemNode.setAttribute("desc", item.Desc)
     itemNode.setAttribute("length", item.Length)
+    itemNode.setAttribute("encrypt", item.Encrypt)
     parentNode.appendChild(itemNode)
 
 def AddFieldNode(dom, parentNode, field):

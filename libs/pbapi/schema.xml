@@ -1,6 +1,12 @@
 <?xml version="1.0" ?>
 <pbstep>
 	<packages>
+		<package name="ReqSetUserInfo" funcid="10100" desc="设置用户数据请求">
+			<field name="ReqSetUserInfo"/>
+		</package>
+		<package name="RspSetUserInfo" funcid="10100" desc="设置用户数据应答">
+			<field name="RspSetUserInfo"/>
+		</package>
 		<package name="ReqSecurityVerity" funcid="4" desc="客户端校验请求">
 			<field name="ReqSecurityVerity"/>
 		</package>
@@ -174,6 +180,18 @@
 		<field name="RspError" desc="应答错误">
 			<item id="1"/>
 			<item id="2"/>
+		</field>
+		<field name="ReqSetUserInfo">
+			<item id="992"/>
+			<item id="993"/>
+			<item id="7017"/>
+			<item id="7021"/>
+			<item id="2063"/>
+			<item id="7029"/>
+			<item id="7031"/>
+			<item id="813"/>
+		</field>
+		<field name="RspSetUserInfo">
 		</field>
 		<field name="UserInfo" desc="用户信息">
 			<item id="992"/>

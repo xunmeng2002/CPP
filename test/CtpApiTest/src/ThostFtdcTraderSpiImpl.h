@@ -1,23 +1,11 @@
 #pragma once
 
 #include "ThostFtdcTraderSpiMiddle.h"
+#include "AccountInfo.h"
 #include <set>
 #include <string>
+#include <thread>
 
-
-typedef char TThostFtdcAccountTypeType[10];
-
-struct AccountInfo
-{
-	TThostFtdcAccountTypeType AccountType;
-	TThostFtdcBrokerIDType	BrokerID;
-	TThostFtdcUserIDType	UserID;
-	TThostFtdcPasswordType	Password;
-	TThostFtdcProductInfoType	UserProductInfo;
-	TThostFtdcAuthCodeType	AuthCode;
-	TThostFtdcAppIDType	AppID;
-	std::set<std::string> FrontAddrs;
-};
 
 class CThostFtdcTraderSpiImpl : public CThostFtdcTraderSpiMiddle
 {
@@ -59,4 +47,7 @@ private:
 	int m_RequestID;
 
 	AccountInfo* m_AccountInfo;
+	std::thread m_ApiReleaseThread;
 };
+
+void ApiRelease(CThostFtdcTraderApi* traderApi);

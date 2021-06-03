@@ -1,6 +1,9 @@
 #include "ThostFtdcTraderSpiImpl.h"
 #include "Logger.h"
+#include <condition_variable>
+#include <functional>
 
+using namespace std;
 
 CThostFtdcTraderSpiImpl::CThostFtdcTraderSpiImpl(CThostFtdcTraderApi* traderApi)
 	:m_TraderApi(traderApi), m_RequestID(0), m_AccountInfo(nullptr)
@@ -59,7 +62,7 @@ void CThostFtdcTraderSpiImpl::OnRspQryTrade(CThostFtdcTradeField* Trade, CThostF
 	CThostFtdcTraderSpiMiddle::OnRspQryTrade(Trade, pRspInfo, nRequestID, bIsLast);
 	if (bIsLast)
 	{
-		
+		m_ApiReleaseThread = thread(std::bind(&ApiRelease, m_TraderApi));
 	}
 }
 
@@ -128,4 +131,11 @@ void CThostFtdcTraderSpiImpl::ReqQryTrade()
 	::memset(&qryTrade, 0, sizeof(qryTrade));
 	int ret = m_TraderApi->ReqQryTrade(&qryTrade, m_RequestID++);
 	WRITE_LOG(LogLevel::Info, "ReqQryTrade: ret[%d]", ret);
+}
+
+
+void ApiRelease(CThostFtdcTraderApi* traderApi)
+{
+	_sleep(100);
+	traderApi->Release();
 }

@@ -10,6 +10,11 @@ using namespace std;
 
 std::map<HANDLE_USER, PBStepSpi*> g_UserSpis;
 
+void SetSpi(HANDLE_USER user, PBStepSpi* stepSpi)
+{
+	g_UserSpis[user] = stepSpi;
+}
+
 PBStepSpi* GetSpi(HANDLE_USER user)
 {
 	if (g_UserSpis.find(user) == g_UserSpis.end())
@@ -71,7 +76,7 @@ int StepApiCallback(HANDLE_USER user, HANDLE_RESPONSE response)
 
 		int recnum = StepApi_PBSTEP_GetBaseRecFieldValueINT(response, STEP_RETURNNUM);
 		int reqno = StepApi_PBSTEP_GetBaseRecFieldValueINT(response, STEP_REQUESTNO);
-		StepApi_PBSTEP_GotoFirst(response);
+		//StepApi_PBSTEP_GotoFirst(response);
 		for (int j = 0; j < recnum; j++)
 		{
 !!travel!!
@@ -103,7 +108,7 @@ int StepApiCallback(HANDLE_USER user, HANDLE_RESPONSE response)
 		::memset(&!!$fieldName!!, 0, sizeof(!!$fieldName!!));
 
 		int recnum = StepApi_PBSTEP_GetBaseRecFieldValueINT(response, STEP_RETURNNUM);
-		StepApi_PBSTEP_GotoFirst(response);
+		//StepApi_PBSTEP_GotoFirst(response);
 		for (int j = 0; j < recnum; j++)
 		{
 !!travel!!

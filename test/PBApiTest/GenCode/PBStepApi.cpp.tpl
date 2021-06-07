@@ -1,5 +1,6 @@
 #include "PBStepApi.h"
 #include "StepApiFunc.h"
+#include "PBStepCallback.h"
 #include "Logger.h"
 #include <mutex>
 using namespace std;
@@ -12,11 +13,19 @@ PBStepApi::PBStepApi()
 PBStepApi::~PBStepApi()
 {
 }
-bool PBStepApi::Init(const char* address)
+bool PBStepApi::Init(PBStepSpi* stepSpi, const char* address, const char* fileName)
 {
 	m_User = StepApi_CreateUser();
 	if (m_User == nullptr)
 		return false;
+	SetSpi(m_User, stepSpi);
+	StepApi_SetAddr(m_User, address);
+
+	tagMainFuncPtr MainFuncPtr = { 0 };
+	MainFuncPtr.pSTEPRequestCallBack = StepApiCallback;
+	StepApi_SetCallBackFunc(&MainFuncPtr, sizeof(MainFuncPtr));
+	StepApi_SetConfigPath(m_User, fileName);
+	return true;
 }
 
 !!entry packages!!
@@ -26,8 +35,12 @@ bool PBStepApi::Init(const char* address)
 !!packageName=@name!!
 !!funcID=@funcid!!
 !!entry field!!
+!!fieldName=@name!!
 int PBStepApi::!!$packageName!!(PBStep!!@name!!Field& !!@name!!, int& reqNo)
 {
+	WRITE_LOG(LogLevel::Info, "!!$packageName!!");
+	WRITE_LOG(LogLevel::Info, "PBStep!!$fieldName!!Field:!!travel!! !!@name!![%s]!!leave!!"!!travel!!, !!$fieldName!!.!!@name!!!!leave!!);
+
 	HANDLE_REQUEST	request = StepApi_CreateRequestHandle(m_User);
 	HANDLE_RESPONSE response = StepApi_CreateResponseHandle(m_User);
 	StepApi_PBSTEP_Init(request);
@@ -43,7 +56,6 @@ int PBStepApi::!!$packageName!!(PBStep!!@name!!Field& !!@name!!, int& reqNo)
 !!dec indent!!
 	
 	StepApi_PBSTEP_AppendRecord(request);
-!!fieldName=@name!!
 !!travel!!
 !!if @encrypt=='1':!!
 !!inc indent!!

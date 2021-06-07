@@ -1,5 +1,4 @@
-#ifndef PBSTEP_API_H
-#define PBSTEP_API_H
+#pragma once
 
 #include "PBApiDataStruct.h"
 #include "StepApi.h"
@@ -7,13 +6,14 @@
 #define PBSTEP_ERROR_DISCONNECT -3
 #define PBSTEP_ERROR_NOT_LOGIN -8
 
+class PBStepSpi;
 class PBStepApi
 {
 public:
 	PBStepApi();
 	~PBStepApi();
 	
-	bool Init(const char* address);
+	bool Init(PBStepSpi* stepSpi, const char* address, const char* fileName);
 	
 !!entry packages!!
 !!travel!!
@@ -31,5 +31,3 @@ private:
 private:
 	HANDLE_USER m_User;
 };
-
-#endif

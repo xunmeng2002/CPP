@@ -1,5 +1,4 @@
-#ifndef PBSTEP_SPI_H
-#define PBSTEP_SPI_H
+#pragma once
 
 #include "PBStepApi.h"
 
@@ -23,5 +22,3 @@ public:
 !!leave!!
 !!leave!!
 };
-
-#endif

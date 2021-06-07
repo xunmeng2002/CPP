@@ -1,5 +1,5 @@
-#ifndef PBAPI_DATA_STRUCT_H
-#define PBAPI_DATA_STRUCT_H
+#pragma once
+
 #include "stepdef.h"
 
 //基本信息
@@ -23,5 +23,3 @@ struct PBStep!!@name!!Field
 
 !!leave!!
 !!leave!!
-
-#endif

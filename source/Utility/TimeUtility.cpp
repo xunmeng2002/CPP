@@ -29,7 +29,7 @@ void GetFormatDateTime(char* buff, int size)
 
 	time_t t = std::chrono::system_clock::to_time_t(now);
 	int len = strftime(buff, size, "%Y%m%d  %H:%M:%S", localtime(&t));
-	snprintf(buff + len, uint64_t(size) - len, ".%03d", int(ms.time_since_epoch().count() % 1000));
+	_snprintf(buff + len, uint64_t(size) - len, ".%03d", int(ms.time_since_epoch().count() % 1000));
 }
 
 void GetFormatTime(char* buff, int size)
@@ -39,6 +39,6 @@ void GetFormatTime(char* buff, int size)
 
 	time_t t = std::chrono::system_clock::to_time_t(now);
 	int len = strftime(buff, size, "%H:%M:%S", localtime(&t));
-	snprintf(buff + len, uint64_t(size) - len, ".%03d", int(ms.time_since_epoch().count() % 1000));
+	_snprintf(buff + len, uint64_t(size) - len, ".%03d", int(ms.time_since_epoch().count() % 1000));
 }
 

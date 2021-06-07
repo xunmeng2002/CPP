@@ -15,6 +15,8 @@ struct AccountInfo
 	string AccountClass;
 	string LoginType;
 	string Product;
+	string Platform;
+	string Version;
 };
 
 void PrintAccountInfo(AccountInfo* accountInfo);

@@ -49,7 +49,7 @@ bool LoadStepApiFunc(const char* fileName)
 	DllInstance = LoadLibrary(fileName);
 	if (DllInstance == nullptr)
 	{
-		WRITE_LOG(LogLevel::Error, "loadLibrary Failed. FileName:[%s], Error:[%s]", fileName, GetLastError());
+		//WRITE_LOG(LogLevel::Error, "loadLibrary Failed. FileName:[%s], Error:[%s]", fileName, GetLastError());
 		return false;
 	}
 
@@ -127,16 +127,12 @@ bool LoadStepApiFunc(const char* fileName)
 	return true;
 }
 
-bool Init(const char* fileName)
+bool StepApiInit(const char* fileName)
 {
-	if (!StepApi_Init())
+	if (StepApi_Init() < 0)
 	{
-		WRITE_LOG(LogLevel::Error, "StepApi_Init Failed.");
+		WRITE_LOG(LogLevel::Error, "StepApi_Init Failed. ErrorCode:[%d]", GetLastError());
 		return false;
 	}
-	StepApi_SetConfigPath(NULL, fileName);
-	tagMainFuncPtr MainFuncPtr = { 0 };
-	MainFuncPtr.pSTEPRequestCallBack = StepApiCallback;
-	StepApi_SetCallBackFunc(&MainFuncPtr, sizeof(MainFuncPtr));
 	return true;
 }

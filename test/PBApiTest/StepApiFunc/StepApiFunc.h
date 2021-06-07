@@ -1,5 +1,4 @@
-#ifndef STEP_API_FUNC_H
-#define STEP_API_FUNC_H
+#pragma once
 
 #include "StepApi.h"
 #include <Windows.h>
@@ -46,6 +45,4 @@ extern __StepApi_PBSTEP_SetConfigPath					StepApi_SetConfigPath;
 
 bool LoadStepApiFunc(const char* fileName);
 
-bool Init(const char* fileName);
-
-#endif
+bool StepApiInit(const char* fileName);

@@ -25,13 +25,13 @@ static map<LogLevel, string> s_LogLevelName = {
 	{ LogLevel::Ignore, "IGNORE"}
 };
 
-thread_local char* t_LogBuffer = new char[LOG_LINE_LENGTH];
+char* t_LogBuffer = new char[LOG_LINE_LENGTH];
 
 
 Logger Logger::m_Instance;
 
 Logger::Logger()
-	:ThreadBase("Logger"), m_ProcessName("")
+	:ThreadBase("Logger")
 {
 	unsigned long buffSize = 128;
 	GetComputerName(m_HostName, &buffSize);
@@ -148,7 +148,7 @@ void Logger::WriteToConsole(LogLevel level, const char* formatStr, va_list va)
 	if (level > s_logLevel)
 		return;
 	char logString[10240];
-	int len = snprintf(logString, sizeof(logString), "ThreadID[%05d] ", GetCurrentThreadId());
+	int len = _snprintf(logString, sizeof(logString), "ThreadID[%05d] ", GetCurrentThreadId());
 	len += vsnprintf(logString + len, sizeof(logString) - len - 3, formatStr, va);
 
 	printf("%s\n", logString);

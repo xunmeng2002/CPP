@@ -1,5 +1,4 @@
-#ifndef PBSTEP_SPI_IMPL_H
-#define PBSTEP_SPI_IMPL_H
+#pragma once
 
 #include "PBStepSpi.h"
 #include "PBStepApi.h"
@@ -13,6 +12,8 @@ public:
 
 	virtual void OnDisConnected() override;
 
+	virtual void OnRspSetUserInfo(PBStepRspSetUserInfoField* RspSetUserInfo, PBStepRspErrorField* RspError, int& reqNo, bool isLast) override;
+
 	virtual void OnRspSecurityVerity(PBStepRspSecurityVerityField* RspSecurityVerity, PBStepRspErrorField* RspError, int& reqNo, bool isLast) override;
 
 	virtual void OnRspLogin(PBStepRspLoginField* RspLogin, PBStepRspErrorField* RspError, int& reqNo, bool isLast) override;
@@ -20,7 +21,9 @@ public:
 private:
 	PBStepApi* m_StepApi;
 	AccountInfo* m_AccountInfo;
+
+	unsigned char m_AeskeySecurity[256];
+	unsigned char m_AeskeyResultBuffer[1024];
+	unsigned char m_AeskeyResultBufferBase64[2048];
+	int m_AeskeySecurityTimeInterval;
 };
-
-
-#endif

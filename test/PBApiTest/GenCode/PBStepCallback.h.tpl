@@ -1,5 +1,4 @@
-#ifndef PBSTEP_CALLBACK_H
-#define PBSTEP_CALLBACK_H
+#pragma once
 
 #include "StepApiFunc.h"
 #include "PBStepSpi.h"
@@ -7,11 +6,10 @@
 
 
 
-extern std::map<HANDLE_USER, PBStepSpi*> g_UserSpis;
+void SetSpi(HANDLE_USER user, PBStepSpi* stepSpi);
+
+PBStepSpi* GetSpi(HANDLE_USER user);
 
 
 int StepApiCallback(HANDLE_USER user, HANDLE_RESPONSE response);
 
-
-
-#endif

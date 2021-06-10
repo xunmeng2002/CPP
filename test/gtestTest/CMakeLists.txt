@@ -1,5 +1,5 @@
 #工程名
-SET(PROJECT_NAME "gtestTest")
+SET(PROJECT_NAME "GtestTest")
 project(${PROJECT_NAME})
 enable_language(CXX)
 cmake_minimum_required(VERSION 2.8)
@@ -30,7 +30,14 @@ add_package(gtest ../../libs/gtest/include)
 add_definitions("-D_CRT_SECURE_NO_WARNINGS")
 
 
-link_directories(${PROJECT_SOURCE_DIR}/../../libs/gtest/win64)
+message(STATUS "MSVC: " ${MSVC})
+message(STATUS "MSVC_VERSION: " ${MSVC_VERSION})
+message(STATUS "CMAKE_CL_64: " ${CMAKE_CL_64})
+if(CMAKE_CL_64)
+	link_directories(${PROJECT_SOURCE_DIR}/../../libs/gtest/win64_2019)
+ELSE(CMAKE_CL_64)
+	link_directories(${PROJECT_SOURCE_DIR}/../../libs/gtest/win32_2019)
+endif(CMAKE_CL_64)
 
 add_executable(${PROJECT_NAME} ${all_file})
 

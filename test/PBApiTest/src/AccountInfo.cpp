@@ -22,7 +22,7 @@ void ReadAccountInfo(map<string, AccountInfo*>& accountInfos)
 	Json::FastWriter writer;
 	Json::Value root;
 
-	ifstream in_file("AccountInfo.json", ios::binary);
+	ifstream in_file("../AccountInfo.json", ios::binary);
 	cout << "parse: " << reader.parse(in_file, root) << endl;
 	in_file.close();
 

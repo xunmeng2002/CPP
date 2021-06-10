@@ -24,7 +24,6 @@ bool PBStepApi::Init(PBStepSpi* stepSpi, const char* address, const char* fileNa
 	tagMainFuncPtr MainFuncPtr = { 0 };
 	MainFuncPtr.pSTEPRequestCallBack = StepApiCallback;
 	StepApi_SetCallBackFunc(&MainFuncPtr, sizeof(MainFuncPtr));
-	StepApi_SetConfigPath(m_User, fileName);
 	return true;
 }
 
@@ -75,6 +74,7 @@ int PBStepApi::!!$packageName!!(PBStep!!@name!!Field& !!@name!!, int& reqNo)
 	reqNo = StepApi_PBSTEP_GetBaseRecFieldValueINT(response, STEP_REQUESTNO);
 	StepApi_PBSTEP_Free(request);
 	StepApi_PBSTEP_Free(response);
+	WRITE_LOG(LogLevel::Info, "!!$packageName!!: ReqNo:[%d], ErrorCode:[%d]", reqNo, errorCode);
 	return errorCode;
 }
 !!leave!!

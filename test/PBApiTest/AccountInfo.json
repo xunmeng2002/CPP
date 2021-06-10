@@ -1,0 +1,14 @@
+[
+	{
+		"BrokerID": "0",
+		"AccountID": "18511899894",
+		"Password": "123456",
+		"AuthFilePath": "",
+		"FrontAddr": "101.226.207.176:20002",
+		"AccountClass": "0",
+		"LoginType": "6",
+		"Product": "21",
+		"Platform": "5",
+		"Version": "6.4.0.1"
+	}
+]

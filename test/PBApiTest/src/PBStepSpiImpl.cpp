@@ -33,7 +33,6 @@ void PBStepSpiImpl::OnRspSecurityVerity(PBStepRspSecurityVerityField* RspSecurit
 	PBStepQryInstrumentField qryInstrument;
 	::memset(&qryInstrument, 0, sizeof(qryInstrument));
 	int errorCode = m_StepApi->ReqQryInstrument(qryInstrument, reqNo);
-	WRITE_LOG(LogLevel::Info, "ReqQryInstrument  ErrorCode:[%d]  ReqNo:[%d]", errorCode, reqNo);
 }
 void PBStepSpiImpl::OnRspLogin(PBStepRspLoginField* RspLogin, PBStepRspErrorField* RspError, int& reqNo, bool isLast)
 {
@@ -55,5 +54,4 @@ void PBStepSpiImpl::OnRspLogin(PBStepRspLoginField* RspLogin, PBStepRspErrorFiel
 	::memset(&reqSecurityVerity, 0, sizeof(reqSecurityVerity));
 	::memcpy(reqSecurityVerity.MYKL, m_AeskeyResultBufferBase64, len);
 	int errorCode = m_StepApi->ReqSecurityVerity(reqSecurityVerity, reqNo);
-	WRITE_LOG(LogLevel::Info, "ReqSecurityVerity  ErrorCode:[%d]  ReqNo:[%d]", errorCode, reqNo);
 }

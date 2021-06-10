@@ -17,7 +17,7 @@ void PBStepSpi::OnDisConnected()
 !!fieldName=@name!!
 void PBStepSpi::On!!$packageName!!(PBStep!!$fieldName!!Field* !!$fieldName!!, PBStepRspErrorField* RspError, int& reqNo, bool isLast)
 {
-	WRITE_LOG(LogLevel::Info, "On!!$packageName!!");
+	WRITE_LOG(LogLevel::Info, "On!!$packageName!!, reqNo:[%d], isLast:[%d]", reqNo, isLast);
 	if (RspError)
 	{
 		WRITE_LOG(LogLevel::Info, "PBStepRspErrorField: CODE[%s] MSG[%s]", RspError->CODE, RspError->MSG);

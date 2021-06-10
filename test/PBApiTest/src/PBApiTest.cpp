@@ -49,7 +49,6 @@ int main(int argc, char* argv[])
 
 	int reqNo = 0;
 	int errorCode = stepApi->ReqSetUserInfo(reqSetUserInfo, reqNo);
-	WRITE_LOG(LogLevel::Info, "ReqSetUserInfo  ErrorCode:[%d]  ReqNo:[%d]", errorCode, reqNo);
 
 	Sleep(2000);
 
@@ -73,8 +72,6 @@ int main(int argc, char* argv[])
 	strcpy(reqLogin.LOCAL_MAC, "");
 
 	errorCode = stepApi->ReqLogin(reqLogin, reqNo);
-	WRITE_LOG(LogLevel::Info, "ReqLogin  ErrorCode:[%d]  ReqNo:[%d]", errorCode, reqNo);
-
 
 	Sleep(10000);
 	Logger::GetInstance().Stop();

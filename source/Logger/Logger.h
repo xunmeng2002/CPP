@@ -31,7 +31,7 @@ private:
 public:
 	static Logger& GetInstance();
 	bool Init(const char* fullProcessName);
-	void WriteLog(LogLevel level, const char* file, int line, const char* formatStr, ...);
+	void WriteLog(LogLevel level, const char* file, int line, const char* func, const char* formatStr, ...);
 
 
 protected:
@@ -43,7 +43,7 @@ protected:
 	bool CreateLogDir(const char* path);
 	void SwapInnerLogBuffers();
 	void FlushBuffers();
-	void WriteToLog(LogLevel level, const char* file, int line, const char* format, va_list va);
+	void WriteToLog(LogLevel level, const char* file, int line, const char* func, const char* format, va_list va);
 	void WriteToConsole(LogLevel level, const char* formatStr, va_list va);
 	void CreateLogFile();
 
@@ -58,7 +58,7 @@ private:
 };
 
 #define WRITE_LOG(level, formatStr, ...)\
-	Logger::GetInstance().WriteLog(level, __FILE__, __LINE__, formatStr, ##__VA_ARGS__);
+	Logger::GetInstance().WriteLog(level, __FILE__, __LINE__, __func__, formatStr, ##__VA_ARGS__);
 
 #define WRITE_ERROR_LOG(errorID, errorMsg)\
-	Logger::GetInstance().WriteLog(LogLevel::Error, __FILE__, __LINE__, "ErrorID:[%d], ErrorMsg:[%s].", errorID, errorMsg);
+	Logger::GetInstance().WriteLog(LogLevel::Error, __FILE__, __LINE__, __func__, "ErrorID:[%d], ErrorMsg:[%s].", errorID, errorMsg);

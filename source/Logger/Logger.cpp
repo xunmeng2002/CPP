@@ -35,7 +35,7 @@ Logger::Logger()
 {
 	unsigned long buffSize = 128;
 	GetComputerName(m_HostName, &buffSize);
-	m_Pid = getpid();
+	m_Pid = _getpid();
 }
 Logger::~Logger()
 {
@@ -52,11 +52,11 @@ bool Logger::Init(const char* fullProcessName)
 	m_LogData = new LogData();
 	return CreateLogDir("log");
 }
-void Logger::WriteLog(LogLevel level, const char* file, int line, const char* formatStr, ...)
+void Logger::WriteLog(LogLevel level, const char* file, int line, const char* func, const char* formatStr, ...)
 {
 	va_list va;
 	va_start(va, formatStr);
-	WriteToLog(level, file, line, formatStr, va);
+	WriteToLog(level, file, line, func, formatStr, va);
 	if (level <= LogLevel::Warning)
 	{
 		WriteToConsole(level, formatStr, va);
@@ -122,7 +122,7 @@ void Logger::FlushBuffers()
 	fflush(m_LogData->LogFile);
 }
 
-void Logger::WriteToLog(LogLevel level, const char* file, int line, const char* format, va_list va)
+void Logger::WriteToLog(LogLevel level, const char* file, int line, const char* func, const char* format, va_list va)
 {
 	for (auto p = file; *p != '\0'; p++)
 		if (*p == '\\' || *p == '/')
@@ -133,7 +133,7 @@ void Logger::WriteToLog(LogLevel level, const char* file, int line, const char* 
 		time_buff, GetCurrentThreadId(), s_LogLevelName[level].c_str());
 
 	len += vsnprintf(t_LogBuffer + len, (sizeof(t_LogBuffer) - len - 1), format, va);
-	len += _snprintf(t_LogBuffer + len, (sizeof(t_LogBuffer) - len - 1), "\t\t---%s:%d\n", file, line);
+	len += _snprintf(t_LogBuffer + len, (sizeof(t_LogBuffer) - len - 1), "\t\t---%s:%d[%s]\n", file, line, func);
 
 	lock_guard<mutex> guard(m_LogData->Mutex);
 	if (m_LogData->CurrBuffer->Available() < len)

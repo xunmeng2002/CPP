@@ -5,9 +5,7 @@ if(UNIX)
 	add_definitions(-D LINUX)
 	add_compile_options(-g)
 endif(UNIX)
-#宏定义，添加一个包
-#name：是一个不带双引号的字符
-#dir：是一个不带引号的路径
+
 macro(add_package name dir)
 	include_directories(${dir})
 	set(hfind ${ARGV1})
@@ -19,3 +17,10 @@ macro(add_package name dir)
 	source_group(${ARGV0} FILES ${name_header} ${name_cpp})
 	set(all_file ${all_file} ${name_header} ${name_cpp})
 endmacro(add_package)
+
+macro(add_file name dir filename)
+	include_directories(${dir})
+	file(GLOB_RECURSE fullname ${dir}/${filename})
+	source_group(${name} FILES ${fullname})
+	set(all_file ${all_file} ${fullname})
+endmacro(add_file)

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 include(../../Common.cmake)
-SET(PROJECT_NAME "UdpClient")
+SET(PROJECT_NAME "TcpServer")
 project(${PROJECT_NAME})
 
 

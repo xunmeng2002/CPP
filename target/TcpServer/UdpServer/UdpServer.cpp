@@ -2,6 +2,7 @@
 #include <iostream>
 #include "UdpServer.h"
 #include "SocketInit.h"
+#include "Logger.h"
 
 using namespace std;
 
@@ -15,7 +16,7 @@ void UdpServerTest()
 	addrSrv.sin_family = AF_INET;
 	addrSrv.sin_port = htons(6000);
 	auto ret = bind(sockSrv, (SOCKADDR*)&addrSrv, sizeof(SOCKADDR));
-	printf("bind: ret[%d]\n", ret);
+	WRITE_LOG(LogLevel::Info, "bind: ret[%d]", ret);
 	if (ret == SOCKET_ERROR)
 	{
 		return;
@@ -32,8 +33,8 @@ void UdpServerTest()
 
 		retSend = sendto(sockSrv, buff, retRecv, 0, (SOCKADDR*)&addrClient, addrLen);
 
-		printf("retSend[%d], retRecv[%d]\n", retSend, retRecv);
-		printf("recv from [%s:%u]: [%s]\n", inet_ntoa(addrClient.sin_addr), ntohs(addrClient.sin_port), buff);
+		WRITE_LOG(LogLevel::Info, "retSend[%d], retRecv[%d]", retSend, retRecv);
+		WRITE_LOG(LogLevel::Info, "recv from [%s:%u]: [%s]", inet_ntoa(addrClient.sin_addr), ntohs(addrClient.sin_port), buff);
 
 		if (strcmp(buff, "quit") == 0)
 		{

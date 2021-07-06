@@ -2,6 +2,7 @@
 #include <iostream>
 #include "TcpServer.h"
 #include "SocketInit.h"
+#include "Logger.h"
 
 using namespace std;
 
@@ -16,7 +17,7 @@ void TcpServerTest()
 	addrSrv.sin_port = htons(6000);
 
 	int ret = bind(sockServer, (struct sockaddr*)&addrSrv, sizeof(addrSrv));
-	printf("bind: ret[%d]\n", ret);
+	WRITE_LOG(LogLevel::Info, "bind: ret[%d]", ret);
 	if (ret == SOCKET_ERROR)
 	{
 		return;
@@ -24,7 +25,7 @@ void TcpServerTest()
 	listen(sockServer, SOMAXCONN);
 
 	SOCKET sockConnect = accept(sockServer, (struct sockaddr*)&addrClient, &addrLen);
-	printf("accept: sockConnect[%lld] [%s:%u]\n", sockConnect, inet_ntoa(addrClient.sin_addr), ntohs(addrClient.sin_port));
+	WRITE_LOG(LogLevel::Info, "accept: sockConnect[%lld] [%s:%u]", sockConnect, inet_ntoa(addrClient.sin_addr), ntohs(addrClient.sin_port));
 
 	char buff[1024];
 	buff[1023] = '\0';
@@ -40,8 +41,8 @@ void TcpServerTest()
 			buff[retRecv] = '\0';
 		}
 		
-		printf("retSend[%d], retRecv[%d]\n", retSend, retRecv);
-		printf("recv: [%s]\n", buff);
+		WRITE_LOG(LogLevel::Info, "retSend[%d], retRecv[%d]", retSend, retRecv);
+		WRITE_LOG(LogLevel::Info, "recv: [%s]", buff);
 		
 		
 		if (strcmp(buff, "quit") == 0)

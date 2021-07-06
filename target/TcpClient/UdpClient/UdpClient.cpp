@@ -2,6 +2,7 @@
 #include <iostream>
 #include "UdpClient.h"
 #include "SocketInit.h"
+#include "Logger.h"
 
 
 using namespace std;
@@ -27,8 +28,8 @@ void UdpClientTest()
 		retSend = sendto(sockSrv, sendBuf, strlen(sendBuf) + 1, 0, (SOCKADDR*)&addrSrv, addrLen);
 
 		retRecv = recvfrom(sockSrv, recvBuf, 100, 0, (SOCKADDR*)&addrSrv, &addrLen);
-		printf("retSend[%d], retRecv[%d]\n", retSend, retRecv);
-		printf("recv from [%s:%u]: [%s]\n", inet_ntoa(addrSrv.sin_addr), ntohs(addrSrv.sin_port), recvBuf);
+		WRITE_LOG(LogLevel::Info, "retSend[%d], retRecv[%d]", retSend, retRecv);
+		WRITE_LOG(LogLevel::Info, "recv from [%s:%u]: [%s]", inet_ntoa(addrSrv.sin_addr), ntohs(addrSrv.sin_port), recvBuf);
 
 
 		if (strcmp(recvBuf, "quit") == 0)

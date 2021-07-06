@@ -2,6 +2,7 @@
 #include <iostream>
 #include "TcpClient.h"
 #include "SocketInit.h"
+#include "Logger.h"
 
 using namespace std;
 
@@ -15,7 +16,7 @@ void TcpClientTest()
 	addrSrv.sin_port = htons(6000);
 
 	int ret = connect(sockClient, (struct sockaddr*)&addrSrv, sizeof(addrSrv));
-	printf("Connect Server: ret[%d]\n", ret);
+	WRITE_LOG(LogLevel::Info, "Connect Server: ret[%d]\n", ret);
 	if (ret == SOCKET_ERROR)
 	{
 		closesocket(sockClient);
@@ -33,13 +34,17 @@ void TcpClientTest()
 		retSend = send(sockClient, sendBuf, strlen(sendBuf), 0);
 		
 		retRecv = recv(sockClient, recvBuf, 1023, 0);
+		WRITE_LOG(LogLevel::Info, "retSend[%d], retRecv[%d]\n", retSend, retRecv);
+
+		if (retRecv < 0)
+		{
+			break;
+		}
 		if (retRecv < 1024)
 		{
 			recvBuf[retRecv] = '\0';
 		}
-		
-		printf("retSend[%d], retRecv[%d]\n", retSend, retRecv);
-		printf("recv: [%s]\n", recvBuf);
+		WRITE_LOG(LogLevel::Info, "recv: [%s]\n", recvBuf);
 		
 		
 		if (strcmp(recvBuf, "quit") == 0)

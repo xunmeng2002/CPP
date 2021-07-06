@@ -1,12 +1,20 @@
-#include "TcpServer.h"
+#include "Logger.h"
 #include "UdpServer.h"
-
+#include "TcpServer.h"
+#include "TcpServerSelect.h"
 
 using namespace std;
 
 
-void main()
+int main(int argc, char* argv[])
 {
+	Logger::GetInstance().Init(argv[0]);
+	Logger::GetInstance().Start();
 	//UdpServerTest();
-	TcpServerTest();
+	//TcpServerTest();
+	TcpServerSelectTest();
+
+	Logger::GetInstance().Stop();
+	Logger::GetInstance().Join();
+	return 0;
 }

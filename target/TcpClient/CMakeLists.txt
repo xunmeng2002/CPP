@@ -13,6 +13,7 @@ add_package(MemCache ../../source/MemCache)
 add_package(ThreadBase ../../source/ThreadBase)
 add_package(Logger ../../source/Logger)
 add_package(SocketInit ../../source/SocketInit)
+add_package(CacheList ../../source/CacheList)
 
 
 add_definitions("-D_CRT_SECURE_NO_WARNINGS")

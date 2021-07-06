@@ -6,6 +6,6 @@ using namespace std;
 
 void main()
 {
-	//TcpClientTest();
-	UdpClientTest();
+	//UdpClientTest();
+	TcpClientTest();
 }

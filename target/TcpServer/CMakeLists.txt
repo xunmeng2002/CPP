@@ -5,6 +5,9 @@ project(${PROJECT_NAME})
 
 
 add_package(src ./src)
+add_package(UdpServer ./UdpServer)
+add_package(TcpServer ./TcpServer)
+add_package(TcpServerSelect ./TcpServerSelect)
 add_package(Utility ../../source/Utility)
 add_package(MemCache ../../source/MemCache)
 add_package(ThreadBase ../../source/ThreadBase)

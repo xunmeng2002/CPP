@@ -57,7 +57,7 @@ void Logger::WriteLog(LogLevel level, const char* file, int line, const char* fu
 	va_list va;
 	va_start(va, formatStr);
 	WriteToLog(level, file, line, func, formatStr, va);
-	if (level <= LogLevel::Warning)
+	if (level >= LogLevel::Info)
 	{
 		WriteToConsole(level, formatStr, va);
 	}
@@ -124,6 +124,8 @@ void Logger::FlushBuffers()
 
 void Logger::WriteToLog(LogLevel level, const char* file, int line, const char* func, const char* format, va_list va)
 {
+	if (level < s_logLevel)
+		return;
 	for (auto p = file; *p != '\0'; p++)
 		if (*p == '\\' || *p == '/')
 			file = p + 1;
@@ -145,7 +147,7 @@ void Logger::WriteToLog(LogLevel level, const char* file, int line, const char* 
 }
 void Logger::WriteToConsole(LogLevel level, const char* formatStr, va_list va)
 {
-	if (level > s_logLevel)
+	if (level < s_logLevel)
 		return;
 	char logString[10240];
 	int len = _snprintf(logString, sizeof(logString), "ThreadID[%05d] ", GetCurrentThreadId());

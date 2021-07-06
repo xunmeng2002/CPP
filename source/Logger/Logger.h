@@ -9,14 +9,14 @@
 
 enum class LogLevel : int
 {
-	None = 0,
-	Emergency = 1,
-	Critical = 2,
-	Error = 3,
-	Warning = 4,
-	Info = 5,
-	Debug = 6,
-	Ignore = 7,
+	Ignore = 0,
+	Debug = 1,
+	Info = 2,
+	Warning = 3,
+	Error = 4,
+	Critical = 5,
+	Emergency = 6,
+	None = 7,
 };
 
 struct LogData;

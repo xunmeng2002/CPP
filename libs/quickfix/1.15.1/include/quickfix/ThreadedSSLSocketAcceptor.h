@@ -135,10 +135,10 @@ class ThreadedSSLSocketAcceptor : public Acceptor
 
 public:
   ThreadedSSLSocketAcceptor(Application &, MessageStoreFactory &,
-                            const SessionSettings &) EXCEPT (ConfigError);
+                            const SessionSettings &) throw(ConfigError);
   ThreadedSSLSocketAcceptor(Application &, MessageStoreFactory &,
                             const SessionSettings &,
-                            LogFactory &) EXCEPT (ConfigError);
+                            LogFactory &) throw(ConfigError);
 
   virtual ~ThreadedSSLSocketAcceptor();
 
@@ -151,14 +151,14 @@ public:
 private:
   struct AcceptorThreadInfo
   {
-    AcceptorThreadInfo(ThreadedSSLSocketAcceptor *pAcceptor, socket_handle socket,
+    AcceptorThreadInfo(ThreadedSSLSocketAcceptor *pAcceptor, int socket,
                        int port)
         : m_pAcceptor(pAcceptor), m_socket(socket), m_port(port)
     {
     }
 
     ThreadedSSLSocketAcceptor *m_pAcceptor;
-    socket_handle m_socket;
+    int m_socket;
     int m_port;
   };
 
@@ -176,15 +176,15 @@ private:
 
   bool readSettings(const SessionSettings &);
 
-  typedef std::set< socket_handle > Sockets;
+  typedef std::set< int > Sockets;
   typedef std::set< SessionID > Sessions;
   typedef std::map< int, Sessions > PortToSessions;
-  typedef std::map< socket_handle, int > SocketToPort;
-  typedef std::pair< socket_handle, SSL * > SocketKey;
+  typedef std::map< int, int > SocketToPort;
+  typedef std::pair< int, SSL * > SocketKey;
   typedef std::map< SocketKey, thread_id > SocketToThread;
 
-  void onConfigure(const SessionSettings &) EXCEPT (ConfigError);
-  void onInitialize(const SessionSettings &) EXCEPT (RuntimeError);
+  void onConfigure(const SessionSettings &) throw(ConfigError);
+  void onInitialize(const SessionSettings &) throw(RuntimeError);
 
   void onStart();
   bool onPoll(double timeout);

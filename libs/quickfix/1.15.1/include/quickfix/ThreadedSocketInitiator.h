@@ -40,20 +40,20 @@ class ThreadedSocketInitiator : public Initiator
 {
 public:
   ThreadedSocketInitiator( Application&, MessageStoreFactory&,
-                           const SessionSettings& ) EXCEPT ( ConfigError );
+                           const SessionSettings& ) throw( ConfigError );
   ThreadedSocketInitiator( Application&, MessageStoreFactory&,
                            const SessionSettings&,
-                           LogFactory& ) EXCEPT ( ConfigError );
+                           LogFactory& ) throw( ConfigError );
 
   virtual ~ThreadedSocketInitiator();
 
 private:
-  typedef std::map < socket_handle, thread_id > SocketToThread;
+  typedef std::map < int, thread_id > SocketToThread;
   typedef std::map < SessionID, int > SessionToHostNum;
   typedef std::pair < ThreadedSocketInitiator*, ThreadedSocketConnection* > ThreadPair;
 
-  void onConfigure( const SessionSettings& ) EXCEPT ( ConfigError );
-  void onInitialize( const SessionSettings& ) EXCEPT ( RuntimeError );
+  void onConfigure( const SessionSettings& ) throw ( ConfigError );
+  void onInitialize( const SessionSettings& ) throw ( RuntimeError );
 
   void onStart();
   bool onPoll( double timeout );
@@ -61,8 +61,8 @@ private:
 
   void doConnect( const SessionID& s, const Dictionary& d );
 
-  void addThread(socket_handle s, thread_id t );
-  void removeThread(socket_handle s );
+  void addThread( int s, thread_id t );
+  void removeThread( int s );
   void lock() { Locker l(m_mutex); }
   static THREAD_PROC socketThread( void* p );
 

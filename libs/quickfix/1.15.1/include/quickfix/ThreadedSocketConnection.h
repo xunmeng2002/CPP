@@ -46,26 +46,26 @@ class ThreadedSocketConnection : Responder
 public:
   typedef std::set<SessionID> Sessions;
 
-  ThreadedSocketConnection( socket_handle s, Sessions sessions, Log* pLog );
-  ThreadedSocketConnection( const SessionID&, socket_handle s,
+  ThreadedSocketConnection( int s, Sessions sessions, Log* pLog );
+  ThreadedSocketConnection( const SessionID&, int s, 
                             const std::string& address, short port, 
                             Log* pLog,
                             const std::string& sourceAddress = "", short sourcePort = 0);
   virtual ~ThreadedSocketConnection() ;
 
   Session* getSession() const { return m_pSession; }
-  socket_handle getSocket() const { return m_socket; }
+  int getSocket() const { return m_socket; }
   bool connect();
   void disconnect();
   bool read();
 
 private:
-  bool readMessage( std::string& msg ) EXCEPT ( SocketRecvFailed );
+  bool readMessage( std::string& msg ) throw( SocketRecvFailed );
   void processStream();
   bool send( const std::string& );
   bool setSession( const std::string& msg );
 
-  socket_handle m_socket;
+  int m_socket;
   char m_buffer[BUFSIZ];
 
   std::string m_address;

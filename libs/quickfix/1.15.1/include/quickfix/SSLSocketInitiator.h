@@ -134,9 +134,9 @@ class SSLSocketInitiator : public Initiator, SocketConnector::Strategy
 {
 public:
   SSLSocketInitiator( Application&, MessageStoreFactory&,
-                   const SessionSettings& ) EXCEPT ( ConfigError );
+                   const SessionSettings& ) throw( ConfigError );
   SSLSocketInitiator( Application&, MessageStoreFactory&,
-                   const SessionSettings&, LogFactory& ) EXCEPT ( ConfigError );
+                   const SessionSettings&, LogFactory& ) throw( ConfigError );
 
   virtual ~SSLSocketInitiator();
 
@@ -153,24 +153,24 @@ public:
   static int passwordHandleCB(char *buf, int bufsize, int verify, void *job);
 
 private:
-  typedef std::map < socket_handle, SSLSocketConnection* > SocketConnections;
+  typedef std::map < int, SSLSocketConnection* > SocketConnections;
   typedef std::map < SessionID, int > SessionToHostNum;
 
-  void onConfigure( const SessionSettings& ) EXCEPT ( ConfigError );
-  void onInitialize( const SessionSettings& ) EXCEPT ( RuntimeError );
+  void onConfigure( const SessionSettings& ) throw ( ConfigError );
+  void onInitialize( const SessionSettings& ) throw ( RuntimeError );
 
   void onStart();
   bool onPoll( double timeout );
   void onStop();
 
   void doConnect( const SessionID&, const Dictionary& d );
-  void onConnect( SocketConnector&, socket_handle);
-  void onWrite( SocketConnector&, socket_handle);
-  bool onData( SocketConnector&, socket_handle);
-  void onDisconnect( SocketConnector&, socket_handle);
+  void onConnect( SocketConnector&, int );
+  void onWrite( SocketConnector&, int );
+  bool onData( SocketConnector&, int );
+  void onDisconnect( SocketConnector&, int );
   void onError( SocketConnector& );
   void onTimeout( SocketConnector& );
-  bool handshakeSSL(SSL* ssl);
+
   void getHost( const SessionID&, const Dictionary&, std::string&, short&, std::string&, short& );
 
   SessionToHostNum m_sessionToHostNum;

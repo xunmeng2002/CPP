@@ -145,28 +145,28 @@ class ThreadedSSLSocketConnection : Responder
 public:
   typedef std::set< SessionID > Sessions;
 
-  ThreadedSSLSocketConnection(socket_handle s, SSL *ssl, Sessions sessions, Log *pLog);
-  ThreadedSSLSocketConnection(const SessionID &, socket_handle s, SSL *ssl,
+  ThreadedSSLSocketConnection(int s, SSL *ssl, Sessions sessions, Log *pLog);
+  ThreadedSSLSocketConnection(const SessionID &, int s, SSL *ssl,
                               const std::string &address, short port,
                               Log *pLog);
   virtual ~ThreadedSSLSocketConnection();
 
   Session *getSession() const { return m_pSession; }
-  socket_handle getSocket() const { return m_socket; }
+  int getSocket() const { return m_socket; }
   bool connect();
   void disconnect();
   bool read();
   SSL *sslObject() { return m_ssl; }
 
 private:
-  typedef std::pair< socket_handle, SSL * > SocketKey;
+  typedef std::pair< int, SSL * > SocketKey;
 
-  bool readMessage(std::string &msg) EXCEPT (SocketRecvFailed);
+  bool readMessage(std::string &msg) throw(SocketRecvFailed);
   void processStream();
   bool send(const std::string &);
   bool setSession(const std::string &msg);
 
-  socket_handle m_socket;
+  int m_socket;
   SSL *m_ssl;
   char m_buffer[BUFSIZ];
 

@@ -37,13 +37,13 @@ class HttpMessage;
 class HttpConnection
 {
 public:
-  HttpConnection(socket_handle s );
+  HttpConnection( int s );
 
-  socket_handle getSocket() const { return m_socket; }
+  int getSocket() const { return m_socket; }
   bool read();
 
 private:
-  bool readMessage( std::string& msg ) EXCEPT ( SocketRecvFailed );
+  bool readMessage( std::string& msg ) throw( SocketRecvFailed );
   void processStream();
   void processRequest( const HttpMessage& );
   void processRoot( const HttpMessage&, std::stringstream& h, std::stringstream& b );
@@ -67,7 +67,7 @@ private:
   bool send( const std::string& );
   void disconnect( int error = 0 );
 
-  socket_handle m_socket;
+  int m_socket;
   char m_buffer[BUFSIZ];
 
   HttpParser m_parser;

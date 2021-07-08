@@ -30,7 +30,6 @@
 #include "Exceptions.h"
 #include "Utility.h"
 #include "config-all.h"
-#include <assert.h>
 #include <string>
 #include <sstream>
 #include <iomanip>
@@ -139,16 +138,6 @@ inline char* integer_to_string_padded
   return p;
 }
 
-template<typename T>
-T clamp_of( const T& value, const T& lowerBound, const T& upperBound )
-{
-  assert( lowerBound <= upperBound );
-  if( value < lowerBound )
-    return lowerBound;
-  else
-    return ( value > upperBound ) ? upperBound : value;
-}
-
 /// Empty converter is a no-op.
 struct EmptyConvertor
 {
@@ -209,7 +198,7 @@ struct IntConvertor
   }
 
   static signed_int convert( const std::string& value )
-  EXCEPT ( FieldConvertError )
+  throw( FieldConvertError )
   {
     signed_int result = 0;
     if( !convert( value.begin(), value.end(), result ) )
@@ -223,11 +212,14 @@ struct IntConvertor
 struct CheckSumConvertor
 {
   static std::string convert( int value )
-  EXCEPT ( FieldConvertError )
+  throw( FieldConvertError )
   {
     if ( value > 255 || value < 0 ) throw FieldConvertError();
     char result[3];
-    integer_to_string_padded(result, sizeof(result), value);
+    if( integer_to_string_padded(result, sizeof(result), value) != result )
+    {
+      throw FieldConvertError();
+    }
     return std::string( result, sizeof( result ) );
   }
 
@@ -237,7 +229,7 @@ struct CheckSumConvertor
   }
 
   static int convert( const std::string& value )
-  EXCEPT ( FieldConvertError )
+  throw( FieldConvertError )
   {
     return IntConvertor::convert( value );
   }
@@ -251,16 +243,16 @@ private:
 
   static double fast_strtod( const char * buffer, int size, int * processed_chars );
 
-  static int fast_dtoa( char * buffer, int size, double value, int significant_digits );
+  static int fast_dtoa( char * buffer, int size, double value );
 
-  static int fast_fixed_dtoa( char * buffer, int size, double value, int significant_digits);
+  static int fast_fixed_dtoa( char * buffer, int size, double value ); 
 
 public:
 
   static const int SIGNIFICANT_DIGITS = 15;
   static const int BUFFFER_SIZE = 32;
 
-  static std::string convert( double value, int padding = 0, int significant_digits = SIGNIFICANT_DIGITS)
+  static std::string convert( double value, int padding = 0 )
   {
     char result[BUFFFER_SIZE];
     char *end = 0;
@@ -268,7 +260,7 @@ public:
     int size;
     if( value == 0 || value > 0.0001 || value < -0.0001 )
     {
-      size = fast_dtoa( result, BUFFFER_SIZE, value, significant_digits);
+      size = fast_dtoa( result, BUFFFER_SIZE, value ); 
       if( size == 0 )
         return std::string();
 
@@ -296,7 +288,7 @@ public:
     }
     else
     {
-      size = fast_fixed_dtoa( result, BUFFFER_SIZE, value, significant_digits );
+      size = fast_fixed_dtoa( result, BUFFFER_SIZE, value );
       if( size == 0 )
         return std::string();
 
@@ -305,7 +297,7 @@ public:
 
       if( padding > 0 )
       {
-        int discard = significant_digits - padding;
+        int discard = SIGNIFICANT_DIGITS - padding;
 
         while( (*end == '0') && (discard-- > 0) )
         {
@@ -350,16 +342,23 @@ static bool convert( const std::string& value, double& result )
   }
 
   if( *i || !haveDigit ) return false;
-
+    
   int processed_chars;
   const int total_length = value.length();
-  result = fast_strtod( value.c_str(), total_length, &processed_chars);
+  const double val = fast_strtod( value.c_str(), total_length, &processed_chars);
 
+  if ( processed_chars != total_length ||
+     val != val /*test for quite NaN*/ )
+  {
+    return false;
+  }
+
+  result = val;
   return true;
 }
 
   static double convert( const std::string& value )
-  EXCEPT ( FieldConvertError )
+  throw( FieldConvertError )
   {
     double result = 0.0;
     if( !convert( value, result ) )
@@ -386,7 +385,7 @@ struct CharConvertor
   }
 
   static char convert( const std::string& value )
-  EXCEPT ( FieldConvertError )
+  throw( FieldConvertError )
   {
     char result = '\0';
     if( !convert( value, result ) )
@@ -419,7 +418,7 @@ struct BoolConvertor
   }
 
   static bool convert( const std::string& value )
-  EXCEPT ( FieldConvertError )
+  throw( FieldConvertError )
   {
     bool result = false;
     if( !convert( value, result ) )
@@ -434,12 +433,10 @@ struct UtcTimeStampConvertor
 {
   static std::string convert( const UtcTimeStamp& value,
                               int precision = 0 )
-  EXCEPT ( FieldConvertError )
+  throw( FieldConvertError )
   {
     char result[ 17+10 ]; // Maximum
     int year, month, day, hour, minute, second, fraction;
-
-    precision = clamp_of( precision, 0, 9 );
 
     value.getYMD( year, month, day );
     value.getHMS( hour, minute, second, fraction, precision );
@@ -457,14 +454,18 @@ struct UtcTimeStampConvertor
     if( precision )
     {
       result[17] = '.';
-      integer_to_string_padded ( result + 18, precision, fraction );
+      if( integer_to_string_padded ( result + 18, precision, fraction )
+          != result + 18 )
+      {
+        throw FieldConvertError();
+      }
     }
 
     return std::string(result, precision ? (17 + 1 + precision) : 17);
   }
 
   static UtcTimeStamp convert( const std::string& value )
-  EXCEPT ( FieldConvertError )
+  throw( FieldConvertError )
   {
     size_t len = value.size();
     if (len < 17 || len > 27) throw FieldConvertError(value);
@@ -546,12 +547,10 @@ struct UtcTimeOnlyConvertor
 {
   static std::string convert( const UtcTimeOnly& value,
                               int precision = 0 )
-  EXCEPT ( FieldConvertError )
+  throw( FieldConvertError )
   {
     char result[ 8+10 ]; // Maximum
     int hour, minute, second, fraction;
-
-    precision = clamp_of( precision, 0, 9 );
 
     value.getHMS( hour, minute, second, fraction, precision );
 
@@ -564,14 +563,16 @@ struct UtcTimeOnlyConvertor
     if( precision )
     {
       result[8] = '.';
-      integer_to_string_padded ( result + 9, precision, fraction );
+      if( integer_to_string_padded ( result + 9, precision, fraction )
+          != result + 9 )
+          throw FieldConvertError();
     }
 
     return std::string(result, precision ? (8 + 1 + precision) : 8);
   }
 
   static UtcTimeOnly convert( const std::string& value)
-  EXCEPT ( FieldConvertError )
+  throw( FieldConvertError )
   {
     size_t len = value.size();
     if (len < 8 || len > 18) throw FieldConvertError(value);
@@ -632,7 +633,7 @@ struct UtcTimeOnlyConvertor
 struct UtcDateConvertor
 {
   static std::string convert( const UtcDate& value )
-  EXCEPT ( FieldConvertError )
+  throw( FieldConvertError )
   {
     int year, month, day;
     value.getYMD( year, month, day );
@@ -647,7 +648,7 @@ struct UtcDateConvertor
   }
 
   static UtcDate convert( const std::string& value )
-  EXCEPT ( FieldConvertError )
+  throw( FieldConvertError )
   {
     if( value.size() != 8 ) throw FieldConvertError(value);
 

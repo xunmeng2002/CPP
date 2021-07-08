@@ -48,11 +48,11 @@ class SocketConnection : Responder
 public:
   typedef std::set<SessionID> Sessions;
 
-  SocketConnection( socket_handle s, Sessions sessions, SocketMonitor* pMonitor );
-  SocketConnection( SocketInitiator&, const SessionID&, socket_handle, SocketMonitor* );
+  SocketConnection( int s, Sessions sessions, SocketMonitor* pMonitor );
+  SocketConnection( SocketInitiator&, const SessionID&, int, SocketMonitor* );
   virtual ~SocketConnection();
 
-  socket_handle getSocket() const { return m_socket; }
+  int getSocket() const { return m_socket; }
   Session* getSession() const { return m_pSession; }
 
   bool read( SocketConnector& s );
@@ -80,13 +80,13 @@ private:
     Queue;
 
   bool isValidSession();
-  void readFromSocket() EXCEPT ( SocketRecvFailed );
+  void readFromSocket() throw( SocketRecvFailed );
   bool readMessage( std::string& msg );
   void readMessages( SocketMonitor& s );
   bool send( const std::string& );
   void disconnect();
 
-  socket_handle m_socket;
+  int m_socket;
   char m_buffer[BUFSIZ];
 
   Parser m_parser;

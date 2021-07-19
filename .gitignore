@@ -1,4 +1,6 @@
 target/*/build/*
+target/spec/*
+libs/*
 test/*/build/*
 pump_temp.py
 test/*/GenCode/*.cpp

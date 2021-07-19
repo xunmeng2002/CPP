@@ -13,7 +13,7 @@ private:
 	}
 	~MemCacheTemplateSingleton()
 	{
-		for (auto item : m_Items)
+		for (auto& item : m_Items)
 		{
 			delete item;
 		}

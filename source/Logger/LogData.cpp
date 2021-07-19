@@ -14,13 +14,13 @@ LogData::~LogData()
 		LogFile = nullptr;
 	}
 	delete CurrBuffer;
-	for (auto logBuffer : LogBuffers)
+	for (auto& logBuffer : LogBuffers)
 	{
 		delete logBuffer;
 	}
 	LogBuffers.clear();
 
-	for (auto logBuffer : InnerLogBuffers)
+	for (auto& logBuffer : InnerLogBuffers)
 	{
 		delete logBuffer;
 	}

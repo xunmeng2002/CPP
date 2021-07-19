@@ -12,7 +12,7 @@ using namespace std;
 
 #define LOG_LINE_LENGTH 64 * 1024
 
-static LogLevel s_logLevel = LogLevel::Debug;
+static LogLevel s_logLevel = LogLevel::Info;
 
 static map<LogLevel, string> s_LogLevelName = {
 	{ LogLevel::None, "NONE"},
@@ -113,7 +113,7 @@ void Logger::SwapInnerLogBuffers()
 }
 void Logger::FlushBuffers()
 {
-	for (auto buffer : m_LogData->InnerLogBuffers)
+	for (auto& buffer : m_LogData->InnerLogBuffers)
 	{
 		fwrite(buffer->GetData(), buffer->Length(), 1, m_LogData->LogFile);
 		m_LogData->FreeBuffer(buffer);

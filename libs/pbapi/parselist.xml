@@ -1,3 +1,0 @@
-<pumplist>
-	<pump script="./libs/pbapi/ParsePbStepModel.py" dest="./libs/pbapi/pbstep.xml" sources="./libs/pbapi/schema.xml ./libs/pbapi/macros.xml"/>
-</pumplist>

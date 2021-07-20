@@ -1,3 +1,0 @@
-<pumplist>
-	<pump dest="./libs/pbapi/include/stepdef.h" tpl="./libs/pbapi/include/stepdef.h.tpl" model="./libs/pbapi/macros.xml"/>
-</pumplist>

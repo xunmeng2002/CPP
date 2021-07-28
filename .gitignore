@@ -7,3 +7,6 @@ test/*/GenCode/*.cpp
 test/*/GenCode/*.h
 test/*/GenCode/*/*.cpp
 test/*/GenCode/*/*.h
+target/GlobexFixTest/TradeApi/*.1
+target/*/GenCode/*.cpp
+target/*/GenCode/*.h

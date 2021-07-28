@@ -1,0 +1,10 @@
+<pumplist>
+	<pump dest="./target/GlobexFixTest/GenCode/TradeApiHeaderFields.h" tpl="./target/GlobexFixTest/GenCode/TradeApiHeaderFields.h.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
+	<pump dest="./target/GlobexFixTest/GenCode/TradeApiHeaderFields.cpp" tpl="./target/GlobexFixTest/GenCode/TradeApiHeaderFields.cpp.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
+	
+	<pump dest="./target/GlobexFixTest/GenCode/TradeApiReqFields.h" tpl="./target/GlobexFixTest/GenCode/TradeApiReqFields.h.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
+	<pump dest="./target/GlobexFixTest/GenCode/TradeApiReqFields.cpp" tpl="./target/GlobexFixTest/GenCode/TradeApiReqFields.cpp.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
+	
+	<pump dest="./target/GlobexFixTest/GenCode/TradeApiRspFields.h" tpl="./target/GlobexFixTest/GenCode/TradeApiRspFields.h.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
+	<pump dest="./target/GlobexFixTest/GenCode/TradeApiRspFields.cpp" tpl="./target/GlobexFixTest/GenCode/TradeApiRspFields.cpp.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
+</pumplist>

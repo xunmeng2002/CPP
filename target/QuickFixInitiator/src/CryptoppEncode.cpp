@@ -102,7 +102,7 @@ std::string GetCanonicalReq(const FIX::Message& logonMsg)
 		canonicalRequest = canonicalRequest + applicationSystemVendor.getValue();
 	}
 
-	WRITE_LOG(LogLevel::Info, "CanonicalRequest: [%s]", canonicalRequest.c_str());
+	WRITE_LOG(LogLevel::Debug, "CanonicalRequest: [%s]", canonicalRequest.c_str());
 	return canonicalRequest;
 }
 

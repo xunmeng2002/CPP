@@ -3,20 +3,46 @@
 
 GlobalParam GlobalParam::m_Instance;
 
-void GlobalParam::SetNextExpectedMsgSeqNum(int value)
+void GlobalParam::SetNextSendSeqNum(int value)
 {
-	m_NextExpectedMsgSeqNum = value;
+	m_NextSendSeqNum = value;
 }
-int GlobalParam::GetNextExpectedMsgSeqNum()
+int GlobalParam::GetNextSendSeqNum()
 {
-	return m_NextExpectedMsgSeqNum++;
+	return m_NextSendSeqNum++;
 }
 
-void GlobalParam::SetSenderCompID(string value)
+
+int GlobalParam::GetLastRecvSeqNum()
 {
-	m_SenderCompID = value;
+	return m_LastRecvSeqNum;
 }
-string GlobalParam::GetSenderCompID()
+int GlobalParam::GetNextExpectSeqNum()
 {
-	return m_SenderCompID;
+	return m_LastRecvSeqNum + 1;
 }
+bool GlobalParam::SetLastRecvSeqNum(int value)
+{
+	if (value > m_LastRecvSeqNum)
+	{
+		m_LastRecvSeqNum = value;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+bool GlobalParam::ResetLastRecvSeqNum(int value)
+{
+	if (value > m_LastRecvSeqNum)
+	{
+		m_LastRecvSeqNum = value;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+

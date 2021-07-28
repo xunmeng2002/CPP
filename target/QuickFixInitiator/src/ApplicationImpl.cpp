@@ -41,11 +41,10 @@ void ApplicationImpl::toAdmin(FIX::Message& message, const FIX::SessionID& sessi
 	msgHeader.getField(msgType);
 	const std::string& strmsgType = msgType.getValue();
 	
-
+	FIX::IntField seqNum(34, GlobalParam::GetInstance().GetNextExpectedMsgSeqNum());
+	msgHeader.setField(seqNum);
 	if (strmsgType == FIX::MsgType_Logon)
 	{
-		FIX::IntField seqNum(34, GlobalParam::GetInstance().GetNextExpectedMsgSeqNum());
-		msgHeader.setField(seqNum);
 		const std::string strRealSenderID = msgHeader.getField(FIX::FIELD::SenderCompID);
 		auto strv = strRealSenderID + "U";
 		msgHeader.setField(FIX::SenderCompID(strv));

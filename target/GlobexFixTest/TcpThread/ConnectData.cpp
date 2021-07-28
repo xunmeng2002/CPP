@@ -32,7 +32,7 @@ int ConnectData::OnSend()
 	len = min(len, MAX_SINGLE_MESSAGE_LENGTH);
 	int sendLen = send(SocketID, (char*)data, len, 0);
 	*((char*)data + len) = 0;
-	WRITE_LOG(LogLevel::Info, "OnSend: SessionID[%d] data[%s], len[%d], sendLen[%d]", SessionID, data, len, sendLen);
+	WRITE_LOG(LogLevel::Debug, "OnSend: SessionID[%d] data[%s], len[%d], sendLen[%d]", SessionID, data, len, sendLen);
 	if (sendLen > 0)
 	{
 		SendCache->PopFront(nullptr, sendLen);

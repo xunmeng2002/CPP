@@ -1,7 +1,8 @@
 #include "TradeApiRspFields.h"
 
 
-RspHeader::RspHeader(FixMessage* fixMessage)
+RspHeader::RspHeader(const string& fieldName, FixMessage* fixMessage)
+	:FieldName(fieldName)
 {
 	BeginString = fixMessage->GetItem(8);
 	BodyLength = fixMessage->GetItem(9);
@@ -19,6 +20,8 @@ RspHeader::RspHeader(FixMessage* fixMessage)
 int RspHeader::ToString(char* buff, int size)
 {
 	int len = 0;
+	len += sprintf(buff, "%s:", FieldName.c_str());
+
 	len += WriteString(buff + len, size - len, "BeginString", BeginString);
 	len += WriteString(buff + len, size - len, "BodyLength", BodyLength);
 	len += WriteString(buff + len, size - len, "MsgType", MsgType);
@@ -64,8 +67,8 @@ int RspHeader::AddHead(char* buff, int bodyLen)
 }
 
 
-RspFieldBase::RspFieldBase(FixMessage* fixMessage)
-	: RspHeader(fixMessage), Trailer(fixMessage)
+RspFieldBase::RspFieldBase(const string& fieldName, FixMessage* fixMessage)
+	: RspHeader(fieldName, fixMessage), Trailer(fixMessage)
 {
 
 }
@@ -79,7 +82,7 @@ int RspFieldBase::MakePackage(char* buff, int size)
 
 
 RspLogonField::RspLogonField(FixMessage* fixMessage)
-	:RspFieldBase(fixMessage)
+	:RspFieldBase("RspLogonField", fixMessage)
 {
 	HeartBtInt = fixMessage->GetItem(108);
 	ResetSeqNumFlag = fixMessage->GetItem(141);
@@ -119,7 +122,7 @@ int RspLogonField::ToStream(char* buff)
 
 
 RspLogoutField::RspLogoutField(FixMessage* fixMessage)
-	:RspFieldBase(fixMessage)
+	:RspFieldBase("RspLogoutField", fixMessage)
 {
 	Text = fixMessage->GetItem(58);
 	NextExpectedMsgSeqNum = fixMessage->GetItem(789);
@@ -152,7 +155,7 @@ int RspLogoutField::ToStream(char* buff)
 
 
 RspTestRequestField::RspTestRequestField(FixMessage* fixMessage)
-	:RspFieldBase(fixMessage)
+	:RspFieldBase("RspTestRequestField", fixMessage)
 {
 	TestReqID = fixMessage->GetItem(112);
 }
@@ -178,7 +181,7 @@ int RspTestRequestField::ToStream(char* buff)
 
 
 RspHeartBeatField::RspHeartBeatField(FixMessage* fixMessage)
-	:RspFieldBase(fixMessage)
+	:RspFieldBase("RspHeartBeatField", fixMessage)
 {
 	TestReqID = fixMessage->GetItem(112);
 	SplitMsg = fixMessage->GetItem(9553);
@@ -207,7 +210,7 @@ int RspHeartBeatField::ToStream(char* buff)
 
 
 RspSessionLevelRejectField::RspSessionLevelRejectField(FixMessage* fixMessage)
-	:RspFieldBase(fixMessage)
+	:RspFieldBase("RspSessionLevelRejectField", fixMessage)
 {
 	RefSeqNum = fixMessage->GetItem(45);
 	Text = fixMessage->GetItem(58);
@@ -242,6 +245,64 @@ int RspSessionLevelRejectField::ToStream(char* buff)
 	len += WriteStream(buff + len, 373, SessionRejectReason);
 	len += WriteStream(buff + len, 1028, ManualOrderIndicator);
 	len += WriteStream(buff + len, 9553, SplitMsg);
+
+	return len;
+}
+
+
+RspResendRequestField::RspResendRequestField(FixMessage* fixMessage)
+	:RspFieldBase("RspResendRequestField", fixMessage)
+{
+	BeginSeqNo = fixMessage->GetItem(7);
+	EndSeqNo = fixMessage->GetItem(16);
+}
+int RspResendRequestField::ToString(char* buff, int size)
+{
+	int len = 0;
+	len += RspHeader::ToString(buff + len, size - len);
+
+	len += WriteString(buff + len, size - len, "BeginSeqNo", BeginSeqNo);
+	len += WriteString(buff + len, size - len, "EndSeqNo", EndSeqNo);
+
+	len += Trailer::ToString(buff + len, size - len);
+	return len;
+}
+int RspResendRequestField::ToStream(char* buff)
+{
+	int len = 0;
+	len += RspHeader::ToStream(buff + len);
+
+	len += WriteStream(buff + len, 7, BeginSeqNo);
+	len += WriteStream(buff + len, 16, EndSeqNo);
+
+	return len;
+}
+
+
+RspSequenceResetField::RspSequenceResetField(FixMessage* fixMessage)
+	:RspFieldBase("RspSequenceResetField", fixMessage)
+{
+	NewSeqNo = fixMessage->GetItem(36);
+	GapFillFlag = fixMessage->GetItem(123);
+}
+int RspSequenceResetField::ToString(char* buff, int size)
+{
+	int len = 0;
+	len += RspHeader::ToString(buff + len, size - len);
+
+	len += WriteString(buff + len, size - len, "NewSeqNo", NewSeqNo);
+	len += WriteString(buff + len, size - len, "GapFillFlag", GapFillFlag);
+
+	len += Trailer::ToString(buff + len, size - len);
+	return len;
+}
+int RspSequenceResetField::ToStream(char* buff)
+{
+	int len = 0;
+	len += RspHeader::ToStream(buff + len);
+
+	len += WriteStream(buff + len, 36, NewSeqNo);
+	len += WriteStream(buff + len, 123, GapFillFlag);
 
 	return len;
 }

@@ -25,6 +25,7 @@ public:
 	void AddItem(int tag, string value);
 	string GetItem(int tag);
 	string GetMessageType();
+	string GetSeqNum();
 	int ToString(char* buff, int size);
 
 

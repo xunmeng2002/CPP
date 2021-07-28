@@ -19,6 +19,10 @@ string FixMessage::GetMessageType()
 {
 	return GetItem(35);
 }
+string FixMessage::GetSeqNum()
+{
+	return GetItem(34);
+}
 int FixMessage::ToString(char* buff, int size)
 {
 	int len = 0;

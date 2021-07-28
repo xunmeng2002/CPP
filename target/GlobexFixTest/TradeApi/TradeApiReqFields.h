@@ -5,12 +5,12 @@
 class ReqHeader
 {
 public:
-	ReqHeader() {}
-	ReqHeader(FixMessage* fixMessage);
+	ReqHeader(const string& fieldName, const string& msgType);
 
-	virtual int ToString(char* buff, int size);
-	virtual int ToStream(char* buff);
+	int ToString(char* buff, int size);
+	int ToStream(char* buff);
 	int AddHead(char* buff, int bodyLen);
+	void SetHead(const string& senderCompID, const string& senderSubID, const string& targetCompID, const string& targetSubID);
 
 public:
 	string BeginString;
@@ -27,6 +27,8 @@ public:
 	string LastMsgSeqNumProcessed;
 
 protected:
+	string FieldName;
+
 	char HeadBuff[HEAD_LEN];
 	unordered_map<int, string> Items;
 };
@@ -34,18 +36,21 @@ protected:
 class ReqFieldBase : public ReqHeader, public Trailer
 {
 public:
-	ReqFieldBase() {}
-	ReqFieldBase(FixMessage* fixMessage);
+	ReqFieldBase(const string& fieldName, const string& msgType)
+		:ReqHeader(fieldName, msgType)
+	{}
 
 	int MakePackage(char* buff, int size);
-	virtual int ToStream(char* buff) override = 0;
+	virtual int ToString(char* buff, int size) = 0;
+	virtual int ToStream(char* buff) = 0;
 };
 
 class ReqLogonField : public ReqFieldBase
 {
 public:
-	ReqLogonField() {}
-	ReqLogonField(FixMessage* fixMessage);
+	ReqLogonField()
+		:ReqFieldBase("ReqLogonField", "A")
+	{}
 
 	virtual int ToString(char* buff, int size);
 	virtual int ToStream(char* buff) override;
@@ -63,12 +68,42 @@ public:
 	string EncryptedPassword;
 };
 
+class ReqLogoutField : public ReqFieldBase
+{
+public:
+	ReqLogoutField()
+		:ReqFieldBase("ReqLogoutField", "5") 
+	{}
+
+	virtual int ToString(char* buff, int size);
+	virtual int ToStream(char* buff) override;
+
+public:
+
+};
+
+
+class ReqTestRequestField : public ReqFieldBase
+{
+public:
+	ReqTestRequestField()
+		:ReqFieldBase("ReqTestRequestField", "1")
+	{}
+	
+	virtual int ToString(char* buff, int size);
+	virtual int ToStream(char* buff) override;
+
+public:
+	string TestReqID;
+};
+
+
 class ReqHeartBeatField : public ReqFieldBase
 {
 public:
-	ReqHeartBeatField() {}
-	ReqHeartBeatField(FixMessage* fixMessage);
-
+	ReqHeartBeatField()
+		:ReqFieldBase("ReqHeartBeatField", "0")
+	{}
 
 	virtual int ToString(char* buff, int size);
 	virtual int ToStream(char* buff) override;
@@ -78,11 +113,45 @@ public:
 	string SplitMsg;
 };
 
+
+class ReqResendRequestField : public ReqFieldBase
+{
+public:
+	ReqResendRequestField()
+		:ReqFieldBase("ReqResendRequestField", "2")
+	{}
+
+	virtual int ToString(char* buff, int size);
+	virtual int ToStream(char* buff) override;
+
+public:
+	string BeginSeqNo;
+	string EndSeqNo;
+};
+
+
+class ReqSequenceResetField : public ReqFieldBase
+{
+public:
+	ReqSequenceResetField()
+		:ReqFieldBase("ReqSequenceResetField", "2")
+	{}
+
+	virtual int ToString(char* buff, int size);
+	virtual int ToStream(char* buff) override;
+
+public:
+	string NewSeqNo;
+	string GapFillFlag;
+};
+
+
 class ReqNewOrderField : public ReqFieldBase
 {
 public:
-	ReqNewOrderField() {}
-	ReqNewOrderField(FixMessage* fixMessage);
+	ReqNewOrderField()
+		:ReqFieldBase("ReqNewOrderField", "D")
+	{}
 
 	virtual int ToString(char* buff, int size);
 	virtual int ToStream(char* buff) override;
@@ -119,5 +188,6 @@ public:
 	string GiveUpFirm;
 	string CmtaGiveupCD;
 	string CorrelationClOrdID;
+	string MarketSegmentID;
 };
 

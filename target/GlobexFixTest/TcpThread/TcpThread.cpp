@@ -173,7 +173,7 @@ void TcpThread::OnRecv()
 			if (len > 0)
 			{
 				m_RecvBuffer[len] = '\0';
-				WRITE_LOG(LogLevel::Info, "OnRecv: SessionID[%d], len[%d], [%s]", sessionID, len, m_RecvBuffer);
+				WRITE_LOG(LogLevel::Debug, "OnRecv: SessionID[%d], len[%d], [%s]", sessionID, len, m_RecvBuffer);
 				WorkThread::GetInstance().OnRecv(sessionID, m_RecvBuffer, len);
 			}
 			else

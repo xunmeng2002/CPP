@@ -1,27 +1,30 @@
 #include "TradeApiReqFields.h"
 #include "Logger.h"
 #include "Common.h"
+#include "GlobalParam.h"
 
 
-
-ReqHeader::ReqHeader(FixMessage* fixMessage)
+ReqHeader::ReqHeader(const string& fieldName, const string& msgType)
+	:FieldName(fieldName), MsgType(msgType)
 {
-	BeginString = fixMessage->GetItem(8);
-	BodyLength = fixMessage->GetItem(9);
-	MsgType = fixMessage->GetItem(35);
-	MsgSeqNum = fixMessage->GetItem(34);
-	SenderCompID = fixMessage->GetItem(49);
-	SenderSubID = fixMessage->GetItem(50);
-	SendingTime = fixMessage->GetItem(52);
-	TargetCompID = fixMessage->GetItem(56);
-	TargetSubID = fixMessage->GetItem(57);
-	OrigSendingTime = fixMessage->GetItem(122);
-	SenderLocationID = fixMessage->GetItem(142);
-	LastMsgSeqNumProcessed = fixMessage->GetItem(369);
+	BeginString = "FIX.4.2";
+	BodyLength = "";
+	MsgType = msgType;
+	MsgSeqNum = ItoA(GlobalParam::GetInstance().GetNextSendSeqNum());
+	SenderCompID = "";
+	SenderSubID = "";
+	SendingTime = GetUtcTime();
+	TargetCompID = "";
+	TargetSubID = "";
+	OrigSendingTime = "";
+	SenderLocationID = "CN";
+	LastMsgSeqNumProcessed = ItoA(GlobalParam::GetInstance().GetLastRecvSeqNum());
 }
 int ReqHeader::ToString(char* buff, int size)
 {
 	int len = 0;
+	len += sprintf(buff, "%s:", FieldName.c_str());
+
 	len += WriteString(buff + len, size - len, "BeginString", BeginString);
 	len += WriteString(buff + len, size - len, "BodyLength", BodyLength);
 	len += WriteString(buff + len, size - len, "MsgType", MsgType);
@@ -63,13 +66,15 @@ int ReqHeader::AddHead(char* buff, int bodyLen)
 	memcpy(buff, HeadBuff, HEAD_LEN);
 	return len;
 }
-
-
-ReqFieldBase::ReqFieldBase(FixMessage* fixMessage)
-	: ReqHeader(fixMessage), Trailer(fixMessage)
+void ReqHeader::SetHead(const string& senderCompID, const string& senderSubID, const string& targetCompID, const string& targetSubID)
 {
-
+	SenderCompID = senderCompID;
+	SenderSubID = senderSubID;
+	TargetCompID = targetCompID;
+	TargetSubID = targetSubID;
 }
+
+
 int ReqFieldBase::MakePackage(char* buff, int size)
 {
 	auto len = ToStream(buff + HEAD_LEN);
@@ -79,20 +84,6 @@ int ReqFieldBase::MakePackage(char* buff, int size)
 }
 
 
-ReqLogonField::ReqLogonField(FixMessage* fixMessage)
-	:ReqFieldBase(fixMessage)
-{
-	HeartBtInt = fixMessage->GetItem(108);
-	ResetSeqNumFlag = fixMessage->GetItem(141);
-	ApplicationSystemName = fixMessage->GetItem(1603);
-	ApplicationSystemVersion = fixMessage->GetItem(1604);
-	ApplicationSystemVendor = fixMessage->GetItem(1605);
-	EncodedTextLen = fixMessage->GetItem(354);
-	EncodedText = fixMessage->GetItem(355);
-	EncryptedPasswordMethod = fixMessage->GetItem(1400);
-	EncryptedPasswordLen = fixMessage->GetItem(1401);
-	EncryptedPassword = fixMessage->GetItem(1402);
-}
 int ReqLogonField::ToString(char* buff, int size)
 {
 	int len = 0;
@@ -131,12 +122,44 @@ int ReqLogonField::ToStream(char* buff)
 }
 
 
-ReqHeartBeatField::ReqHeartBeatField(FixMessage* fixMessage)
-	:ReqFieldBase(fixMessage)
+int ReqLogoutField::ToString(char* buff, int size)
 {
-	TestReqID = fixMessage->GetItem(112);
-	SplitMsg = fixMessage->GetItem(9553);
+	int len = 0;
+	len += ReqHeader::ToString(buff + len, size - len);
+
+	len += Trailer::ToString(buff + len, size - len);
+	return len;
 }
+int ReqLogoutField::ToStream(char* buff)
+{
+	int len = 0;
+	len += ReqHeader::ToStream(buff + len);
+
+	return len;
+}
+
+
+int ReqTestRequestField::ToString(char* buff, int size)
+{
+	int len = 0;
+	len += ReqHeader::ToString(buff + len, size - len);
+
+	len += WriteString(buff + len, size - len, "TestReqID", TestReqID);
+
+	len += Trailer::ToString(buff + len, size - len);
+	return len;
+}
+int ReqTestRequestField::ToStream(char* buff)
+{
+	int len = 0;
+	len += ReqHeader::ToStream(buff + len);
+
+	len += WriteStream(buff + len, 112, TestReqID);
+
+	return len;
+}
+
+
 int ReqHeartBeatField::ToString(char* buff, int size)
 {
 	int len = 0;
@@ -160,41 +183,51 @@ int ReqHeartBeatField::ToStream(char* buff)
 }
 
 
-ReqNewOrderField::ReqNewOrderField(FixMessage* fixMessage)
-	:ReqFieldBase(fixMessage)
+int ReqResendRequestField::ToString(char* buff, int size)
 {
-	Account = fixMessage->GetItem(1);
-	ClOrdID = fixMessage->GetItem(11);
-	HandInst = fixMessage->GetItem(21);
-	CustOrderHandlingInst = fixMessage->GetItem(1031);
-	OrderQty = fixMessage->GetItem(38);
-	OrdType = fixMessage->GetItem(40);
-	Price = fixMessage->GetItem(44);
-	Side = fixMessage->GetItem(54);
-	Symbol = fixMessage->GetItem(55);
-	TimeInForce = fixMessage->GetItem(59);
-	TransactTime = fixMessage->GetItem(60);
-	ManualOrderIndicator = fixMessage->GetItem(1028);
-	NoAllocs = fixMessage->GetItem(78);
-	AllocAccount = fixMessage->GetItem(79);
-	StopPx = fixMessage->GetItem(99);
-	SecurityDesc = fixMessage->GetItem(107);
-	MinQty = fixMessage->GetItem(110);
-	SecurityType = fixMessage->GetItem(167);
-	CustomerOrFirm = fixMessage->GetItem(204);
-	MaxShow = fixMessage->GetItem(210);
-	ExpireDate = fixMessage->GetItem(432);
-	SelfMatchPreventionID = fixMessage->GetItem(7928);
-	SelfMatchPreventionInstruction = fixMessage->GetItem(8000);
-	CtiCode = fixMessage->GetItem(9702);
-	AvgPxGroupID = fixMessage->GetItem(1731);
-	ClearingTradePriceType = fixMessage->GetItem(1598);
-	AvgPXIndicator = fixMessage->GetItem(819);
-	Memo = fixMessage->GetItem(5149);
-	GiveUpFirm = fixMessage->GetItem(9707);
-	CmtaGiveupCD = fixMessage->GetItem(9708);
-	CorrelationClOrdID = fixMessage->GetItem(9717);
+	int len = 0;
+	len += ReqHeader::ToString(buff + len, size - len);
+
+	len += WriteString(buff + len, size - len, "BeginSeqNo", BeginSeqNo);
+	len += WriteString(buff + len, size - len, "EndSeqNo", EndSeqNo);
+
+	len += Trailer::ToString(buff + len, size - len);
+	return len;
 }
+int ReqResendRequestField::ToStream(char* buff)
+{
+	int len = 0;
+	len += ReqHeader::ToStream(buff + len);
+
+	len += WriteStream(buff + len, 7, BeginSeqNo);
+	len += WriteStream(buff + len, 16, EndSeqNo);
+
+	return len;
+}
+
+
+int ReqSequenceResetField::ToString(char* buff, int size)
+{
+	int len = 0;
+	len += ReqHeader::ToString(buff + len, size - len);
+
+	len += WriteString(buff + len, size - len, "NewSeqNo", NewSeqNo);
+	len += WriteString(buff + len, size - len, "GapFillFlag", GapFillFlag);
+
+	len += Trailer::ToString(buff + len, size - len);
+	return len;
+}
+int ReqSequenceResetField::ToStream(char* buff)
+{
+	int len = 0;
+	len += ReqHeader::ToStream(buff + len);
+
+	len += WriteStream(buff + len, 36, NewSeqNo);
+	len += WriteStream(buff + len, 123, GapFillFlag);
+
+	return len;
+}
+
 
 int ReqNewOrderField::ToString(char* buff, int size)
 {
@@ -232,6 +265,7 @@ int ReqNewOrderField::ToString(char* buff, int size)
 	len += WriteString(buff + len, size - len, "GiveUpFirm", GiveUpFirm);
 	len += WriteString(buff + len, size - len, "CmtaGiveupCD", CmtaGiveupCD);
 	len += WriteString(buff + len, size - len, "CorrelationClOrdID", CorrelationClOrdID);
+	len += WriteString(buff + len, size - len, "MarketSegmentID", MarketSegmentID);
 
 	len += Trailer::ToString(buff + len, size - len);
 	return len;
@@ -272,6 +306,7 @@ int ReqNewOrderField::ToStream(char* buff)
 	len += WriteStream(buff + len, 9707, GiveUpFirm);
 	len += WriteStream(buff + len, 9708, CmtaGiveupCD);
 	len += WriteStream(buff + len, 9717, CorrelationClOrdID);
+	len += WriteStream(buff + len, 1300, MarketSegmentID);
 
 	return len;
 }

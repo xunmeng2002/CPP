@@ -7,7 +7,7 @@ using namespace std;
 class GlobalParam
 {
 	GlobalParam()
-		:m_NextExpectedMsgSeqNum(0)
+		:m_NextSendSeqNum(2), m_LastRecvSeqNum(1)
 	{
 	}
 	GlobalParam(const GlobalParam&) = delete;
@@ -17,17 +17,18 @@ public:
 	{
 		return m_Instance;
 	}
-	void SetNextExpectedMsgSeqNum(int value);
-	int GetNextExpectedMsgSeqNum();
+	void SetNextSendSeqNum(int value);
+	int GetNextSendSeqNum();
 
-	void SetSenderCompID(string value);
-	string GetSenderCompID();
-
+	bool ResetLastRecvSeqNum(int value);
+	bool SetLastRecvSeqNum(int value);
+	int GetLastRecvSeqNum();
+	int GetNextExpectSeqNum();
 
 private:
 	static GlobalParam m_Instance;
 
-	int m_NextExpectedMsgSeqNum;
-	string m_SenderCompID;
+	int m_NextSendSeqNum;
+	int m_LastRecvSeqNum;
 };
 

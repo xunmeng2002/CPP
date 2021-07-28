@@ -16,7 +16,7 @@ TradeApi::TradeApi(AccountInfo* accountInfo)
 	m_FixMessage = new FixMessage();
 
 	m_AccountLogonStatus = LogonStatus::NotLogged;
-	m_SendOrderMark = false;
+	m_IsOnResendRequest = false;
 }
 
 void TradeApi::OnRecv(char* buff, int len)
@@ -88,39 +88,44 @@ void TradeApi::OnSessionDisConnected(int sessionID)
 void TradeApi::OnFixMessage()
 {
 	m_FixMessage->ToString(m_LogBuff, BUFF_SIZE);
-	WRITE_LOG(LogLevel::Info, "OnFixMessage: %s", m_LogBuff);
+	WRITE_LOG(LogLevel::Debug, "OnFixMessage: %s", m_LogBuff);
 
-	auto msgType = m_FixMessage->GetMessageType();
-	if (msgType.empty())
+	auto rspField = ParseRspField();
+	if (rspField == nullptr)
 	{
-		WRITE_LOG(LogLevel::Error, "Cannot Find MsgType[%s]", msgType.c_str());
+		WRITE_LOG(LogLevel::Error, "ParseRspField Failed");
+		return;
 	}
-	else if (msgType == "0")
-	{
-		OnRspHeartBeat();
-	}
-	else if (msgType == "1")
-	{
-		OnRspTestRequest();
-	}
-	else if (msgType == "3")
-	{
-		OnSessionLevelReject();
-	}
-	else if (msgType == "5")
-	{
-		OnRspLogout();
-	}
-	else if (msgType == "A")
-	{
-		OnRspLogon();
-	}
-	else
-	{
-		WRITE_LOG(LogLevel::Error, "UnSupported MsgType[%s]", msgType.c_str());
-	}
+	CheckAndUpdateRecvSeqNum(rspField->MsgSeqNum);
 
-	m_FixMessage->Items.clear();
+	if (rspField->MsgType == "0")
+	{
+		OnRspHeartBeat(rspField);
+	}
+	else if (rspField->MsgType == "1")
+	{
+		OnRspTestRequest(rspField);
+	}
+	else if (rspField->MsgType == "2")
+	{
+		OnResendRequest(rspField);
+	}
+	else if (rspField->MsgType == "3")
+	{
+		OnSessionLevelReject(rspField);
+	}
+	else if (rspField->MsgType == "4")
+	{
+		OnRspSequenceReset(rspField);
+	}
+	else if (rspField->MsgType == "5")
+	{
+		OnRspLogout(rspField);
+	}
+	else if (rspField->MsgType == "A")
+	{
+		OnRspLogon(rspField);
+	}
 }
 
 void TradeApi::CheckLogonStatus()
@@ -139,170 +144,282 @@ void TradeApi::CheckLogonStatus()
 	}
 }
 
+bool TradeApi::Send(const string& funcName, ReqFieldBase* reqField)
+{
+	auto len = reqField->MakePackage(m_SendBuff, BUFF_SIZE);
+
+	m_ReqFields.insert(make_pair(atoi(reqField->MsgSeqNum.c_str()), reqField));
+
+	reqField->ToString(m_LogBuff, BUFF_SIZE);
+	WRITE_LOG(LogLevel::Info, "%s %s", funcName.c_str(), m_LogBuff);
+	return TcpThread::GetInstance().Send(m_SessionID, m_SendBuff, len);
+}
+
 
 
 int TradeApi::ReqLogon()
 {
-	ReqLogonField reqLogonField;
-	reqLogonField.BeginString = m_AccountInfo->BeginString;
-	reqLogonField.BodyLength = "";
-	reqLogonField.MsgType = "A";
-	reqLogonField.MsgSeqNum = ItoA(GlobalParam::GetInstance().GetNextExpectedMsgSeqNum());
-	reqLogonField.SenderCompID = m_AccountInfo->SenderCompID + "U";
-	reqLogonField.SenderSubID = m_AccountInfo->SenderSubID;
-	reqLogonField.SendingTime = GetUtcTime();
-	reqLogonField.TargetCompID = m_AccountInfo->TargetCompID;
-	reqLogonField.TargetSubID = m_AccountInfo->TargetSubID;
-	reqLogonField.OrigSendingTime = "";
-	reqLogonField.SenderLocationID = m_AccountInfo->SenderLocationID;
-	reqLogonField.LastMsgSeqNumProcessed = "";
+	ReqLogonField* reqLogonField = new ReqLogonField();
+	reqLogonField->SetHead(m_AccountInfo->SenderCompID + "U", m_AccountInfo->SenderSubID, m_AccountInfo->TargetCompID, m_AccountInfo->TargetSubID);
 
-	reqLogonField.HeartBtInt = m_AccountInfo->HeartBtInt;
-	reqLogonField.ResetSeqNumFlag = m_AccountInfo->ResetSeqNumFlag;
-	reqLogonField.ApplicationSystemName = m_AccountInfo->ApplicationSystemName;
-	reqLogonField.ApplicationSystemVersion = m_AccountInfo->ApplicationSystemVersion;
-	reqLogonField.ApplicationSystemVendor = m_AccountInfo->ApplicationSystemVendor;
-	reqLogonField.EncodedTextLen = ItoA(m_AccountInfo->AccountID.length());
-	reqLogonField.EncodedText = m_AccountInfo->AccountID;
-	reqLogonField.EncryptedPasswordMethod = m_AccountInfo->EncryptedPasswordMethod;
+	reqLogonField->HeartBtInt = m_AccountInfo->HeartBtInt;
+	reqLogonField->ResetSeqNumFlag = m_AccountInfo->ResetSeqNumFlag;
+	reqLogonField->ApplicationSystemName = m_AccountInfo->ApplicationSystemName;
+	reqLogonField->ApplicationSystemVersion = m_AccountInfo->ApplicationSystemVersion;
+	reqLogonField->ApplicationSystemVendor = m_AccountInfo->ApplicationSystemVendor;
+	reqLogonField->EncodedTextLen = ItoA(m_AccountInfo->AccountID.length());
+	reqLogonField->EncodedText = m_AccountInfo->AccountID;
+	reqLogonField->EncryptedPasswordMethod = m_AccountInfo->EncryptedPasswordMethod;
 
-	std::string canonicalRequest = GetCanonicalReq(reqLogonField);
+	std::string canonicalRequest = GetCanonicalReq(*reqLogonField);
 	std::string encodedHmac = calculateHMAC(m_AccountInfo->SecretKey, canonicalRequest);
-	reqLogonField.EncryptedPasswordLen = ItoA(encodedHmac.length());
-	reqLogonField.EncryptedPassword = encodedHmac;
+	reqLogonField->EncryptedPasswordLen = ItoA(encodedHmac.length());
+	reqLogonField->EncryptedPassword = encodedHmac;	
 
-	auto len = reqLogonField.MakePackage(m_SendBuff, BUFF_SIZE);
-	TcpThread::GetInstance().Send(m_SessionID, m_SendBuff, len);
-	return 0;
+	return Send(__func__, reqLogonField);
+}
+
+int TradeApi::ReqLogout()
+{
+	ReqLogoutField* reqLogoutField = new ReqLogoutField();
+	SetHead(reqLogoutField);
+
+	return Send(__func__, reqLogoutField);
 }
 
 int TradeApi::ReqHeartBeat(const string& testReqID)
 {
-	ReqHeartBeatField reqHeartBeatField;
-	reqHeartBeatField.BeginString = m_AccountInfo->BeginString;
-	reqHeartBeatField.BodyLength = "";
-	reqHeartBeatField.MsgType = "0";
-	reqHeartBeatField.MsgSeqNum = ItoA(GlobalParam::GetInstance().GetNextExpectedMsgSeqNum());
-	reqHeartBeatField.SenderCompID = m_SenderCompID;
-	reqHeartBeatField.SenderSubID = m_AccountInfo->SenderSubID;
-	reqHeartBeatField.SendingTime = GetUtcTime();
-	reqHeartBeatField.TargetCompID = m_AccountInfo->TargetCompID;
-	reqHeartBeatField.TargetSubID = m_AccountInfo->TargetSubID;
-	reqHeartBeatField.OrigSendingTime = "";
-	reqHeartBeatField.SenderLocationID = m_AccountInfo->SenderLocationID;
-	reqHeartBeatField.LastMsgSeqNumProcessed = "";
+	ReqHeartBeatField* reqHeartBeatField = new ReqHeartBeatField();
+	SetHead(reqHeartBeatField);
 
-	reqHeartBeatField.TestReqID = testReqID;
+	reqHeartBeatField->TestReqID = testReqID;
 	
-	auto len = reqHeartBeatField.MakePackage(m_SendBuff, BUFF_SIZE);
-	TcpThread::GetInstance().Send(m_SessionID, m_SendBuff, len);
-	return 0;
+	return Send(__func__, reqHeartBeatField);
+}
+
+int TradeApi::ReqTestRequest()
+{
+	ReqTestRequestField* reqTestRequestField = new ReqTestRequestField();
+	SetHead(reqTestRequestField);
+
+	reqTestRequestField->TestReqID = "Hello World";
+
+	return Send(__func__, reqTestRequestField);
+}
+
+int TradeApi::ReqResendRequest(int startSeqNum, int endSeqNum)
+{
+	m_IsOnResendRequest = true;
+
+	ReqResendRequestField* reqResendRequestField = new ReqResendRequestField();
+	SetHead(reqResendRequestField);
+
+	if (endSeqNum >= startSeqNum + 2500)
+	{
+		endSeqNum = startSeqNum + 2499;
+	}
+	m_ResendStartSeqNum = startSeqNum;
+	m_ResendEndSeqNum = endSeqNum;
+
+	reqResendRequestField->BeginSeqNo = ItoA(startSeqNum);
+	reqResendRequestField->EndSeqNo = ItoA(endSeqNum);
+
+	return Send(__func__, reqResendRequestField);
+}
+
+int TradeApi::ReqSequenceReset(string msgSeqNum)
+{
+	ReqSequenceResetField* reqSequenceResetField = new ReqSequenceResetField();
+	SetHead(reqSequenceResetField);
+	reqSequenceResetField->MsgSeqNum = msgSeqNum;
+	
+	reqSequenceResetField->NewSeqNo = ItoA(GlobalParam::GetInstance().GetNextSendSeqNum() + 1);
+	reqSequenceResetField->GapFillFlag = "Y";
+
+	return Send(__func__, reqSequenceResetField);
 }
 
 int TradeApi::ReqNewOrder()
 {
-	ReqNewOrderField reqNewOrderField;
-	reqNewOrderField.BeginString = m_AccountInfo->BeginString;
-	reqNewOrderField.BodyLength = "";
-	reqNewOrderField.MsgType = "D";
-	reqNewOrderField.MsgSeqNum = ItoA(GlobalParam::GetInstance().GetNextExpectedMsgSeqNum());
-	reqNewOrderField.SenderCompID = m_SenderCompID;
-	reqNewOrderField.SenderSubID = m_AccountInfo->SenderSubID;
-	reqNewOrderField.SendingTime = GetUtcTime();
-	reqNewOrderField.TargetCompID = m_AccountInfo->TargetCompID;
-	reqNewOrderField.TargetSubID = m_AccountInfo->TargetSubID;
-	reqNewOrderField.OrigSendingTime = "";
-	reqNewOrderField.SenderLocationID = m_AccountInfo->SenderLocationID;
-	reqNewOrderField.LastMsgSeqNumProcessed = "";
+	ReqNewOrderField* reqNewOrderField = new ReqNewOrderField();
+	SetHead(reqNewOrderField);
 
-	reqNewOrderField.Account = "2F5004";
-	reqNewOrderField.ClOrdID = "5";
-	reqNewOrderField.HandInst = "1";
-	reqNewOrderField.CustOrderHandlingInst = "Y";
-	reqNewOrderField.OrderQty = "5";
-	reqNewOrderField.OrdType = "1";
-	reqNewOrderField.Price = "";
-	reqNewOrderField.Side = "1";
-	reqNewOrderField.Symbol = "";
-	reqNewOrderField.TimeInForce = "0";
-	reqNewOrderField.TransactTime = GetUtcTime();
-	reqNewOrderField.ManualOrderIndicator = "Y";
-	reqNewOrderField.NoAllocs = "";
-	reqNewOrderField.AllocAccount = "";
-	reqNewOrderField.StopPx = "";
-	reqNewOrderField.SecurityDesc = "1GLBJ0";
-	reqNewOrderField.MinQty = "1";
-	reqNewOrderField.SecurityType = "FUT";
-	reqNewOrderField.CustomerOrFirm = "0";
-	reqNewOrderField.MaxShow = "1";
-	reqNewOrderField.ExpireDate = "";
-	reqNewOrderField.SelfMatchPreventionID = "";
-	reqNewOrderField.SelfMatchPreventionInstruction = "";
-	reqNewOrderField.CtiCode = "4";
-	reqNewOrderField.AvgPxGroupID = "";
-	reqNewOrderField.ClearingTradePriceType = "";
-	reqNewOrderField.AvgPXIndicator = "";
-	reqNewOrderField.Memo = "";
-	reqNewOrderField.GiveUpFirm = "";
-	reqNewOrderField.CmtaGiveupCD = "";
-	reqNewOrderField.CorrelationClOrdID = "5";
+	reqNewOrderField->Account = "2F5004";
+	reqNewOrderField->ClOrdID = "5";
+	reqNewOrderField->HandInst = "1";
+	reqNewOrderField->CustOrderHandlingInst = "Y";
+	reqNewOrderField->OrderQty = "5";
+	reqNewOrderField->OrdType = "1";
+	reqNewOrderField->Price = "";
+	reqNewOrderField->Side = "1";
+	reqNewOrderField->Symbol = "";
+	reqNewOrderField->TimeInForce = "0";
+	reqNewOrderField->TransactTime = GetUtcTime();
+	reqNewOrderField->ManualOrderIndicator = "Y";
+	reqNewOrderField->NoAllocs = "";
+	reqNewOrderField->AllocAccount = "";
+	reqNewOrderField->StopPx = "";
+	reqNewOrderField->SecurityDesc = "GEZ8";
+	reqNewOrderField->MinQty = "1";
+	reqNewOrderField->SecurityType = "FUT";
+	reqNewOrderField->CustomerOrFirm = "0";
+	reqNewOrderField->MaxShow = "1";
+	reqNewOrderField->ExpireDate = "";
+	reqNewOrderField->SelfMatchPreventionID = "";
+	reqNewOrderField->SelfMatchPreventionInstruction = "";
+	reqNewOrderField->CtiCode = "4";
+	reqNewOrderField->AvgPxGroupID = "";
+	reqNewOrderField->ClearingTradePriceType = "";
+	reqNewOrderField->AvgPXIndicator = "";
+	reqNewOrderField->Memo = "";
+	reqNewOrderField->GiveUpFirm = "";
+	reqNewOrderField->CmtaGiveupCD = "";
+	reqNewOrderField->CorrelationClOrdID = "5";
+	reqNewOrderField->MarketSegmentID = "99";
 
-
-	auto len = reqNewOrderField.MakePackage(m_SendBuff, BUFF_SIZE);
-	TcpThread::GetInstance().Send(m_SessionID, m_SendBuff, len);
-	return 0;
+	return Send(__func__, reqNewOrderField);
 }
 
 
 
-void TradeApi::OnRspLogon()
+void TradeApi::OnRspLogon(RspFieldBase* rspField)
 {
-	RspLogonField rspLogonField(m_FixMessage);
-	rspLogonField.ToString(m_LogBuff, BUFF_SIZE);
-	WRITE_LOG(LogLevel::Info, "OnRspLogon  RspLogonField: %s", m_LogBuff);
-
-	m_SenderCompID = rspLogonField.TargetCompID;
+	m_AccountLogonStatus = LogonStatus::Logged;
+	m_SenderCompID = rspField->TargetCompID;
 }
 
-void TradeApi::OnRspLogout()
+void TradeApi::OnRspLogout(RspFieldBase* rspField)
 {
-	RspLogoutField rspLogoutField(m_FixMessage);
-	rspLogoutField.ToString(m_LogBuff, BUFF_SIZE);
-	WRITE_LOG(LogLevel::Info, "OnRspLogout  RspLogoutField: %s", m_LogBuff);
-
-	if (!rspLogoutField.NextExpectedMsgSeqNum.empty())
+	auto rspLogoutField = (RspLogoutField*)rspField;
+	if (!rspLogoutField->NextExpectedMsgSeqNum.empty())
 	{
-		GlobalParam::GetInstance().SetNextExpectedMsgSeqNum(atoi(rspLogoutField.NextExpectedMsgSeqNum.c_str()));
+		GlobalParam::GetInstance().SetNextSendSeqNum(atoi(rspLogoutField->NextExpectedMsgSeqNum.c_str()));
+	}
+	ResetMarks();
+}
+
+void TradeApi::OnRspHeartBeat(RspFieldBase* rspField)
+{
+	
+}
+
+void TradeApi::OnRspTestRequest(RspFieldBase* rspField)
+{
+	auto rspTestRequestField = (RspTestRequestField*)rspField;
+	ReqHeartBeat(rspTestRequestField->TestReqID);
+}
+
+void TradeApi::OnSessionLevelReject(RspFieldBase* rspField)
+{
+	
+}
+
+void TradeApi::OnResendRequest(RspFieldBase* rspField)
+{
+	RspResendRequestField* rspResendRequestField = (RspResendRequestField*)rspField;
+	
+	ReqSequenceReset(rspResendRequestField->BeginSeqNo);
+}
+
+void TradeApi::OnRspSequenceReset(RspFieldBase* rspField)
+{
+	auto rspSequenceResetField = (RspSequenceResetField*)rspField;
+	auto newSeqNo = atoi(rspSequenceResetField->NewSeqNo.c_str());
+	if (m_IsOnResendRequest)
+	{
+		m_ResendStartSeqNum = newSeqNo;
+		if (newSeqNo >= m_ResendEndSeqNum)
+		{
+			m_IsOnResendRequest = false;
+		}
+	}
+	GlobalParam::GetInstance().ResetLastRecvSeqNum(newSeqNo);
+}
+
+
+void TradeApi::SetHead(ReqFieldBase* reqField)
+{
+	reqField->SetHead(m_SenderCompID, m_AccountInfo->SenderSubID, m_AccountInfo->TargetCompID, m_AccountInfo->TargetSubID);
+}
+
+void TradeApi::CheckAndUpdateRecvSeqNum(string seqNum)
+{
+	int seqNumInt = atoi(seqNum.c_str());
+	if (m_IsOnResendRequest)
+	{
+		if (seqNumInt >= m_ResendStartSeqNum && seqNumInt < m_ResendEndSeqNum)
+		{
+			WRITE_LOG(LogLevel::Debug, "OnResendRequest. m_ResendStartSeqNum[%d], m_ResendEndSeqNum[%d], seqNumInt[%d]", m_ResendStartSeqNum, m_ResendEndSeqNum, seqNumInt);
+			m_ResendStartSeqNum = seqNumInt;
+		}
+		else if (seqNumInt == m_ResendEndSeqNum)
+		{
+			WRITE_LOG(LogLevel::Info, "OnResendRequest. m_ResendStartSeqNum[%d], m_ResendEndSeqNum[%d], seqNumInt[%d]", m_ResendStartSeqNum, m_ResendEndSeqNum, seqNumInt);
+			m_IsOnResendRequest = false;
+		}
+		else if (seqNumInt > m_ResendEndSeqNum)
+		{
+			GlobalParam::GetInstance().SetLastRecvSeqNum(seqNumInt);
+		}
+	}
+	else
+	{
+		int nextExpectSeqNum = GlobalParam::GetInstance().GetNextExpectSeqNum();
+		if (seqNumInt == nextExpectSeqNum)
+		{
+			GlobalParam::GetInstance().SetLastRecvSeqNum(seqNumInt);
+		}
+		else if (seqNumInt > nextExpectSeqNum && m_AccountLogonStatus == LogonStatus::Logged)
+		{
+			ReqResendRequest(nextExpectSeqNum, seqNumInt);
+		}
 	}
 }
 
-void TradeApi::OnRspHeartBeat()
+RspFieldBase* TradeApi::ParseRspField()
 {
-	RspHeartBeatField rspHeartBeatField(m_FixMessage);
-	rspHeartBeatField.ToString(m_LogBuff, BUFF_SIZE);
-	WRITE_LOG(LogLevel::Info, "OnRspHeartBeatField  RspHeartBeatField: %s", m_LogBuff);
-
-	ReqHeartBeat("");
-}
-
-void TradeApi::OnRspTestRequest()
-{
-	RspTestRequestField rspTestRequestField(m_FixMessage);
-	rspTestRequestField.ToString(m_LogBuff, BUFF_SIZE);
-	WRITE_LOG(LogLevel::Info, "OnRspTestRequest  RspTestRequestField: %s", m_LogBuff);
-
-	ReqHeartBeat(rspTestRequestField.TestReqID);
-
-	if (!m_SendOrderMark)
+	RspFieldBase* rspField = nullptr;
+	auto msgType = m_FixMessage->GetMessageType();
+	if (msgType == "0")
 	{
-		m_SendOrderMark = true;
-		ReqNewOrder();
+		rspField = new RspHeartBeatField(m_FixMessage);
 	}
+	else if (msgType == "1")
+	{
+		rspField = new RspTestRequestField(m_FixMessage);
+	}
+	else if (msgType == "2")
+	{
+		rspField = new RspResendRequestField(m_FixMessage);
+	}
+	else if (msgType == "3")
+	{
+		rspField = new RspSessionLevelRejectField(m_FixMessage);
+	}
+	else if (msgType == "4")
+	{
+		rspField = new RspSequenceResetField(m_FixMessage);
+	}
+	else if (msgType == "5")
+	{
+		rspField = new RspLogoutField(m_FixMessage);	
+	}
+	else if (msgType == "A")
+	{
+		rspField = new RspLogonField(m_FixMessage);
+	}
+	if (rspField)
+	{
+		m_RspFields.insert(make_pair(atoi(rspField->MsgSeqNum.c_str()), rspField));
+
+		rspField->ToString(m_LogBuff, BUFF_SIZE);
+		WRITE_LOG(LogLevel::Info, "%s", m_LogBuff);
+	}
+	m_FixMessage->Items.clear();
+	return rspField;
 }
 
-void TradeApi::OnSessionLevelReject()
+void TradeApi::ResetMarks()
 {
-	RspSessionLevelRejectField rspSessionLevelRejectField(m_FixMessage);
-	rspSessionLevelRejectField.ToString(m_LogBuff, BUFF_SIZE);
-	WRITE_LOG(LogLevel::Info, "OnSessionLevelReject  RspSessionLevelRejectField: %s", m_LogBuff);
+	m_IsOnResendRequest = false;
 }

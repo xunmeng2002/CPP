@@ -1,5 +1,4 @@
 #pragma once
-#include "TradeApiDataStruct.h"
 #include "TradeApiReqFields.h"
 #include <string>
 

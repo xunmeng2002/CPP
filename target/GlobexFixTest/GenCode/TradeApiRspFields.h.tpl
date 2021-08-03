@@ -6,10 +6,11 @@ using namespace std;
 
 !!entry RspFields!!
 !!travel!!
-class !!@name!! : public RspHeader, public Trailer
+class !!@name!!Field : public RspHeader, public Trailer
 {
 public:
-	!!@name!!(const string& fieldName, FixMessage* fixMessage);
+	!!@name!!Field(FixMessage* fixMessage);
+	~!!@name!!Field();
 	int ToString(char* buff, int size);
 	int ToStream(char* buff);
 	
@@ -17,6 +18,8 @@ public:
 !!travel!!
 	string !!@name!!;
 !!leave!!
+
+	FixMessage* m_FixMessage;
 };
 
 !!leave!!

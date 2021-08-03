@@ -3,11 +3,14 @@
 
 !!entry Headers!!
 !!travel!!
-!!@name!!::!!@name!!(const string& fieldName, FixMessage* fixMessage)
-	:FieldName(fieldName)
+!!@name!!::!!@name!!(const string& fieldName, const string& msgType, FixMessage* fixMessage)
+	:FieldName(fieldName), MsgType(msgType)
 {
 !!travel!!
+!!if @name != "MsgType":!!
+!!inc indent!!
 	!!@name!! = fixMessage->GetItem(!!@key!!);
+!!dec indent!!
 !!leave!!
 }
 int !!@name!!::ToString(char* buff, int size)
@@ -24,7 +27,10 @@ int !!@name!!::ToStream(char* buff)
 {
 	int len = 0;
 !!travel!!
+!!if @name != "BeginString" and @name != "BodyLength":!!
+!!inc indent!!
 	len += WriteStream(buff + len, !!@key!!, !!@name!!);
+!!dec indent!!
 !!leave!!
 	return len;
 }
@@ -53,10 +59,18 @@ void !!@name!!::SetHeader(const string& senderCompID, const string& senderSubID,
 
 !!entry Trailers!!
 !!travel!!
+!!@name!!::!!@name!!(FixMessage* fixMessage)
+{
+!!travel!!
+	!!@name!! = fixMessage->GetItem(!!@key!!);
+!!leave!!
+}
 int !!@name!!::ToString(char* buff, int size)
 {
 	int len = 0;
-	len += WriteString(buff + len, size - len, "CheckSum", CheckSum);
+!!travel!!
+	len += WriteString(buff + len, size - len, "!!@name!!", !!@name!!);
+!!leave!!
 	return len;
 }
 int !!@name!!::AddTrailer(char* buff, int len)

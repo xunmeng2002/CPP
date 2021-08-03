@@ -193,12 +193,18 @@ void TcpThread::AddSessionData(ConnectData* connectData)
 		m_ConnectDatas.insert(make_pair(connectData->SessionID, connectData));
 		m_SocketIndex.insert(make_pair(connectData->SocketID, connectData->SessionID));
 	}
-	WorkThread::GetInstance().OnSessionConnected(connectData->ClientIP, connectData->ClientPort, connectData->SessionID);
+	MyEvent* myEvent = MyEvent::Allocate();
+	myEvent->EventID = EVENT_CONNECTED;
+	myEvent->NumParams.push_back(connectData->SessionID);
+	WorkThread::GetInstance().OnEvent(myEvent);
 }
 void TcpThread::RemoveSessionData(ConnectData* connectData)
 {
 	WRITE_LOG(LogLevel::Info, "Close Connection: SessionID[%d]", connectData->SessionID);
-	WorkThread::GetInstance().OnSessionDisConnected(connectData->ClientIP, connectData->ClientPort, connectData->SessionID);
+	MyEvent* myEvent = MyEvent::Allocate();
+	myEvent->EventID = EVENT_DISCONNECTED;
+	myEvent->NumParams.push_back(connectData->SessionID);
+	WorkThread::GetInstance().OnEvent(myEvent);
 
 	lock_guard<mutex> guard(m_ConnectDataMutex);
 	m_ConnectDatas.erase(connectData->SessionID);

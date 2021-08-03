@@ -8,21 +8,17 @@
 using namespace std;
 
 
-void PrintAccountInfo(map<Address, AccountInfo*>& accountInfos)
+void PrintAccountInfo(AccountInfo* accountInfo)
 {
-	for (auto& it : accountInfos)
-	{
-		auto accountInfo = it.second;
-		WRITE_LOG(LogLevel::Info, "Address: IP[%s], Port[%s], BeginString[%s], SenderCompID[%s],  SenderSubID[%s], TargetCompID[%s], TargetSubID[%s], "
-			"SenderLocationID[%s], HeartBtInt[%s], ResetSeqNumFlag[%s], ApplicationSystemName[%s], ApplicationSystemVersion[%s], ApplicationSystemVendor[%s], "
-			"AccountID[%s], EncryptedPasswordMethod[%s], SecretKey[%s].",
-			accountInfo->IP.c_str(), accountInfo->Port.c_str(), accountInfo->BeginString.c_str(), accountInfo->SenderCompID.c_str(), accountInfo->SenderSubID.c_str(), accountInfo->TargetCompID.c_str(), accountInfo->TargetSubID.c_str(),
-			accountInfo->SenderLocationID.c_str(), accountInfo->HeartBtInt.c_str(), accountInfo->ResetSeqNumFlag.c_str(), accountInfo->ApplicationSystemName.c_str(), accountInfo->ApplicationSystemVersion.c_str(), accountInfo->ApplicationSystemVendor.c_str(),
-			accountInfo->AccountID.c_str(), accountInfo->EncryptedPasswordMethod.c_str(), accountInfo->SecretKey.c_str());
-	}
+	WRITE_LOG(LogLevel::Info, "IP[%s], Port[%s], BeginString[%s], SenderCompID[%s],  SenderSubID[%s], TargetCompID[%s], TargetSubID[%s], "
+		"SenderLocationID[%s], HeartBtInt[%s], ResetSeqNumFlag[%s], ApplicationSystemName[%s], ApplicationSystemVersion[%s], ApplicationSystemVendor[%s], "
+		"AccountID[%s], EncryptedPasswordMethod[%s], SecretKey[%s].",
+		accountInfo->IP.c_str(), accountInfo->Port.c_str(), accountInfo->BeginString.c_str(), accountInfo->SenderCompID.c_str(), accountInfo->SenderSubID.c_str(), accountInfo->TargetCompID.c_str(), accountInfo->TargetSubID.c_str(),
+		accountInfo->SenderLocationID.c_str(), accountInfo->HeartBtInt.c_str(), accountInfo->ResetSeqNumFlag.c_str(), accountInfo->ApplicationSystemName.c_str(), accountInfo->ApplicationSystemVersion.c_str(), accountInfo->ApplicationSystemVendor.c_str(),
+		accountInfo->AccountID.c_str(), accountInfo->EncryptedPasswordMethod.c_str(), accountInfo->SecretKey.c_str());
 }
 
-void ReadAccountInfo(map<Address, AccountInfo*>& accountInfos)
+void ReadAccountInfo(AccountInfo* accountInfo)
 {
 	Json::Reader reader;
 	Json::FastWriter writer;
@@ -31,32 +27,22 @@ void ReadAccountInfo(map<Address, AccountInfo*>& accountInfos)
 	ifstream in_file("AccountInfo.json", ios::binary);
 	cout << "parse: " << reader.parse(in_file, root) << endl;
 	in_file.close();
+	accountInfo->IP = root["IP"].asString();
+	accountInfo->Port = root["Port"].asString();
+	accountInfo->BeginString = root["BeginString"].asString();
+	accountInfo->SenderCompID = root["SenderCompID"].asString();
+	accountInfo->SenderSubID = root["SenderSubID"].asString();
+	accountInfo->TargetCompID = root["TargetCompID"].asString();
+	accountInfo->TargetSubID = root["TargetSubID"].asString();
+	accountInfo->SenderLocationID = root["SenderLocationID"].asString();
+	accountInfo->HeartBtInt = root["HeartBtInt"].asString();
+	accountInfo->ResetSeqNumFlag = root["ResetSeqNumFlag"].asString();
+	accountInfo->ApplicationSystemName = root["ApplicationSystemName"].asString();
+	accountInfo->ApplicationSystemVersion = root["ApplicationSystemVersion"].asString();
+	accountInfo->ApplicationSystemVendor = root["ApplicationSystemVendor"].asString();
+	accountInfo->AccountID = root["AccountID"].asString();
+	accountInfo->EncryptedPasswordMethod = root["EncryptedPasswordMethod"].asString();
+	accountInfo->SecretKey = root["SecretKey"].asString();
 
-	for (auto i = 0; i < root.size(); i++)
-	{
-		AccountInfo* accountInfo = new AccountInfo();
-		accountInfo->IP = root[i]["IP"].asString();
-		accountInfo->Port = root[i]["Port"].asString();
-		accountInfo->BeginString = root[i]["BeginString"].asString();
-		accountInfo->SenderCompID = root[i]["SenderCompID"].asString();
-		accountInfo->SenderSubID = root[i]["SenderSubID"].asString();
-		accountInfo->TargetCompID = root[i]["TargetCompID"].asString();
-		accountInfo->TargetSubID = root[i]["TargetSubID"].asString();
-		accountInfo->SenderLocationID = root[i]["SenderLocationID"].asString();
-		accountInfo->HeartBtInt = root[i]["HeartBtInt"].asString();
-		accountInfo->ResetSeqNumFlag = root[i]["ResetSeqNumFlag"].asString();
-		accountInfo->ApplicationSystemName = root[i]["ApplicationSystemName"].asString();
-		accountInfo->ApplicationSystemVersion = root[i]["ApplicationSystemVersion"].asString();
-		accountInfo->ApplicationSystemVendor = root[i]["ApplicationSystemVendor"].asString();
-		accountInfo->AccountID = root[i]["AccountID"].asString();
-		accountInfo->EncryptedPasswordMethod = root[i]["EncryptedPasswordMethod"].asString();
-		accountInfo->SecretKey = root[i]["SecretKey"].asString();
-
-		Address address;
-		address.IP = accountInfo->IP;
-		address.Port = accountInfo->Port;
-
-		accountInfos.insert(make_pair(address, accountInfo));
-	}
-	PrintAccountInfo(accountInfos);
+	PrintAccountInfo(accountInfo);
 }

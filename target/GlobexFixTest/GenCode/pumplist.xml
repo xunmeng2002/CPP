@@ -7,4 +7,10 @@
 	
 	<pump dest="./target/GlobexFixTest/GenCode/TradeApiRspFields.h" tpl="./target/GlobexFixTest/GenCode/TradeApiRspFields.h.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
 	<pump dest="./target/GlobexFixTest/GenCode/TradeApiRspFields.cpp" tpl="./target/GlobexFixTest/GenCode/TradeApiRspFields.cpp.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
+	
+	<pump dest="./target/GlobexFixTest/GenCode/TradeApi.h" tpl="./target/GlobexFixTest/GenCode/TradeApi.h.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
+	<pump dest="./target/GlobexFixTest/GenCode/TradeApi.cpp" tpl="./target/GlobexFixTest/GenCode/TradeApi.cpp.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
+	
+	<pump dest="./target/GlobexFixTest/GenCode/TradeSpi.h" tpl="./target/GlobexFixTest/GenCode/TradeSpi.h.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
+	<pump dest="./target/GlobexFixTest/GenCode/TradeSpi.cpp" tpl="./target/GlobexFixTest/GenCode/TradeSpi.cpp.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
 </pumplist>

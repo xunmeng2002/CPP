@@ -1,15 +1,18 @@
 #pragma once
-#include "TradeApiDataStruct.h"
+#include "FixMessage.h"
 #include <string>
 
 using namespace std;
+
+#define HEAD_LEN 18
+#define TRAILER_LEN 7
 
 !!entry Headers!!
 !!travel!!
 class !!@name!!
 {
 public:
-	!!@name!!(const string& fieldName, FixMessage* fixMessage);
+	!!@name!!(const string& fieldName, const string& msgType, FixMessage* fixMessage);
 	int ToString(char* buff, int size);
 	int ToStream(char* buff);
 	int AddHeader(char* buff, int bodyLen);
@@ -35,7 +38,7 @@ protected:
 class !!@name!!
 {
 public:
-	!!@name!!(){}
+	!!@name!!(FixMessage* fixMessage);
 	int ToString(char* buff, int size);
 	int AddTrailer(char* buff, int len);
 	

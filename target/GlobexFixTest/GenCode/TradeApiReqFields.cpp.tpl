@@ -3,14 +3,18 @@
 
 !!entry ReqFields!!
 !!travel!!
-!!@name!!::!!@name!!(const string& fieldName, FixMessage* fixMessage)
-	:ReqHeader("!!@name!!", fixMessage)
+!!@name!!Field::!!@name!!Field(FixMessage* fixMessage)
+	:ReqHeader("!!@name!!Field", "!!@msgtype!!", fixMessage), Trailer(fixMessage), m_FixMessage(fixMessage)
 {
 !!travel!!
 	!!@name!! = fixMessage->GetItem(!!@key!!);
 !!leave!!
 }
-int !!@name!!::ToString(char* buff, int size)
+!!@name!!Field::~!!@name!!Field()
+{
+	FixMessage::Free(m_FixMessage);
+}
+int !!@name!!Field::ToString(char* buff, int size)
 {
 	int len = 0;
 	len += ReqHeader::ToString(buff + len, size - len);
@@ -22,7 +26,7 @@ int !!@name!!::ToString(char* buff, int size)
 	len += Trailer::ToString(buff + len, size - len);
 	return len;
 }
-int !!@name!!::ToStream(char* buff)
+int !!@name!!Field::ToStream(char* buff)
 {
 	int len = HEAD_LEN;
 	len += ReqHeader::ToStream(buff + len);

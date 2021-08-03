@@ -5,6 +5,7 @@
 			<item name="BodyLength" key="9"/>
 			<item name="MsgType" key="35"/>
 			<item name="MsgSeqNum" key="34"/>
+			<item name="PossDupFlag" key="43"/>
 			<item name="SenderCompID" key="49"/>
 			<item name="SenderSubID" key="50"/>
 			<item name="SendingTime" key="52"/>
@@ -19,6 +20,7 @@
 			<item name="BodyLength" key="9"/>
 			<item name="MsgType" key="35"/>
 			<item name="MsgSeqNum" key="34"/>
+			<item name="PossDupFlag" key="43"/>
 			<item name="SenderCompID" key="49"/>
 			<item name="SenderSubID" key="50"/>
 			<item name="SendingTime" key="52"/>
@@ -35,7 +37,7 @@
 		</field>
 	</Trailers>
 	<ReqFields>
-		<field name="ReqLogon">
+		<field name="ReqLogon" msgtype="A">
 			<item name="HeartBtInt" key="108"/>
 			<item name="ResetSeqNumFlag" key="141"/>
 			<item name="ApplicationSystemName" key="1603"/>
@@ -47,27 +49,27 @@
 			<item name="EncryptedPasswordLen" key="1401"/>
 			<item name="EncryptedPassword" key="1402"/>
 		</field>
-		<field name="ReqLogout">
+		<field name="ReqLogout" msgtype="5">
 			<item name="Text" key="58"/>
 			<item name="NextExpectedMsgSeqNum" key="789"/>
 			<item name="SplitMsg" key="9553"/>
 		</field>
-		<field name="ReqTestRequest">
-			<item name="TestReqID" key="112"/>
-		</field>
-		<field name="ReqHeartBeat">
+		<field name="ReqHeartBeat" msgtype="0">
 			<item name="TestReqID" key="112"/>
 			<item name="SplitMsg" key="9553"/>
 		</field>
-		<field name="ReqResendRequest">
+		<field name="ReqTestRequest" msgtype="1">
+			<item name="TestReqID" key="112"/>
+		</field>
+		<field name="ReqResendRequest" msgtype="2">
 			<item name="BeginSeqNo" key="7"/>
 			<item name="EndSeqNo" key="16"/>
 		</field>
-		<field name="ReqSequenceReset">
+		<field name="ReqSequenceReset" msgtype="4">
 			<item name="NewSeqNo" key="36"/>
 			<item name="GapFillFlag" key="123"/>
 		</field>
-		<field name="ReqNewOrder">
+		<field name="ReqNewOrder" msgtype="D">
 			<item name="Account" key="1"/>
 			<item name="ClOrdID" key="11"/>
 			<item name="HandInst" key="21"/>
@@ -103,7 +105,7 @@
 		</field>
 	</ReqFields>
 	<RspFields>
-		<field name="RspLogon">
+		<field name="RspLogon" msgtype="A">
 			<item name="HeartBtInt" key="108"/>
 			<item name="ResetSeqNumFlag" key="141"/>
 			<item name="ApplicationSystemName" key="1603"/>
@@ -111,27 +113,23 @@
 			<item name="ApplicationSystemVendor" key="1605"/>
 			<item name="SplitMsg" key="9553"/>
 		</field>
-		<field name="RspLogout">
+		<field name="RspLogout" msgtype="5">
 			<item name="Text" key="58"/>
 			<item name="NextExpectedMsgSeqNum" key="789"/>
 			<item name="SplitMsg" key="9553"/>
 		</field>
-		<field name="RspTestRequest">
-			<item name="TestReqID" key="112"/>
-		</field>
-		<field name="RspHeartBeat">
+		<field name="RspHeartBeat" msgtype="0">
 			<item name="TestReqID" key="112"/>
 			<item name="SplitMsg" key="9553"/>
 		</field>
-		<field name="RspResendRequest">
+		<field name="RspTestRequest" msgtype="1">
+			<item name="TestReqID" key="112"/>
+		</field>
+		<field name="RspResendRequest" msgtype="2">
 			<item name="BeginSeqNo" key="7"/>
 			<item name="EndSeqNo" key="16"/>
 		</field>
-		<field name="RspSequenceReset">
-			<item name="NewSeqNo" key="36"/>
-			<item name="GapFillFlag" key="123"/>
-		</field>
-		<field name="RspSessionLevelReject">
+		<field name="RspSessionLevelReject" msgtype="3">
 			<item name="RefSeqNum" key="45"/>
 			<item name="Text" key="58"/>
 			<item name="RefTagID" key="371"/>
@@ -139,7 +137,11 @@
 			<item name="ManualOrderIndicator" key="1028"/>
 			<item name="SplitMsg" key="9553"/>
 		</field>
-		<field name="ExecutionReport">
+		<field name="RspSequenceReset" msgtype="4">
+			<item name="NewSeqNo" key="36"/>
+			<item name="GapFillFlag" key="123"/>
+		</field>
+		<field name="ExecutionReport" msgtype="8">
 			<item name="Account" key="1"/>
 			<item name="AvgPx" key="6"/>
 			<item name="ClOrdId" key="11"/>

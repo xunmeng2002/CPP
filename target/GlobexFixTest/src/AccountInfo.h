@@ -8,33 +8,6 @@
 
 using namespace std;
 
-struct Address
-{
-	Address() {}
-	Address(const char* ip, unsigned int port)
-		:IP(ip), Port(ItoA(port))
-	{}
-	Address(const string& ip, unsigned int port)
-		:IP(ip), Port(ItoA(port))
-	{}
-
-	bool operator<(const Address& other) const
-	{
-		if (IP < other.IP)
-		{
-			return true;
-		}
-		else if (IP > other.IP)
-		{
-			return false;
-		}
-		return Port < other.Port;
-	}
-
-	string IP;
-	string Port;
-};
-
 struct AccountInfo
 {
 	string IP;
@@ -55,6 +28,6 @@ struct AccountInfo
 	string SecretKey;
 };
 
-void PrintAccountInfo(map<Address, AccountInfo*>& accountInfos);
+void PrintAccountInfo(AccountInfo* accountInfo);
 
-void ReadAccountInfo(map<Address, AccountInfo*>& accountInfos);
+void ReadAccountInfo(AccountInfo* accountInfo);

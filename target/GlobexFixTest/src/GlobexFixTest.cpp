@@ -4,12 +4,47 @@
 #include "WorkThread.h"
 #include "AccountInfo.h"
 #include <iostream>
+#include <signal.h>
+#include<stdlib.h>
 
 using namespace std;
 
+void OnExit()
+{
+	WRITE_LOG(LogLevel::Info, "OnExit");
+	TcpThread::GetInstance().Stop();
+	TcpThread::GetInstance().Join();
+
+	WorkThread::GetInstance().Stop();
+	WorkThread::GetInstance().Join();
+	
+
+	Logger::GetInstance().Stop();
+	Logger::GetInstance().Join();
+}
+
+void ReqTestRequest()
+{
+	Sleep(30000);
+
+	auto myEvent = MyEvent::Allocate();
+	myEvent->EventID = EVENT_DO_TEST_REQUEST;
+	myEvent->StringParams.push_back("Hello world!");
+	WorkThread::GetInstance().OnEvent(myEvent);
+}
+void ReqLogout()
+{
+	Sleep(30000);
+
+	auto myEvent = MyEvent::Allocate();
+	myEvent->EventID = EVENT_DO_REQ_LOGOUT;
+	WorkThread::GetInstance().OnEvent(myEvent);
+}
 
 int main(int argc, char* argv[])
 {
+	atexit(OnExit);
+
 	Logger::GetInstance().Init(argv[0]);
 	Logger::GetInstance().Start();
 
@@ -28,15 +63,11 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 	WorkThread::GetInstance().Start();
-	
+
 	while (true)
 	{
-		Sleep(30000);
+		Sleep(10000);
 	}
-	TcpThread::GetInstance().Stop();
-	TcpThread::GetInstance().Join();
-	Logger::GetInstance().Stop();
-	Logger::GetInstance().Join();
 
 	return 0;
 }

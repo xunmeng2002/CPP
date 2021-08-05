@@ -42,7 +42,7 @@ void ReqLogout()
 }
 void ReqNewOrder()
 {
-	Sleep(2000);
+	Sleep(5000);
 	auto myEvent = MyEvent::Allocate();
 	myEvent->EventID = EVENT_DO_REQ_NEW_ORDER;
 	WorkThread::GetInstance().OnEvent(myEvent);

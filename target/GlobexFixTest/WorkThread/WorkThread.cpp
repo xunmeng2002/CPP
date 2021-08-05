@@ -9,6 +9,7 @@
 
 
 
+
 WorkThread WorkThread::m_Instance;
 
 WorkThread::WorkThread(const char* name)
@@ -19,6 +20,7 @@ WorkThread::WorkThread(const char* name)
 	m_FixMessageParse = new FixMessageParse(this);
 
 	m_IsDoResendRequest = false;
+	m_TestReqID = "Hello World!";
 }
 
 WorkThread& WorkThread::GetInstance()
@@ -28,6 +30,7 @@ WorkThread& WorkThread::GetInstance()
 bool WorkThread::Init()
 {
 	ReadAccountInfo(&m_AccountInfo);
+	m_HeartBeatSecond = atoi(m_AccountInfo.HeartBtInt.c_str());
 	return true;
 }
 void WorkThread::ThreadExit()
@@ -42,6 +45,9 @@ void WorkThread::Run()
 	CheckLogonStatus();
 	CheckAndParsePackage();
 	CheckRequest();
+	CheckSendHeartBeat();
+	CheckRecvHeartBeat();
+	CheckTestRequstReply();
 }
 void WorkThread::OnEvent(MyEvent* myEvent)
 {
@@ -49,7 +55,7 @@ void WorkThread::OnEvent(MyEvent* myEvent)
 }
 void WorkThread::OnEventSequenceGap(int beginSeqNo, int endSeqNo)
 {
-	endSeqNo = endSeqNo < (beginSeqNo + 2499) ? endSeqNo : (beginSeqNo + 2499);
+	endSeqNo = endSeqNo < (beginSeqNo + 2499) ? 0 : (beginSeqNo + 2499);
 	m_ResendRange = make_pair(beginSeqNo, endSeqNo);
 
 	MyEvent* myEvent = MyEvent::Allocate();
@@ -78,6 +84,12 @@ void WorkThread::OnRecv(int sessionID, char* buff, int len)
 	m_FixMessageParse->OnRecv(buff, len);
 	m_ThreadConditionVariable.notify_one();
 }
+void WorkThread::UpdateLastSendTime()
+{
+	m_LastSendTimeCount = 0;
+	m_LastSendTimePoint = chrono::steady_clock().now();
+}
+
 
 bool WorkThread::Verify(FixMessage* fixMessage, bool checkTooHigh, bool checkTooLow)
 {
@@ -218,6 +230,9 @@ void WorkThread::OnFixMessage(FixMessage* fixMessage)
 			WRITE_LOG(LogLevel::Error, "UnKnown MsgType:[%s], FixMessage:%s", msgType.c_str(), m_LogBuff);
 		}
 	}
+
+	m_LastRecvTimeCount = 0;
+	m_LastRecvTimePoint = chrono::steady_clock::now();
 }
 void WorkThread::OnRspLogon(FixMessage* fixMessage)
 {
@@ -269,6 +284,12 @@ void WorkThread::OnRspHeartBeat(FixMessage* fixMessage)
 
 	GlobalParam::GetInstance().SetLastRecvSeqNum(rspField.MsgSeqNum);
 	GlobalParam::GetInstance().IncreaseNextExpectSeqNum();
+
+	if (m_AlreadySendTestRequest && m_TestReqID == rspField.TestReqID)
+	{
+		m_AlreadySendTestRequest = false;
+		m_TestRequestSendTimeCount = 0;
+	}
 }
 void WorkThread::OnRspTestRequest(FixMessage* fixMessage)
 {
@@ -473,6 +494,54 @@ void WorkThread::CheckRequest()
 {
 
 }
+void WorkThread::CheckSendHeartBeat()
+{
+	if (++m_LastSendTimeCount < m_HeartBeatSecond)
+	{
+		return;
+	}
+	auto timeDiff = chrono::steady_clock::now() - m_LastSendTimePoint;
+	auto timeDiffSecond = chrono::duration_cast<chrono::seconds>(timeDiff);
+	if (timeDiffSecond.count() >= m_HeartBeatSecond)
+	{
+		ReqHeartBeat("");
+	}
+}
+void WorkThread::CheckRecvHeartBeat()
+{
+	if (++m_LastRecvTimeCount < m_HeartBeatSecond)
+	{
+		return;
+	}
+	auto timeDiff = chrono::steady_clock::now() - m_LastRecvTimePoint;
+	auto timeDiffSecond = chrono::duration_cast<chrono::seconds>(timeDiff);
+	if (timeDiffSecond.count() >= m_HeartBeatSecond)
+	{
+		m_AlreadySendTestRequest = true;
+		m_TestRequestSendTimeCount = 0;
+		m_TestRequestSendTimePoint = chrono::steady_clock::now();
+		ReqTestRequest(m_TestReqID);
+	}
+}
+void WorkThread::CheckTestRequstReply()
+{
+	if (!m_AlreadySendTestRequest)
+	{
+		return;
+	}
+	if (++m_TestRequestSendTimeCount < m_HeartBeatSecond)
+	{
+		return;
+	}
+	auto timeDiff = chrono::steady_clock::now() - m_TestRequestSendTimePoint;
+	auto timeDiffSecond = chrono::duration_cast<chrono::seconds>(timeDiff);
+	if (timeDiffSecond.count() >= m_HeartBeatSecond)
+	{
+		ReqLogout();
+	}
+}
+
+
 
 
 void WorkThread::Reset()

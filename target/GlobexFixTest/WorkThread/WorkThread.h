@@ -8,6 +8,7 @@
 #include <map>
 #include <mutex>
 #include <condition_variable>
+#include <chrono>
 
 using namespace std;
 
@@ -30,6 +31,7 @@ public:
 	void OnEventSequenceGap(int beginSeqNo, int endSeqNo);
 	void OnEventDoResendRequest(int beginSeqNo, int endSeqNo);
 	void OnRecv(int sessionID, char* buff, int len);
+	void UpdateLastSendTime();
 
 public:
 	bool Verify(FixMessage* fixMessage, bool checkTooHigh = true, bool checkTooLow = true);
@@ -66,6 +68,9 @@ private:
 	void CheckLogonStatus();
 	void CheckAndParsePackage();
 	void CheckRequest();
+	void CheckSendHeartBeat();
+	void CheckRecvHeartBeat();
+	void CheckTestRequstReply();
 
 
 	void Reset();
@@ -106,5 +111,15 @@ private:
 	std::map<int, FixMessage*> m_FixMessages;
 	std::map<int, ReqHeader*> m_AppReqFields;
 	bool m_IsDoResendRequest;
+
+	int m_HeartBeatSecond;
+	int m_LastSendTimeCount;
+	chrono::steady_clock::time_point m_LastSendTimePoint;
+	int m_LastRecvTimeCount;
+	chrono::steady_clock::time_point m_LastRecvTimePoint;
+	bool m_AlreadySendTestRequest;
+	string m_TestReqID;
+	int m_TestRequestSendTimeCount;
+	chrono::steady_clock::time_point m_TestRequestSendTimePoint;
 };
 

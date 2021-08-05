@@ -3,6 +3,7 @@
 #include "Logger.h"
 #include "TcpThread.h"
 #include "GlobalParam.h"
+#include "WorkThread.h"
 
 
 TradeApi::TradeApi()
@@ -40,6 +41,7 @@ int TradeApi::!!@name!!(!!@name!!Field* reqField)
 !!inc indent!!
 	GlobalParam::GetInstance().IncreaseNextSendSeqNum();
 !!dec indent!!
+	WorkThread::GetInstance().UpdateLastSendTime();
 	return TcpThread::GetInstance().Send(m_SessionID, m_SendBuff, len);
 }
 

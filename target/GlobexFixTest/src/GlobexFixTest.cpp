@@ -40,6 +40,13 @@ void ReqLogout()
 	myEvent->EventID = EVENT_DO_REQ_LOGOUT;
 	WorkThread::GetInstance().OnEvent(myEvent);
 }
+void ReqNewOrder()
+{
+	Sleep(2000);
+	auto myEvent = MyEvent::Allocate();
+	myEvent->EventID = EVENT_DO_REQ_NEW_ORDER;
+	WorkThread::GetInstance().OnEvent(myEvent);
+}
 
 int main(int argc, char* argv[])
 {
@@ -64,6 +71,11 @@ int main(int argc, char* argv[])
 	}
 	WorkThread::GetInstance().Start();
 
+	Sleep(20000);
+	for (auto i = 0; i < 3; i++)
+	{
+		ReqNewOrder();
+	}
 	while (true)
 	{
 		Sleep(10000);

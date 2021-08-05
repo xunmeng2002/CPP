@@ -13,8 +13,8 @@ class !!@name!!
 {
 public:
 	!!@name!!(const string& fieldName, const string& msgType, FixMessage* fixMessage);
-	int ToString(char* buff, int size);
-	int ToStream(char* buff);
+	virtual int ToString(char* buff, int size);
+	virtual int ToStream(char* buff);
 	int AddHeader(char* buff, int bodyLen);
 	void SetHeader(const string& senderCompID, const string& senderSubID, const string& targetCompID, const string& targetSubID);
 	

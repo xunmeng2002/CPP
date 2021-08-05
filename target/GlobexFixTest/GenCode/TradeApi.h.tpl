@@ -11,6 +11,8 @@ public:
 	
 	void OnSessionConnected(int sessionID);
 	
+	int SendResendRequest(ReqHeader* reqField);
+	
 !!entry ReqFields!!
 !!travel!!
 	virtual int !!@name!!(!!@name!!Field* reqField);

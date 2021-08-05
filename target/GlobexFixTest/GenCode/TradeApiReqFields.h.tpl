@@ -11,8 +11,8 @@ class !!@name!!Field : public ReqHeader, public Trailer
 public:
 	!!@name!!Field(FixMessage* fixMessage);
 	~!!@name!!Field();
-	int ToString(char* buff, int size);
-	int ToStream(char* buff);
+	virtual int ToString(char* buff, int size) override;
+	virtual int ToStream(char* buff) override;
 	
 public:
 !!travel!!

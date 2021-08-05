@@ -56,6 +56,10 @@ void FixMessageParse::Parse()
 				{
 					m_FixMessage->SetItem(tag, value);
 				}
+				else
+				{
+					_ASSERT(false);
+				}
 				m_ParseBuffDataLen = 0;
 			}
 			else
@@ -63,6 +67,10 @@ void FixMessageParse::Parse()
 				if (ParseOneItem(data, itemLen, tag, value))
 				{
 					m_FixMessage->SetItem(tag, value);
+				}
+				else
+				{
+					_ASSERT(false);
 				}
 			}
 			popLen += itemLen;
@@ -72,13 +80,8 @@ void FixMessageParse::Parse()
 			if (tag == 10)
 			{
 				m_TradeSpi->OnFixMessage(m_FixMessage);
-				m_FixMessage = MemCacheTemplateSingleton<FixMessage>::GetInstance().Allocate();
+				m_FixMessage = FixMessage::Allocate();
 				while (WorkThread::GetInstance().NextQueue());
-
-				if (WorkThread::GetInstance().CheckAndSendResendRequest())
-				{
-					break;
-				}
 			}
 		}
 		if (len - popLen > 0)

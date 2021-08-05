@@ -7,7 +7,7 @@ using namespace std;
 class GlobalParam
 {
 	GlobalParam()
-		:m_NextSendSeqNum(1), m_NextExpectSeqNum(1)
+		:m_NextSendSeqNum(1), m_LastRecvSeqNum(1), m_NextExpectSeqNum(1), m_SequenceResetNum(1), m_ClOrdID(1)
 	{
 		ReadSeqNumFromFile();
 	}
@@ -28,6 +28,8 @@ public:
 	int GetNextSendSeqNum();
 	void SetNextSendSeqNum(int value);
 	void SetNextSendSeqNum(string value);
+	void IncreaseNextSendSeqNum();
+	
 	int GetLastRecvSeqNum();
 	void SetLastRecvSeqNum(int value);
 	void SetLastRecvSeqNum(string value);
@@ -36,7 +38,7 @@ public:
 	void SetNextExpectSeqNum(string value);
 	void IncreaseNextExpectSeqNum();
 
-
+	int GetClOrdID();
 private:
 	static GlobalParam m_Instance;
 
@@ -45,5 +47,7 @@ private:
 	int m_NextExpectSeqNum;
 	int m_SequenceResetNum;
 	int m_MaxRecvSeqNum;
+
+	int m_ClOrdID;
 };
 

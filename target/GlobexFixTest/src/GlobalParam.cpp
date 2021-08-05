@@ -28,7 +28,7 @@ void GlobalParam::StoreSeqNumToFile()
 
 int GlobalParam::GetNextSendSeqNum()
 {
-	return m_NextSendSeqNum++;
+	return m_NextSendSeqNum;
 }
 void GlobalParam::SetNextSendSeqNum(int value)
 {
@@ -42,6 +42,11 @@ void GlobalParam::SetNextSendSeqNum(string value)
 		m_NextSendSeqNum = valueInt;
 	}
 }
+void GlobalParam::IncreaseNextSendSeqNum()
+{
+	m_NextSendSeqNum++;
+}
+
 int GlobalParam::GetLastRecvSeqNum()
 {
 	return m_LastRecvSeqNum;
@@ -76,4 +81,9 @@ void GlobalParam::SetNextExpectSeqNum(string value)
 void GlobalParam::IncreaseNextExpectSeqNum()
 {
 	++m_NextExpectSeqNum;
+}
+
+int GlobalParam::GetClOrdID()
+{
+	return m_ClOrdID++;
 }

@@ -27,7 +27,8 @@ public:
 	virtual void Run() override;
 	
 	void OnEvent(MyEvent* myEvent);
-	void OnEventResendRequest(int beginSeqNo, int endSeqNo);
+	void OnEventSequenceGap(int beginSeqNo, int endSeqNo);
+	void OnEventDoResendRequest(int beginSeqNo, int endSeqNo);
 	void OnRecv(int sessionID, char* buff, int len);
 
 public:
@@ -35,7 +36,6 @@ public:
 	void OnMsgSeqTooHigh(FixMessage* fixMessage, int msgSeqNum, int expectSeqNum);
 	void OnMsgSeqTooLow(FixMessage* fixMessage, int msgSeqNum, int expectSeqNum);
 	bool NextQueue();
-	bool CheckAndSendResendRequest();
 
 	virtual void OnFixMessage(FixMessage* fixMessage) override;
 
@@ -59,6 +59,8 @@ public:
 
 private:
 	void CheckEvent();
+	MyEvent* GetEvent();
+	void PushEvent(MyEvent* myEvent);
 	void HandleEvent();
 	void CheckConnectStatus();
 	void CheckLogonStatus();
@@ -67,13 +69,14 @@ private:
 
 
 	void Reset();
-	void AddReqHeader();
+	void AddReqHeader(string msgSeqNum = "");
 	int ReqLogon();
 	int ReqLogout();
 	int ReqHeartBeat(string testReqID);
 	int ReqTestRequest(string testReqID);
 	int ReqResendRequest(int startSeqNum, int endSeqNum);
-	int ReqSequenceReset(const string& beginSeqNum);
+	void DoResendRequest(int startSeqNum, int endSeqNum);
+	int ReqSequenceReset(int beginSeqNum, int endSeqNum);
 	int ReqNewOrder();
 
 
@@ -101,5 +104,7 @@ private:
 
 	std::pair<int, int> m_ResendRange;
 	std::map<int, FixMessage*> m_FixMessages;
+	std::map<int, ReqHeader*> m_AppReqFields;
+	bool m_IsDoResendRequest;
 };
 

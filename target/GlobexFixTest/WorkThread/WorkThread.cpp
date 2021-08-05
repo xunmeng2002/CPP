@@ -17,6 +17,8 @@ WorkThread::WorkThread(const char* name)
 	m_FixMessage = nullptr;
 	m_TradeApi = new TradeApi();
 	m_FixMessageParse = new FixMessageParse(this);
+
+	m_IsDoResendRequest = false;
 }
 
 WorkThread& WorkThread::GetInstance()
@@ -43,21 +45,33 @@ void WorkThread::Run()
 }
 void WorkThread::OnEvent(MyEvent* myEvent)
 {
-	lock_guard<mutex> guard(m_MyEventMutex);
-	m_MyEvents.push_back(myEvent);
-
-	m_ThreadConditionVariable.notify_one();
+	PushEvent(myEvent);
 }
-void WorkThread::OnEventResendRequest(int beginSeqNo, int endSeqNo)
+void WorkThread::OnEventSequenceGap(int beginSeqNo, int endSeqNo)
 {
+	endSeqNo = endSeqNo < (beginSeqNo + 2499) ? endSeqNo : (beginSeqNo + 2499);
+	m_ResendRange = make_pair(beginSeqNo, endSeqNo);
+
+	MyEvent* myEvent = MyEvent::Allocate();
+	myEvent->EventID = EVENT_ON_SEQUENCE_GAP;
+	myEvent->NumParams.push_back(beginSeqNo);
+	myEvent->NumParams.push_back(endSeqNo);
+	
+	PushEvent(myEvent);
+}
+void WorkThread::OnEventDoResendRequest(int beginSeqNo, int endSeqNo)
+{
+	if (m_IsDoResendRequest)
+	{
+		return;
+	}
+	m_IsDoResendRequest = true;
 	MyEvent* myEvent = MyEvent::Allocate();
 	myEvent->EventID = EVENT_DO_RESEND_REQUEST;
 	myEvent->NumParams.push_back(beginSeqNo);
 	myEvent->NumParams.push_back(endSeqNo);
-	lock_guard<mutex> guard(m_MyEventMutex);
-	m_MyEvents.push_back(myEvent);
-
-	m_ThreadConditionVariable.notify_one();
+	
+	PushEvent(myEvent);
 }
 void WorkThread::OnRecv(int sessionID, char* buff, int len)
 {
@@ -98,54 +112,52 @@ void WorkThread::OnMsgSeqTooHigh(FixMessage* fixMessage, int msgSeqNum, int expe
 
 	if (IsOnResend())
 	{
-		WRITE_LOG(LogLevel::Info, "Already sent ResendRequest FROM:[%d] TO:[%d], Not sending another", m_ResendRange.first, m_ResendRange.second);
+		WRITE_LOG(LogLevel::Info, "Already sent ResendRequest FROM:[%d] TO:[%d], MsgSeqNum:[%d], Send again!!!", m_ResendRange.first, m_ResendRange.second, msgSeqNum);
+		OnEventSequenceGap(m_ResendRange.first, m_ResendRange.second);
 	}
 	else
 	{
-		OnEventResendRequest(expectSeqNum, msgSeqNum - 1);
+		OnEventSequenceGap(expectSeqNum, msgSeqNum - 1);
 	}
 }
 void WorkThread::OnMsgSeqTooLow(FixMessage* fixMessage, int msgSeqNum, int expectSeqNum)
 {
 	auto possDupFlag = fixMessage->GetPossDupFlag();
 	auto msgType = fixMessage->GetMessageType();
+	fixMessage->ToString(m_LogBuff, BUFF_SIZE);
 	if (possDupFlag != "Y" || msgType != "4")
 	{
-		WRITE_LOG(LogLevel::Error, "MsgSeqNum too low, Expect:[%d], Receive:[%d]", expectSeqNum, msgSeqNum);
+		WRITE_LOG(LogLevel::Error, "MsgSeqNum too low, Expect:[%d], Receive:[%d], FixMessage:%s", expectSeqNum, msgSeqNum, m_LogBuff);
 		ReqLogout();
 	}
 	FixMessage::Free(fixMessage);
 }
 bool WorkThread::NextQueue()
 {
-	auto nextExpectSeqNum = GlobalParam::GetInstance().GetNextExpectSeqNum();
-	if (m_FixMessages.find(nextExpectSeqNum) != m_FixMessages.end())
+	if (m_FixMessages.size() == 0)
 	{
-		auto fixMessage = m_FixMessages[nextExpectSeqNum];
-		m_FixMessages.erase(nextExpectSeqNum);
+		return false;
+	}
+	auto nextExpectSeqNum = GlobalParam::GetInstance().GetNextExpectSeqNum();
+	auto it = m_FixMessages.begin();
+	auto msgSeqNum = it->first;
+	if (msgSeqNum < nextExpectSeqNum)
+	{
+		it->second->ToString(m_LogBuff, BUFF_SIZE);
+		WRITE_LOG(LogLevel::Warning, "Find MsgSeqNum Less than Expect in Queue. FixMessage: %s", m_LogBuff);
+		m_FixMessages.erase(it);
+		return true;
+	}
+	else if (msgSeqNum == nextExpectSeqNum)
+	{
+		auto fixMessage = it->second;
+		m_FixMessages.erase(it);
 		OnFixMessage(fixMessage);
 		return true;
 	}
-	return false;
-}
-bool WorkThread::CheckAndSendResendRequest()
-{
-	auto nextExpectSeqNum = GlobalParam::GetInstance().GetNextExpectSeqNum();
-	while (m_FixMessages.size() > 0)
+	if (!IsOnResend())
 	{
-		auto it = m_FixMessages.begin();
-		auto msgSeqNum = it->first;
-		if (msgSeqNum <= nextExpectSeqNum)
-		{
-			it->second->ToString(m_LogBuff, BUFF_SIZE);
-			WRITE_LOG(LogLevel::Warning, "Find MsgSeqNum Less than Expect in Queue. FixMessage: %s", m_LogBuff);
-			m_FixMessages.erase(it);
-		}
-		else
-		{
-			OnEventResendRequest(nextExpectSeqNum, msgSeqNum - 1);
-			return true;
-		}
+		OnEventSequenceGap(nextExpectSeqNum, msgSeqNum - 1);
 	}
 	return false;
 }
@@ -190,10 +202,20 @@ void WorkThread::OnFixMessage(FixMessage* fixMessage)
 	}
 	else
 	{
-		if (Verify(fixMessage))
+		if (!Verify(fixMessage))
 		{
-			GlobalParam::GetInstance().SetLastRecvSeqNum(seqNum);
-			GlobalParam::GetInstance().IncreaseNextExpectSeqNum();
+			return;
+		}
+		GlobalParam::GetInstance().SetLastRecvSeqNum(seqNum);
+		GlobalParam::GetInstance().IncreaseNextExpectSeqNum();
+		if (msgType == "8")
+		{
+			OnExecutionReport(fixMessage);
+		}
+		else
+		{
+			fixMessage->ToString(m_LogBuff, BUFF_SIZE);
+			WRITE_LOG(LogLevel::Error, "UnKnown MsgType:[%s], FixMessage:%s", msgType.c_str(), m_LogBuff);
 		}
 	}
 }
@@ -254,16 +276,12 @@ void WorkThread::OnRspTestRequest(FixMessage* fixMessage)
 	{
 		return;
 	}
+
 	RspTestRequestField rspField(fixMessage);
 	TradeSpi::OnRspTestRequest(&rspField);
 
 	GlobalParam::GetInstance().SetLastRecvSeqNum(rspField.MsgSeqNum);
-	auto msgSeqNum = atoi(fixMessage->GetMsgSeqNum().c_str());
-	auto nextExpectSeqNum = GlobalParam::GetInstance().GetNextExpectSeqNum();
-	if (msgSeqNum == nextExpectSeqNum)
-	{
-		GlobalParam::GetInstance().IncreaseNextExpectSeqNum();
-	}
+	GlobalParam::GetInstance().IncreaseNextExpectSeqNum();
 
 	ReqHeartBeat(rspField.TestReqID);
 }
@@ -272,10 +290,14 @@ void WorkThread::OnRspResendRequest(FixMessage* fixMessage)
 	RspResendRequestField rspField(fixMessage);
 	TradeSpi::OnRspResendRequest(&rspField);
 	
-	MyEvent* myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_DO_SEQUENCE_RESET;
-	myEvent->StringParams.push_back(rspField.BeginSeqNo);
-	OnEvent(myEvent);
+	auto msgSeqNum = atoi(fixMessage->GetMsgSeqNum().c_str());
+	auto nextExpectSeqNum = GlobalParam::GetInstance().GetNextExpectSeqNum();
+	if (nextExpectSeqNum == msgSeqNum)
+	{
+		GlobalParam::GetInstance().SetLastRecvSeqNum(rspField.MsgSeqNum);
+		GlobalParam::GetInstance().IncreaseNextExpectSeqNum();
+	}
+	OnEventDoResendRequest(atoi(rspField.BeginSeqNo.c_str()), atoi(rspField.EndSeqNo.c_str()));
 }
 void WorkThread::OnRspSessionLevelReject(FixMessage* fixMessage)
 {
@@ -291,12 +313,6 @@ void WorkThread::OnRspSessionLevelReject(FixMessage* fixMessage)
 }
 void WorkThread::OnRspSequenceReset(FixMessage* fixMessage)
 {
-	auto isGapFill = fixMessage->GetItem(123);
-	if (isGapFill == "Y" && !Verify(fixMessage))
-	{
-		return;
-	}
-
 	RspSequenceResetField rspField(fixMessage);
 	TradeSpi::OnRspSequenceReset(&rspField);
 
@@ -305,7 +321,6 @@ void WorkThread::OnRspSequenceReset(FixMessage* fixMessage)
 	WRITE_LOG(LogLevel::Info, "Received SequenceReset FROM [%d] To [%d]", nextExpectSeqNum, newSeqNo);
 
 	GlobalParam::GetInstance().SetLastRecvSeqNum(rspField.MsgSeqNum);
-
 	if (IsOnResend() && newSeqNo > m_ResendRange.second)
 	{
 		GlobalParam::GetInstance().SetNextExpectSeqNum(m_ResendRange.second + 1);
@@ -328,11 +343,30 @@ void WorkThread::CheckEvent()
 	unique_lock<mutex> guard(m_ThreadMutex);
 	m_ThreadConditionVariable.wait_for(guard, std::chrono::seconds(1), [&] {return !m_MyEvents.empty();});
 }
-void WorkThread::HandleEvent()
+MyEvent* WorkThread::GetEvent()
 {
 	lock_guard<mutex> guard(m_MyEventMutex);
-	for (auto& myEvent : m_MyEvents)
+	if (m_MyEvents.empty())
 	{
+		return nullptr;
+	}
+	auto myEvent = m_MyEvents.front();
+	m_MyEvents.pop_front();
+	return myEvent;
+}
+void WorkThread::PushEvent(MyEvent* myEvent)
+{
+	lock_guard<mutex> guard(m_MyEventMutex);
+	m_MyEvents.push_back(myEvent);
+
+	m_ThreadConditionVariable.notify_one();
+}
+void WorkThread::HandleEvent()
+{
+	MyEvent* myEvent = nullptr;
+	while (myEvent = GetEvent())
+	{
+		bool shouldRepush = false;
 		switch (myEvent->EventID)
 		{
 		case EVENT_CONNECTED:
@@ -345,10 +379,10 @@ void WorkThread::HandleEvent()
 		case EVENT_DISCONNECTED:
 		{
 			m_ConnectStatus = ConnectStatus::NotConnected;
-			m_LogonStatus = LogonStatus::NotLogged;
+			Reset();
 			break;
 		}
-		case EVENT_DO_RESEND_REQUEST:
+		case EVENT_ON_SEQUENCE_GAP:
 		{
 			if (m_LogonStatus == LogonStatus::Logged)
 			{
@@ -358,12 +392,13 @@ void WorkThread::HandleEvent()
 			}
 			break;
 		}
-		case EVENT_DO_SEQUENCE_RESET:
+		case EVENT_DO_RESEND_REQUEST:
 		{
 			if (m_LogonStatus == LogonStatus::Logged)
 			{
-				auto beginSeqNum = myEvent->StringParams[0];
-				ReqSequenceReset(beginSeqNum);
+				auto beginSeqNum = myEvent->NumParams[0];
+				auto endSeqNum = myEvent->NumParams[1];
+				DoResendRequest(beginSeqNum, endSeqNum);
 			}
 			break;
 		}
@@ -373,6 +408,10 @@ void WorkThread::HandleEvent()
 			{
 				auto testReqID = myEvent->StringParams[0];
 				ReqTestRequest(testReqID);
+			}
+			else
+			{
+				shouldRepush = true;
 			}
 			break;
 		}
@@ -384,14 +423,31 @@ void WorkThread::HandleEvent()
 			}
 			break;
 		}
-		
+		case EVENT_DO_REQ_NEW_ORDER:
+		{
+			if (m_LogonStatus == LogonStatus::Logged && !m_IsDoResendRequest)
+			{
+				ReqNewOrder();
+			}
+			else
+			{
+				shouldRepush = true;
+			}
+			break;
+		}
 		default:
 			_ASSERT(false);
 			break;
 		}
-		MyEvent::Free(myEvent);
+		if (shouldRepush)
+		{
+			PushEvent(myEvent);
+		}
+		else
+		{
+			MyEvent::Free(myEvent);
+		}
 	}
-	m_MyEvents.clear();
 }
 void WorkThread::CheckConnectStatus()
 {
@@ -421,14 +477,22 @@ void WorkThread::CheckRequest()
 
 void WorkThread::Reset()
 {
+	m_LogonStatus = LogonStatus::NotLogged;
 	m_ResendRange = make_pair(0, 0);
 	m_FixMessages.clear();
 }
-void WorkThread::AddReqHeader()
+void WorkThread::AddReqHeader(string msgSeqNum)
 {
 	m_FixMessage = FixMessage::Allocate();
 	m_FixMessage->SetItem(8, m_AccountInfo.BeginString);
-	m_FixMessage->SetItem(34, ItoA(GlobalParam::GetInstance().GetNextSendSeqNum()));
+	if (msgSeqNum.empty())
+	{
+		m_FixMessage->SetItem(34, ItoA(GlobalParam::GetInstance().GetNextSendSeqNum()));
+	}
+	else
+	{
+		m_FixMessage->SetItem(34, msgSeqNum);
+	}
 	m_FixMessage->SetItem(43, "N");
 	m_FixMessage->SetItem(49, m_SenderCompID);
 	m_FixMessage->SetItem(50, m_AccountInfo.SenderSubID);
@@ -487,16 +551,9 @@ int WorkThread::ReqTestRequest(string testReqID)
 }
 int WorkThread::ReqResendRequest(int startSeqNum, int endSeqNum)
 {
-	if (IsOnResend())
-	{
-		WRITE_LOG(LogLevel::Info, "Already sent ResendRequest FROM:[%d] TO:[%d], Not sending another", m_ResendRange.first, m_ResendRange.second);
-		return 0;
-	}
 	AddReqHeader();
 	ReqResendRequestField reqField(m_FixMessage);
-
-	endSeqNum = endSeqNum < (startSeqNum + 2499) ? endSeqNum : (startSeqNum + 2499);
-	m_ResendRange = make_pair(startSeqNum, endSeqNum);
+	reqField.PossDupFlag = "Y";
 
 	reqField.BeginSeqNo = ItoA(startSeqNum);
 	reqField.EndSeqNo = ItoA(endSeqNum);
@@ -504,55 +561,93 @@ int WorkThread::ReqResendRequest(int startSeqNum, int endSeqNum)
 	GlobalParam::GetInstance().SetNextExpectSeqNum(startSeqNum);
 	return m_TradeApi->ReqResendRequest(&reqField);
 }
-int WorkThread::ReqSequenceReset(const string& beginSeqNum)
+void WorkThread::DoResendRequest(int startSeqNum, int endSeqNum)
 {
-	AddReqHeader();
+	endSeqNum = GlobalParam::GetInstance().GetNextSendSeqNum();
+	if (m_AppReqFields.size() == 0)
+	{
+		ReqSequenceReset(startSeqNum, endSeqNum);
+		return;
+	}
+	int currSeqNum = startSeqNum;
+	for (auto it = m_AppReqFields.begin(); it != m_AppReqFields.end(); ++it)
+	{
+		if (it->first < currSeqNum)
+		{
+			continue;
+		}
+		if (it->first > currSeqNum)
+		{
+			ReqSequenceReset(currSeqNum, it->first);
+			currSeqNum = it->first;
+		}
+		it->second->SendingTime = GetUtcTime();
+		it->second->PossDupFlag = "Y";
+		it->second->LastMsgSeqNumProcessed = ItoA(GlobalParam::GetInstance().GetLastRecvSeqNum());
+		m_TradeApi->SendResendRequest(it->second);
+		currSeqNum++;
+	}
+	if (currSeqNum < endSeqNum)
+	{
+		ReqSequenceReset(currSeqNum, endSeqNum);
+	}
+	
+	m_IsDoResendRequest = false;
+}
+int WorkThread::ReqSequenceReset(int beginSeqNum, int endSeqNum)
+{
+	AddReqHeader(ItoA(beginSeqNum));
 	ReqSequenceResetField reqField(m_FixMessage);
 	reqField.PossDupFlag = "Y";
-	auto nextSendSeqNum = reqField.MsgSeqNum;
-	GlobalParam::GetInstance().SetNextSendSeqNum(nextSendSeqNum);
-	reqField.MsgSeqNum = beginSeqNum;
-	reqField.NewSeqNo = nextSendSeqNum;
-	reqField.GapFillFlag = "N";
+	reqField.NewSeqNo = ItoA(endSeqNum);
+	reqField.GapFillFlag = "Y";
 
 	return m_TradeApi->ReqSequenceReset(&reqField);
 }
 int WorkThread::ReqNewOrder()
 {
 	AddReqHeader();
-	ReqNewOrderField reqField(m_FixMessage);
-	reqField.Account = "2F5004";
-	reqField.ClOrdID = "5";
-	reqField.HandInst = "1";
-	reqField.CustOrderHandlingInst = "Y";
-	reqField.OrderQty = "5";
-	reqField.OrdType = "1";
-	reqField.Price = "";
-	reqField.Side = "1";
-	reqField.Symbol = "";
-	reqField.TimeInForce = "0";
-	reqField.TransactTime = GetUtcTime();
-	reqField.ManualOrderIndicator = "Y";
-	reqField.NoAllocs = "";
-	reqField.AllocAccount = "";
-	reqField.StopPx = "";
-	reqField.SecurityDesc = "GEZ8";
-	reqField.MinQty = "1";
-	reqField.SecurityType = "FUT";
-	reqField.CustomerOrFirm = "0";
-	reqField.MaxShow = "1";
-	reqField.ExpireDate = "";
-	reqField.SelfMatchPreventionID = "";
-	reqField.SelfMatchPreventionInstruction = "";
-	reqField.CtiCode = "4";
-	reqField.AvgPxGroupID = "";
-	reqField.ClearingTradePriceType = "";
-	reqField.AvgPXIndicator = "";
-	reqField.Memo = "";
-	reqField.GiveUpFirm = "";
-	reqField.CmtaGiveupCD = "";
-	reqField.CorrelationClOrdID = "5";
-	reqField.MarketSegmentID = "99";
+	ReqNewOrderField* reqField = new ReqNewOrderField(m_FixMessage);
+	reqField->Account = "2F5004";
+	reqField->ClOrdID = ItoA(GlobalParam::GetInstance().GetClOrdID());
+	reqField->HandInst = "1";
+	reqField->CustOrderHandlingInst = "Y";
+	reqField->OrderQty = "1";
+	reqField->OrdType = "2";
+	reqField->Price = "100";
+	reqField->Side = "1";
+	reqField->Symbol = "";
+	reqField->TimeInForce = "0";
+	reqField->TransactTime = GetUtcTime();
+	reqField->ManualOrderIndicator = "Y";
+	reqField->NoAllocs = "";
+	reqField->AllocAccount = "";
+	reqField->StopPx = "";
+	//reqField->SecurityDesc = "GEZ8";
+	reqField->SecurityDesc = "0GLBZ0";
+	reqField->MinQty = "1";
+	reqField->SecurityType = "FUT";
+	reqField->CustomerOrFirm = "0";
+	reqField->MaxShow = "1";
+	reqField->ExpireDate = "";
+	reqField->SelfMatchPreventionID = "";
+	reqField->SelfMatchPreventionInstruction = "";
+	reqField->CtiCode = "4";
+	reqField->AvgPxGroupID = "";
+	reqField->ClearingTradePriceType = "";
+	reqField->AvgPXIndicator = "";
+	reqField->Memo = "";
+	reqField->GiveUpFirm = "";
+	reqField->CmtaGiveupCD = "";
+	reqField->CorrelationClOrdID = reqField->ClOrdID;
+	//reqField->MarketSegmentID = "99";
+	//reqField->MarketSegmentID = "931";
+	reqField->MarketSegmentID = "925";
 
-	return m_TradeApi->ReqNewOrder(&reqField);
+	int ret = m_TradeApi->ReqNewOrder(reqField);
+
+	reqField->OrigSendingTime = reqField->SendingTime;
+	m_AppReqFields[atoi(reqField->MsgSeqNum.c_str())] = reqField;
+
+	return ret;
 }

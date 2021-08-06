@@ -2,7 +2,6 @@
 
 #include "ThreadBase.h"
 #include "TradeSpi.h"
-#include "MyEvent.h"
 #include "AccountInfo.h"
 #include <vector>
 #include <map>
@@ -27,9 +26,9 @@ public:
 	virtual void ThreadExit() override;
 	virtual void Run() override;
 	
-	void OnEvent(MyEvent* myEvent);
 	void OnEventSequenceGap(int beginSeqNo, int endSeqNo);
 	void OnEventDoResendRequest(int beginSeqNo, int endSeqNo);
+	void OnEventDoLogout();
 	void OnRecv(int sessionID, char* buff, int len);
 	void UpdateLastSendTime();
 
@@ -60,9 +59,6 @@ public:
 
 
 private:
-	void CheckEvent();
-	MyEvent* GetEvent();
-	void PushEvent(MyEvent* myEvent);
 	void HandleEvent();
 	void CheckConnectStatus();
 	void CheckLogonStatus();
@@ -93,10 +89,7 @@ private:
 private:
 	static WorkThread m_Instance;
 
-	list<MyEvent*> m_MyEvents;
-	mutex m_MyEventMutex;
 	std::mutex m_ThreadMutex;
-	std::condition_variable m_ThreadConditionVariable;
 
 	string m_SenderCompID;
 	AccountInfo m_AccountInfo;
@@ -111,6 +104,7 @@ private:
 	std::map<int, FixMessage*> m_FixMessages;
 	std::map<int, ReqHeader*> m_AppReqFields;
 	bool m_IsDoResendRequest;
+	bool m_AlreadySendLogout;
 
 	int m_HeartBeatSecond;
 	int m_LastSendTimeCount;

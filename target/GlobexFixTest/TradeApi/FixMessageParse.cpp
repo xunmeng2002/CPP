@@ -81,7 +81,6 @@ void FixMessageParse::Parse()
 			{
 				m_TradeSpi->OnFixMessage(m_FixMessage);
 				m_FixMessage = FixMessage::Allocate();
-				while (WorkThread::GetInstance().NextQueue());
 			}
 		}
 		if (len - popLen > 0)
@@ -91,4 +90,5 @@ void FixMessageParse::Parse()
 		}
 		m_CacheList->PopFront(nullptr, len);
 	}
+	while (WorkThread::GetInstance().NextQueue());
 }

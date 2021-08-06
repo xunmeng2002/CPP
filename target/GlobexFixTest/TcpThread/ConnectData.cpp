@@ -1,12 +1,11 @@
 #include "ConnectData.h"
 #include "Logger.h"
+#include "MemCacheTemplateSingleton.h"
 
 using namespace std;
 
-ConnectData::ConnectData(int sessionID, const SOCKET& socketID, const char* clientIP, int clientPort)
-	:SessionID(sessionID), SocketID(socketID), ClientPort(clientPort)
+ConnectData::ConnectData()
 {
-	memcpy(ClientIP, clientIP, sizeof(ClientIP));
 	SendCache = new CacheList();
 }
 ConnectData::~ConnectData()
@@ -18,6 +17,19 @@ ConnectData::~ConnectData()
 	SendCache = nullptr;
 }
 
+void ConnectData::Set(int sessionID, const SOCKET& socketID, const string& clientIP, int clientPort)
+{
+	SessionID = sessionID;
+	SocketID = socketID;
+	ClientIP = clientIP;
+	ClientPort = clientPort;
+}
+void ConnectData::Reset()
+{
+	lock_guard<mutex> guard(SendMutex);
+	SendCache->Clear();
+	closesocket(SocketID);
+}
 bool ConnectData::Send(const char* data, int length)
 {
 	lock_guard<mutex> guard(SendMutex);
@@ -38,4 +50,16 @@ int ConnectData::OnSend()
 		SendCache->PopFront(nullptr, sendLen);
 	}
 	return sendLen;
+}
+
+ConnectData* ConnectData::Allocate(int sessionID, const SOCKET& socketID, const string& clientIP, int clientPort)
+{
+	ConnectData* connectData = MemCacheTemplateSingleton<ConnectData>::GetInstance().Allocate();
+	connectData->Set(sessionID, socketID, clientIP, clientPort);
+	return connectData;
+}
+void ConnectData::Free(ConnectData* connectData)
+{
+	connectData->Reset();
+	MemCacheTemplateSingleton<ConnectData>::GetInstance().Free(connectData);
 }

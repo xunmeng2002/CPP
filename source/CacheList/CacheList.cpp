@@ -74,17 +74,17 @@ void CacheNode::Clear()
 CacheList::CacheList(int blockSize)
 	:m_BlockSize(blockSize)
 {
-	m_Head = new CacheNode(m_BlockSize);
-	m_Write = m_Tail = m_Head;
+	m_HeadNode = new CacheNode(m_BlockSize);
+	m_WriteNode = m_TailNode = m_HeadNode;
 	m_Length = 0;
 }
 CacheList::~CacheList()
 {
 	CacheNode* cacheNode;
-	while (m_Head)
+	while (m_HeadNode)
 	{
-		cacheNode = m_Head;
-		m_Head = m_Head->GetNext();
+		cacheNode = m_HeadNode;
+		m_HeadNode = m_HeadNode->GetNext();
 		delete cacheNode;
 	}
 }
@@ -94,14 +94,14 @@ void CacheList::PushBack(const void* data, int length)
 	int pushLen = 0;
 	while (pushLen < length)
 	{
-		pushLen += m_Write->PushBack((char*)data + pushLen, length - pushLen);
-		if (m_Write->IsFull())
+		pushLen += m_WriteNode->PushBack((char*)data + pushLen, length - pushLen);
+		if (m_WriteNode->IsFull())
 		{
-			if (m_Write == m_Tail)
+			if (m_WriteNode == m_TailNode)
 			{
 				AddNewNode();
 			}
-			m_Write = m_Write->GetNext();
+			m_WriteNode = m_WriteNode->GetNext();
 		}
 	}
 	m_Length += length;
@@ -119,19 +119,19 @@ bool CacheList::PopFront(void* data, int length)
 	{
 		if (data)
 		{
-			popLen += m_Head->PopFront((char*)data + popLen, length - popLen);
+			popLen += m_HeadNode->PopFront((char*)data + popLen, length - popLen);
 		}
 		else //用于GetData之后
 		{
-			popLen += m_Head->PopFront(data, length - popLen);
+			popLen += m_HeadNode->PopFront(data, length - popLen);
 		}
-		if (m_Head->IsEmpty() && m_Write != m_Head && m_Head->GetNext())
+		if (m_HeadNode->IsEmpty() && m_WriteNode != m_HeadNode && m_HeadNode->GetNext())
 		{
 			PopFrontNode();
 		}
 		if (popLen < length)
 		{
-			if (m_Head->IsEmpty())
+			if (m_HeadNode->IsEmpty())
 			{
 				assert(false);
 				m_Length -= popLen;
@@ -145,7 +145,7 @@ bool CacheList::PopFront(void* data, int length)
 void* CacheList::GetData(int& length)
 {
 	lock_guard<mutex> guard(m_Mutex);
-	return m_Head->GetData(length);
+	return m_HeadNode->GetData(length);
 }
 int CacheList::GetLength()
 {
@@ -155,21 +155,30 @@ int CacheList::GetLength()
 bool CacheList::IsEmpty()
 {
 	lock_guard<mutex> guard(m_Mutex);
-	return m_Head->IsEmpty();
+	return m_HeadNode->IsEmpty();
+}
+void CacheList::Clear()
+{
+	lock_guard<mutex> guard(m_Mutex);
+	while (m_HeadNode != m_WriteNode)
+	{
+		PopFrontNode();
+	}
+	m_HeadNode->Clear();
 }
 
 void CacheList::PopFrontNode()
 {
-	CacheNode* cacheNode = m_Head;
-	m_Head = m_Head->GetNext();
+	CacheNode* cacheNode = m_HeadNode;
+	m_HeadNode = m_HeadNode->GetNext();
 	cacheNode->Clear();
 
-	m_Tail->SetNext(cacheNode);
-	m_Tail = cacheNode;
+	m_TailNode->SetNext(cacheNode);
+	m_TailNode = cacheNode;
 }
 void CacheList::AddNewNode()
 {
 	CacheNode* cacheNode = new CacheNode(m_BlockSize);
-	m_Tail->SetNext(cacheNode);
-	m_Tail = cacheNode;
+	m_TailNode->SetNext(cacheNode);
+	m_TailNode = cacheNode;
 }

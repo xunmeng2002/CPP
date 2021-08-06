@@ -1,7 +1,7 @@
 #ifndef __CACHE_LIST_H__
 #define __CACHE_LIST_H__
 
-#define NODE_BLOCK_SIZE 64 * 1024
+#define NODE_BLOCK_SIZE 1024
 #include <mutex>
 
 class CacheNode
@@ -41,6 +41,7 @@ public:
 	void* GetData(int& length);
 	int GetLength();
 	bool IsEmpty();
+	void Clear();
 
 private:
 	void PopFrontNode();
@@ -49,9 +50,9 @@ private:
 private:
 	int m_BlockSize;
 	int m_Length;
-	CacheNode* m_Head;
-	CacheNode* m_Tail;
-	CacheNode* m_Write;
+	CacheNode* m_HeadNode;
+	CacheNode* m_TailNode;
+	CacheNode* m_WriteNode;
 
 	std::mutex m_Mutex;
 };

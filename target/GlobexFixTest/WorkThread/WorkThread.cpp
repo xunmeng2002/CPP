@@ -49,13 +49,9 @@ void WorkThread::Run()
 	CheckRecvHeartBeat();
 	CheckTestRequstReply();
 }
-void WorkThread::OnEvent(MyEvent* myEvent)
-{
-	PushEvent(myEvent);
-}
 void WorkThread::OnEventSequenceGap(int beginSeqNo, int endSeqNo)
 {
-	endSeqNo = endSeqNo < (beginSeqNo + 2499) ? 0 : (beginSeqNo + 2499);
+	endSeqNo = endSeqNo < (beginSeqNo + 2499) ? endSeqNo : (beginSeqNo + 2499);
 	m_ResendRange = make_pair(beginSeqNo, endSeqNo);
 
 	MyEvent* myEvent = MyEvent::Allocate();
@@ -63,7 +59,7 @@ void WorkThread::OnEventSequenceGap(int beginSeqNo, int endSeqNo)
 	myEvent->NumParams.push_back(beginSeqNo);
 	myEvent->NumParams.push_back(endSeqNo);
 	
-	PushEvent(myEvent);
+	OnEvent(myEvent);
 }
 void WorkThread::OnEventDoResendRequest(int beginSeqNo, int endSeqNo)
 {
@@ -77,7 +73,14 @@ void WorkThread::OnEventDoResendRequest(int beginSeqNo, int endSeqNo)
 	myEvent->NumParams.push_back(beginSeqNo);
 	myEvent->NumParams.push_back(endSeqNo);
 	
-	PushEvent(myEvent);
+	OnEvent(myEvent);
+}
+void WorkThread::OnEventDoLogout()
+{
+	MyEvent* myEvent = MyEvent::Allocate();
+	myEvent->EventID = EVENT_DO_REQ_LOGOUT;
+
+	OnEvent(myEvent);
 }
 void WorkThread::OnRecv(int sessionID, char* buff, int len)
 {
@@ -140,7 +143,7 @@ void WorkThread::OnMsgSeqTooLow(FixMessage* fixMessage, int msgSeqNum, int expec
 	if (possDupFlag != "Y" || msgType != "4")
 	{
 		WRITE_LOG(LogLevel::Error, "MsgSeqNum too low, Expect:[%d], Receive:[%d], FixMessage:%s", expectSeqNum, msgSeqNum, m_LogBuff);
-		ReqLogout();
+		OnEventDoLogout();
 	}
 	FixMessage::Free(fixMessage);
 }
@@ -258,10 +261,6 @@ void WorkThread::OnRspLogout(FixMessage* fixMessage)
 {
 	RspLogoutField rspField(fixMessage);
 	TradeSpi::OnRspLogout(&rspField);
-	if (m_LogonStatus != LogonStatus::Logout)
-	{
-		ReqLogout();
-	}
 
 	if (!rspField.NextExpectedMsgSeqNum.empty())
 	{
@@ -359,29 +358,6 @@ void WorkThread::OnExecutionReport(FixMessage* fixMessage)
 }
 
 
-void WorkThread::CheckEvent()
-{
-	unique_lock<mutex> guard(m_ThreadMutex);
-	m_ThreadConditionVariable.wait_for(guard, std::chrono::seconds(1), [&] {return !m_MyEvents.empty();});
-}
-MyEvent* WorkThread::GetEvent()
-{
-	lock_guard<mutex> guard(m_MyEventMutex);
-	if (m_MyEvents.empty())
-	{
-		return nullptr;
-	}
-	auto myEvent = m_MyEvents.front();
-	m_MyEvents.pop_front();
-	return myEvent;
-}
-void WorkThread::PushEvent(MyEvent* myEvent)
-{
-	lock_guard<mutex> guard(m_MyEventMutex);
-	m_MyEvents.push_back(myEvent);
-
-	m_ThreadConditionVariable.notify_one();
-}
 void WorkThread::HandleEvent()
 {
 	MyEvent* myEvent = nullptr;
@@ -390,15 +366,21 @@ void WorkThread::HandleEvent()
 		bool shouldRepush = false;
 		switch (myEvent->EventID)
 		{
-		case EVENT_CONNECTED:
+		case EVENT_ON_CONNECTED:
 		{
-			auto sessionID = myEvent->NumParams[0];
+			auto& ip = myEvent->StringParams[0];
+			auto prot = myEvent->NumParams[0];
+			auto sessionID = myEvent->NumParams[1];
 			m_TradeApi->OnSessionConnected(sessionID);
 			m_ConnectStatus = ConnectStatus::Connected;
 			break;
 		}
-		case EVENT_DISCONNECTED:
+		case EVENT_ON_DISCONNECTED:
 		{
+			auto& ip = myEvent->StringParams[0];
+			auto prot = myEvent->NumParams[0];
+			auto sessionID = myEvent->NumParams[1];
+
 			m_ConnectStatus = ConnectStatus::NotConnected;
 			Reset();
 			break;
@@ -438,7 +420,7 @@ void WorkThread::HandleEvent()
 		}
 		case EVENT_DO_REQ_LOGOUT:
 		{
-			if (m_LogonStatus != LogonStatus::Logout)
+			if (m_ConnectStatus == ConnectStatus::Connected)
 			{
 				ReqLogout();
 			}
@@ -462,7 +444,7 @@ void WorkThread::HandleEvent()
 		}
 		if (shouldRepush)
 		{
-			PushEvent(myEvent);
+			OnEvent(myEvent);
 		}
 		else
 		{
@@ -537,7 +519,7 @@ void WorkThread::CheckTestRequstReply()
 	auto timeDiffSecond = chrono::duration_cast<chrono::seconds>(timeDiff);
 	if (timeDiffSecond.count() >= m_HeartBeatSecond)
 	{
-		ReqLogout();
+		OnEventDoLogout();
 	}
 }
 
@@ -547,6 +529,7 @@ void WorkThread::CheckTestRequstReply()
 void WorkThread::Reset()
 {
 	m_LogonStatus = LogonStatus::NotLogged;
+	m_AlreadySendLogout = false;
 	m_ResendRange = make_pair(0, 0);
 	m_FixMessages.clear();
 }
@@ -596,6 +579,9 @@ int WorkThread::ReqLogon()
 }
 int WorkThread::ReqLogout()
 {
+	if (m_AlreadySendLogout)
+		return 0;
+	m_AlreadySendLogout = true;
 	AddReqHeader();
 	ReqLogoutField reqField(m_FixMessage);
 
@@ -632,6 +618,7 @@ int WorkThread::ReqResendRequest(int startSeqNum, int endSeqNum)
 }
 void WorkThread::DoResendRequest(int startSeqNum, int endSeqNum)
 {
+	m_IsDoResendRequest = false;
 	endSeqNum = GlobalParam::GetInstance().GetNextSendSeqNum();
 	if (m_AppReqFields.size() == 0)
 	{
@@ -660,8 +647,6 @@ void WorkThread::DoResendRequest(int startSeqNum, int endSeqNum)
 	{
 		ReqSequenceReset(currSeqNum, endSeqNum);
 	}
-	
-	m_IsDoResendRequest = false;
 }
 int WorkThread::ReqSequenceReset(int beginSeqNum, int endSeqNum)
 {

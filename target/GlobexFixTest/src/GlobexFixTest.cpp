@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
 	}
 	WorkThread::GetInstance().Start();
 
-	Sleep(20000);
+	Sleep(10000);
 	for (auto i = 0; i < 3; i++)
 	{
 		ReqNewOrder();

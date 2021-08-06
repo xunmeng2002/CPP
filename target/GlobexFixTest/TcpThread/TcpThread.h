@@ -2,6 +2,7 @@
 #include "SocketInit.h"
 #include "ThreadBase.h"
 #include "ConnectData.h"
+#include "MyEvent.h"
 #include <mutex>
 #include <map>
 #include <list>
@@ -18,21 +19,23 @@ public:
 
 	void SetTcpInfo(long micro_seconds = 1000000, int af = AF_INET, int type = SOCK_STREAM, int protocol = IPPROTO_TCP);
 	bool Init();
-	int Connect(const char* ip, unsigned short port);
+	void Connect(const char* ip, unsigned short port);
 	void DisConnect(int sessionID);
 	bool Send(int sessionID, const char* data, int length);
 
 	virtual void Run();
-	void DisConnectSessions();
+	void HandleEvent();
+	void DoConnect(const string& ip, int port);
+	void DoDisConnect(int sessionID);
 	void OnConncect();
 	void PrepareFds();
 	void OnSend();
 	void OnRecv();
 
+	void NotifyConnectStatus(const string& ip, int port, int sessionID, int eventID);
 	void AddSessionData(ConnectData* connectData);
 	void RemoveSessionData(ConnectData* connectData);
 	ConnectData* GetSessionData(int sessionID);
-	void ClearSessions();
 
 private:
 	static TcpThread m_Instance;
@@ -53,16 +56,8 @@ private:
 	timeval m_ConnectTimeOut;
 	timeval m_TimeOut;
 
-	std::map<SOCKET, int> m_SocketIndex;
-
 	std::list<ConnectData*> m_ConnectingSocket;
-	std::mutex m_ConnectingSocketMutex;
-
 	
 	std::map<int, ConnectData*> m_ConnectDatas;
 	std::mutex m_ConnectDataMutex;
-
-	
-	std::list<ConnectData*> m_DisConnectSessions;
-	std::mutex m_DisConnectSessionMutex;
 };

@@ -1,8 +1,11 @@
 #include "TcpThread.h"
 #include "Logger.h"
 #include "WorkThread.h"
+#include "MyEvent.h"
 
 using namespace std;
+
+
 
 TcpThread TcpThread::m_Instance;
 
@@ -35,9 +38,67 @@ bool TcpThread::Init()
 {
 	return true;
 }
-int TcpThread::Connect(const char* ip, unsigned short port)
+void TcpThread::Connect(const char* ip, unsigned short port)
 {
-	m_ServerAddress.sin_addr.S_un.S_addr = inet_addr(ip);
+	MyEvent* myEvent = MyEvent::Allocate();
+	myEvent->EventID = EVENT_CONNECT;
+	myEvent->StringParams.push_back(ip);
+	myEvent->NumParams.push_back(port);
+	OnEvent(myEvent);
+}
+void TcpThread::DisConnect(int sessionID)
+{
+	MyEvent* myEvent = MyEvent::Allocate();
+	myEvent->EventID = EVENT_DISCONNECT;
+	myEvent->NumParams.push_back(sessionID);
+	OnEvent(myEvent);
+}
+bool TcpThread::Send(int sessionID, const char* data, int length)
+{
+	auto connectionData = GetSessionData(sessionID);
+	if (connectionData != nullptr)
+	{
+		return connectionData->Send(data, length);
+	}
+	WRITE_LOG(LogLevel::Error, "Send Failed SessionID:[%d]", sessionID);
+	return false;
+}
+
+void TcpThread::Run()
+{
+	HandleEvent();
+	PrepareFds();
+	OnConncect();
+	::select(0, &m_RecvFds, &m_SendFds, nullptr, &m_TimeOut);
+	OnSend();
+	OnRecv();
+}
+void TcpThread::HandleEvent()
+{
+	MyEvent* myEvent = nullptr;
+	while (myEvent = GetEvent())
+	{
+		switch (myEvent->EventID)
+		{
+		case EVENT_CONNECT:
+		{
+			DoConnect(myEvent->StringParams[0], myEvent->NumParams[0]);
+			break;
+		}
+		case EVENT_DISCONNECT:
+		{
+			DoDisConnect(myEvent->NumParams[0]);
+			break;
+		}
+		default:
+			break;
+		}
+		MyEvent::Free(myEvent);
+	}
+}
+void TcpThread::DoConnect(const string& ip, int port)
+{
+	m_ServerAddress.sin_addr.S_un.S_addr = inet_addr(ip.c_str());
 	m_ServerAddress.sin_port = htons(port);
 
 	SOCKET socketID = socket(m_AF, m_Type, 0);
@@ -51,55 +112,30 @@ int TcpThread::Connect(const char* ip, unsigned short port)
 	if (ret == SOCKET_ERROR)
 	{
 		closesocket(socketID);
-		return SOCKET_ERROR;
+		NotifyConnectStatus(ip, port, -1, EVENT_ON_DISCONNECTED);
+		return ;
 	}
 
 	ret = connect(socketID, (sockaddr*)&m_ServerAddress, m_AddressLen);
 	WRITE_LOG(LogLevel::Info, "Connect Server: ret[%d]\n", ret);
 
 	int sessionID = ++m_MaxSessionID;
-	ConnectData* connectData = new ConnectData(sessionID, socketID, ip, port);
-	lock_guard<mutex> guard(m_ConnectingSocketMutex);
+	ConnectData* connectData = ConnectData::Allocate(sessionID, socketID, ip, port);
 	m_ConnectingSocket.push_back(connectData);
-	return sessionID;
 }
-void TcpThread::DisConnect(int sessionID)
+void TcpThread::DoDisConnect(int sessionID)
 {
-	lock_guard<mutex> guard(m_DisConnectSessionMutex);
-	m_DisConnectSessions.push_back(GetSessionData(sessionID));
-}
-bool TcpThread::Send(int sessionID, const char* data, int length)
-{
-	lock_guard<mutex> guard(m_ConnectDataMutex);
-	if (m_ConnectDatas.find(sessionID) == m_ConnectDatas.end())
+	auto connectData = GetSessionData(sessionID);
+	if (connectData == nullptr)
 	{
-		return false;
+		WRITE_LOG(LogLevel::Warning, "DoDisConnect While ConnectData is nullptr, SessionID:[%d]", sessionID);
+		return;
 	}
-	auto connectionData = m_ConnectDatas[sessionID];
-	return connectionData->Send(data, length);
-}
-
-void TcpThread::Run()
-{
-	DisConnectSessions();
-	OnConncect();
-	PrepareFds();
-	::select(0, &m_RecvFds, &m_SendFds, nullptr, &m_TimeOut);
-	OnSend();
-	OnRecv();
-}
-void TcpThread::DisConnectSessions()
-{
-	lock_guard<mutex> guard(m_DisConnectSessionMutex);
-	for (auto& connectData : m_DisConnectSessions)
-	{
-		RemoveSessionData(connectData);
-	}
-	m_DisConnectSessions.clear();
+	NotifyConnectStatus(connectData->ClientIP, connectData->ClientPort, connectData->SessionID, EVENT_ON_DISCONNECTED);
+	RemoveSessionData(connectData);
 }
 void TcpThread::OnConncect()
 {
-	lock_guard<mutex> guard(m_ConnectingSocketMutex);
 	if (m_ConnectingSocket.size() == 0)
 		return;
 	for (auto& connectData : m_ConnectingSocket)
@@ -113,14 +149,17 @@ void TcpThread::OnConncect()
 	{
 		if (ret == 0)
 		{
-			RemoveSessionData(connectData);
+			NotifyConnectStatus(connectData->ClientIP, connectData->ClientPort, connectData->SessionID, EVENT_ON_DISCONNECTED);
+			ConnectData::Free(connectData);
 		}
 		else if (ret < 0 || !FD_ISSET(connectData->SocketID, &m_ConnectFds))
 		{
-			RemoveSessionData(connectData);
+			NotifyConnectStatus(connectData->ClientIP, connectData->ClientPort, connectData->SessionID, EVENT_ON_DISCONNECTED);
+			ConnectData::Free(connectData);
 		}
 		else
 		{
+			NotifyConnectStatus(connectData->ClientIP, connectData->ClientPort, connectData->SessionID, EVENT_ON_CONNECTED);
 			AddSessionData(connectData);
 		}
 	}
@@ -131,7 +170,6 @@ void TcpThread::PrepareFds()
 	FD_ZERO(&m_RecvFds);
 	FD_ZERO(&m_SendFds);
 
-	lock_guard<mutex> guard(m_ConnectDataMutex);
 	for (auto& it : m_ConnectDatas)
 	{
 		if (it.second != nullptr)
@@ -155,18 +193,18 @@ void TcpThread::OnSend()
 		{
 			if (connectData->OnSend() < 0)
 			{
-				lock_guard<mutex> guard(m_DisConnectSessionMutex);
-				m_DisConnectSessions.push_back(connectData);
+				DisConnect(connectData->SessionID);
 			}
 		}
 	}
 }
 void TcpThread::OnRecv()
 {
-	for (auto& it : m_SocketIndex)
+	for (auto& it : m_ConnectDatas)
 	{
-		SOCKET socketID = it.first;
-		int sessionID = it.second;
+		auto connectData = it.second;
+		auto socketID = connectData->SocketID;
+		int sessionID = connectData->SessionID;
 		if (FD_ISSET(socketID, &m_RecvFds))
 		{
 			int len = recv(socketID, m_RecvBuffer, MAX_SINGLE_MESSAGE_LENGTH - 1, 0);
@@ -185,46 +223,34 @@ void TcpThread::OnRecv()
 	}
 }
 
+void TcpThread::NotifyConnectStatus(const string& ip, int port, int sessionID, int eventID)
+{
+	MyEvent* myEvent = MyEvent::Allocate();
+	myEvent->EventID = eventID;
+	myEvent->StringParams.push_back(ip);
+	myEvent->NumParams.push_back(port);
+	myEvent->NumParams.push_back(sessionID);
+	WorkThread::GetInstance().OnEvent(myEvent);
+}
 void TcpThread::AddSessionData(ConnectData* connectData)
 {
-	WRITE_LOG(LogLevel::Info, "New Connection. SessionID[%d], Socket[%lld], ClientIP[%s], ClientPort[%d]", connectData->SessionID, connectData->SocketID, connectData->ClientIP, connectData->ClientPort);
-	{
-		lock_guard<mutex> guard(m_ConnectDataMutex);
-		m_ConnectDatas.insert(make_pair(connectData->SessionID, connectData));
-		m_SocketIndex.insert(make_pair(connectData->SocketID, connectData->SessionID));
-	}
-	MyEvent* myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_CONNECTED;
-	myEvent->NumParams.push_back(connectData->SessionID);
-	WorkThread::GetInstance().OnEvent(myEvent);
+	WRITE_LOG(LogLevel::Info, "New Connection. SessionID[%d], Socket[%lld], ClientIP[%s], ClientPort[%d]", connectData->SessionID, connectData->SocketID, connectData->ClientIP.c_str(), connectData->ClientPort);
+	lock_guard<mutex> guard(m_ConnectDataMutex);
+	m_ConnectDatas.insert(make_pair(connectData->SessionID, connectData));
 }
 void TcpThread::RemoveSessionData(ConnectData* connectData)
 {
-	WRITE_LOG(LogLevel::Info, "Close Connection: SessionID[%d]", connectData->SessionID);
-	MyEvent* myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_DISCONNECTED;
-	myEvent->NumParams.push_back(connectData->SessionID);
-	WorkThread::GetInstance().OnEvent(myEvent);
-
+	WRITE_LOG(LogLevel::Info, "DisConnection. SessionID[%d], Socket[%lld], ClientIP[%s], ClientPort[%d]", connectData->SessionID, connectData->SocketID, connectData->ClientIP.c_str(), connectData->ClientPort);
+	ConnectData::Free(connectData);
 	lock_guard<mutex> guard(m_ConnectDataMutex);
 	m_ConnectDatas.erase(connectData->SessionID);
-	m_SocketIndex.erase(connectData->SocketID);
-	::closesocket(connectData->SocketID);
-	delete connectData;
 }
 ConnectData* TcpThread::GetSessionData(int sessionID)
 {
 	lock_guard<mutex> guard(m_ConnectDataMutex);
-	return m_ConnectDatas[sessionID];
-}
-void TcpThread::ClearSessions()
-{
-	m_SocketIndex.clear();
-	lock_guard<mutex> guard(m_ConnectDataMutex);
-	for (auto& it : m_ConnectDatas)
+	if (m_ConnectDatas.find(sessionID) != m_ConnectDatas.end())
 	{
-		::closesocket(it.second->SocketID);
-		delete it.second;
+		return m_ConnectDatas[sessionID];
 	}
-	m_ConnectDatas.clear();
+	return nullptr;
 }

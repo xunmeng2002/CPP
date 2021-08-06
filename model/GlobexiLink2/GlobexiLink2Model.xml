@@ -103,7 +103,7 @@
 			<item name="CorrelationClOrdID" key="9717"/>
 			<item name="MarketSegmentID" key="1300"/>
 		</field>
-		<field name="ReqOrderCancelRequest" msgtype="D">
+		<field name="ReqOrderCancelRequest" msgtype="F">
 			<item name="Account" key="1"/>
 			<item name="ClOrdID" key="11"/>
 			<item name="OrderID" key="37"/>
@@ -117,7 +117,7 @@
 			<item name="SecurityType" key="167"/>
 			<item name="CorrelationClOrdID" key="9717"/>
 		</field>
-		<field name="ReqOrderCancelReplaceRequest" msgtype="D">
+		<field name="ReqOrderCancelReplaceRequest" msgtype="G">
 			<item name="Account" key="1"/>
 			<item name="ClOrdID" key="11"/>
 			<item name="OrderID" key="37"/>
@@ -263,7 +263,7 @@
 			<item name="CorrelationClOrdID" key="9717"/>
 			<item name="MDTradeEntryID" key="37711"/>
 		</field>
-		<field name="RspOrderCancelReject" msgtype="D">
+		<field name="RspOrderCancelReject" msgtype="9">
 			<item name="Account" key="1"/>
 			<item name="ClOrdID" key="11"/>
 			<item name="ExecID" key="17"/>
@@ -271,7 +271,6 @@
 			<item name="OrdStatus" key="39"/>
 			<item name="OrigClOrdID" key="41"/>
 			<item name="SecurityID" key="48"/>
-			<item name="CustOrderHandlingInst" key="1031"/>
 			<item name="Text" key="58"/>
 			<item name="TransactTime" key="60"/>
 			<item name="CxlRejReason" key="102"/>

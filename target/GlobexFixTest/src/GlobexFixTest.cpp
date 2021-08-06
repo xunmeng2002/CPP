@@ -45,6 +45,7 @@ void ReqNewOrder()
 	Sleep(5000);
 	auto myEvent = MyEvent::Allocate();
 	myEvent->EventID = EVENT_DO_REQ_NEW_ORDER;
+	myEvent->NumParams.push_back(5);
 	WorkThread::GetInstance().OnEvent(myEvent);
 }
 
@@ -72,7 +73,7 @@ int main(int argc, char* argv[])
 	WorkThread::GetInstance().Start();
 
 	Sleep(10000);
-	for (auto i = 0; i < 3; i++)
+	for (auto i = 0; i < 1; i++)
 	{
 		ReqNewOrder();
 	}

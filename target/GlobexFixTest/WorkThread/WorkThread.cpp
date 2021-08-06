@@ -430,7 +430,8 @@ void WorkThread::HandleEvent()
 		{
 			if (m_LogonStatus == LogonStatus::Logged && !m_IsDoResendRequest)
 			{
-				ReqNewOrder();
+				int orderQty = myEvent->NumParams[0];
+				ReqNewOrder(orderQty);
 			}
 			else
 			{
@@ -658,7 +659,7 @@ int WorkThread::ReqSequenceReset(int beginSeqNum, int endSeqNum)
 
 	return m_TradeApi->ReqSequenceReset(&reqField);
 }
-int WorkThread::ReqNewOrder()
+int WorkThread::ReqNewOrder(int orderQty)
 {
 	AddReqHeader();
 	ReqNewOrderField* reqField = new ReqNewOrderField(m_FixMessage);
@@ -666,7 +667,7 @@ int WorkThread::ReqNewOrder()
 	reqField->ClOrdID = ItoA(GlobalParam::GetInstance().GetClOrdID());
 	reqField->HandInst = "1";
 	reqField->CustOrderHandlingInst = "Y";
-	reqField->OrderQty = "1";
+	reqField->OrderQty = ItoA(orderQty);
 	reqField->OrdType = "2";
 	reqField->Price = "100";
 	reqField->Side = "1";

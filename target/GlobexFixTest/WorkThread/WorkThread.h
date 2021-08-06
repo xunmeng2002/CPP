@@ -78,7 +78,7 @@ private:
 	int ReqResendRequest(int startSeqNum, int endSeqNum);
 	void DoResendRequest(int startSeqNum, int endSeqNum);
 	int ReqSequenceReset(int beginSeqNum, int endSeqNum);
-	int ReqNewOrder();
+	int ReqNewOrder(int orderQty);
 
 
 	bool IsOnResend()

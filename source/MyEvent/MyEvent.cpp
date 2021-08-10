@@ -7,10 +7,10 @@ MyEvent* MyEvent::Allocate()
 	return MemCacheTemplateSingleton<MyEvent>::GetInstance().Allocate();
 }
 
-void MyEvent::Free(MyEvent* myEvent)
+void MyEvent::Free()
 {
-	myEvent->NumParams.clear();
-	myEvent->StringParams.clear();
+	NumParams.clear();
+	StringParams.clear();
 
-	MemCacheTemplateSingleton<MyEvent>::GetInstance().Free(myEvent);
+	MemCacheTemplateSingleton<MyEvent>::GetInstance().Free(this);
 }

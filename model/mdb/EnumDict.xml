@@ -1,0 +1,35 @@
+<root>
+	<enums>
+		<enum name="Direction">
+			<item name="Buy" value="1"/>
+			<item name="Sell" value="2"/>
+		</enum>
+		<enum name="OrderType">
+			<item name="MarketOrder" value="1"/>
+			<item name="LimitOrder" value="2"/>
+			<item name="StopOrder" value="3"/>
+			<item name="StopLimitOrder" value="4"/>
+			<item name="MarketLimitOrder" value="K"/>
+		</enum>
+		<enum name="OrderStatus">
+			<item name="New" value="0"/>
+			<item name="PartiallyFilled" value="1"/>
+			<item name="Filled" value="2"/>
+			<item name="Cancelled" value="4"/>
+			<item name="Replaced" value="5"/>
+			<item name="PendingCancel" value="6"/>
+			<item name="Rejected" value="8"/>
+			<item name="Eliminated" value="C"/>
+			<item name="PendingReplace" value="E"/>
+			<item name="TradeCorrect" value="G"/>
+			<item name="TradeCancel" value="H"/>
+			<item name="Undefined" value="U"/>
+		</enum>
+		<enum name="TimeInForce">
+			<item name="Day" value="0"/>
+			<item name="GoodTillCancel" value="1"/>
+			<item name="FillAndKill" value="3"/>
+			<item name="GoodTillDate" value="6"/>
+		</enum>
+	</enums>
+</root>

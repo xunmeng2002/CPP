@@ -5,7 +5,7 @@
 #include <list>
 #include <mutex>
 #include <condition_variable>
-#include "MyEvent.h"
+#include "Event.h"
 
 
 
@@ -19,7 +19,7 @@ public:
 	virtual void Stop();
 	virtual void Join();
 	
-	virtual void OnEvent(MyEvent* myEvent);
+	virtual void OnEvent(Event* event);
 protected:
 	void ThreadFunc();
 	virtual void ThreadInit();
@@ -28,7 +28,7 @@ protected:
 
 	virtual void CheckEvent();
 	virtual void HandleEvent() {}
-	virtual MyEvent* GetEvent();
+	virtual Event* GetEvent();
 	
 
 protected:
@@ -40,7 +40,7 @@ protected:
 	std::mutex m_ThreadMutex;
 	std::condition_variable m_ThreadConditionVariable;
 
-	std::list<MyEvent*> m_MyEvents;
-	std::mutex m_MyEventMutex;
+	std::list<Event*> m_Events;
+	std::mutex m_EventMutex;
 };
 

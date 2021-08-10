@@ -11,18 +11,17 @@ public:
 	
 	void OnSessionConnected(int sessionID);
 	
-	int SendResendRequest(ReqHeader* reqField);
+	void SendResendRequest(ReqHeader* reqField);
 	
 !!entry ReqFields!!
 !!travel!!
-	virtual int !!@name!!(!!@name!!Field* reqField);
+	virtual void !!@name!!(!!@name!!Field* reqField);
 	
 !!leave!!
 !!leave!!
 
 protected:
 	int m_SessionID;
-	char* m_SendBuff;
 	char* m_LogBuff;
 };
 

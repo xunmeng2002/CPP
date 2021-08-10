@@ -53,15 +53,20 @@ void TcpThread::DisConnect(int sessionID)
 	myEvent->NumParams.push_back(sessionID);
 	OnEvent(myEvent);
 }
-bool TcpThread::Send(int sessionID, const char* data, int length)
+void TcpThread::Send(int sessionID, const char* data, int length)
 {
-	auto connectionData = GetSessionData(sessionID);
-	if (connectionData != nullptr)
-	{
-		return connectionData->Send(data, length);
-	}
-	WRITE_LOG(LogLevel::Error, "Send Failed SessionID:[%d]", sessionID);
-	return false;
+	TcpEvent* tcpEvent = TcpEvent::Allocate();
+	tcpEvent->EventID = EVENT_ON_TCP_SEND;
+	tcpEvent->SessionID = sessionID;
+	memcpy(tcpEvent->Buff, data, length);
+	tcpEvent->Length = length;
+
+	OnEvent(tcpEvent);
+}
+void TcpThread::Send(TcpEvent* tcpEvent)
+{
+	tcpEvent->EventID = EVENT_ON_TCP_SEND;
+	OnEvent(tcpEvent);
 }
 
 void TcpThread::Run()
@@ -70,30 +75,45 @@ void TcpThread::Run()
 	PrepareFds();
 	OnConncect();
 	::select(0, &m_RecvFds, &m_SendFds, nullptr, &m_TimeOut);
-	OnSend();
-	OnRecv();
+	DoSend();
+	DoRecv();
 }
 void TcpThread::HandleEvent()
 {
+	Event* event = nullptr;
 	MyEvent* myEvent = nullptr;
-	while (myEvent = GetEvent())
+	TcpEvent* tcpEvent = nullptr;
+	while (event = GetEvent())
 	{
-		switch (myEvent->EventID)
+		bool shouldFree = true;
+		switch (event->EventID)
 		{
 		case EVENT_CONNECT:
 		{
+			myEvent = (MyEvent*)event;
 			DoConnect(myEvent->StringParams[0], myEvent->NumParams[0]);
 			break;
 		}
 		case EVENT_DISCONNECT:
 		{
+			myEvent = (MyEvent*)event;
 			DoDisConnect(myEvent->NumParams[0]);
+			break;
+		}
+		case EVENT_ON_TCP_SEND:
+		{
+			tcpEvent = (TcpEvent*)event;
+			PushSendEvent(tcpEvent);
+			shouldFree = false;
 			break;
 		}
 		default:
 			break;
 		}
-		MyEvent::Free(myEvent);
+		if (shouldFree)
+		{
+			event->Free();
+		}
 	}
 }
 void TcpThread::DoConnect(const string& ip, int port)
@@ -150,12 +170,12 @@ void TcpThread::OnConncect()
 		if (ret == 0)
 		{
 			NotifyConnectStatus(connectData->ClientIP, connectData->ClientPort, connectData->SessionID, EVENT_ON_DISCONNECTED);
-			ConnectData::Free(connectData);
+			connectData->Free();
 		}
 		else if (ret < 0 || !FD_ISSET(connectData->SocketID, &m_ConnectFds))
 		{
 			NotifyConnectStatus(connectData->ClientIP, connectData->ClientPort, connectData->SessionID, EVENT_ON_DISCONNECTED);
-			ConnectData::Free(connectData);
+			connectData->Free();
 		}
 		else
 		{
@@ -172,33 +192,48 @@ void TcpThread::PrepareFds()
 
 	for (auto& it : m_ConnectDatas)
 	{
-		if (it.second != nullptr)
+		if (!m_SendEvents[it.first].empty())
 		{
-			auto socketID = it.second->SocketID;
-			FD_SET(socketID, &m_RecvFds);
-			if (it.second && !it.second->SendCache->IsEmpty())
-			{
-				FD_SET(socketID, &m_SendFds);
-			}
+			FD_SET(it.second->SocketID, &m_SendFds);
 		}
+		FD_SET(it.second->SocketID, &m_RecvFds);
 	}
 }
-void TcpThread::OnSend()
+void TcpThread::DoSend()
 {
-	lock_guard<mutex> guard(m_ConnectDataMutex);
 	for (auto& it : m_ConnectDatas)
 	{
 		auto connectData = it.second;
 		if (FD_ISSET(connectData->SocketID, &m_SendFds))
 		{
-			if (connectData->OnSend() < 0)
+			while (auto tcpEvent = GetSendEvent(it.first))
 			{
-				DisConnect(connectData->SessionID);
+				int len = send(connectData->SocketID, tcpEvent->Buff, tcpEvent->Length, 0);
+				if (len <= 0)
+				{
+					WRITE_LOG(LogLevel::Info, "DisConnect For Send len = [%d]", len);
+					DisConnect(connectData->SessionID);
+					tcpEvent->Free();
+					break;
+				}
+				else if (len < tcpEvent->Length)
+				{
+					WRITE_LOG(LogLevel::Info, "OnSend, Send Less than expect. Expect Len[%d], Send Len[%d], Buff[%s]", tcpEvent->Length, len, tcpEvent->Buff);
+					memmove(tcpEvent->Buff, tcpEvent->Buff + len, tcpEvent->Length - len);
+					tcpEvent->Length -= len;
+					RePushSendEvent(tcpEvent);
+					break;
+				}
+				else
+				{
+					WRITE_LOG(LogLevel::Info, "OnSend Send Len[%d], Buff[%s]", tcpEvent->Length, tcpEvent->Buff);
+				}
+				tcpEvent->Free();
 			}
 		}
 	}
 }
-void TcpThread::OnRecv()
+void TcpThread::DoRecv()
 {
 	for (auto& it : m_ConnectDatas)
 	{
@@ -207,16 +242,22 @@ void TcpThread::OnRecv()
 		int sessionID = connectData->SessionID;
 		if (FD_ISSET(socketID, &m_RecvFds))
 		{
-			int len = recv(socketID, m_RecvBuffer, MAX_SINGLE_MESSAGE_LENGTH - 1, 0);
+			TcpEvent* tcpEvent = TcpEvent::Allocate();
+			int len = recv(socketID, tcpEvent->Buff, BUFF_SIZE - 1, 0);
 			if (len > 0)
 			{
-				m_RecvBuffer[len] = '\0';
-				WRITE_LOG(LogLevel::Debug, "OnRecv: SessionID[%d], len[%d], [%s]", sessionID, len, m_RecvBuffer);
-				WorkThread::GetInstance().OnRecv(sessionID, m_RecvBuffer, len);
+				tcpEvent->Buff[len] = '\0';
+				WRITE_LOG(LogLevel::Info, "OnRecv: SessionID[%d], len[%d], [%s]", sessionID, len, tcpEvent->Buff);
+				tcpEvent->EventID = EVENT_ON_TCP_RECV;
+				tcpEvent->SessionID = sessionID;
+				tcpEvent->Length = len;
+
+				WorkThread::GetInstance().OnRecv(tcpEvent);
 			}
 			else
 			{
 				WRITE_LOG(LogLevel::Info, "OnRecv: SessionID[%d], len[%d] DisConnect", sessionID, len);
+				tcpEvent->Free();
 				DisConnect(sessionID);
 			}
 		}
@@ -235,22 +276,47 @@ void TcpThread::NotifyConnectStatus(const string& ip, int port, int sessionID, i
 void TcpThread::AddSessionData(ConnectData* connectData)
 {
 	WRITE_LOG(LogLevel::Info, "New Connection. SessionID[%d], Socket[%lld], ClientIP[%s], ClientPort[%d]", connectData->SessionID, connectData->SocketID, connectData->ClientIP.c_str(), connectData->ClientPort);
-	lock_guard<mutex> guard(m_ConnectDataMutex);
 	m_ConnectDatas.insert(make_pair(connectData->SessionID, connectData));
+	m_SendEvents.insert(make_pair(connectData->SessionID, list<TcpEvent*>()));
 }
 void TcpThread::RemoveSessionData(ConnectData* connectData)
 {
 	WRITE_LOG(LogLevel::Info, "DisConnection. SessionID[%d], Socket[%lld], ClientIP[%s], ClientPort[%d]", connectData->SessionID, connectData->SocketID, connectData->ClientIP.c_str(), connectData->ClientPort);
-	ConnectData::Free(connectData);
-	lock_guard<mutex> guard(m_ConnectDataMutex);
+	for (auto tcpEvent : m_SendEvents[connectData->SessionID])
+	{
+		tcpEvent->Free();
+	}
+	m_SendEvents.erase(connectData->SessionID);
 	m_ConnectDatas.erase(connectData->SessionID);
+	connectData->Free();
 }
 ConnectData* TcpThread::GetSessionData(int sessionID)
 {
-	lock_guard<mutex> guard(m_ConnectDataMutex);
 	if (m_ConnectDatas.find(sessionID) != m_ConnectDatas.end())
 	{
 		return m_ConnectDatas[sessionID];
 	}
 	return nullptr;
+}
+TcpEvent* TcpThread::GetSendEvent(int sessionID)
+{
+	if (m_SendEvents.find(sessionID) == m_SendEvents.end())
+	{
+		return nullptr;
+	}
+	if (m_SendEvents[sessionID].empty())
+	{
+		return nullptr;
+	}
+	auto tcpEvent = m_SendEvents[sessionID].front();
+	m_SendEvents[sessionID].pop_front();
+	return tcpEvent;
+}
+void TcpThread::PushSendEvent(TcpEvent* tcpEvent)
+{
+	m_SendEvents[tcpEvent->SessionID].push_back(tcpEvent);
+}
+void TcpThread::RePushSendEvent(TcpEvent* tcpEvent)
+{
+	m_SendEvents[tcpEvent->SessionID].push_front(tcpEvent);
 }

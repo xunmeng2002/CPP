@@ -79,13 +79,25 @@ void WorkThread::OnEventDoLogout()
 {
 	MyEvent* myEvent = MyEvent::Allocate();
 	myEvent->EventID = EVENT_DO_REQ_LOGOUT;
-
 	OnEvent(myEvent);
 }
-void WorkThread::OnRecv(int sessionID, char* buff, int len)
+void WorkThread::OnEventTestRequest(const string& testReqID)
 {
-	m_FixMessageParse->OnRecv(buff, len);
-	m_ThreadConditionVariable.notify_one();
+	MyEvent* myEvent = MyEvent::Allocate();
+	myEvent->EventID = EVENT_DO_TEST_REQUEST;
+	if (testReqID.empty())
+	{
+		myEvent->StringParams.push_back(m_TestReqID);
+	}
+	else
+	{
+		myEvent->StringParams.push_back(testReqID);
+	}
+	OnEvent(myEvent);
+}
+void WorkThread::OnRecv(TcpEvent* tcpEvent)
+{
+	OnEvent(tcpEvent);
 }
 void WorkThread::UpdateLastSendTime()
 {
@@ -227,6 +239,10 @@ void WorkThread::OnFixMessage(FixMessage* fixMessage)
 		{
 			OnExecutionReport(fixMessage);
 		}
+		else if (msgType == "9")
+		{
+			OnRspOrderCancelReject(fixMessage);
+		}
 		else
 		{
 			fixMessage->ToString(m_LogBuff, BUFF_SIZE);
@@ -256,6 +272,8 @@ void WorkThread::OnRspLogon(FixMessage* fixMessage)
 	
 	m_LogonStatus = LogonStatus::Logged;
 	m_SenderCompID = rspField.TargetCompID;
+
+	OnEventTestRequest();
 }
 void WorkThread::OnRspLogout(FixMessage* fixMessage)
 {
@@ -266,9 +284,11 @@ void WorkThread::OnRspLogout(FixMessage* fixMessage)
 	{
 		GlobalParam::GetInstance().SetNextSendSeqNum(rspField.NextExpectedMsgSeqNum);
 	}
+	
 	GlobalParam::GetInstance().SetLastRecvSeqNum(rspField.MsgSeqNum);
 	GlobalParam::GetInstance().IncreaseNextExpectSeqNum();
 
+	m_LogonStatus = LogonStatus::Logout;
 	Reset();
 }
 void WorkThread::OnRspHeartBeat(FixMessage* fixMessage)
@@ -355,19 +375,32 @@ void WorkThread::OnExecutionReport(FixMessage* fixMessage)
 {
 	ExecutionReportField rspField(fixMessage);
 	TradeSpi::OnExecutionReport(&rspField);
+
+	UpdateOrder(&rspField);
+
+	ReportOrder();
+	ReportTrade();
+}
+void WorkThread::OnRspOrderCancelReject(FixMessage* fixMessage)
+{
+	RspOrderCancelRejectField rspField(fixMessage);
+	TradeSpi::OnRspOrderCancelReject(&rspField);
 }
 
 
 void WorkThread::HandleEvent()
 {
+	Event* event = nullptr;
+	TcpEvent* tcpEvent = nullptr;
 	MyEvent* myEvent = nullptr;
-	while (myEvent = GetEvent())
+	while (event = GetEvent())
 	{
 		bool shouldRepush = false;
-		switch (myEvent->EventID)
+		switch (event->EventID)
 		{
 		case EVENT_ON_CONNECTED:
 		{
+			myEvent = (MyEvent*)event;
 			auto& ip = myEvent->StringParams[0];
 			auto prot = myEvent->NumParams[0];
 			auto sessionID = myEvent->NumParams[1];
@@ -377,16 +410,19 @@ void WorkThread::HandleEvent()
 		}
 		case EVENT_ON_DISCONNECTED:
 		{
+			myEvent = (MyEvent*)event;
 			auto& ip = myEvent->StringParams[0];
 			auto prot = myEvent->NumParams[0];
 			auto sessionID = myEvent->NumParams[1];
 
 			m_ConnectStatus = ConnectStatus::NotConnected;
+			m_LogonStatus = LogonStatus::NotLogged;
 			Reset();
 			break;
 		}
 		case EVENT_ON_SEQUENCE_GAP:
 		{
+			myEvent = (MyEvent*)event;
 			if (m_LogonStatus == LogonStatus::Logged)
 			{
 				auto startSeqNum = myEvent->NumParams[0];
@@ -397,6 +433,7 @@ void WorkThread::HandleEvent()
 		}
 		case EVENT_DO_RESEND_REQUEST:
 		{
+			myEvent = (MyEvent*)event;
 			if (m_LogonStatus == LogonStatus::Logged)
 			{
 				auto beginSeqNum = myEvent->NumParams[0];
@@ -407,6 +444,7 @@ void WorkThread::HandleEvent()
 		}
 		case EVENT_DO_TEST_REQUEST:
 		{
+			myEvent = (MyEvent*)event;
 			if (m_LogonStatus == LogonStatus::Logged)
 			{
 				auto testReqID = myEvent->StringParams[0];
@@ -428,15 +466,57 @@ void WorkThread::HandleEvent()
 		}
 		case EVENT_DO_REQ_NEW_ORDER:
 		{
+			myEvent = (MyEvent*)event;
 			if (m_LogonStatus == LogonStatus::Logged && !m_IsDoResendRequest)
 			{
+				const string& marketSegmentID = myEvent->StringParams[0];
+				const string& instrumentID = myEvent->StringParams[1];
+				const string& orderType = myEvent->StringParams[2];
+				const string& price = myEvent->StringParams[3];
+				const string& stopPrice = myEvent->StringParams[4];
 				int orderQty = myEvent->NumParams[0];
-				ReqNewOrder(orderQty);
+				ReqNewOrder(marketSegmentID, instrumentID, orderType, price, stopPrice, orderQty);
 			}
 			else
 			{
 				shouldRepush = true;
 			}
+			break;
+		}
+		case EVENT_DO_REQ_ORDER_CANCEL:
+		{
+			myEvent = (MyEvent*)event;
+			if (m_LogonStatus == LogonStatus::Logged && !m_IsDoResendRequest)
+			{
+				auto& orderLocalID = myEvent->StringParams[0];
+				ReqOrderCancelRequest(orderLocalID);
+			}
+			else
+			{
+				shouldRepush = true;
+			}
+			break;
+		}
+		case EVENT_DO_REQ_ORDER_CANCEL_REPLACE:
+		{
+			myEvent = (MyEvent*)event;
+			if (m_LogonStatus == LogonStatus::Logged && !m_IsDoResendRequest)
+			{
+				auto& origOrderLocalID = myEvent->StringParams[0];
+				auto& price = myEvent->StringParams[1];
+				int orderQty = myEvent->NumParams[0];
+				ReqOrderCancelReplaceRequest(origOrderLocalID, price, orderQty);
+			}
+			else
+			{
+				shouldRepush = true;
+			}
+			break;
+		}
+		case EVENT_ON_TCP_RECV:
+		{
+			tcpEvent = (TcpEvent*)event;
+			m_FixMessageParse->OnRecv(tcpEvent->Buff, tcpEvent->Length);
 			break;
 		}
 		default:
@@ -449,7 +529,7 @@ void WorkThread::HandleEvent()
 		}
 		else
 		{
-			MyEvent::Free(myEvent);
+			event->Free();
 		}
 	}
 }
@@ -498,12 +578,12 @@ void WorkThread::CheckRecvHeartBeat()
 	}
 	auto timeDiff = chrono::steady_clock::now() - m_LastRecvTimePoint;
 	auto timeDiffSecond = chrono::duration_cast<chrono::seconds>(timeDiff);
-	if (timeDiffSecond.count() >= m_HeartBeatSecond)
+	if (!m_AlreadySendTestRequest && timeDiffSecond.count() >= m_HeartBeatSecond)
 	{
 		m_AlreadySendTestRequest = true;
 		m_TestRequestSendTimeCount = 0;
 		m_TestRequestSendTimePoint = chrono::steady_clock::now();
-		ReqTestRequest(m_TestReqID);
+		OnEventTestRequest();
 	}
 }
 void WorkThread::CheckTestRequstReply()
@@ -529,8 +609,6 @@ void WorkThread::CheckTestRequstReply()
 
 void WorkThread::Reset()
 {
-	m_LogonStatus = LogonStatus::NotLogged;
-	m_AlreadySendLogout = false;
 	m_ResendRange = make_pair(0, 0);
 	m_FixMessages.clear();
 }
@@ -556,7 +634,7 @@ void WorkThread::AddReqHeader(string msgSeqNum)
 	m_FixMessage->SetItem(142, m_AccountInfo.SenderLocationID);
 	m_FixMessage->SetItem(369, ItoA(GlobalParam::GetInstance().GetLastRecvSeqNum()));
 }
-int WorkThread::ReqLogon()
+void WorkThread::ReqLogon()
 {
 	AddReqHeader();
 	m_FixMessage->SetItem(49, m_AccountInfo.SenderCompID);
@@ -576,36 +654,33 @@ int WorkThread::ReqLogon()
 	reqLogonField.EncryptedPasswordLen = ItoA(encodedHmac.length());
 	reqLogonField.EncryptedPassword = encodedHmac;
 
-	return m_TradeApi->ReqLogon(&reqLogonField);
+	m_TradeApi->ReqLogon(&reqLogonField);
 }
-int WorkThread::ReqLogout()
+void WorkThread::ReqLogout()
 {
-	if (m_AlreadySendLogout)
-		return 0;
-	m_AlreadySendLogout = true;
 	AddReqHeader();
 	ReqLogoutField reqField(m_FixMessage);
 
 	m_LogonStatus = LogonStatus::Logout;
-	return m_TradeApi->ReqLogout(&reqField);
+	m_TradeApi->ReqLogout(&reqField);
 }
-int WorkThread::ReqHeartBeat(string testReqID)
+void WorkThread::ReqHeartBeat(string testReqID)
 {
 	AddReqHeader();
 	ReqHeartBeatField reqField(m_FixMessage);
 	reqField.TestReqID = testReqID;
 
-	return m_TradeApi->ReqHeartBeat(&reqField);
+	m_TradeApi->ReqHeartBeat(&reqField);
 }
-int WorkThread::ReqTestRequest(string testReqID)
+void WorkThread::ReqTestRequest(string testReqID)
 {
 	AddReqHeader();
 	ReqTestRequestField reqField(m_FixMessage);
 	reqField.TestReqID = testReqID;
 
-	return m_TradeApi->ReqTestRequest(&reqField);
+	m_TradeApi->ReqTestRequest(&reqField);
 }
-int WorkThread::ReqResendRequest(int startSeqNum, int endSeqNum)
+void WorkThread::ReqResendRequest(int startSeqNum, int endSeqNum)
 {
 	AddReqHeader();
 	ReqResendRequestField reqField(m_FixMessage);
@@ -615,7 +690,7 @@ int WorkThread::ReqResendRequest(int startSeqNum, int endSeqNum)
 	reqField.EndSeqNo = ItoA(endSeqNum);
 
 	GlobalParam::GetInstance().SetNextExpectSeqNum(startSeqNum);
-	return m_TradeApi->ReqResendRequest(&reqField);
+	m_TradeApi->ReqResendRequest(&reqField);
 }
 void WorkThread::DoResendRequest(int startSeqNum, int endSeqNum)
 {
@@ -649,7 +724,7 @@ void WorkThread::DoResendRequest(int startSeqNum, int endSeqNum)
 		ReqSequenceReset(currSeqNum, endSeqNum);
 	}
 }
-int WorkThread::ReqSequenceReset(int beginSeqNum, int endSeqNum)
+void WorkThread::ReqSequenceReset(int beginSeqNum, int endSeqNum)
 {
 	AddReqHeader(ItoA(beginSeqNum));
 	ReqSequenceResetField reqField(m_FixMessage);
@@ -657,9 +732,9 @@ int WorkThread::ReqSequenceReset(int beginSeqNum, int endSeqNum)
 	reqField.NewSeqNo = ItoA(endSeqNum);
 	reqField.GapFillFlag = "Y";
 
-	return m_TradeApi->ReqSequenceReset(&reqField);
+	m_TradeApi->ReqSequenceReset(&reqField);
 }
-int WorkThread::ReqNewOrder(int orderQty)
+void WorkThread::ReqNewOrder(const string& marketSegmentID, const string& instrumentID, const string& orderType, const string& price, const string& stopPrice, int orderQty)
 {
 	AddReqHeader();
 	ReqNewOrderField* reqField = new ReqNewOrderField(m_FixMessage);
@@ -668,8 +743,8 @@ int WorkThread::ReqNewOrder(int orderQty)
 	reqField->HandInst = "1";
 	reqField->CustOrderHandlingInst = "Y";
 	reqField->OrderQty = ItoA(orderQty);
-	reqField->OrdType = "2";
-	reqField->Price = "100";
+	reqField->OrdType = orderType;
+	reqField->Price = price;
 	reqField->Side = "1";
 	reqField->Symbol = "";
 	reqField->TimeInForce = "0";
@@ -677,10 +752,9 @@ int WorkThread::ReqNewOrder(int orderQty)
 	reqField->ManualOrderIndicator = "Y";
 	reqField->NoAllocs = "";
 	reqField->AllocAccount = "";
-	reqField->StopPx = "";
-	//reqField->SecurityDesc = "GEZ8";
-	reqField->SecurityDesc = "0GLBZ0";
-	reqField->MinQty = "1";
+	reqField->StopPx = stopPrice;
+	reqField->SecurityDesc = instrumentID;
+	reqField->MinQty = "";
 	reqField->SecurityType = "FUT";
 	reqField->CustomerOrFirm = "0";
 	reqField->MaxShow = "1";
@@ -695,14 +769,207 @@ int WorkThread::ReqNewOrder(int orderQty)
 	reqField->GiveUpFirm = "";
 	reqField->CmtaGiveupCD = "";
 	reqField->CorrelationClOrdID = reqField->ClOrdID;
-	//reqField->MarketSegmentID = "99";
-	//reqField->MarketSegmentID = "931";
-	reqField->MarketSegmentID = "925";
+	reqField->MarketSegmentID = marketSegmentID;
 
-	int ret = m_TradeApi->ReqNewOrder(reqField);
+	m_TradeApi->ReqNewOrder(reqField);
+	AddNewOrder(reqField);
+	RecordRequest(reqField);
+}
+void WorkThread::ReqOrderCancelRequest(const string& origOrderLocalID)
+{
+	auto order = GetOrder(origOrderLocalID);
+	if (order == nullptr)
+	{
+		return;
+	}
+	AddReqHeader();
+	ReqOrderCancelRequestField* reqField = new ReqOrderCancelRequestField(m_FixMessage);
+	reqField->Account = order->AccountID;
+	reqField->ClOrdID = ItoA(GlobalParam::GetInstance().GetClOrdID());;
+	reqField->OrderID = order->OrderSysID;
+	
+	reqField->Side = (char)order->Direction;
+	reqField->Symbol = order->Symbol;
+	reqField->TransactTime = GetUtcTime();
+	reqField->ManualOrderIndicator = "Y";
+	reqField->SecurityDesc = order->InstrumentID;
+	reqField->SecurityType = order->SecurityType;
+	reqField->CorrelationClOrdID = reqField->ClOrdID;
+	
+	m_TradeApi->ReqOrderCancelRequest(reqField);
+	RecordRequest(reqField);
+}
+void WorkThread::ReqOrderCancelReplaceRequest(const string& origOrderLocalID, const string& newPrice, int newVolume)
+{
+	auto order = GetOrder(origOrderLocalID);
+	if (order == nullptr)
+	{
+		return;
+	}
+	AddReqHeader();
+	ReqOrderCancelReplaceRequestField* reqField = new ReqOrderCancelReplaceRequestField(m_FixMessage);
+	reqField->Account = order->AccountID;
+	reqField->ClOrdID = ItoA(GlobalParam::GetInstance().GetClOrdID());
+	reqField->HandInst = "1";
+	reqField->OrderID = order->OrderSysID;
+	reqField->OrderQty = ItoA(newVolume);
+	reqField->CustOrderHandlingInst = "Y";
+	reqField->OrdType = ToString(order->OrderType);
+	reqField->OrigClOrdID = order->OrderLocalID;
+	reqField->Price = newPrice;
+	reqField->Side = ToString(order->Direction);
+	reqField->Symbol = "";
+	reqField->TimeInForce = "0";
+	reqField->ManualOrderIndicator = "Y";
+	reqField->TransactTime = GetUtcTime();
+	reqField->SecurityDesc = order->InstrumentID;
+	reqField->MinQty = "";
+	reqField->SecurityType = "FUT";
+	reqField->CustomerOrFirm = "0";
+	reqField->MaxShow = "1";
+	reqField->ExpireDate = "";
+	reqField->SelfMatchPreventionID = "";
+	reqField->SelfMatchPreventionInstruction = "";
+	reqField->CtiCode = "4";
+	reqField->AvgPxGroupID = "";
+	reqField->ClearingTradePriceType = "";
+	reqField->AvgPXIndicator = "";
+	reqField->Memo = "";
+	reqField->CorrelationClOrdID = reqField->ClOrdID;
+	reqField->OFMOverride = "";
+	
+	m_TradeApi->ReqOrderCancelReplaceRequest(reqField);
+	RecordRequest(reqField);
+}
 
+
+void WorkThread::RecordRequest(ReqHeader* reqField)
+{
 	reqField->OrigSendingTime = reqField->SendingTime;
 	m_AppReqFields[atoi(reqField->MsgSeqNum.c_str())] = reqField;
+}
+Order* WorkThread::GetOrder(string orderLocalID)
+{
+	if (m_Orders.find(orderLocalID) != m_Orders.end())
+	{
+		return m_Orders[orderLocalID];
+	}
+	WRITE_LOG(LogLevel::Warning, "Cannot Find Order For OrderLocalID:[%s]", orderLocalID.c_str());
+	return nullptr;
+}
+void WorkThread::AddNewOrder(ReqNewOrderField* reqNewOrde)
+{
+	Order* order = new Order();
+	order->BrokerID = "";
+	order->AccountID = reqNewOrde->Account;
+	order->ExchangeID = reqNewOrde->MarketSegmentID;
+	order->InstrumentID = reqNewOrde->SecurityDesc;
+	order->Direction = DirectionConvert(reqNewOrde->Side);
+	order->OrderType = OrderTypeConvert(reqNewOrde->OrdType);
+	order->Price = atof(reqNewOrde->Price.c_str());
+	order->Volume = atoi(reqNewOrde->OrderQty.c_str());
+	order->VolumeTraded = 0;
+	order->OrderStatus = OrderStatus::Undefined;
+	order->OrderLocalID = reqNewOrde->ClOrdID;
+	order->OrderSysID = "";
+	order->Symbol = reqNewOrde->Symbol;
+	order->TimeInForce = TimeInForceConvert(reqNewOrde->TimeInForce);
+	order->TransactTime = reqNewOrde->TransactTime;
+	order->SecurityType = reqNewOrde->SecurityType;
 
-	return ret;
+	m_Orders.insert(make_pair(order->OrderLocalID, order));
+}
+void WorkThread::UpdateOrder(ExecutionReportField* executionReport)
+{
+	Order* order = nullptr;
+	if (executionReport->OrigClOrdID != "0")
+	{
+		order = GetOrder(executionReport->OrigClOrdID);
+	}
+	else
+	{
+		order = GetOrder(executionReport->ClOrdId);
+	}
+	if (order == nullptr)
+	{
+		return;
+	}
+	auto orderStatus = (OrderStatus)executionReport->OrderStatus[0];
+	order->OrderStatus = orderStatus;
+	order->OrderSysID = executionReport->OrderID;
+	order->Price = atof(executionReport->Price.c_str());
+	order->Volume = atoi(executionReport->OrderQty.c_str());
+	order->VolumeTraded += atoi(executionReport->LastQty.c_str());
+	order->Symbol = executionReport->Symbol;
+
+	if (orderStatus == OrderStatus::PartiallyFilled || orderStatus == OrderStatus::Filled)
+	{
+		AddNewTrade(executionReport, order);
+	}
+	else if (orderStatus == OrderStatus::TradeCorrect)
+	{
+		ModifyTrade(executionReport, order);
+	}
+	else if (orderStatus == OrderStatus::TradeCancel)
+	{
+		CancelTrade(executionReport, order);
+	}
+}
+void WorkThread::AddNewTrade(ExecutionReportField* executionReport, Order* order)
+{
+	Trade* trade = new Trade();
+	trade->BrokerID = "";
+	trade->AccountID = executionReport->Account;
+	trade->ExchangeID = order->ExchangeID;
+	trade->InstrumentID = executionReport->SecurityDesc;
+	trade->Direction = order->Direction;
+	trade->Price = atof(executionReport->LastPx.c_str());
+	trade->Volume = atoi(executionReport->LastQty.c_str());
+	trade->TradeID = executionReport->MDTradeEntryID;
+	trade->OrderLocalID = executionReport->ClOrdId;
+	trade->OrderSysID = executionReport->OrderID;
+	trade->Symbol = executionReport->Symbol;
+	trade->TimeInForce = TimeInForceConvert(executionReport->TimeInForce);
+	trade->TransactTime = executionReport->TransactTime;
+
+	m_Trades.insert(make_pair(trade->TradeID, trade));
+}
+void WorkThread::ModifyTrade(ExecutionReportField* executionReport, Order* order)
+{
+	if (m_Trades.find(executionReport->MDTradeEntryID) == m_Trades.end())
+	{
+		WRITE_LOG(LogLevel::Error, "Can't Find Trade for MDTradeEntryID[%s]", executionReport->MDTradeEntryID.c_str());
+		return;
+	}
+	auto trade = m_Trades[executionReport->MDTradeEntryID];
+	trade->Price = atof(executionReport->LastPx.c_str());
+	trade->Volume = atoi(executionReport->LastQty.c_str());
+}
+void WorkThread::CancelTrade(ExecutionReportField* executionReport, Order* order)
+{
+	if (m_Trades.find(executionReport->MDTradeEntryID) == m_Trades.end())
+	{
+		WRITE_LOG(LogLevel::Error, "Can't Find Trade for MDTradeEntryID[%s]", executionReport->MDTradeEntryID.c_str());
+		return;
+	}
+	auto trade = m_Trades[executionReport->MDTradeEntryID];
+	m_Trades.erase(trade->TradeID);
+	delete trade;
+}
+
+void WorkThread::ReportOrder()
+{
+	for (auto& it : m_Orders)
+	{
+		it.second->ToString(m_LogBuff, BUFF_SIZE);
+		WRITE_LOG(LogLevel::Info, "%s", m_LogBuff);
+	}
+}
+void WorkThread::ReportTrade()
+{
+	for (auto& it : m_Trades)
+	{
+		it.second->ToString(m_LogBuff, BUFF_SIZE);
+		WRITE_LOG(LogLevel::Info, "%s", m_LogBuff);
+	}
 }

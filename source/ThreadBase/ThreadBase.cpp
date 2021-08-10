@@ -55,23 +55,23 @@ void ThreadBase::ThreadExit()
 void ThreadBase::CheckEvent()
 {
 	unique_lock<mutex> guard(m_ThreadMutex);
-	m_ThreadConditionVariable.wait_for(guard, std::chrono::seconds(1), [&] {return !m_MyEvents.empty();});
+	m_ThreadConditionVariable.wait_for(guard, std::chrono::seconds(1), [&] {return !m_Events.empty();});
 }
-MyEvent* ThreadBase::GetEvent()
+Event* ThreadBase::GetEvent()
 {
-	lock_guard<mutex> guard(m_MyEventMutex);
-	if (m_MyEvents.empty())
+	lock_guard<mutex> guard(m_EventMutex);
+	if (m_Events.empty())
 	{
 		return nullptr;
 	}
-	auto myEvent = m_MyEvents.front();
-	m_MyEvents.pop_front();
+	auto myEvent = m_Events.front();
+	m_Events.pop_front();
 	return myEvent;
 }
-void ThreadBase::OnEvent(MyEvent* myEvent)
+void ThreadBase::OnEvent(Event* event)
 {
-	lock_guard<mutex> guard(m_MyEventMutex);
-	m_MyEvents.push_back(myEvent);
+	lock_guard<mutex> guard(m_EventMutex);
+	m_Events.push_back(event);
 
 	m_ThreadConditionVariable.notify_one();
 }

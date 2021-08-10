@@ -10,6 +10,13 @@ string ItoA(int value)
 	return string(buff);
 }
 
+string FtoA(double value)
+{
+    static char buff[32];
+    sprintf(buff, "%f", value);
+    return string(buff);
+}
+
 string GetUtcTime()
 {
     struct timeb timePoint;

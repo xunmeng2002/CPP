@@ -1,0 +1,55 @@
+<root>
+	<tables>
+		<table name="Order">
+			<items>
+				<item name="BrokerID" type="string"/>
+				<item name="AccountID" type="string"/>
+				<item name="ExchangeID" type="string"/>
+				<item name="InstrumentID" type="string"/>
+				<item name="Direction" type="enum"/>
+				<item name="OrderType" type="enum"/>
+				<item name="Price" type="double"/>
+				<item name="Volume" type="int"/>
+				<item name="VolumeTraded" type="int"/>
+				<item name="OrderStatus" type="enum"/>
+				<item name="OrderLocalID" type="string"/>
+				<item name="OrderSysID" type="string"/>
+				<item name="Symbol" type="string"/>
+				<item name="TimeInForce" type="enum"/>
+				<item name="TransactTime" type="string"/>
+				<item name="SecurityType" type="string"/>
+			</items>
+			<primarykey>
+				<item name="BrokerID"/>
+				<item name="AccountID"/>
+				<item name="ExchangeID"/>
+				<item name="InstrumentID"/>
+				<item name="OrderLocalID"/>
+			</primarykey>
+		</table>
+		<table name="Trade">
+			<items>
+				<item name="BrokerID" type="string"/>
+				<item name="AccountID" type="string"/>
+				<item name="ExchangeID" type="string"/>
+				<item name="InstrumentID" type="string"/>
+				<item name="Direction" type="enum"/>
+				<item name="Price" type="double"/>
+				<item name="Volume" type="int"/>
+				<item name="TradeID" type="string"/>
+				<item name="OrderLocalID" type="string"/>
+				<item name="OrderSysID" type="string"/>
+				<item name="Symbol" type="string"/>
+				<item name="TimeInForce" type="enum"/>
+				<item name="TransactTime" type="string"/>
+			</items>
+			<primarykey>
+				<item name="BrokerID"/>
+				<item name="AccountID"/>
+				<item name="ExchangeID"/>
+				<item name="InstrumentID"/>
+				<item name="TradeID"/>
+			</primarykey>
+		</table>
+	</tables>
+</root>

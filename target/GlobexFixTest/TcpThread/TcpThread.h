@@ -3,11 +3,11 @@
 #include "ThreadBase.h"
 #include "ConnectData.h"
 #include "MyEvent.h"
+#include "TcpEvent.h"
 #include <mutex>
 #include <map>
 #include <list>
 
-#define MAX_SINGLE_MESSAGE_LENGTH 1024 * 64
 
 class TcpThread : public ThreadBase
 {
@@ -21,7 +21,9 @@ public:
 	bool Init();
 	void Connect(const char* ip, unsigned short port);
 	void DisConnect(int sessionID);
-	bool Send(int sessionID, const char* data, int length);
+	void Send(int sessionID, const char* data, int length);
+	void Send(TcpEvent* tcpEvent);
+
 
 	virtual void Run();
 	void HandleEvent();
@@ -29,13 +31,16 @@ public:
 	void DoDisConnect(int sessionID);
 	void OnConncect();
 	void PrepareFds();
-	void OnSend();
-	void OnRecv();
+	void DoSend();
+	void DoRecv();
 
 	void NotifyConnectStatus(const string& ip, int port, int sessionID, int eventID);
 	void AddSessionData(ConnectData* connectData);
 	void RemoveSessionData(ConnectData* connectData);
 	ConnectData* GetSessionData(int sessionID);
+	TcpEvent* GetSendEvent(int sessionID);
+	void PushSendEvent(TcpEvent* tcpEvent);
+	void RePushSendEvent(TcpEvent* tcpEvent);
 
 private:
 	static TcpThread m_Instance;
@@ -48,7 +53,6 @@ private:
 	int m_AddressLen;
 
 	int m_MaxSessionID;
-	char m_RecvBuffer[MAX_SINGLE_MESSAGE_LENGTH];
 
 	fd_set m_ConnectFds;
 	fd_set m_RecvFds;
@@ -59,5 +63,5 @@ private:
 	std::list<ConnectData*> m_ConnectingSocket;
 	
 	std::map<int, ConnectData*> m_ConnectDatas;
-	std::mutex m_ConnectDataMutex;
+	std::map<int, list<TcpEvent*>> m_SendEvents;
 };

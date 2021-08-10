@@ -3,6 +3,10 @@
 #include "ThreadBase.h"
 #include "TradeSpi.h"
 #include "AccountInfo.h"
+#include "Mdb.h"
+#include "TradeApiReqFields.h"
+#include "MyEvent.h"
+#include "TcpEvent.h"
 #include <vector>
 #include <map>
 #include <mutex>
@@ -29,7 +33,8 @@ public:
 	void OnEventSequenceGap(int beginSeqNo, int endSeqNo);
 	void OnEventDoResendRequest(int beginSeqNo, int endSeqNo);
 	void OnEventDoLogout();
-	void OnRecv(int sessionID, char* buff, int len);
+	void OnEventTestRequest(const string& testReqID = "");
+	void OnRecv(TcpEvent* tcpEvent);
 	void UpdateLastSendTime();
 
 public:
@@ -56,6 +61,8 @@ public:
 
 	virtual void OnExecutionReport(FixMessage* fixMessage) override;
 
+	virtual void OnRspOrderCancelReject(FixMessage* fixMessage) override;
+
 
 
 private:
@@ -71,16 +78,28 @@ private:
 
 	void Reset();
 	void AddReqHeader(string msgSeqNum = "");
-	int ReqLogon();
-	int ReqLogout();
-	int ReqHeartBeat(string testReqID);
-	int ReqTestRequest(string testReqID);
-	int ReqResendRequest(int startSeqNum, int endSeqNum);
+	void ReqLogon();
+	void ReqLogout();
+	void ReqHeartBeat(string testReqID);
+	void ReqTestRequest(string testReqID);
+	void ReqResendRequest(int startSeqNum, int endSeqNum);
 	void DoResendRequest(int startSeqNum, int endSeqNum);
-	int ReqSequenceReset(int beginSeqNum, int endSeqNum);
-	int ReqNewOrder(int orderQty);
+	void ReqSequenceReset(int beginSeqNum, int endSeqNum);
+	void ReqNewOrder(const string& marketSegmentID, const string& instrumentID, const string& orderType, const string& price, const string& stopPrice, int orderQty);
+	void ReqOrderCancelRequest(const string& origOrderLocalID);
+	void ReqOrderCancelReplaceRequest(const string& origOrderLocalID, const string& newPrice, int newVolume);
 
 
+	void RecordRequest(ReqHeader* reqField);
+	Order* GetOrder(string orderLocalID);
+	void AddNewOrder(ReqNewOrderField* reqNewOrder);
+	void UpdateOrder(ExecutionReportField* executionReport);
+	void AddNewTrade(ExecutionReportField* executionReport, Order* order);
+	void ModifyTrade(ExecutionReportField* executionReport, Order* order);
+	void CancelTrade(ExecutionReportField* executionReport, Order* order);
+	void ReportOrder();
+	void ReportTrade();
+	
 	bool IsOnResend()
 	{
 		return !(m_ResendRange.first == 0 && m_ResendRange.second == 0);
@@ -104,7 +123,6 @@ private:
 	std::map<int, FixMessage*> m_FixMessages;
 	std::map<int, ReqHeader*> m_AppReqFields;
 	bool m_IsDoResendRequest;
-	bool m_AlreadySendLogout;
 
 	int m_HeartBeatSecond;
 	int m_LastSendTimeCount;
@@ -115,5 +133,8 @@ private:
 	string m_TestReqID;
 	int m_TestRequestSendTimeCount;
 	chrono::steady_clock::time_point m_TestRequestSendTimePoint;
+
+	map<string, Order*> m_Orders;
+	map<string, Trade*> m_Trades;
 };
 

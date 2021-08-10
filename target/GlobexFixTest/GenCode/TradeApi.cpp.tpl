@@ -9,7 +9,6 @@
 TradeApi::TradeApi()
 	:m_SessionID(0)
 {
-	m_SendBuff = new char[BUFF_SIZE];
 	m_LogBuff = new char[BUFF_SIZE];
 }
 
@@ -18,21 +17,29 @@ void TradeApi::OnSessionConnected(int sessionID)
 	m_SessionID = sessionID;
 }
 
-int TradeApi::SendResendRequest(ReqHeader* reqField)
+void TradeApi::SendResendRequest(ReqHeader* reqField)
 {
-	auto len = reqField->ToStream(m_SendBuff);
+	TcpEvent* tcpEvent = TcpEvent::Allocate();
+	tcpEvent->EventID = EVENT_ON_TCP_SEND;
+	tcpEvent->SessionID = m_SessionID;
+	auto len = reqField->ToStream(tcpEvent->Buff);
+	tcpEvent->Length = len;
 	
 	reqField->ToString(m_LogBuff, BUFF_SIZE);
 	WRITE_LOG(LogLevel::Info, "%s", m_LogBuff);
 	
-	return TcpThread::GetInstance().Send(m_SessionID, m_SendBuff, len);
+	TcpThread::GetInstance().Send(tcpEvent);
 }
 	
 !!entry ReqFields!!
 !!travel!!
-int TradeApi::!!@name!!(!!@name!!Field* reqField)
+void TradeApi::!!@name!!(!!@name!!Field* reqField)
 {
-	auto len = reqField->ToStream(m_SendBuff);
+	TcpEvent* tcpEvent = TcpEvent::Allocate();
+	tcpEvent->EventID = EVENT_ON_TCP_SEND;
+	tcpEvent->SessionID = m_SessionID;
+	auto len = reqField->ToStream(tcpEvent->Buff);
+	tcpEvent->Length = len;
 	
 	reqField->ToString(m_LogBuff, BUFF_SIZE);
 	WRITE_LOG(LogLevel::Info, "%s", m_LogBuff);
@@ -42,7 +49,7 @@ int TradeApi::!!@name!!(!!@name!!Field* reqField)
 	GlobalParam::GetInstance().IncreaseNextSendSeqNum();
 !!dec indent!!
 	WorkThread::GetInstance().UpdateLastSendTime();
-	return TcpThread::GetInstance().Send(m_SessionID, m_SendBuff, len);
+	TcpThread::GetInstance().Send(tcpEvent);
 }
 
 !!leave!!

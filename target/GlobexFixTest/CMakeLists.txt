@@ -18,6 +18,7 @@ add_package(jsoncpp ../../source/jsoncpp)
 add_package(SocketInit ../../source/SocketInit)
 add_package(CacheList ../../source/CacheList)
 add_package(CacheLoop ../../source/CacheLoop)
+add_package(Mdb ../../source/Mdb/GenCode)
 
 add_package(cryptopp ../../libs/cryptopp/8.5.0/include)
 

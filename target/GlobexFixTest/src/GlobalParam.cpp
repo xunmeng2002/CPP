@@ -37,10 +37,7 @@ void GlobalParam::SetNextSendSeqNum(int value)
 void GlobalParam::SetNextSendSeqNum(string value)
 {
 	auto valueInt = atoi(value.c_str());
-	if (valueInt > m_NextSendSeqNum)
-	{
-		m_NextSendSeqNum = valueInt;
-	}
+	m_NextSendSeqNum = valueInt;
 }
 void GlobalParam::IncreaseNextSendSeqNum()
 {

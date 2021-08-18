@@ -41,13 +41,13 @@ bool WorkThread::Init()
 void WorkThread::InitReqMessage(ReqHeader* reqHeader)
 {
 	reqHeader->ToString(m_LogBuff, BUFF_SIZE);
-	WRITE_LOG(LogLevel::Info, "InitReqMessage: %", m_LogBuff);
+	WRITE_LOG(LogLevel::Info, "InitReqMessage: %s", m_LogBuff);
 	m_AppReqFields.insert(make_pair(atoi(reqHeader->MsgSeqNum.c_str()), reqHeader));
 }
 void WorkThread::InitRspMessage(RspHeader* rspHeader)
 {
 	rspHeader->ToString(m_LogBuff, BUFF_SIZE);
-	WRITE_LOG(LogLevel::Info, "InitRspMessage: %", m_LogBuff);
+	WRITE_LOG(LogLevel::Info, "InitRspMessage: %s", m_LogBuff);
 	m_AppRspFields.insert(make_pair(atoi(rspHeader->MsgSeqNum.c_str()), rspHeader));
 }
 void WorkThread::ThreadExit()
@@ -387,6 +387,7 @@ void WorkThread::OnExecutionReport(FixMessage* fixMessage)
 {
 	ExecutionReportField rspField(fixMessage);
 	TradeSpi::OnExecutionReport(&rspField);
+	RecordResponse(&rspField);
 
 	auto order = UpdateOrder(&rspField);
 	if (order == nullptr)
@@ -407,7 +408,6 @@ void WorkThread::OnExecutionReport(FixMessage* fixMessage)
 	}
 	ReportOrder();
 	ReportTrade();
-	RecordResponse(&rspField);
 }
 void WorkThread::OnRspOrderCancelReject(FixMessage* fixMessage)
 {
@@ -740,7 +740,7 @@ void WorkThread::ResendLastResendRequest()
 	m_LastResendRequestField.SendingTime = GetUtcTime();
 	m_LastResendRequestField.PossDupFlag = "Y";
 
-	m_TradeApi->ReqResendRequest(&m_LastResendRequestField);
+	m_TradeApi->SendResendRequest(&m_LastResendRequestField);
 }
 void WorkThread::DoResendRequest(int startSeqNum, int endSeqNum)
 {
@@ -771,7 +771,7 @@ void WorkThread::DoResendRequest(int startSeqNum, int endSeqNum)
 	}
 	if (currSeqNum < endSeqNum)
 	{
-		ReqSequenceReset(currSeqNum, endSeqNum);
+		ReqSequenceReset(currSeqNum, endSeqNum, "N");
 	}
 }
 void WorkThread::ReqSequenceReset(int beginSeqNum, int endSeqNum, const string& gapFil)

@@ -31,10 +31,36 @@ void TradeApiTables::CreateAllTables()
 	Create!!@name!!Table();
 !!leave!!
 !!leave!!
+
+!!entry RspFields!!
+!!travel!!
+	Create!!@name!!Table();
+!!leave!!
+!!leave!!
+}
+void TradeApiTables::TruncateAllTables()
+{
+!!entry ReqFields!!
+!!travel!!
+	Truncate!!@name!!Table();
+!!leave!!
+!!leave!!
+
+!!entry RspFields!!
+!!travel!!
+	Truncate!!@name!!Table();
+!!leave!!
+!!leave!!
 }
 void TradeApiTables::SelectAllTables()
 {
 !!entry ReqFields!!
+!!travel!!
+	Select!!@name!!Table();
+!!leave!!
+!!leave!!
+
+!!entry RspFields!!
 !!travel!!
 	Select!!@name!!Table();
 !!leave!!
@@ -46,6 +72,7 @@ void TradeApiTables::SelectAllTables()
 int TradeApiTables::Create!!@name!!Table()
 {
 	string sql = !!@name!!Field::CreateSql();
+	WRITE_LOG(LogLevel::Info, "Create!!@name!!Table SQL:[%s]", sql.c_str());
 	
 	int rc = sqlite3_exec(m_DB, sql.c_str(), nullptr, "Create !!@name!!", &m_ErrorMsg);
 	if (rc != SQLITE_OK)
@@ -62,6 +89,7 @@ int TradeApiTables::Create!!@name!!Table()
 int TradeApiTables::Truncate!!@name!!Table()
 {
 	string sql = "DELETE FROM !!@name!!";
+	WRITE_LOG(LogLevel::Info, "Truncate!!@name!!Table SQL:[%s]", sql.c_str());
 	
 	int rc = sqlite3_exec(m_DB, sql.c_str(), nullptr, "Truncate !!@name!!", &m_ErrorMsg);
 	if (rc != SQLITE_OK)
@@ -78,6 +106,7 @@ int TradeApiTables::Truncate!!@name!!Table()
 int TradeApiTables::Select!!@name!!Table()
 {
 	string sql = "SELECT * FROM !!@name!!;";
+	WRITE_LOG(LogLevel::Info, "Select!!@name!!Table SQL:[%s]", sql.c_str());
 	
 	int rc = sqlite3_exec(m_DB, sql.c_str(), SelectCallback!!@name!!, "Select !!@name!!", &m_ErrorMsg);
 	if (rc != SQLITE_OK)
@@ -85,6 +114,10 @@ int TradeApiTables::Select!!@name!!Table()
 		WRITE_LOG(LogLevel::Warning, "SQL error: %s", m_ErrorMsg);
 		sqlite3_free(m_ErrorMsg);
 	}
+	else
+    {
+        WRITE_LOG(LogLevel::Info, "Select Table !!@name!! successfully");
+    }
 	return rc;
 }
 !!leave!!
@@ -95,6 +128,7 @@ int TradeApiTables::Select!!@name!!Table()
 int TradeApiTables::Create!!@name!!Table()
 {
 	string sql = !!@name!!Field::CreateSql();
+	WRITE_LOG(LogLevel::Info, "Create!!@name!!Table SQL:[%s]", sql.c_str());
 	
 	int rc = sqlite3_exec(m_DB, sql.c_str(), nullptr, "Create !!@name!!", &m_ErrorMsg);
 	if (rc != SQLITE_OK)
@@ -108,9 +142,27 @@ int TradeApiTables::Create!!@name!!Table()
     }
 	return rc;
 }
+int TradeApiTables::Truncate!!@name!!Table()
+{
+	string sql = "DELETE FROM !!@name!!";
+	WRITE_LOG(LogLevel::Info, "Truncate!!@name!!Table SQL:[%s]", sql.c_str());
+	
+	int rc = sqlite3_exec(m_DB, sql.c_str(), nullptr, "Truncate !!@name!!", &m_ErrorMsg);
+	if (rc != SQLITE_OK)
+    {
+        WRITE_LOG(LogLevel::Warning, "SQL error: %s", m_ErrorMsg);
+        sqlite3_free(m_ErrorMsg);
+    }
+    else
+    {
+        WRITE_LOG(LogLevel::Info, "Truncate Table !!@name!! successfully");
+    }
+	return rc;
+}
 int TradeApiTables::Select!!@name!!Table()
 {
 	string sql = "SELECT * FROM !!@name!!;";
+	WRITE_LOG(LogLevel::Info, "Select!!@name!!Table SQL:[%s]", sql.c_str());
 	
 	int rc = sqlite3_exec(m_DB, sql.c_str(), SelectCallback!!@name!!, "Select !!@name!!", &m_ErrorMsg);
 	if (rc != SQLITE_OK)
@@ -118,6 +170,10 @@ int TradeApiTables::Select!!@name!!Table()
 		WRITE_LOG(LogLevel::Warning, "SQL error: %s", m_ErrorMsg);
 		sqlite3_free(m_ErrorMsg);
 	}
+	else
+    {
+        WRITE_LOG(LogLevel::Info, "Select Table !!@name!! successfully");
+    }
 	return rc;
 }
 !!leave!!

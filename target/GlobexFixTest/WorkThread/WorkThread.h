@@ -80,8 +80,8 @@ private:
 	void CheckRecvHeartBeat();
 	void CheckTestRequstReply();
 
-
-	void Reset();
+	void ResetSequenceNum();
+	void ResetConnect();
 	void AddReqHeader(string msgSeqNum = "");
 	void ReqLogon();
 	void ReqLogout();
@@ -134,6 +134,7 @@ private:
 	std::pair<int, int> m_ResendRange;
 	std::map<int, FixMessage*> m_FixMessages;
 	std::map<int, ReqHeader*> m_AppReqFields;
+	std::map<int, RspHeader*> m_AppRspFields;
 	bool m_IsDoResendRequest;
 
 	int m_HeartBeatSecond;

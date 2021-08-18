@@ -59,6 +59,13 @@ void GlobalParam::WriteSeqNum()
 	fflush(m_SeqNumFile);
 }
 
+void GlobalParam::ResetSeqNum()
+{
+	m_NextSendSeqNum = 1;
+	m_LastRecvSeqNum = 0;
+	WriteSeqNum();
+}
+
 int GlobalParam::GetNextSendSeqNum()
 {
 	return m_NextSendSeqNum;
@@ -73,10 +80,6 @@ void GlobalParam::SetNextSendSeqNum(int value)
 void GlobalParam::SetNextSendSeqNum(string value)
 {
 	SetNextSendSeqNum(atoi(value.c_str()));
-}
-void GlobalParam::ResetNextSendSeqNum(string value)
-{
-	m_NextSendSeqNum = atoi(value.c_str());
 }
 void GlobalParam::IncreaseNextSendSeqNum()
 {

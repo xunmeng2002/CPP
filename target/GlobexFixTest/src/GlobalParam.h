@@ -23,10 +23,11 @@ public:
 	void ReadSeqNum();
 	void WriteSeqNum();
 
+	void ResetSeqNum();
+
 	int GetNextSendSeqNum();
 	void SetNextSendSeqNum(int value);
 	void SetNextSendSeqNum(string value);
-	void ResetNextSendSeqNum(string value);
 	void IncreaseNextSendSeqNum();
 	
 	int GetNextExpectSeqNum();

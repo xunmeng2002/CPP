@@ -119,14 +119,14 @@ int main(int argc, char* argv[])
 	ReqTestRequest("");
 
 
-	//ReqNewOrder(925, 2, OrderType::LimitOrder, 2.5);
-	//Sleep(5000);
-	//ReqNewOrder(925, 4, OrderType::LimitOrder, 3.5);
-	//Sleep(5000);
-	//ReqNewOrder(925, 6, OrderType::LimitOrder, 4.5);
+	ReqNewOrder(925, 2, OrderType::LimitOrder, 2.5);
+	Sleep(5000);
+	ReqNewOrder(925, 4, OrderType::LimitOrder, 3.5);
+	Sleep(5000);
+	ReqNewOrder(925, 6, OrderType::LimitOrder, 4.5);
 
-	Sleep(10000);
-	ReqLogout();
+	//Sleep(10000);
+	//ReqLogout();
 
 	//Sleep(10000);
 	//ReqNewOrder(925, 2, OrderType::LimitOrder, 2.5);
@@ -156,6 +156,7 @@ int main(int argc, char* argv[])
 		Sleep(10000);
 	}
 
+	sqlite3_close(db);
 	return 0;
 }
 

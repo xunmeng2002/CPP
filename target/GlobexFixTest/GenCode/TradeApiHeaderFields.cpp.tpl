@@ -72,7 +72,7 @@ string !!@name!!::CreateSql()
 }
 string !!@name!!::InsertSql()
 {
-	return !!travel!!!!if $pumpid > "1":!!!!inc indent!! + ", " + !!dec indent!!!!@name!!!!leave!!;
+	return !!travel!!!!if $pumpid > "1":!!!!inc indent!! + "', '" + !!dec indent!!!!@name!!!!leave!!;
 }
 int !!@name!!::AddHeader(char* buff, int bodyLen)
 {

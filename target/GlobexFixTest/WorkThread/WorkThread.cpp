@@ -40,11 +40,15 @@ bool WorkThread::Init()
 }
 void WorkThread::InitReqMessage(ReqHeader* reqHeader)
 {
+	reqHeader->ToString(m_LogBuff, BUFF_SIZE);
+	WRITE_LOG(LogLevel::Info, "InitReqMessage: %", m_LogBuff);
 	m_AppReqFields.insert(make_pair(atoi(reqHeader->MsgSeqNum.c_str()), reqHeader));
 }
 void WorkThread::InitRspMessage(RspHeader* rspHeader)
 {
-
+	rspHeader->ToString(m_LogBuff, BUFF_SIZE);
+	WRITE_LOG(LogLevel::Info, "InitRspMessage: %", m_LogBuff);
+	m_AppRspFields.insert(make_pair(atoi(rspHeader->MsgSeqNum.c_str()), rspHeader));
 }
 void WorkThread::ThreadExit()
 {
@@ -298,7 +302,7 @@ void WorkThread::OnRspLogout(FixMessage* fixMessage)
 
 	if (rspField.NextExpectedMsgSeqNum == "1")
 	{
-		GlobalParam::GetInstance().ResetNextSendSeqNum(rspField.NextExpectedMsgSeqNum);
+		ResetSequenceNum();
 	}
 	else if (!rspField.NextExpectedMsgSeqNum.empty())
 	{
@@ -307,7 +311,7 @@ void WorkThread::OnRspLogout(FixMessage* fixMessage)
 	GlobalParam::GetInstance().SetLastRecvSeqNum(rspField.MsgSeqNum);
 
 	m_LogonStatus = LogonStatus::Logout;
-	Reset();
+	ResetConnect();
 }
 void WorkThread::OnRspHeartBeat(FixMessage* fixMessage)
 {
@@ -358,6 +362,7 @@ void WorkThread::OnRspSessionLevelReject(FixMessage* fixMessage)
 	}
 	RspSessionLevelRejectField rspField(fixMessage);
 	TradeSpi::OnRspSessionLevelReject(&rspField);
+	RecordResponse(&rspField);
 }
 void WorkThread::OnRspSequenceReset(FixMessage* fixMessage)
 {
@@ -402,11 +407,13 @@ void WorkThread::OnExecutionReport(FixMessage* fixMessage)
 	}
 	ReportOrder();
 	ReportTrade();
+	RecordResponse(&rspField);
 }
 void WorkThread::OnRspOrderCancelReject(FixMessage* fixMessage)
 {
 	RspOrderCancelRejectField rspField(fixMessage);
 	TradeSpi::OnRspOrderCancelReject(&rspField);
+	RecordResponse(&rspField);
 }
 
 
@@ -439,7 +446,7 @@ void WorkThread::HandleEvent()
 
 			m_ConnectStatus = ConnectStatus::NotConnected;
 			m_LogonStatus = LogonStatus::NotLogged;
-			Reset();
+			ResetConnect();
 			break;
 		}
 		case EVENT_ON_SEQUENCE_GAP:
@@ -632,8 +639,17 @@ void WorkThread::CheckTestRequstReply()
 	}
 }
 
-
-void WorkThread::Reset()
+void WorkThread::ResetSequenceNum()
+{
+	GlobalParam::GetInstance().ResetSeqNum();
+	TradeApiTables::GetInstance().TruncateAllTables();
+	for (auto& it : m_AppReqFields)
+	{
+		delete it.second;
+	}
+	m_AppReqFields.clear();
+}
+void WorkThread::ResetConnect()
 {
 	m_ResendRange = make_pair(0, 0);
 	m_FixMessages.clear();

@@ -18,6 +18,7 @@ public:
 	void SetDB(sqlite3* db);
 	
 	void CreateAllTables();
+	void TruncateAllTables();
 	void SelectAllTables();
 	
 !!entry ReqFields!!
@@ -41,6 +42,8 @@ public:
 	int InsertRecord(T* field)
 	{
 		string sql = field->InsertSql();
+		WRITE_LOG(LogLevel::Info, "InsertRecord SQL:[%s]", sql.c_str());
+		
 		int rc = sqlite3_exec(m_DB, sql.c_str(), nullptr, "InsertRecord", &m_ErrorMsg);
 		if (rc != SQLITE_OK)
 		{
@@ -53,6 +56,7 @@ public:
 	int DeleteRecord(T* field)
 	{
 		string sql = "DELETE FROM " + string(T::Name) + " WHERE MsgSeqNum = '" + field->MsgSeqNum + "';";
+		WRITE_LOG(LogLevel::Info, "DeleteRecord SQL:[%s]", sql.c_str());
 
 		int rc = sqlite3_exec(m_DB, sql.c_str(), nullptr, "DeleteRecord", &m_ErrorMsg);
 		if (rc != SQLITE_OK)

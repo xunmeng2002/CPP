@@ -48,6 +48,7 @@
 {
 	if (m_FixMessage)
 		m_FixMessage->Free();
+	m_FixMessage = nullptr;
 }
 
 int !!@name!!Field::ToString(char* buff, int size)
@@ -83,7 +84,7 @@ string !!@name!!Field::CreateSql()
 }
 string !!@name!!Field::InsertSql()
 {
-	return "REPLACE INTO !!@name!! VALUES(" + RspHeader::InsertSql()!!travel!! + ", " + !!@name!!!!leave!! + ");";
+	return "REPLACE INTO !!@name!! VALUES('" + RspHeader::InsertSql()!!travel!! + "', '" + !!@name!!!!leave!! + "');";
 }
 
 !!leave!!

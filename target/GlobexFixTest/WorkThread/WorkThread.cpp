@@ -977,6 +977,29 @@ Order* WorkThread::AddNewOrder(ReqNewOrderField* reqNewOrde)
 	m_Orders.insert(make_pair(order->OrderLocalID, order));
 	return order;
 }
+Order* WorkThread::AddNewOrder(ExecutionReportField* executionReport)
+{
+	Order* order = new Order();
+	order->BrokerID = "";
+	order->AccountID = executionReport->Account;
+	order->ExchangeID = executionReport->MarketSegmentID;
+	order->InstrumentID = executionReport->SecurityDesc;
+	order->Direction = DirectionConvert(executionReport->Side);
+	order->OrderType = OrderTypeConvert(executionReport->OrdType);
+	order->Price = atof(executionReport->Price.c_str());
+	order->Volume = atoi(executionReport->OrderQty.c_str());
+	order->VolumeTraded = atoi(executionReport->LastQty.c_str());
+	order->OrderStatus = OrderStatus::Undefined;
+	order->OrderLocalID = executionReport->ClOrdID;
+	order->OrderSysID = executionReport->OrderID;
+	order->Symbol = executionReport->Symbol;
+	order->TimeInForce = TimeInForceConvert(executionReport->TimeInForce);
+	order->TransactTime = executionReport->TransactTime;
+	order->SecurityType = executionReport->SecurityType;
+
+	m_Orders.insert(make_pair(order->OrderLocalID, order));
+	return order;
+}
 Order* WorkThread::UpdateOrder(ExecutionReportField* executionReport)
 {
 	auto order = GetOrderForOrderLocalID(executionReport->ClOrdID);
@@ -986,7 +1009,7 @@ Order* WorkThread::UpdateOrder(ExecutionReportField* executionReport)
 		if (order == nullptr)
 		{
 			WRITE_LOG(LogLevel::Warning, "Can't Find Order For ExecutionReport while OrderLocalID:[%s], OrderSysID:[%s]", executionReport->ClOrdID.c_str(), executionReport->OrderID.c_str());
-			return nullptr;
+			return AddNewOrder(executionReport);
 		}
 	}
 	order->OrderSysID = executionReport->OrderID;

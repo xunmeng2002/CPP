@@ -103,6 +103,7 @@ private:
 	Order* GetOrderForOrderLocalID(string orderLocalID);
 	Order* GetOrderForOrderSysID(string orderSysID);
 	Order* AddNewOrder(ReqNewOrderField* reqNewOrder);
+	Order* AddNewOrder(ExecutionReportField* executionReport);
 	Order* UpdateOrder(ExecutionReportField* executionReport);
 	void AddNewTrade(ExecutionReportField* executionReport, Order* order);
 	void ModifyTrade(ExecutionReportField* executionReport, Order* order);

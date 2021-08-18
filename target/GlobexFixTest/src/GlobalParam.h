@@ -1,20 +1,14 @@
 #pragma once
 #include <string>
+#include <fstream>
 
 using namespace std;
 
 
 class GlobalParam
 {
-	GlobalParam()
-		:m_NextSendSeqNum(1), m_LastRecvSeqNum(1), m_NextExpectSeqNum(1), m_SequenceResetNum(1), m_ClOrdID(1)
-	{
-		ReadSeqNumFromFile();
-	}
-	~GlobalParam()
-	{
-		StoreSeqNumToFile();
-	}
+	GlobalParam();
+	~GlobalParam();
 	GlobalParam(const GlobalParam&) = delete;
 	GlobalParam& operator=(const GlobalParam&) = delete;
 public:
@@ -22,31 +16,34 @@ public:
 	{
 		return m_Instance;
 	}
-	void ReadSeqNumFromFile();
-	void StoreSeqNumToFile();
+	bool CreateDataDir(const char* path);
+	void Open();
+	void Close();
+
+	void ReadSeqNum();
+	void WriteSeqNum();
 
 	int GetNextSendSeqNum();
 	void SetNextSendSeqNum(int value);
 	void SetNextSendSeqNum(string value);
+	void ResetNextSendSeqNum(string value);
 	void IncreaseNextSendSeqNum();
 	
+	int GetNextExpectSeqNum();
 	int GetLastRecvSeqNum();
 	void SetLastRecvSeqNum(int value);
 	void SetLastRecvSeqNum(string value);
-	int GetNextExpectSeqNum();
-	void SetNextExpectSeqNum(int value);
-	void SetNextExpectSeqNum(string value);
-	void IncreaseNextExpectSeqNum();
+	
 
 	int GetClOrdID();
 private:
 	static GlobalParam m_Instance;
 
+	string m_SeqNumFileName;
+	FILE* m_SeqNumFile;
+
 	int m_NextSendSeqNum;
 	int m_LastRecvSeqNum;
-	int m_NextExpectSeqNum;
-	int m_SequenceResetNum;
-	int m_MaxRecvSeqNum;
 
 	int m_ClOrdID;
 };

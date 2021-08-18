@@ -1,18 +1,49 @@
 #include "TradeApiHeaderFields.h"
 
+!!items = {}!!
+!!entry items!!
+!!travel!!
+!!items[@name] = @key!!
+!!leave!!
+!!leave!!
 
 !!entry Headers!!
 !!travel!!
 !!@name!!::!!@name!!(const string& fieldName, const string& msgType, FixMessage* fixMessage)
-	:FieldName(fieldName), MsgType(msgType)
+	:FieldName(fieldName), MsgType(msgType), HeadBuff{0}
 {
+	if (!fixMessage)
+		return;
 !!travel!!
 !!if @name != "MsgType":!!
 !!inc indent!!
-	!!@name!! = fixMessage->GetItem(!!@key!!);
+!!key = items[@name]!!
+	!!@name!! = fixMessage->GetItem(!!$key!!);
 !!dec indent!!
 !!leave!!
 }
+!!@name!!::!!@name!!(!!@name!!&& other) noexcept
+{
+	FieldName = std::move(other.FieldName);
+	Items = std::move(other.Items);
+	
+!!travel!!
+	!!@name!! = std::move(other.!!@name!!);
+!!leave!!
+}
+!!@name!!& !!@name!!::operator=(!!@name!!&& other) noexcept
+{
+	Items.clear();
+	FieldName = std::move(other.FieldName);
+	Items = std::move(other.Items);
+	
+!!travel!!
+	!!@name!! = std::move(other.!!@name!!);
+!!leave!!
+	
+	return *this;
+}
+
 int !!@name!!::ToString(char* buff, int size)
 {
 	int len = 0;
@@ -29,10 +60,19 @@ int !!@name!!::ToStream(char* buff)
 !!travel!!
 !!if @name != "BeginString" and @name != "BodyLength":!!
 !!inc indent!!
-	len += WriteStream(buff + len, !!@key!!, !!@name!!);
+!!key = items[@name]!!
+	len += WriteStream(buff + len, !!$key!!, !!@name!!);
 !!dec indent!!
 !!leave!!
 	return len;
+}
+string !!@name!!::CreateSql()
+{
+	return "!!travel!!!!if @name != "MsgSeqNum":!!!!inc indent!!!!@name!! char(32), !!dec indent!!!!else:!!!!inc indent!!!!@name!! char (32) PRIMARY KEY NOT NULL, !!dec indent!!!!leave!!";
+}
+string !!@name!!::InsertSql()
+{
+	return !!travel!!!!if $pumpid > "1":!!!!inc indent!! + ", " + !!dec indent!!!!@name!!!!leave!!;
 }
 int !!@name!!::AddHeader(char* buff, int bodyLen)
 {
@@ -61,8 +101,11 @@ void !!@name!!::SetHeader(const string& senderCompID, const string& senderSubID,
 !!travel!!
 !!@name!!::!!@name!!(FixMessage* fixMessage)
 {
+	if (!fixMessage)
+		return;
 !!travel!!
-	!!@name!! = fixMessage->GetItem(!!@key!!);
+!!key = items[@name]!!
+	!!@name!! = fixMessage->GetItem(!!$key!!);
 !!leave!!
 }
 int !!@name!!::ToString(char* buff, int size)

@@ -1,0 +1,67 @@
+<root>
+	<files>
+		<file name="stdio.h">
+			<variables>
+				<variable name="size_t" desc="这是无符号整数类型，它是 sizeof 关键字的结果。"/>
+				<variable name="FILE" desc="这是一个适合存储文件流信息的对象类型。"/>
+				<variable name="fpos_t" desc="这是一个适合存储文件中任何位置的对象类型。"/>
+			</variables>
+			<macros>
+				<macro name="NULL" value="" desc="这个宏是一个空指针常量的值。"/>
+				<macro name="_IOFBF, _IOLBF, _IONBF" value="" desc="这些宏扩展了带有特定值的整型常量表达式，并适用于 setvbuf 函数的第三个参数。"/>
+				<macro name="BUFSIZ" value="" desc="这个宏是一个整数，该整数代表了 setbuf 函数使用的缓冲区大小。"/>
+				<macro name="EOF" value="" desc="这个宏是一个表示已经到达文件结束的负整数。"/>
+				<macro name="FOPEN_MAX" value="" desc="这个宏是一个整数，该整数代表了系统可以同时打开的文件数量。"/>
+				<macro name="FILENAME_MAX" value="" desc="这个宏是一个整数，该整数代表了字符数组可以存储的文件名的最大长度。如果实现没有任何限制，则该值应为推荐的最大值。"/>
+				<macro name="L_tmpnam" value="" desc="这个宏是一个整数，该整数代表了字符数组可以存储的由 tmpnam 函数创建的临时文件名的最大长度。"/>
+				<macro name="SEEK_CUR, SEEK_END, SEEK_SET" value="" desc="这些宏是在 fseek 函数中使用，用于在一个文件中定位不同的位置。"/>
+				<macro name="TMP_MAX" value="" desc="这个宏是 tmpnam 函数可生成的独特文件名的最大数量。"/>
+				<macro name="stderr, stdin, stdout" value="" desc="这些宏是指向 FILE 类型的指针，分别对应于标准错误、标准输入和标准输出流。"/>
+			</macros>
+			<funcs>
+				<func name="fclose" declaration="int fclose(FILE *stream)" desc="关闭流 stream。刷新所有的缓冲区。"/>
+				<func name="clearerr" declaration="void clearerr(FILE *stream)" desc="清除给定流 stream 的文件结束和错误标识符。"/>
+				<func name="feof" declaration="int feof(FILE *stream)" desc="测试给定流 stream 的文件结束标识符。"/>
+				<func name="ferror" declaration="int ferror(FILE *stream)" desc="测试给定流 stream 的错误标识符。"/>
+				<func name="fflush" declaration="int fflush(FILE *stream)" desc="刷新流 stream 的输出缓冲区。"/>
+				<func name="fgetpos" declaration="int fgetpos(FILE *stream, fpos_t *pos)" desc="获取流 stream 的当前文件位置，并把它写入到 pos。"/>
+				<func name="fopen" declaration="FILE *fopen(const char *filename, const char *mode)" desc="使用给定的模式 mode 打开 filename 所指向的文件。"/>
+				<func name="fread" declaration="size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream)" desc="从给定流 stream 读取数据到 ptr 所指向的数组中。"/>
+				<func name="freopen" declaration="FILE *freopen(const char *filename, const char *mode, FILE *stream)" desc="把一个新的文件名 filename 与给定的打开的流 stream 关联，同时关闭流中的旧文件。"/>
+				<func name="fseek" declaration="int fseek(FILE *stream, long int offset, int whence)" desc="设置流 stream 的文件位置为给定的偏移 offset，参数 offset 意味着从给定的 whence 位置查找的字节数。"/>
+				<func name="fsetpos" declaration="int fsetpos(FILE *stream, const fpos_t *pos)" desc="设置给定流 stream 的文件位置为给定的位置。参数 pos 是由函数 fgetpos 给定的位置。"/>
+				<func name="ftell" declaration="long int ftell(FILE *stream)" desc="返回给定流 stream 的当前文件位置。"/>
+				<func name="fwrite" declaration="size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream)" desc="把 ptr 所指向的数组中的数据写入到给定流 stream 中。"/>
+				<func name="remove" declaration="int remove(const char *filename)" desc="删除给定的文件名 filename，以便它不再被访问。"/>
+				<func name="rename" declaration="int rename(const char *old_filename, const char *new_filename)" desc="把 old_filename 所指向的文件名改为 new_filename。"/>
+				<func name="rewind" declaration="void rewind(FILE *stream)" desc="设置文件位置为给定流 stream 的文件的开头。"/>
+				<func name="setbuf" declaration="void setbuf(FILE *stream, char *buffer)" desc="定义流 stream 应如何缓冲。"/>
+				<func name="setvbuf" declaration="int setvbuf(FILE *stream, char *buffer, int mode, size_t size)" desc="另一个定义流 stream 应如何缓冲的函数。"/>
+				<func name="tmpfile" declaration="FILE *tmpfile(void)" desc="以二进制更新模式(wb+)创建临时文件。"/>
+				<func name="tmpnam" declaration="char *tmpnam(char *str)" desc="生成并返回一个有效的临时文件名，该文件名之前是不存在的。"/>
+				<func name="fprintf" declaration="int fprintf(FILE *stream, const char *format, ...)" desc="发送格式化输出到流 stream 中。"/>
+				<func name="printf" declaration="int printf(const char *format, ...)" desc="发送格式化输出到标准输出 stdout。"/>
+				<func name="sprintf" declaration="int sprintf(char *str, const char *format, ...)" desc="发送格式化输出到字符串。"/>
+				<func name="vfprintf" declaration="int vfprintf(FILE *stream, const char *format, va_list arg)" desc="使用参数列表发送格式化输出到流 stream 中。"/>
+				<func name="vprintf" declaration="int vprintf(const char *format, va_list arg)" desc="使用参数列表发送格式化输出到标准输出 stdout。"/>
+				<func name="vsprintf" declaration="int vsprintf(char *str, const char *format, va_list arg)" desc="使用参数列表发送格式化输出到字符串。"/>
+				<func name="fscanf" declaration="int fscanf(FILE *stream, const char *format, ...)" desc="从流 stream 读取格式化输入。"/>
+				<func name="scanf" declaration="int scanf(const char *format, ...)" desc="从标准输入 stdin 读取格式化输入。"/>
+				<func name="sscanf" declaration="int sscanf(const char *str, const char *format, ...)" desc="从字符串读取格式化输入。"/>
+				<func name="fgetc" declaration="int fgetc(FILE *stream)" desc="从指定的流 stream 获取下一个字符（一个无符号字符），并把位置标识符往前移动。"/>
+				<func name="fgets" declaration="char *fgets(char *str, int n, FILE *stream)" desc="从指定的流 stream 读取一行，并把它存储在 str 所指向的字符串内。当读取 (n-1) 个字符时，或者读取到换行符时，或者到达文件末尾时，它会停止，具体视情况而定。"/>
+				<func name="fputc" declaration="int fputc(int char, FILE *stream)" desc="把参数 char 指定的字符（一个无符号字符）写入到指定的流 stream 中，并把位置标识符往前移动。"/>
+				<func name="fputs" declaration="int fputs(const char *str, FILE *stream)" desc="把字符串写入到指定的流 stream 中，但不包括空字符。"/>
+				<func name="getc" declaration="int getc(FILE *stream)" desc="从指定的流 stream 获取下一个字符（一个无符号字符），并把位置标识符往前移动。"/>
+				<func name="getchar" declaration="int getchar(void)" desc="从标准输入 stdin 获取一个字符（一个无符号字符）。"/>
+				<func name="gets" declaration="char *gets(char *str)" desc="从标准输入 stdin 读取一行，并把它存储在 str 所指向的字符串中。当读取到换行符时，或者到达文件末尾时，它会停止，具体视情况而定。"/>
+				<func name="putc" declaration="int putc(int char, FILE *stream)" desc="把参数 char 指定的字符（一个无符号字符）写入到指定的流 stream 中，并把位置标识符往前移动。"/>
+				<func name="putchar" declaration="int putchar(int char)" desc="把参数 char 指定的字符（一个无符号字符）写入到标准输出 stdout 中。"/>
+				<func name="puts" declaration="int puts(const char *str)" desc="把一个字符串写入到标准输出 stdout，直到空字符，但不包括空字符。换行符会被追加到输出中。"/>
+				<func name="ungetc" declaration="int ungetc(int char, FILE *stream)" desc="把字符 char（一个无符号字符）推入到指定的流 stream 中，以便它是下一个被读取到的字符。"/>
+				<func name="perror" declaration="void perror(const char *str)" desc="把一个描述性错误消息输出到标准错误 stderr。首先输出字符串 str，后跟一个冒号，然后是一个空格。"/>
+				<func name="snprintf" declaration="int snprintf(char *str, size_t size, const char *format, ...)" desc="格式字符串到 str 中。"/>
+			</funcs>
+		</file>
+	</files>
+</root>

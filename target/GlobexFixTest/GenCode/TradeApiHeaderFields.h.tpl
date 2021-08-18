@@ -13,8 +13,15 @@ class !!@name!!
 {
 public:
 	!!@name!!(const string& fieldName, const string& msgType, FixMessage* fixMessage);
+	!!@name!!(const !!@name!!&) = delete;
+	!!@name!! operator=(const !!@name!!&) = delete;
+	!!@name!!(!!@name!!&& other) noexcept;
+	!!@name!!& operator=(!!@name!!&& other) noexcept;
+	
 	virtual int ToString(char* buff, int size);
 	virtual int ToStream(char* buff);
+	static string CreateSql();
+	virtual string InsertSql();
 	int AddHeader(char* buff, int bodyLen);
 	void SetHeader(const string& senderCompID, const string& senderSubID, const string& targetCompID, const string& targetSubID);
 	

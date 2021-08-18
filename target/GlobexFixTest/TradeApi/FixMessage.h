@@ -21,7 +21,7 @@ class FixMessage
 {
 public:
 	static FixMessage* Allocate();
-	static void Free(FixMessage* fixMessage);
+	void Free();
 
 	void SetItem(int tag, string value);
 	void Clear();

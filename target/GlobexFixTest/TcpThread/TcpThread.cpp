@@ -226,7 +226,7 @@ void TcpThread::DoSend()
 				}
 				else
 				{
-					WRITE_LOG(LogLevel::Info, "OnSend Send Len[%d], Buff[%s]", tcpEvent->Length, tcpEvent->Buff);
+					WRITE_LOG(LogLevel::Debug, "OnSend Send Len[%d], Buff[%s]", tcpEvent->Length, tcpEvent->Buff);
 				}
 				tcpEvent->Free();
 			}
@@ -244,21 +244,21 @@ void TcpThread::DoRecv()
 		{
 			TcpEvent* tcpEvent = TcpEvent::Allocate();
 			int len = recv(socketID, tcpEvent->Buff, BUFF_SIZE - 1, 0);
-			if (len > 0)
+			if (len <= 0)
+			{
+				WRITE_LOG(LogLevel::Info, "OnRecv: SessionID[%d], len[%d] DisConnect", sessionID, len);
+				tcpEvent->Free();
+				DisConnect(sessionID);
+			}
+			else
 			{
 				tcpEvent->Buff[len] = '\0';
-				WRITE_LOG(LogLevel::Info, "OnRecv: SessionID[%d], len[%d], [%s]", sessionID, len, tcpEvent->Buff);
+				WRITE_LOG(LogLevel::Debug, "OnRecv: SessionID[%d], len[%d], [%s]", sessionID, len, tcpEvent->Buff);
 				tcpEvent->EventID = EVENT_ON_TCP_RECV;
 				tcpEvent->SessionID = sessionID;
 				tcpEvent->Length = len;
 
 				WorkThread::GetInstance().OnRecv(tcpEvent);
-			}
-			else
-			{
-				WRITE_LOG(LogLevel::Info, "OnRecv: SessionID[%d], len[%d] DisConnect", sessionID, len);
-				tcpEvent->Free();
-				DisConnect(sessionID);
 			}
 		}
 	}

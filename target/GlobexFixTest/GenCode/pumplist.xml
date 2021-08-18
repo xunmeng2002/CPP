@@ -1,4 +1,7 @@
 <pumplist>
+	<pump dest="./target/GlobexFixTest/GenCode/TradeApiItems.h" tpl="./target/GlobexFixTest/GenCode/TradeApiItems.h.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
+	<pump dest="./target/GlobexFixTest/GenCode/TradeApiItems.cpp" tpl="./target/GlobexFixTest/GenCode/TradeApiItems.cpp.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
+	
 	<pump dest="./target/GlobexFixTest/GenCode/TradeApiHeaderFields.h" tpl="./target/GlobexFixTest/GenCode/TradeApiHeaderFields.h.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
 	<pump dest="./target/GlobexFixTest/GenCode/TradeApiHeaderFields.cpp" tpl="./target/GlobexFixTest/GenCode/TradeApiHeaderFields.cpp.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
 	
@@ -13,4 +16,7 @@
 	
 	<pump dest="./target/GlobexFixTest/GenCode/TradeSpi.h" tpl="./target/GlobexFixTest/GenCode/TradeSpi.h.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
 	<pump dest="./target/GlobexFixTest/GenCode/TradeSpi.cpp" tpl="./target/GlobexFixTest/GenCode/TradeSpi.cpp.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
+	
+	<pump dest="./target/GlobexFixTest/GenCode/TradeApiTables.h" tpl="./target/GlobexFixTest/GenCode/TradeApiTables.h.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
+	<pump dest="./target/GlobexFixTest/GenCode/TradeApiTables.cpp" tpl="./target/GlobexFixTest/GenCode/TradeApiTables.cpp.tpl" model="./model/GlobexiLink2/GlobexiLink2Model.xml"/>
 </pumplist>

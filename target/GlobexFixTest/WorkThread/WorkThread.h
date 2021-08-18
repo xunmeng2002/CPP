@@ -8,6 +8,7 @@
 #include "MyEvent.h"
 #include "TcpEvent.h"
 #include <vector>
+#include <set>
 #include <map>
 #include <mutex>
 #include <condition_variable>
@@ -27,10 +28,14 @@ class WorkThread : public ThreadBase, public TradeSpi
 public:
 	static WorkThread& GetInstance();
 	bool Init();
+	void InitReqMessage(ReqHeader* reqHeader);
+	void InitRspMessage(RspHeader* rspHeader);
 	virtual void ThreadExit() override;
 	virtual void Run() override;
+
 	
 	void OnEventSequenceGap(int beginSeqNo, int endSeqNo);
+	void OnEventResendLastResendRequest();
 	void OnEventDoResendRequest(int beginSeqNo, int endSeqNo);
 	void OnEventDoLogout();
 	void OnEventTestRequest(const string& testReqID = "");
@@ -83,17 +88,22 @@ private:
 	void ReqHeartBeat(string testReqID);
 	void ReqTestRequest(string testReqID);
 	void ReqResendRequest(int startSeqNum, int endSeqNum);
+	void ResendLastResendRequest();
 	void DoResendRequest(int startSeqNum, int endSeqNum);
-	void ReqSequenceReset(int beginSeqNum, int endSeqNum);
+	void ReqSequenceReset(int beginSeqNum, int endSeqNum, const string& gapFill = "Y");
 	void ReqNewOrder(const string& marketSegmentID, const string& instrumentID, const string& orderType, const string& price, const string& stopPrice, int orderQty);
 	void ReqOrderCancelRequest(const string& origOrderLocalID);
 	void ReqOrderCancelReplaceRequest(const string& origOrderLocalID, const string& newPrice, int newVolume);
+	void ReqOrderStatusRequest(const string& origOrderLocalID);
 
 
 	void RecordRequest(ReqHeader* reqField);
-	Order* GetOrder(string orderLocalID);
-	void AddNewOrder(ReqNewOrderField* reqNewOrder);
-	void UpdateOrder(ExecutionReportField* executionReport);
+	void RecordResponse(RspHeader* rspField);
+	Order* GetOrder(string orderID);
+	Order* GetOrderForOrderLocalID(string orderLocalID);
+	Order* GetOrderForOrderSysID(string orderSysID);
+	Order* AddNewOrder(ReqNewOrderField* reqNewOrder);
+	Order* UpdateOrder(ExecutionReportField* executionReport);
 	void AddNewTrade(ExecutionReportField* executionReport, Order* order);
 	void ModifyTrade(ExecutionReportField* executionReport, Order* order);
 	void CancelTrade(ExecutionReportField* executionReport, Order* order);
@@ -112,6 +122,7 @@ private:
 
 	string m_SenderCompID;
 	AccountInfo m_AccountInfo;
+	bool m_IsLastConnectPrimary;
 	FixMessage* m_FixMessage;
 	TradeApi* m_TradeApi;
 	FixMessageParse* m_FixMessageParse;
@@ -119,6 +130,7 @@ private:
 	ConnectStatus m_ConnectStatus;
 	LogonStatus m_LogonStatus;
 
+	ReqResendRequestField m_LastResendRequestField;
 	std::pair<int, int> m_ResendRange;
 	std::map<int, FixMessage*> m_FixMessages;
 	std::map<int, ReqHeader*> m_AppReqFields;
@@ -130,6 +142,7 @@ private:
 	int m_LastRecvTimeCount;
 	chrono::steady_clock::time_point m_LastRecvTimePoint;
 	bool m_AlreadySendTestRequest;
+	bool m_AlreadySendLogout;
 	string m_TestReqID;
 	int m_TestRequestSendTimeCount;
 	chrono::steady_clock::time_point m_TestRequestSendTimePoint;

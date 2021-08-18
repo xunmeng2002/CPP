@@ -8,10 +8,10 @@ FixMessage* FixMessage::Allocate()
 {
 	return MemCacheTemplateSingleton<FixMessage>::GetInstance().Allocate();
 }
-void FixMessage::Free(FixMessage* fixMessage)
+void FixMessage::Free()
 {
-	fixMessage->Clear();
-	MemCacheTemplateSingleton<FixMessage>::GetInstance().Free(fixMessage);
+	Clear();
+	MemCacheTemplateSingleton<FixMessage>::GetInstance().Free(this);
 }
 void FixMessage::SetItem(int tag, string value)
 {

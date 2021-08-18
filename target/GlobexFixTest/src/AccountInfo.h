@@ -11,7 +11,8 @@ using namespace std;
 struct AccountInfo
 {
 	string IP;
-	string Port;
+	string PrimaryPort;
+	string BackupPort;
 	string BeginString;
 	string SenderCompID;
 	string SenderSubID;

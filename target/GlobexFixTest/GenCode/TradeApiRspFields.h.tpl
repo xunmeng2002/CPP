@@ -10,9 +10,15 @@ class !!@name!!Field : public RspHeader, public Trailer
 {
 public:
 	!!@name!!Field(FixMessage* fixMessage);
+	!!@name!!Field(const !!@name!!Field&) = delete;
+	!!@name!!Field& operator=(const !!@name!!Field&) = delete;
+	!!@name!!Field(!!@name!!Field&& other) noexcept;
+	!!@name!!Field& operator=(!!@name!!Field&& other) noexcept;
 	~!!@name!!Field();
 	virtual int ToString(char* buff, int size) override;
 	virtual int ToStream(char* buff) override;
+	static string CreateSql();
+	virtual string InsertSql() override;
 	
 public:
 !!travel!!
@@ -20,6 +26,7 @@ public:
 !!leave!!
 
 	FixMessage* m_FixMessage;
+	static constexpr char* Name = "!!@name!!";
 };
 
 !!leave!!

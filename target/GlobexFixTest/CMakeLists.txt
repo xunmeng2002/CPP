@@ -21,16 +21,19 @@ add_package(CacheLoop ../../source/CacheLoop)
 add_package(Mdb ../../source/Mdb/GenCode)
 
 add_package(cryptopp ../../libs/cryptopp/8.5.0/include)
+add_package(SQLite ../../libs/SQLite/3.36.0/include)
 
 add_definitions("-D_CRT_SECURE_NO_WARNINGS")
 
 message(STATUS "CMAKE_CL_64: " ${CMAKE_CL_64})
 if(CMAKE_CL_64)
 	link_directories(${PROJECT_SOURCE_DIR}/../../libs/cryptopp/8.5.0/win64)
+	link_directories(${PROJECT_SOURCE_DIR}/../../libs/SQLite/3.36.0/win64)
 ELSE(CMAKE_CL_64)
 	link_directories(${PROJECT_SOURCE_DIR}/../../libs/cryptopp/8.5.0/win32)
+	link_directories(${PROJECT_SOURCE_DIR}/../../libs/SQLite/3.36.0/win32)
 endif(CMAKE_CL_64)
 
 add_executable(${PROJECT_NAME} ${all_file})
 
-target_link_libraries(${PROJECT_NAME} cryptlib.lib)
+target_link_libraries(${PROJECT_NAME} cryptlib.lib sqlite3.lib)

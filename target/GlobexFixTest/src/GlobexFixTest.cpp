@@ -1,17 +1,18 @@
-#include "Logger.h"
-#include "TradeApi.h"
-#include "TcpThread.h"
-#include "WorkThread.h"
-#include "AccountInfo.h"
-#include "EnumDict.h"
 #include <vector>
 #include <map>
 #include <iostream>
 #include <signal.h>
 #include<stdlib.h>
-
+#include "Logger.h"
+#include "TcpThread.h"
+#include "WorkThread.h"
+#include "AccountInfo.h"
+#include "EnumDict.h"
+#include "TradeApiTables.h"
 
 using namespace std;
+
+constexpr char* DB_Name = "CME.db";
 
 void OnExit()
 {
@@ -43,11 +44,13 @@ void InitMarketSegMent()
 
 void ReqLogout()
 {
-	Sleep(30000);
-
 	auto myEvent = MyEvent::Allocate();
 	myEvent->EventID = EVENT_DO_REQ_LOGOUT;
 	WorkThread::GetInstance().OnEvent(myEvent);
+}
+void ReqTestRequest(const string& testReqID)
+{
+	WorkThread::GetInstance().OnEventTestRequest(testReqID);
 }
 void ReqNewOrder(int marketSegmentID, int volume, OrderType orderType, double price, const string& stopPrice = "")
 {
@@ -91,6 +94,11 @@ int main(int argc, char* argv[])
 	Logger::GetInstance().Init(argv[0]);
 	Logger::GetInstance().Start();
 
+	sqlite3* db = nullptr;
+	sqlite3_open(DB_Name, &db);
+	TradeApiTables::GetInstance().SetDB(db);
+	TradeApiTables::GetInstance().CreateAllTables();
+	TradeApiTables::GetInstance().SelectAllTables();
 
 	TcpThread::GetInstance().SetTcpInfo();
 	if (!TcpThread::GetInstance().Init())
@@ -106,13 +114,26 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 	WorkThread::GetInstance().Start();
+	Sleep(20000);
+
+	ReqTestRequest("");
+
+
+	//ReqNewOrder(925, 2, OrderType::LimitOrder, 2.5);
+	//Sleep(5000);
+	//ReqNewOrder(925, 4, OrderType::LimitOrder, 3.5);
+	//Sleep(5000);
+	//ReqNewOrder(925, 6, OrderType::LimitOrder, 4.5);
 
 	Sleep(10000);
-	ReqNewOrder(925, 2, OrderType::LimitOrder, 2.5);
-	Sleep(1000);
-	ReqNewOrder(925, 4, OrderType::LimitOrder, 3.5);
-	Sleep(1000);
-	ReqNewOrder(925, 6, OrderType::LimitOrder, 4.5);
+	ReqLogout();
+
+	//Sleep(10000);
+	//ReqNewOrder(925, 2, OrderType::LimitOrder, 2.5);
+	//Sleep(1000);
+	//ReqNewOrder(925, 4, OrderType::LimitOrder, 3.5);
+	//Sleep(1000);
+	//ReqNewOrder(925, 6, OrderType::LimitOrder, 4.5);
 	
 	//Sleep(10000);
 	//ReqOrderCancelReplace(1, 1.5, 10);

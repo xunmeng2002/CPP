@@ -1,6 +1,5 @@
 #pragma once
 #include "TradeApi.h"
-#include "Logger.h"
 #include "TcpThread.h"
 #include "GlobalParam.h"
 #include "WorkThread.h"
@@ -28,12 +27,11 @@ void TradeApi::SendResendRequest(ReqHeader* reqField)
 	reqField->ToString(m_LogBuff, BUFF_SIZE);
 	WRITE_LOG(LogLevel::Info, "%s", m_LogBuff);
 	
+	WorkThread::GetInstance().UpdateLastSendTime();
 	TcpThread::GetInstance().Send(tcpEvent);
 }
-	
-!!entry ReqFields!!
-!!travel!!
-void TradeApi::!!@name!!(!!@name!!Field* reqField)
+
+void TradeApi::ReqSequenceReset(ReqSequenceResetField* reqField)
 {
 	TcpEvent* tcpEvent = TcpEvent::Allocate();
 	tcpEvent->EventID = EVENT_ON_TCP_SEND;
@@ -44,13 +42,19 @@ void TradeApi::!!@name!!(!!@name!!Field* reqField)
 	reqField->ToString(m_LogBuff, BUFF_SIZE);
 	WRITE_LOG(LogLevel::Info, "%s", m_LogBuff);
 
-!!if @name != "ReqSequenceReset":!!
-!!inc indent!!
-	GlobalParam::GetInstance().IncreaseNextSendSeqNum();
-!!dec indent!!
 	WorkThread::GetInstance().UpdateLastSendTime();
 	TcpThread::GetInstance().Send(tcpEvent);
 }
+	
+!!entry ReqFields!!
+!!travel!!
+!!if @name != "ReqSequenceReset":!!
+!!inc indent!!
+void TradeApi::!!@name!!(!!@name!!Field* reqField)
+{
+	SendRequest(reqField);
+}
 
+!!dec indent!!
 !!leave!!
 !!leave!!

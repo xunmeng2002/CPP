@@ -9,6 +9,7 @@ struct TcpEvent : public Event
 	TcpEvent(int buffSize = 64 * 1024);
 	~TcpEvent();
 	int SessionID;
+	char* ReadPos;
 	char* Buff;
 	int Length;
 

@@ -24,7 +24,7 @@ public:
 	void Send(int sessionID, const char* data, int length);
 	void Send(TcpEvent* tcpEvent);
 
-
+protected:
 	virtual void Run();
 	void HandleEvent();
 	void DoConnect(const string& ip, int port);

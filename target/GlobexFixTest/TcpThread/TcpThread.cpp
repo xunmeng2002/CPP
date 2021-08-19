@@ -65,7 +65,6 @@ void TcpThread::Send(int sessionID, const char* data, int length)
 }
 void TcpThread::Send(TcpEvent* tcpEvent)
 {
-	tcpEvent->EventID = EVENT_ON_TCP_SEND;
 	OnEvent(tcpEvent);
 }
 
@@ -208,7 +207,7 @@ void TcpThread::DoSend()
 		{
 			while (auto tcpEvent = GetSendEvent(it.first))
 			{
-				int len = send(connectData->SocketID, tcpEvent->Buff, tcpEvent->Length, 0);
+				int len = send(connectData->SocketID, tcpEvent->ReadPos, tcpEvent->Length, 0);
 				if (len <= 0)
 				{
 					WRITE_LOG(LogLevel::Info, "DisConnect For Send len = [%d]", len);
@@ -218,15 +217,15 @@ void TcpThread::DoSend()
 				}
 				else if (len < tcpEvent->Length)
 				{
-					WRITE_LOG(LogLevel::Info, "OnSend, Send Less than expect. Expect Len[%d], Send Len[%d], Buff[%s]", tcpEvent->Length, len, tcpEvent->Buff);
-					memmove(tcpEvent->Buff, tcpEvent->Buff + len, tcpEvent->Length - len);
+					WRITE_LOG(LogLevel::Info, "OnSend, Send Less than expect. Expect Len[%d], Send Len[%d], Buff[%s]", tcpEvent->Length, len, tcpEvent->ReadPos);
+					tcpEvent->ReadPos += len;
 					tcpEvent->Length -= len;
 					RePushSendEvent(tcpEvent);
 					break;
 				}
 				else
 				{
-					WRITE_LOG(LogLevel::Debug, "OnSend Send Len[%d], Buff[%s]", tcpEvent->Length, tcpEvent->Buff);
+					WRITE_LOG(LogLevel::Debug, "OnSend Send Len[%d], Buff[%s]", tcpEvent->Length, tcpEvent->ReadPos);
 				}
 				tcpEvent->Free();
 			}

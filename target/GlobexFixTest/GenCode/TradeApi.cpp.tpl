@@ -1,12 +1,11 @@
 #pragma once
 #include "TradeApi.h"
-#include "TcpThread.h"
 #include "GlobalParam.h"
 #include "WorkThread.h"
 
 
-TradeApi::TradeApi()
-	:m_SessionID(0)
+TradeApi::TradeApi(TcpClient* tcpClient)
+	:m_TcpClient(tcpClient), m_SessionID(0)
 {
 	m_LogBuff = new char[BUFF_SIZE];
 }
@@ -28,7 +27,7 @@ void TradeApi::SendResendRequest(ReqHeader* reqField)
 	WRITE_LOG(LogLevel::Info, "%s", m_LogBuff);
 	
 	WorkThread::GetInstance().UpdateLastSendTime();
-	TcpThread::GetInstance().Send(tcpEvent);
+	m_TcpClient->Send(tcpEvent);
 }
 
 void TradeApi::ReqSequenceReset(ReqSequenceResetField* reqField)
@@ -43,7 +42,7 @@ void TradeApi::ReqSequenceReset(ReqSequenceResetField* reqField)
 	WRITE_LOG(LogLevel::Info, "%s", m_LogBuff);
 
 	WorkThread::GetInstance().UpdateLastSendTime();
-	TcpThread::GetInstance().Send(tcpEvent);
+	m_TcpClient->Send(tcpEvent);
 }
 	
 !!entry ReqFields!!

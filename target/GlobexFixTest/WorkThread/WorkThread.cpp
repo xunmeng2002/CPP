@@ -1,6 +1,6 @@
 #include "WorkThread.h"
 #include  "Logger.h"
-#include "TcpThread.h"
+#include "TcpSelectClient.h"
 #include "MemCacheTemplateSingleton.h"
 #include "GlobalParam.h"
 #include "CryptoppEncode.h"
@@ -17,7 +17,7 @@ WorkThread::WorkThread(const char* name)
 	:ThreadBase(name), m_LastResendRequestField(m_FixMessage)
 {
 	m_FixMessage = nullptr;
-	m_TradeApi = new TradeApi();
+	m_TradeApi = nullptr;
 	m_FixMessageParse = new FixMessageParse(this);
 	
 	m_IsLastConnectPrimary = false;
@@ -31,6 +31,12 @@ WorkThread::WorkThread(const char* name)
 WorkThread& WorkThread::GetInstance()
 {
 	return m_Instance;
+}
+void WorkThread::SetTcpInfo(TcpClient* tcpClient, TcpServer* tcpServer)
+{
+	m_TcpClient = tcpClient;
+	m_TcpServer = tcpServer;
+	m_TradeApi = new TradeApi(m_TcpClient);
 }
 bool WorkThread::Init()
 {
@@ -118,6 +124,26 @@ void WorkThread::OnEventTestRequest(const string& testReqID)
 	{
 		myEvent->StringParams.push_back(testReqID);
 	}
+	OnEvent(myEvent);
+}
+void WorkThread::OnConnect(int sessionID, const char* ip, int port)
+{
+	MyEvent* myEvent = MyEvent::Allocate();
+	myEvent->EventID = EVENT_ON_CONNECTED;
+	myEvent->StringParams.push_back(ip);
+	myEvent->NumParams.push_back(port);
+	myEvent->NumParams.push_back(sessionID);
+	
+	OnEvent(myEvent);
+}
+void WorkThread::OnDisConnect(int sessionID, const char* ip, int port)
+{
+	MyEvent* myEvent = MyEvent::Allocate();
+	myEvent->EventID = EVENT_ON_DISCONNECTED;
+	myEvent->StringParams.push_back(ip);
+	myEvent->NumParams.push_back(port);
+	myEvent->NumParams.push_back(sessionID);
+
 	OnEvent(myEvent);
 }
 void WorkThread::OnRecv(TcpEvent* tcpEvent)
@@ -573,7 +599,7 @@ void WorkThread::CheckConnectStatus()
 	}
 	auto& port = m_IsLastConnectPrimary ? m_AccountInfo.BackupPort : m_AccountInfo.PrimaryPort;
 	m_IsLastConnectPrimary = !m_IsLastConnectPrimary;
-	TcpThread::GetInstance().Connect(m_AccountInfo.IP.c_str(), atoi(port.c_str()));
+	m_TcpClient->Connect(m_AccountInfo.IP.c_str(), atoi(port.c_str()));
 	m_ConnectStatus = ConnectStatus::Connecting;
 }
 void WorkThread::CheckLogonStatus()

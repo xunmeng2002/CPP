@@ -7,6 +7,9 @@
 #include "TradeApiReqFields.h"
 #include "MyEvent.h"
 #include "TcpEvent.h"
+#include "TcpSubscriber.h"
+#include "TcpClient.h"
+#include "TcpServer.h"
 #include <vector>
 #include <set>
 #include <map>
@@ -20,13 +23,14 @@ class FixMessage;
 class FixMessageParse;
 class TradeApi;
 
-class WorkThread : public ThreadBase, public TradeSpi
+class WorkThread : public ThreadBase, public TradeSpi, public TcpSubscriber
 {
 	WorkThread(const char* name = "WorkThread");
 	WorkThread(const WorkThread&) = delete;
 	WorkThread& operator=(const WorkThread&) = delete;
 public:
 	static WorkThread& GetInstance();
+	void SetTcpInfo(TcpClient* tcpClient, TcpServer* tcpServer);
 	bool Init();
 	void InitReqMessage(ReqHeader* reqHeader);
 	void InitRspMessage(RspHeader* rspHeader);
@@ -39,7 +43,9 @@ public:
 	void OnEventDoResendRequest(int beginSeqNo, int endSeqNo);
 	void OnEventDoLogout();
 	void OnEventTestRequest(const string& testReqID = "");
-	void OnRecv(TcpEvent* tcpEvent);
+	virtual void OnConnect(int sessionID, const char* ip, int port) override;
+	virtual void OnDisConnect(int sessionID, const char* ip, int port) override;
+	virtual void OnRecv(TcpEvent* tcpEvent) override;
 	void UpdateLastSendTime();
 
 public:
@@ -118,8 +124,8 @@ private:
 
 private:
 	static WorkThread m_Instance;
-
-	std::mutex m_ThreadMutex;
+	TcpClient* m_TcpClient;
+	TcpServer* m_TcpServer;
 
 	string m_SenderCompID;
 	AccountInfo m_AccountInfo;

@@ -4,10 +4,10 @@
 
 using namespace std;
 
-ConnectData* ConnectData::Allocate(int sessionID, const SOCKET& socketID, const string& clientIP, int clientPort)
+ConnectData* ConnectData::Allocate(int sessionID, const SOCKET& socketID, const string& remoteIP, int remotePort)
 {
 	ConnectData* connectData = MemCacheTemplateSingleton<ConnectData>::GetInstance().Allocate();
-	connectData->Set(sessionID, socketID, clientIP, clientPort);
+	connectData->Set(sessionID, socketID, remoteIP, remotePort);
 	return connectData;
 }
 void ConnectData::Free()
@@ -16,10 +16,10 @@ void ConnectData::Free()
 	MemCacheTemplateSingleton<ConnectData>::GetInstance().Free(this);
 }
 
-void ConnectData::Set(int sessionID, const SOCKET& socketID, const string& clientIP, int clientPort)
+void ConnectData::Set(int sessionID, const SOCKET& socketID, const string& remoteIP, int remotePort)
 {
 	SessionID = sessionID;
 	SocketID = socketID;
-	ClientIP = clientIP;
-	ClientPort = clientPort;
+	RemoteIP = remoteIP;
+	RemotePort = remotePort;
 }

@@ -4,7 +4,8 @@
 #include <signal.h>
 #include<stdlib.h>
 #include "Logger.h"
-#include "TcpThread.h"
+#include "TcpSelectClient.h"
+#include "TcpSelectServer.h"
 #include "WorkThread.h"
 #include "AccountInfo.h"
 #include "EnumDict.h"
@@ -14,19 +15,6 @@ using namespace std;
 
 constexpr char* DB_Name = "CME.db";
 
-void OnExit()
-{
-	WRITE_LOG(LogLevel::Info, "OnExit");
-	TcpThread::GetInstance().Stop();
-	TcpThread::GetInstance().Join();
-
-	WorkThread::GetInstance().Stop();
-	WorkThread::GetInstance().Join();
-	
-
-	Logger::GetInstance().Stop();
-	Logger::GetInstance().Join();
-}
 
 struct MarketSegment
 {
@@ -88,7 +76,6 @@ void ReqOrderCancelReplace(int origOrderLocalID, double newPrice, int newVolume)
 
 int main(int argc, char* argv[])
 {
-	atexit(OnExit);
 	InitMarketSegMent();
 
 	Logger::GetInstance().Init(argv[0]);
@@ -100,14 +87,18 @@ int main(int argc, char* argv[])
 	TradeApiTables::GetInstance().CreateAllTables();
 	TradeApiTables::GetInstance().SelectAllTables();
 
-	TcpThread::GetInstance().SetTcpInfo();
-	if (!TcpThread::GetInstance().Init())
+
+	TcpSelectClient* tcpClient = new TcpSelectClient(&WorkThread::GetInstance());
+	TcpSelectServer* tcpServer = new TcpSelectServer(&WorkThread::GetInstance());
+	tcpClient->SetTcpInfo();
+	if (!tcpClient->Init())
 	{
-		WRITE_LOG(LogLevel::Error, "TcpThread Init Failed.");
+		WRITE_LOG(LogLevel::Error, "TcpSelectClient Init Failed.");
 		return -1;
 	}
-	TcpThread::GetInstance().Start();
+	tcpClient->Start();
 
+	WorkThread::GetInstance().SetTcpInfo(tcpClient, tcpServer);
 	if (!WorkThread::GetInstance().Init())
 	{
 		WRITE_LOG(LogLevel::Error, "WorkThread Init Failed.");
@@ -156,6 +147,17 @@ int main(int argc, char* argv[])
 		Sleep(10000);
 	}
 
+	
+
+	WRITE_LOG(LogLevel::Info, "OnExit");
+	tcpClient->Stop();
+	tcpClient->Join();
+
+	WorkThread::GetInstance().Stop();
+	WorkThread::GetInstance().Join();
+
+	Logger::GetInstance().Stop();
+	Logger::GetInstance().Join();
 	sqlite3_close(db);
 	return 0;
 }

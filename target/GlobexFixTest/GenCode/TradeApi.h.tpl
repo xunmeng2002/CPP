@@ -2,6 +2,7 @@
 #include "TradeApiReqFields.h"
 #include "Event.h"
 #include "Logger.h"
+#include "TcpClient.h"
 #include <string>
 
 using namespace std;
@@ -9,7 +10,7 @@ using namespace std;
 class TradeApi
 {
 public:
-	TradeApi();
+	TradeApi(TcpClient* tcpClient);
 	
 	void OnSessionConnected(int sessionID);
 	
@@ -42,10 +43,11 @@ protected:
 
 		GlobalParam::GetInstance().IncreaseNextSendSeqNum();
 		WorkThread::GetInstance().UpdateLastSendTime();
-		TcpThread::GetInstance().Send(tcpEvent);
+		m_TcpClient->Send(tcpEvent);
 	}
 
 protected:
+	TcpClient* m_TcpClient;
 	int m_SessionID;
 	char* m_LogBuff;
 };

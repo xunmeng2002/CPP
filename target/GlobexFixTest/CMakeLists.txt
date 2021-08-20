@@ -5,7 +5,6 @@ project(${PROJECT_NAME})
 
 
 add_package(src ./src)
-add_package(TcpThread ./TcpThread)
 add_package(WorkThread ./WorkThread)
 add_package(TradeApi ./TradeApi)
 add_package(GenCode ./GenCode)
@@ -18,6 +17,8 @@ add_package(jsoncpp ../../source/jsoncpp)
 add_package(SocketInit ../../source/SocketInit)
 add_package(CacheList ../../source/CacheList)
 add_package(Mdb ../../source/Mdb/GenCode)
+add_package(TcpBase ../../source/Tcp/TcpBase)
+add_package(TcpSelect ../../source/Tcp/TcpSelect)
 
 add_package(cryptopp ../../libs/cryptopp/8.5.0/include)
 add_package(SQLite ../../libs/SQLite/3.36.0/include)

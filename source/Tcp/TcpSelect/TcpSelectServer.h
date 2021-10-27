@@ -5,13 +5,14 @@
 class TcpSelectServer : public TcpSelectBase
 {
 public:
-	TcpSelectServer(TcpSubscriber* subscriber);
+	TcpSelectServer();
 
 	void SetBindAddress(const char* ip, int port, int backLog = 5);
 	virtual bool Init() override;
 
 protected:
-	bool Listen();
+	int Bind();
+	int Listen();
 	virtual void PrepareFds() override;
 	virtual void DoAccept() override;
 

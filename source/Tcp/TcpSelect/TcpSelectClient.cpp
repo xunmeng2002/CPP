@@ -1,11 +1,10 @@
 #include "TcpSelectClient.h"
 #include "Logger.h"
-#include "WorkThread.h"
 
 using namespace std;
 
-TcpSelectClient::TcpSelectClient(TcpSubscriber* subscriber)
-	:TcpSelectBase("TcpSelectClient", subscriber)
+TcpSelectClient::TcpSelectClient()
+	:TcpSelectBase("TcpSelectClient")
 {
 	FD_ZERO(&m_ConnectFds);
 }
@@ -29,15 +28,11 @@ void TcpSelectClient::DoConnect(const string& ip, int port)
 	m_RemoteAddress.sin_port = htons(port);
 
 	SOCKET socketID = socket(m_AF, m_Type, 0);
-	int on = 1;
-	int ret = setsockopt(socketID, SOL_SOCKET, SO_REUSEADDR, (char*)&on, sizeof(on));
-	WRITE_LOG(LogLevel::Info, "setsockopt: ret[%d]", ret);
+	SetSockReuse(socketID);
+	SetSockUnblock(socketID);
+	SetSockNodelay(socketID);
 
-	unsigned long unblock = 1;
-	ret = ::ioctlsocket(socketID, FIONBIO, &unblock);
-	WRITE_LOG(LogLevel::Info, "ioctlsocket: ret[%d]", ret);
-
-	ret = connect(socketID, (sockaddr*)&m_RemoteAddress, m_AddressLen);
+	auto ret = connect(socketID, (sockaddr*)&m_RemoteAddress, m_AddressLen);
 	WRITE_LOG(LogLevel::Info, "Connect Server: ret[%d]", ret);
 
 	int sessionID = ++m_MaxSessionID;

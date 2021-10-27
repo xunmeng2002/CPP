@@ -1,7 +1,9 @@
 #pragma once
 
 #include <chrono>
+#include <string>
 
+using namespace std;
 
 #define TIMERSTART(tag)  auto tag##_start = std::chrono::steady_clock::now()
 #define TIMEREND(tag)  auto tag##_end =  std::chrono::steady_clock::now()
@@ -12,12 +14,17 @@
 
 tm* GetTime();
 
-int GetTimeStamp();
+long long GetUnixTimeStamp();
+string GetDateFromUnixTimeStamp(long long timeStamp);
+string GetTimeFromUnixTimeStamp(long long timeStamp);
 
-//write format datetime into buff. format:YYYYMMDD HH:mm:ss.ms
-void GetFormatDateTime(char* buff, int size);
-//write format time into buff. format:HH:mm:ss.ms
-void GetFormatTime(char* buff, int size);
+string GetFormatDateTime();
+string GetFormatDate();
+string GetFormatTime();
+string GetFormatTimeMilliSecond();
+std::string GetUtcTime();
+string GetDateFromUtcTime(string utcTime);
+string GetTimeFromUtcTime(string utcTime);
 
 template<typename T>
 long long GetDuration(std::chrono::system_clock::time_point& start, std::chrono::system_clock::time_point& end)

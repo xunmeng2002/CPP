@@ -9,6 +9,7 @@ MyEvent* MyEvent::Allocate()
 
 void MyEvent::Free()
 {
+	Field = nullptr;
 	NumParams.clear();
 	StringParams.clear();
 

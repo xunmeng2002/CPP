@@ -1,20 +1,22 @@
 #pragma once
 
+#include <set>
 #include <map>
 #include "ThreadBase.h"
 #include "SocketInit.h"
 #include "TcpEvent.h"
 #include "ConnectData.h"
-#include "TcpSubscriber.h"
-#include "TcpClient.h"
-#include "TcpServer.h"
+#include "TcpInterface.h"
 
 
-class TcpSelectBase : public ThreadBase, public TcpClient, public TcpServer
+
+class TcpSelectBase : public ThreadBase, public TcpPublisher
 {
 public:
-	TcpSelectBase(const char* name, TcpSubscriber* subscriber);
+	TcpSelectBase(const char* name);
 
+	void Subscriber(TcpSubscriber* subscriber);
+	void UnSubscriber(TcpSubscriber* subscriber);
 	void SetTcpInfo(long timeOut = 1000000, int af = AF_INET, int type = SOCK_STREAM, int protocol = IPPROTO_TCP);
 	virtual bool Init() = 0;
 	virtual void Connect(const char* ip, int port) {}
@@ -32,18 +34,21 @@ protected:
 	virtual void DoAccept() {}
 	virtual void DoSend();
 	virtual void DoRecv();
+	virtual void HandleOtherTask() {}
 
 
 	void AddConnect(ConnectData* connectData);
 	void RemoveConnect(ConnectData* connectData);
 	ConnectData* GetConnect(int sessionID);
-
+	int SetSockReuse(SOCKET socketID);
+	int SetSockUnblock(SOCKET socketID);
+	int SetSockNodelay(SOCKET socketID);
 
 	TcpEvent* GetSendEvent(int sessionID);
 	void PushSendEvent(TcpEvent* tcpEvent);
 
 protected:
-	TcpSubscriber* m_Subscriber;
+	set<TcpSubscriber*> m_Subscribers;
 
 	int m_AF;
 	int m_Type;

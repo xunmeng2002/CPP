@@ -1,53 +1,117 @@
 <root>
-	<tables>
-		<table name="Order">
+	<tables len="32">
+		<table name="CmeProduct">
 			<items>
-				<item name="BrokerID" type="string"/>
-				<item name="AccountID" type="string"/>
-				<item name="ExchangeID" type="string"/>
-				<item name="InstrumentID" type="string"/>
-				<item name="Direction" type="enum"/>
-				<item name="OrderType" type="enum"/>
-				<item name="Price" type="double"/>
-				<item name="Volume" type="int"/>
-				<item name="VolumeTraded" type="int"/>
-				<item name="OrderStatus" type="enum"/>
-				<item name="OrderLocalID" type="string"/>
-				<item name="OrderSysID" type="string"/>
-				<item name="Symbol" type="string"/>
-				<item name="TimeInForce" type="enum"/>
-				<item name="TransactTime" type="string"/>
-				<item name="SecurityType" type="string"/>
+				<item column="0" name="ExchangeID" type="string"/>
+				<item column="1" name="ProductID" type="string"/>
+				<item column="3" name="MarketSegmentID" type="string"/>
 			</items>
 			<primarykey>
-				<item name="BrokerID"/>
-				<item name="AccountID"/>
 				<item name="ExchangeID"/>
-				<item name="InstrumentID"/>
+				<item name="ProductID"/>
+			</primarykey>
+		</table>
+		<table name="CmeInstrumentBrief">
+			<items>
+				<item column="0" name="ExchangeID" type="string"/>
+				<item column="1" name="ProductID" type="string"/>
+				<item column="2" name="ContractID" type="string"/>
+				<item column="3" name="ITCAlias" type="string"/>
+				<item column="4" name="GenCode" type="string"/>
+				<item column="5" name="MktID" type="string"/>
+				<item column="6" name="MarketSegmentID" type="string"/>
+			</items>
+			<primarykey>
+				<item name="ExchangeID"/>
+				<item name="ContractID"/>
+			</primarykey>
+		</table>
+		<table name="Order">
+			<items>
+				<item column="0" name="AccountID" type="string"/>
+				<item column="1" name="ExchangeID" type="string"/>
+				<item column="2" name="ContractID" type="string"/>
+				<item column="3" name="MarketSegmentID" type="string"/>
+				<item column="4" name="InstrumentID" type="string"/>
+				<item column="5" name="OrderLocalID" type="int"/>
+				<item column="6" name="OrderSysID" type="string"/>
+				<item column="7" name="Direction" type="enum"/>
+				<item column="8" name="OffsetFlag" type="enum"/>
+				<item column="9" name="HedgeFlag" type="enum"/>
+				<item column="10" name="OrderPriceType" type="enum"/>
+				<item column="11" name="Price" type="double"/>
+				<item column="12" name="Volume" type="int"/>
+				<item column="13" name="VolumeTraded" type="int"/>
+				<item column="14" name="OrderStatus" type="enum"/>
+				<item column="15" name="StatusMsg" type="string"/>
+				<item column="16" name="RequestID" type="string"/>
+				<item column="17" name="FrontID" type="string"/>
+				<item column="18" name="SessionID" type="int"/>
+				<item column="19" name="InsertTime" type="string"/>
+				<item column="20" name="CancelTime" type="string"/>
+				<item column="21" name="InsertDate" type="string"/>
+				<item column="22" name="TradingDay" type="string"/>
+				<item column="23" name="ForceCloseReason" type="enum"/>
+				<item column="24" name="IsLocalOrder" type="enum"/>
+				<item column="25" name="UserProductInfo" type="string"/>
+				<item column="26" name="TimeCondition" type="enum"/>
+				<item column="27" name="GTDDate" type="string"/>
+				<item column="28" name="VolumeCondition" type="enum"/>
+				<item column="29" name="MinVolume" type="int"/>
+				<item column="30" name="ContingentCondition" type="enum"/>
+				<item column="31" name="StopPrice" type="string"/>
+				<item column="32" name="IsSwapOrder" type="string"/>
+			</items>
+			<primarykey>
+				<item name="TradingDay"/>
+				<item name="OrderLocalID"/>
+			</primarykey>
+		</table>
+		<table name="OrderCancel">
+			<items>
+				<item column="0" name="AccountID" type="string"/>
+				<item column="1" name="ExchangeID" type="string"/>
+				<item column="2" name="ContractID" type="string"/>
+				<item column="3" name="MarketSegmentID" type="string"/>
+				<item column="4" name="InstrumentID" type="string"/>
+				<item column="5" name="OrderLocalID" type="int"/>
+				<item column="6" name="OrigOrderLocalID" type="int"/>
+				<item column="7" name="OrderSysID" type="string"/>
+				<item column="8" name="Direction" type="enum"/>
+				<item column="9" name="OrderRef" type="string"/>
+				<item column="10" name="FrontID" type="string"/>
+				<item column="11" name="SessionID" type="int"/>
+				<item column="12" name="ErrorID" type="int"/>
+				<item column="13" name="ErrorMsg" type="string"/>
+				<item column="14" name="TradingDay" type="string"/>
+			</items>
+			<primarykey>
+				<item name="TradingDay"/>
 				<item name="OrderLocalID"/>
 			</primarykey>
 		</table>
 		<table name="Trade">
 			<items>
-				<item name="BrokerID" type="string"/>
-				<item name="AccountID" type="string"/>
-				<item name="ExchangeID" type="string"/>
-				<item name="InstrumentID" type="string"/>
-				<item name="Direction" type="enum"/>
-				<item name="Price" type="double"/>
-				<item name="Volume" type="int"/>
-				<item name="TradeID" type="string"/>
-				<item name="OrderLocalID" type="string"/>
-				<item name="OrderSysID" type="string"/>
-				<item name="Symbol" type="string"/>
-				<item name="TimeInForce" type="enum"/>
-				<item name="TransactTime" type="string"/>
+				<item column="0" name="AccountID" type="string"/>
+				<item column="1" name="ExchangeID" type="string"/>
+				<item column="2" name="ContractID" type="string"/>
+				<item column="3" name="MarketSegmentID" type="string"/>
+				<item column="4" name="InstrumentID" type="string"/>
+				<item column="5" name="TradeID" type="string"/>
+				<item column="6" name="Direction" type="enum"/>
+				<item column="7" name="OffsetFlag" type="enum"/>
+				<item column="8" name="HedgeFlag" type="enum"/>
+				<item column="9" name="Price" type="double"/>
+				<item column="10" name="Volume" type="int"/>
+				<item column="11" name="OrderLocalID" type="int"/>
+				<item column="12" name="OrderSysID" type="string"/>
+				<item column="13" name="TradeTime" type="string"/>
+				<item column="14" name="TradeDate" type="string"/>
+				<item column="15" name="TradingDay" type="string"/>
 			</items>
 			<primarykey>
-				<item name="BrokerID"/>
-				<item name="AccountID"/>
-				<item name="ExchangeID"/>
-				<item name="InstrumentID"/>
+				<item name="TradingDay"/>
+				<item name="OrderSysID"/>
 				<item name="TradeID"/>
 			</primarykey>
 		</table>

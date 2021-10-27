@@ -1,6 +1,0 @@
-<pumplist>
-	<pump dest="./source/Mdb/GenCode/Mdb.h" tpl="./source/Mdb/GenCode/Mdb.h.tpl" model="./model/mdb/Mdb.xml"/>
-	<pump dest="./source/Mdb/GenCode/Mdb.cpp" tpl="./source/Mdb/GenCode/Mdb.cpp.tpl" model="./model/mdb/Mdb.xml"/>
-	<pump dest="./source/Mdb/GenCode/EnumDict.h" tpl="./source/Mdb/GenCode/EnumDict.h.tpl" model="./model/mdb/EnumDict.xml"/>
-	<pump dest="./source/Mdb/GenCode/EnumDict.cpp" tpl="./source/Mdb/GenCode/EnumDict.cpp.tpl" model="./model/mdb/EnumDict.xml"/>
-</pumplist>

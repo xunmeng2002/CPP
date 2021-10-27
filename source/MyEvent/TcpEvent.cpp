@@ -2,10 +2,11 @@
 #include "MemCacheTemplateSingleton.h"
 
 TcpEvent::TcpEvent(int buffSize)
-	:SessionID(0), Length(0)
+	:SessionID(0), IP(""), Port(0)
 {
 	Buff = new char[buffSize];
 	ReadPos = Buff;
+	Length = 0;
 }
 TcpEvent::~TcpEvent()
 {
@@ -22,7 +23,13 @@ TcpEvent* TcpEvent::Allocate()
 }
 void TcpEvent::Free()
 {
+	memset(Buff, 0, BuffSize);
 	ReadPos = Buff;
 	Length = 0;
 	MemCacheTemplateSingleton<TcpEvent>::GetInstance().Free(this);
+}
+void TcpEvent::Shift(int len)
+{
+	ReadPos += len;
+	Length -= len;
 }

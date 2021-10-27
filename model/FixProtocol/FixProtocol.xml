@@ -1,4 +1,4 @@
-<root>
+<root len="32">
 	<Headers>
 		<field name="ReqHeader">
 			<item name="BeginString"/>
@@ -37,39 +37,39 @@
 		</field>
 	</Trailers>
 	<ReqFields>
-		<field name="ReqLogon" msgtype="A">
+		<field name="ReqLogon" msgtype="A" msgClass="admin">
 			<item name="HeartBtInt"/>
 			<item name="ResetSeqNumFlag"/>
 			<item name="ApplicationSystemName"/>
 			<item name="ApplicationSystemVersion"/>
 			<item name="ApplicationSystemVendor"/>
 			<item name="EncodedTextLen"/>
-			<item name="EncodedText"/>
+			<item name="EncodedText" len="128"/>
 			<item name="EncryptedPasswordMethod"/>
 			<item name="EncryptedPasswordLen"/>
-			<item name="EncryptedPassword"/>
+			<item name="EncryptedPassword" len="128"/>
 		</field>
-		<field name="ReqLogout" msgtype="5">
-			<item name="Text"/>
+		<field name="ReqLogout" msgtype="5" msgClass="admin">
+			<item name="Text" len="255"/>
 			<item name="NextExpectedMsgSeqNum"/>
 			<item name="SplitMsg"/>
 		</field>
-		<field name="ReqHeartBeat" msgtype="0">
+		<field name="ReqHeartBeat" msgtype="0" msgClass="admin">
 			<item name="TestReqID"/>
 			<item name="SplitMsg"/>
 		</field>
-		<field name="ReqTestRequest" msgtype="1">
+		<field name="ReqTestRequest" msgtype="1" msgClass="admin">
 			<item name="TestReqID"/>
 		</field>
-		<field name="ReqResendRequest" msgtype="2">
+		<field name="ReqResendRequest" msgtype="2" msgClass="admin">
 			<item name="BeginSeqNo"/>
 			<item name="EndSeqNo"/>
 		</field>
-		<field name="ReqSequenceReset" msgtype="4">
+		<field name="ReqSequenceReset" msgtype="4" msgClass="admin">
 			<item name="NewSeqNo"/>
 			<item name="GapFillFlag"/>
 		</field>
-		<field name="ReqNewOrder" msgtype="D">
+		<field name="ReqNewOrder" msgtype="D" msgClass="app">
 			<item name="Account"/>
 			<item name="ClOrdID"/>
 			<item name="HandInst"/>
@@ -103,7 +103,7 @@
 			<item name="CorrelationClOrdID"/>
 			<item name="MarketSegmentID"/>
 		</field>
-		<field name="ReqOrderCancelRequest" msgtype="F">
+		<field name="ReqOrderCancelRequest" msgtype="F" msgClass="app">
 			<item name="Account"/>
 			<item name="ClOrdID"/>
 			<item name="OrderID"/>
@@ -117,7 +117,7 @@
 			<item name="SecurityType"/>
 			<item name="CorrelationClOrdID"/>
 		</field>
-		<field name="ReqOrderCancelReplaceRequest" msgtype="G">
+		<field name="ReqOrderCancelReplaceRequest" msgtype="G" msgClass="app">
 			<item name="Account"/>
 			<item name="ClOrdID"/>
 			<item name="OrderID"/>
@@ -129,7 +129,7 @@
 			<item name="Price"/>
 			<item name="Side"/>
 			<item name="Symbol"/>
-			<item name="Text"/>
+			<item name="Text" len="255"/>
 			<item name="TimeInForce"/>
 			<item name="ManualOrderIndicator"/>
 			<item name="TransactTime"/>
@@ -152,7 +152,7 @@
 			<item name="CorrelationClOrdID"/>
 			<item name="OFMOverride"/>
 		</field>
-		<field name="ReqOrderStatusRequest" msgtype="H">
+		<field name="ReqOrderStatusRequest" msgtype="H" msgClass="app">
 			<item name="ClOrdID"/>
 			<item name="OrderID"/>
 			<item name="Side"/>
@@ -165,7 +165,7 @@
 		</field>
 	</ReqFields>
 	<RspFields>
-		<field name="RspLogon" msgtype="A">
+		<field name="RspLogon" msgtype="A" msgClass="admin">
 			<item name="HeartBtInt"/>
 			<item name="ResetSeqNumFlag"/>
 			<item name="ApplicationSystemName"/>
@@ -173,35 +173,35 @@
 			<item name="ApplicationSystemVendor"/>
 			<item name="SplitMsg"/>
 		</field>
-		<field name="RspLogout" msgtype="5">
-			<item name="Text"/>
+		<field name="RspLogout" msgtype="5" msgClass="admin">
+			<item name="Text" len="255"/>
 			<item name="NextExpectedMsgSeqNum"/>
 			<item name="SplitMsg"/>
 		</field>
-		<field name="RspHeartBeat" msgtype="0">
+		<field name="RspHeartBeat" msgtype="0" msgClass="admin">
 			<item name="TestReqID"/>
 			<item name="SplitMsg"/>
 		</field>
-		<field name="RspTestRequest" msgtype="1">
+		<field name="RspTestRequest" msgtype="1" msgClass="admin">
 			<item name="TestReqID"/>
 		</field>
-		<field name="RspResendRequest" msgtype="2">
+		<field name="RspResendRequest" msgtype="2" msgClass="admin">
 			<item name="BeginSeqNo"/>
 			<item name="EndSeqNo"/>
 		</field>
-		<field name="RspSessionLevelReject" msgtype="3">
+		<field name="RspSessionLevelReject" msgtype="3" msgClass="admin">
 			<item name="RefSeqNum"/>
-			<item name="Text"/>
+			<item name="Text" len="255"/>
 			<item name="RefTagID"/>
 			<item name="SessionRejectReason"/>
 			<item name="ManualOrderIndicator"/>
 			<item name="SplitMsg"/>
 		</field>
-		<field name="RspSequenceReset" msgtype="4">
+		<field name="RspSequenceReset" msgtype="4" msgClass="admin">
 			<item name="NewSeqNo"/>
 			<item name="GapFillFlag"/>
 		</field>
-		<field name="ExecutionReport" msgtype="8">
+		<field name="ExecutionReport" msgtype="8" msgClass="app">
 			<item name="Account"/>
 			<item name="AvgPx"/>
 			<item name="ClOrdID"/>
@@ -220,7 +220,7 @@
 			<item name="SecurityID"/>
 			<item name="Side"/>
 			<item name="Symbol"/>
-			<item name="Text"/>
+			<item name="Text" len="255"/>
 			<item name="TimeInForce"/>
 			<item name="TransactTime"/>
 			<item name="SettlDate"/>
@@ -275,7 +275,7 @@
 			<item name="MDTradeEntryID"/>
 			<item name="MarketSegmentID"/>
 		</field>
-		<field name="RspOrderCancelReject" msgtype="9">
+		<field name="RspOrderCancelReject" msgtype="9" msgClass="app">
 			<item name="Account"/>
 			<item name="ClOrdID"/>
 			<item name="ExecID"/>
@@ -283,7 +283,7 @@
 			<item name="OrderStatus"/>
 			<item name="OrigClOrdID"/>
 			<item name="SecurityID"/>
-			<item name="Text"/>
+			<item name="Text" len="255"/>
 			<item name="TransactTime"/>
 			<item name="CxlRejReason"/>
 			<item name="SecurityDesc"/>
@@ -298,6 +298,54 @@
 			<item name="SplitMsg"/>
 		</field>
 	</RspFields>
+	<AuditTrail>
+		<item name="SendingTimestamps" desc="Sending Timestamps"/>
+		<item name="ReceivingTimestamps" desc="Receiving Timestamps"/>
+		<item name="MessageDirection" desc="Message Direction"/>
+		<item name="OperatorID" desc="Operator ID" key="57"/>
+		<item name="SelfMatchPreventionID" desc="Self-Match Prevention ID" key="7928"/>
+		<item name="Account" desc="Account Number" key="1"/>
+		<item name="SessionID" desc="Session ID"/>
+		<item name="ExecutingFirmID" desc="Executing Firm ID"/>
+		<item name="ManualOrderIndicator" desc="Manual Order Identifier" key="1028"/>
+		<item name="MsgType" desc="Message Type" key="35"/>
+		<item name="CtiCode" desc="Customer Type Indicator" key="9702"/>
+		<item name="CustomerOrFirm" desc="Origin" key="204"/>
+		<item name="ExecID" desc="CME Globex Message ID" key="17"/>
+		<item name="MessageLinkID" desc="Message Link ID"/>
+		<item name="CorrelationClOrdID" desc="Order Flow ID " key="9717"/>
+		<item name="SecondaryExecID" desc="Spread/Leg Link ID" key="527"/>
+		<item name="SecurityDesc" desc="Instrument Description" key="107"/>
+		<item name="MarketSegmentID" desc="Market Segment ID" key="1300"/>
+		<item name="ClOrdID" desc="Client Order ID" key="11"/>
+		<item name="OrderID" desc="CME Globex Order ID" key="37"/>
+		<item name="Side" desc="Buy/Sell Indicator" key="54"/>
+		<item name="OrderQty" desc="Quantity" key="38"/>
+		<item name="Price" desc="Limit Price" key="44"/>
+		<item name="StopPx" desc="Stop Price" key="99"/>
+		<item name="OrdType" desc="Order Type" key="40"/>
+		<item name="TimeInForce" desc="Order Qualifier" key="59"/>
+		<item name="OFMOverride" desc="IFM Flag" key="9768"/>
+		<item name="MaxShow" desc="Display Quantity" key="210"/>
+		<item name="MinQty" desc="Minimum Quantity" key="110"/>
+		<item name="SenderLocationID" desc="Country of Origin" key="142"/>
+		<item name="LastPx" desc="Fill Price" key="31"/>
+		<item name="LastQty" desc="Fill Quantity" key="32"/>
+		<item name="CumQty" desc="Cumulative Quantity" key="14"/>
+		<item name="LeavesQty" desc="Remaining Quantity" key="151"/>
+		<item name="AggressorIndicator" desc="Aggressor Flag" key="1057"/>
+		<item name="ExecRestatementReason" desc="Source of Cancellation" key="378"/>
+		<item name="RejectReason" desc="Reject Reason"/>
+		<item name="NoProcessedEntries" desc="Processed Quotes" key="9772"/>
+		<item name="CrossID" desc="Cross ID" key="548"/>
+		<item name="QuoteReqID" desc="Quote Request ID" key="131"/>
+		<item name="QuoteID" desc="Message Quote ID" key="117"/>
+		<item name="QuoteEntryID" desc="Quote Entry ID" key="299"/>
+		<item name="BidPx" desc="Bid Price" key="132"/>
+		<item name="BidSize" desc="Bid Size" key="134"/>
+		<item name="OfferPx" desc="Offer Price" key="133"/>
+		<item name="OfferSize" desc="Offer Size" key="135"/>
+	</AuditTrail>
 	<items>
 		<item name="Account" key="1"/>
 		<item name="AvgPx" key="6"/>
@@ -307,11 +355,13 @@
 		<item name="CheckSum" key="10"/>
 		<item name="ClOrdID" key="11"/>
 		<item name="CumQty" key="14"/>
+		<item name="Currency" key="15"/>
 		<item name="EndSeqNo" key="16"/>
 		<item name="ExecID" key="17"/>
 		<item name="ExecRefID" key="19"/>
 		<item name="ExecTransType" key="20"/>
 		<item name="HandInst" key="21"/>
+		<item name="SecurityIDSource" key="22"/>
 		<item name="LastPx" key="31"/>
 		<item name="LastQty" key="32"/>
 		<item name="MsgType" key="35"/>
@@ -347,16 +397,26 @@
 		<item name="HeartBtInt" key="108"/>
 		<item name="MinQty" key="110"/>
 		<item name="TestReqID" key="112"/>
+		<item name="QuoteID" key="117"/>
 		<item name="OrigSendingTime" key="122"/>
 		<item name="GapFillFlag" key="123"/>
+		<item name="QuoteReqID" key="131"/>
+		<item name="BidPx" key="132"/>
+		<item name="OfferPx" key="133"/>
+		<item name="BidSize" key="134"/>
+		<item name="OfferSize" key="135"/>
 		<item name="ResetSeqNumFlag" key="141"/>
 		<item name="SenderLocationID" key="142"/>
 		<item name="TargetLocationID" key="143"/>
 		<item name="ExecType" key="150"/>
 		<item name="LeavesQty" key="151"/>
 		<item name="SecurityType" key="167"/>
+		<item name="MaturityMonthYear" key="200"/>
 		<item name="CustomerOrFirm" key="204"/>
+		<item name="SecurityExchange" key="207"/>
 		<item name="MaxShow" key="210"/>
+		<item name="MarketDepth" key="264"/>
+		<item name="QuoteEntryID" key="299"/>
 		<item name="ContraTrader" key="337"/>
 		<item name="EncodedTextLen" key="354"/>
 		<item name="EncodedText" key="355"/>
@@ -371,21 +431,49 @@
 		<item name="ExpireDate" key="432"/>
 		<item name="CancelRejResponseTo" key="434"/>
 		<item name="MultiLegReportingType" key="442"/>
+		<item name="CFICode" key="461"/>
+		<item name="UnderlyingProduct" key="462"/>
 		<item name="SecondaryExecID" key="527"/>
 		<item name="CrossID" key="548"/>
 		<item name="CrossType" key="549"/>
+		<item name="MinTradeVol" key="562"/>
 		<item name="MassStatusReqID" key="584"/>
+		<item name="SettlPriceType" key="731"/>
+		<item name="LastUpdateTime" key="779"/>
 		<item name="NextExpectedMsgSeqNum" key="789"/>
 		<item name="UnderlyingPx" key="810"/>
 		<item name="OptionDelta" key="811"/>
 		<item name="AvgPXIndicator" key="819"/>
+		<item name="NoEvents" key="864"/>
+		<item name="EventType" key="865"/>
+		<item name="NoInstAttrib" key="870"/>
+		<item name="InstAttribType" key="871"/>
+		<item name="InstAttribValue" key="872"/>
 		<item name="LastRptRequest" key="912"/>
 		<item name="HostCrossID" key="961"/>
+		<item name="MinPriceIncrement" key="969"/>
+		<item name="SecurityUpdateAction" key="980"/>
+		<item name="UnitOfMeasure" key="996"/>
+		<item name="MDFeedType" key="1022"/>
 		<item name="ManualOrderIndicator" key="1028"/>
 		<item name="CustOrderHandlingInst" key="1031"/>
+		<item name="AggressorIndicator" key="1057"/>
+		<item name="MaxTradeVol" key="1140"/>
+		<item name="NoMdFeedTypes" key="1141"/>
+		<item name="MatchAlgorithm" key="1142"/>
+		<item name="MaxPriceVariation" key="1143"/>
+		<item name="EventTime" key="1145"/>
+		<item name="MinPriceIncrementAmount" key="1146"/>
+		<item name="UnitOfMeasureQty" key="1147"/>
+		<item name="LowLimitPrice" key="1148"/>
+		<item name="HighLimitPrice" key="1149"/>
+		<item name="TradingReferencePrice" key="1150"/>
+		<item name="SecurityGroup" key="1151"/>
+		<item name="ApplID" key="1180"/>
 		<item name="Volatility" key="1188"/>
 		<item name="ExpirationTimeValue" key="1189"/>
 		<item name="RiskFreeRate" key="1190"/>
+		<item name="NoLotTypeRules" key="1234"/>
 		<item name="MarketSegmentID" key="1300"/>
 		<item name="NoFills" key="1362"/>
 		<item name="FillExecID" key="1363"/>
@@ -401,8 +489,14 @@
 		<item name="FillYieldType" key="1622"/>
 		<item name="AvgPxGroupID" key="1731"/>
 		<item name="Memo" key="5149"/>
+		<item name="ClearedVolume" key="5791"/>
+		<item name="OpenInterestQty" key="5792"/>
+		<item name="TradingReferenceDate" key="5796"/>
+		<item name="MatchEventIndicator" key="5799"/>
+		<item name="DecayStartDate" key="5819"/>
 		<item name="DelayDuration" key="5904"/>
 		<item name="RequestTime" key="5979"/>
+		<item name="Asset" key="6937"/>
 		<item name="SelfMatchPreventionID" key="7928"/>
 		<item name="SelfMatchPreventionInstruction" key="8000"/>
 		<item name="SplitMsg" key="9553"/>
@@ -412,6 +506,9 @@
 		<item name="CmtaGiveupCD" key="9708"/>
 		<item name="CorrelationClOrdID" key="9717"/>
 		<item name="OFMOverride" key="9768"/>
+		<item name="NoProcessedEntries" key="9772"/>
+		<item name="UserDefinedInstrument" key="9779"/>
+		<item name="DisplayFactor" key="9787"/>
 		<item name="MDTradeEntryID" key="37711"/>
 	</items>
 </root>

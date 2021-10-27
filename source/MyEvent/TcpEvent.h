@@ -19,4 +19,5 @@ struct TcpEvent : public Event
 
 	static TcpEvent* Allocate();
 	virtual void Free() override;
+	virtual void Shift(int len);
 };

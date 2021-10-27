@@ -6,7 +6,7 @@
 class TcpSelectClient : public TcpSelectBase
 {
 public:
-	TcpSelectClient(TcpSubscriber* subscriber);
+	TcpSelectClient();
 
 	virtual bool Init() override;
 	virtual void Connect(const char* ip, int port) override;

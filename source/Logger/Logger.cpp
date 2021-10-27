@@ -129,9 +129,7 @@ void Logger::WriteToLog(LogLevel level, const char* file, int line, const char* 
 	for (auto p = file; *p != '\0'; p++)
 		if (*p == '\\' || *p == '/')
 			file = p + 1;
-	char time_buff[32];
-	GetFormatDateTime(time_buff, 32);
-	int len = sprintf(t_LogBuffer, "%s %d %s ", time_buff, GetCurrentThreadId(), s_LogLevelName[level].c_str());
+	int len = sprintf(t_LogBuffer, "%s %d %s ", GetFormatDateTime().c_str(), GetCurrentThreadId(), s_LogLevelName[level].c_str());
 
 	len += vsnprintf(t_LogBuffer + len, (sizeof(t_LogBuffer) - len - 1), format, va);
 	len += _snprintf(t_LogBuffer + len, (sizeof(t_LogBuffer) - len - 1), "\t\t---%s:%d[%s]\n", file, line, func);

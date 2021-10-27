@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<enums>
+	<enum name="Direction">
+		<item name="Buy" value="0"/>
+		<item name="Sell" value="1"/>
+	</enum>
+	<enum name="OrderPriceType">
+		<item name="AnyPrice" value="0"/>
+		<item name="Sell" value="1"/>
+	</enum>
+</enums>

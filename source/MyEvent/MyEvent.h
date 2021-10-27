@@ -9,6 +9,7 @@ using namespace std;
 
 struct MyEvent : public Event
 {
+	void* Field;
 	vector<int> NumParams;
 	vector<string> StringParams;
 

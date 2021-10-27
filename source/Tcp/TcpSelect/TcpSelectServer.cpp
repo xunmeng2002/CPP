@@ -5,8 +5,8 @@
 using namespace std;
 
 
-TcpSelectServer::TcpSelectServer(TcpSubscriber* subscriber)
-	:TcpSelectBase("TcpSelectServer", subscriber)
+TcpSelectServer::TcpSelectServer()
+	:TcpSelectBase("TcpSelectServer")
 {
 	m_ListenSocket = INVALID_SOCKET;
 	memset(&m_ListenAddress, 0, sizeof(m_ListenAddress));
@@ -19,6 +19,8 @@ void TcpSelectServer::SetBindAddress(const char* ip, int port, int backLog)
 	m_ListenAddress.sin_port = htons(port);
 	
 	m_Backlog = backLog;
+	
+	WRITE_LOG(LogLevel::Info, "TcpSelectServer SetBindAddress IP[%s], Port[%d]", ip, port);
 }
 bool TcpSelectServer::Init()
 {
@@ -28,39 +30,29 @@ bool TcpSelectServer::Init()
 	{
 		return false;
 	}
-	if (!Listen())
+	if (SetSockReuse(m_ListenSocket) == SOCKET_ERROR || SetSockUnblock(m_ListenSocket) == SOCKET_ERROR || SetSockNodelay(m_ListenSocket) == SOCKET_ERROR)
+	{
+		closesocket(m_ListenSocket);
+		return false;
+	}
+	if (Bind() == SOCKET_ERROR || Listen() == SOCKET_ERROR)
 	{
 		closesocket(m_ListenSocket);
 		return false;
 	}
 	return true;
 }
-bool TcpSelectServer::Listen()
+int TcpSelectServer::Bind()
 {
-	int on = 1;
-	int ret = setsockopt(m_ListenSocket, SOL_SOCKET, SO_REUSEADDR, (char*)&on, sizeof(on));
-	WRITE_LOG(LogLevel::Info, "setsockopt: ret[%d].\n", ret);
-
-	unsigned long unblock = 1;
-	ret = ::ioctlsocket(m_ListenSocket, FIONBIO, &unblock);
-	WRITE_LOG(LogLevel::Info, "ioctlsocket: ret[%d].\n", ret);
-	if (ret == SOCKET_ERROR)
-	{
-		return false;
-	}
-	ret = ::bind(m_ListenSocket, (sockaddr*)&m_ListenAddress, sizeof(m_ListenAddress));
-	WRITE_LOG(LogLevel::Info, "bind: ret[%d].\n", ret);
-	if (ret == SOCKET_ERROR)
-	{
-		return false;
-	}
-	ret = ::listen(m_ListenSocket, m_Backlog);
-	WRITE_LOG(LogLevel::Info, "listen: ret[%d].\n", ret);
-	if (ret == SOCKET_ERROR)
-	{
-		return false;
-	}
-	return true;
+	auto ret = ::bind(m_ListenSocket, (sockaddr*)&m_ListenAddress, sizeof(m_ListenAddress));
+	WRITE_LOG(LogLevel::Info, "bind: Port[%d], ret[%d].\n", ntohs(m_ListenAddress.sin_port), ret);
+	return ret;
+}
+int TcpSelectServer::Listen()
+{
+	auto ret = ::listen(m_ListenSocket, m_Backlog);
+	WRITE_LOG(LogLevel::Info, "listen: ret[%d].\n", ret)
+	return ret;
 }
 void TcpSelectServer::PrepareFds()
 {
@@ -74,14 +66,16 @@ void TcpSelectServer::DoAccept()
 		for (int i = 0; i < m_Backlog; i++)
 		{
 			SOCKET socketID = accept(m_ListenSocket, (sockaddr*)&m_RemoteAddress, &m_AddressLen);
-			WRITE_LOG(LogLevel::Info, "accept: socketID[%lld]", socketID);
 			if (socketID == INVALID_SOCKET)
 			{
 				break;
 			}
+			SetSockNodelay(socketID);
+
 			auto sessionID = ++m_MaxSessionID;
 			auto ip = inet_ntoa(m_RemoteAddress.sin_addr);
 			auto port = ntohs(m_RemoteAddress.sin_port);
+			WRITE_LOG(LogLevel::Info, "accept: SessionID[%d], SocketID[%lld], RemoteIP[%s], RemotePort[%d]", sessionID, socketID, ip, port);
 
 			auto connectData = ConnectData::Allocate(sessionID, socketID, ip, port);
 			AddConnect(connectData);

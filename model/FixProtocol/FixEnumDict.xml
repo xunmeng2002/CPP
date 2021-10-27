@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<enums>
+		<enum name="Direction" tag="54">
+			<item name="Buy" value="1" desc="买"/>
+			<item name="Sell" value="2" desc="卖"/>
+		</enum>
+		<enum name="OrderType" tag="40">
+			<item name="MarketOrder" value="1" desc="市价单"/>
+			<item name="LimitOrder" value="2" desc="限价单"/>
+			<item name="StopOrder" value="3" desc="止损单"/>
+			<item name="StopLimitOrder" value="4" desc="限价止损单"/>
+			<item name="MarketLimitOrder" value="K" desc=""/>
+		</enum>
+		<enum name="OrderStatus" tag="39">
+			<item name="New" value="0" desc="已报"/>
+			<item name="PartiallyFilled" value="1" desc="部分成交"/>
+			<item name="Filled" value="2" desc="全部成交"/>
+			<item name="Cancelled" value="4" desc="已撤销"/>
+			<item name="Replaced" value="5" desc="改单"/>
+			<item name="PendingCancel" value="6" desc="正在撤销"/>
+			<item name="Rejected" value="8" desc="已拒绝"/>
+			<item name="Eliminated" value="C" desc="废单"/>
+			<item name="PendingReplace" value="E" desc="正在改单"/>
+			<item name="TradeCorrect" value="G" desc="成交修正"/>
+			<item name="TradeCancel" value="H" desc="成交撤销"/>
+			<item name="Undefined" value="U" desc="未定义"/>
+		</enum>
+		<enum name="TimeInForce" tag="59">
+			<item name="Day" value="0" desc="当日有效"/>
+			<item name="GoodTillCancel" value="1" desc="撤销前有效"/>
+			<item name="FillAndKill" value="3" desc="立即成交剩余撤销"/>
+			<item name="GoodTillDate" value="6" desc="指定日期前有效"/>
+		</enum>
+		<enum name="ExecType" tag="150">
+			<item name="NewOrderAck" value="0" desc="报单回报"/>
+			<item name="PartialFill" value="1" desc="部分成交"/>
+			<item name="CompleteFill" value="2" desc="全部成交"/>
+			<item name="CancelAck" value="4" desc="撤单回报"/>
+			<item name="ModifyAck" value="5" desc="改单回报"/>
+			<item name="RejectAck" value="8" desc="拒绝回报"/>
+			<item name="EliminationAck" value="C" desc="废单回报"/>
+			<item name="TradeCorrect" value="G" desc="交易修正"/>
+			<item name="TradeCancelAck" value="H" desc="交易撤销回报"/>
+			<item name="OrderStatus" value="I" desc="查询报单状态回报"/>
+		</enum>
+	</enums>
+	<dict>
+		<item name="Future" value="FUT" desc="期货"/>
+		<item name="Option" value="OPT" desc="期权"/>
+		<item name="InterestRateSwap" value="IRS" desc="利率互换"/>
+		<item name="FXSpot" value="FXSPOT" desc="外汇即期交易"/>
+	</dict>
+</root>

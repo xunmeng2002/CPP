@@ -1,10 +1,10 @@
 #include "CryptoppEncode.h"
-#include "cryptlib.h"
-#include "hmac.h"
-#include "sha.h"
-#include "base64.h"
-#include "filters.h"
-#include "config_int.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/hmac.h"
+#include "cryptopp/sha.h"
+#include "cryptopp/base64.h"
+#include "cryptopp/filters.h"
+#include "cryptopp/config_int.h"
 #include "Logger.h"
 #include <stdio.h>
 #include <cstdlib>
@@ -21,7 +21,7 @@ using CryptoPP::HashFilter;
 
 using namespace std;
 
-std::string GetCanonicalReq(const ReqLogonField& reqLogon)
+std::string GetCanonicalReq(const FixReqLogonField& reqLogon)
 {
 	std::string canonicalRequest = reqLogon.MsgSeqNum;
     if (reqLogon.SenderCompID.length() > 0)

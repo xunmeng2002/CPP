@@ -26,9 +26,9 @@ public:
 	void ResetSeqNum();
 
 	int GetNextSendSeqNum();
+	int GetAndIncreaseNextSendSeqNum();
 	void SetNextSendSeqNum(int value);
 	void SetNextSendSeqNum(string value);
-	void IncreaseNextSendSeqNum();
 	
 	int GetNextExpectSeqNum();
 	int GetLastRecvSeqNum();
@@ -36,16 +36,16 @@ public:
 	void SetLastRecvSeqNum(string value);
 	
 
-	int GetClOrdID();
+	int GetNextOrderLocalID();
 private:
 	static GlobalParam m_Instance;
 
 	string m_SeqNumFileName;
 	FILE* m_SeqNumFile;
 
-	int m_NextSendSeqNum;
+	int m_LastSendSeqNum;
 	int m_LastRecvSeqNum;
 
-	int m_ClOrdID;
+	int m_OrderLocalID;
 };
 

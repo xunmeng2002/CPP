@@ -1,8 +1,8 @@
 #pragma once
-#include "TradeApiReqFields.h"
+#include "FixFields.h"
 #include <string>
 
-std::string GetCanonicalReq(const ReqLogonField& reqLogon);
+std::string GetCanonicalReq(const FixReqLogonField& reqLogon);
 
 std::string calculateHMAC(std::string& key, std::string& canonicalRequest);
 

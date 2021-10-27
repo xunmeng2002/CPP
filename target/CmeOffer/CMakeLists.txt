@@ -1,13 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 include(../../Common.cmake)
-SET(PROJECT_NAME "GlobexFixTest")
+SET(PROJECT_NAME "CmeOffer")
 project(${PROJECT_NAME})
 
 
 add_package(src ./src)
-add_package(WorkThread ./WorkThread)
-add_package(TradeApi ./TradeApi)
-add_package(GenCode ./GenCode)
+add_package(DataType ../../source/DataType)
 add_package(Utility ../../source/Utility)
 add_package(MemCache ../../source/MemCache)
 add_package(MyEvent ../../source/MyEvent)
@@ -16,12 +14,16 @@ add_package(Logger ../../source/Logger)
 add_package(jsoncpp ../../source/jsoncpp)
 add_package(SocketInit ../../source/SocketInit)
 add_package(CacheList ../../source/CacheList)
-add_package(Mdb ../../source/Mdb/GenCode)
+add_package(Mdb ../../source/Mdb)
+add_package(Udp ../../source/Udp)
 add_package(TcpBase ../../source/Tcp/TcpBase)
 add_package(TcpSelect ../../source/Tcp/TcpSelect)
+add_package(FixProtocol ../../source/FixProtocol)
+add_package(ItsProtocol ../../source/ItsProtocol)
 
 add_package(cryptopp ../../libs/cryptopp/8.5.0/include)
 add_package(SQLite ../../libs/SQLite/3.36.0/include)
+add_package(Zlib ../../libs/Zlib)
 
 add_definitions("-D_CRT_SECURE_NO_WARNINGS")
 

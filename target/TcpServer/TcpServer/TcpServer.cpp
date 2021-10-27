@@ -14,7 +14,7 @@ void TcpServerTest()
 	sockaddr_in  addrSrv, addrClient;
 	addrSrv.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
 	addrSrv.sin_family = AF_INET;
-	addrSrv.sin_port = htons(6000);
+	addrSrv.sin_port = htons(16210);
 
 	int ret = bind(sockServer, (struct sockaddr*)&addrSrv, sizeof(addrSrv));
 	WRITE_LOG(LogLevel::Info, "bind: ret[%d]", ret);
@@ -27,23 +27,23 @@ void TcpServerTest()
 	SOCKET sockConnect = accept(sockServer, (struct sockaddr*)&addrClient, &addrLen);
 	WRITE_LOG(LogLevel::Info, "accept: sockConnect[%lld] [%s:%u]", sockConnect, inet_ntoa(addrClient.sin_addr), ntohs(addrClient.sin_port));
 
-	char buff[1024];
-	buff[1023] = '\0';
-	int retSend, retRecv;
+	char buff[4096];
+	int len;
 	while(true)
 	{
-		retRecv = recv(sockConnect, buff, 1023, 0);
+		len = recv(sockConnect, buff, 1023, 0);
 
-		retSend = send(sockConnect, buff, retRecv, 0);
-		
-		if (retRecv < 1024)
+		if (len <= 0)
 		{
-			buff[retRecv] = '\0';
+			WRITE_LOG(LogLevel::Info, "Disconnect recv: [%d]", len);
 		}
-		
-		WRITE_LOG(LogLevel::Info, "retSend[%d], retRecv[%d]", retSend, retRecv);
-		WRITE_LOG(LogLevel::Info, "recv: [%s]", buff);
-		
+		else
+		{
+			buff[len] = '\0';
+			auto msgLen = *(unsigned short*)buff;
+
+			WRITE_LOG(LogLevel::Info, "recv[%s], len[%d]", buff, len);
+		}
 		
 		if (strcmp(buff, "quit") == 0)
 		{
@@ -52,3 +52,4 @@ void TcpServerTest()
 	}
 	closesocket(sockServer);
 }
+

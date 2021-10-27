@@ -31,14 +31,14 @@ void TcpSelectClient::DoConnect(const string& ip, int port)
 	SOCKET socketID = socket(m_AF, m_Type, 0);
 	int on = 1;
 	int ret = setsockopt(socketID, SOL_SOCKET, SO_REUSEADDR, (char*)&on, sizeof(on));
-	WRITE_LOG(LogLevel::Info, "setsockopt: ret[%d].\n", ret);
+	WRITE_LOG(LogLevel::Info, "setsockopt: ret[%d]", ret);
 
 	unsigned long unblock = 1;
 	ret = ::ioctlsocket(socketID, FIONBIO, &unblock);
-	WRITE_LOG(LogLevel::Info, "ioctlsocket: ret[%d].\n", ret);
+	WRITE_LOG(LogLevel::Info, "ioctlsocket: ret[%d]", ret);
 
 	ret = connect(socketID, (sockaddr*)&m_RemoteAddress, m_AddressLen);
-	WRITE_LOG(LogLevel::Info, "Connect Server: ret[%d]\n", ret);
+	WRITE_LOG(LogLevel::Info, "Connect Server: ret[%d]", ret);
 
 	int sessionID = ++m_MaxSessionID;
 	ConnectData* connectData = ConnectData::Allocate(sessionID, socketID, ip, port);

@@ -138,7 +138,7 @@ void TcpSelectBase::DoSend()
 				}
 				else
 				{
-					WRITE_LOG(LogLevel::Debug, "OnSend Send Len[%d], Buff[%s]", tcpEvent->Length, tcpEvent->ReadPos);
+					WRITE_LOG(LogLevel::Info, "OnSend Send Len[%d], Buff[%s]", tcpEvent->Length, tcpEvent->ReadPos);
 					m_SendEvents[it.first].pop_front();
 					tcpEvent->Free();
 				}

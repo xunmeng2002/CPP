@@ -678,6 +678,10 @@ void WorkThread::ResetSequenceNum()
 void WorkThread::ResetConnect()
 {
 	m_ResendRange = make_pair(0, 0);
+	for (auto& it : m_FixMessages)
+	{
+		it.second->Free();
+	}
 	m_FixMessages.clear();
 	m_AlreadySendLogout = false;
 }

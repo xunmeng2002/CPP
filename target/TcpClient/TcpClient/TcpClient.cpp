@@ -13,7 +13,8 @@ void TcpClientTest()
 	sockaddr_in  addrSrv;
 	addrSrv.sin_addr.S_un.S_addr = inet_addr("127.0.0.1");
 	addrSrv.sin_family = AF_INET;
-	addrSrv.sin_port = htons(6000);
+	addrSrv.sin_port = htons(16210);
+	//addrSrv.sin_port = htons(6000);
 
 	int ret = connect(sockClient, (struct sockaddr*)&addrSrv, sizeof(addrSrv));
 	WRITE_LOG(LogLevel::Info, "Connect Server: ret[%d]\n", ret);

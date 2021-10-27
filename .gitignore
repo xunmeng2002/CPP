@@ -9,4 +9,3 @@ test/*/GenCode/*/*.cpp
 test/*/GenCode/*/*.h
 target/*/GenCode/*.cpp
 target/*/GenCode/*.h
-source/*

@@ -1,0 +1,7 @@
+<pumplist>
+	<pump dest="./Source/ItsProtocol/ItsFields.h" tpl="./Source/ItsProtocol/ItsFields.h.tpl" model="./Model/ItsProtocol/ItsProtocol.xml"/>
+	<pump dest="./Source/ItsProtocol/ItsFields.cpp" tpl="./Source/ItsProtocol/ItsFields.cpp.tpl" model="./Model/ItsProtocol/ItsProtocol.xml"/>
+	
+	<pump dest="./Source/ItsProtocol/ItsMdb.h" tpl="./Source/ItsProtocol/ItsMdb.h.tpl" model="./Model/ItsProtocol/ItsProtocol.xml"/>
+	<pump dest="./Source/ItsProtocol/ItsMdb.cpp" tpl="./Source/ItsProtocol/ItsMdb.cpp.tpl" model="./Model/ItsProtocol/ItsProtocol.xml"/>
+</pumplist>

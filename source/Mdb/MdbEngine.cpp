@@ -2,14 +2,11 @@
 #include  "Logger.h"
 #include "TcpSelectClient.h"
 #include "MemCacheTemplateSingleton.h"
-#include "GlobalParam.h"
-#include "CryptoppEncode.h"
-#include "FixUtility.h"
+#include "AccountInfo.h"
 #include "DataType.h"
 #include "MyEvent.h"
 #include "ItsUtility.h"
 #include "command_id.h"
-#include "FixEnumDict.h"
 #include "Utility.h"
 #include "TimeUtility.h"
 #include "Mdb.h"
@@ -200,14 +197,13 @@ void MdbEngine::HandleInsertOrder(int sessionID, ItsInsertOrder* field)
 		return;
 	}
 
-	auto& AccountInfo = AccountInfo::GetInstance();
 	Order* order = new Order();
 	order->AccountID = field->AccountID;
 	order->ExchangeID = field->ExchangeID;
 	order->ContractID = field->ContractID;
 	order->MarketSegmentID = instrument->MarketSegmentID;
 	order->InstrumentID = instrument->ITCAlias;
-	order->OrderLocalID = GlobalParam::GetInstance().GetNextOrderLocalID();
+	order->OrderLocalID = GetNextOrderLocalID(field->TradingDay);
 	order->OrderSysID = "";
 	order->Direction = ConvertToDirection(field->Direction);
 	order->OffsetFlag = OffsetFlag::Open;
@@ -222,8 +218,8 @@ void MdbEngine::HandleInsertOrder(int sessionID, ItsInsertOrder* field)
 	order->SessionID = sessionID;
 	order->InsertTime = GetFormatTime();
 	order->CancelTime = "";
-	order->InsertDate = GetFormatDate();
-	order->TradingDay = order->InsertDate;
+	order->InsertDate = field->TradingDay;
+	order->TradingDay = field->TradingDay;
 	order->ForceCloseReason = ForceCloseReason::NotForceClose;
 	order->IsLocalOrder = IsLocalOrder::Local;
 	order->TimeCondition = ConvertToTimeCondition(field->TimeCondition);
@@ -269,7 +265,7 @@ void MdbEngine::HandleInsertOrderCancel(int sessionID, ItsInsertOrderCancel* fie
 	orderCancel->ContractID = field->ContractID;
 	orderCancel->MarketSegmentID = instrument->MarketSegmentID;
 	orderCancel->InstrumentID = instrument->ITCAlias;
-	orderCancel->OrderLocalID = GlobalParam::GetInstance().GetNextOrderLocalID();
+	orderCancel->OrderLocalID = GetNextOrderLocalID(field->TradingDay);
 	orderCancel->OrigOrderLocalID = order == nullptr ? 0 :  order->OrderLocalID;
 	orderCancel->OrderSysID = field->OrderSysID;
 	orderCancel->Direction = ConvertToDirection(field->Direction);
@@ -278,7 +274,7 @@ void MdbEngine::HandleInsertOrderCancel(int sessionID, ItsInsertOrderCancel* fie
 	orderCancel->SessionID = atoi(field->SessionID.c_str());
 	orderCancel->ErrorID = 0;
 	orderCancel->ErrorMsg = "";
-	orderCancel->TradingDay = GetFormatDate();
+	orderCancel->TradingDay = field->TradingDay;
 
 	Mdb::GetInstance().InsertRecord(orderCancel);
 	m_OrderCancels.insert(orderCancel);
@@ -484,7 +480,29 @@ CmeInstrumentBrief* MdbEngine::GetCmeInstrumentBriefFromExchange(const string& i
 	}
 	return *it;
 }
-Order* MdbEngine::GetOrderFromOrderSysID(string orderSysID)
+int MdbEngine::GetNextOrderLocalID(const string& tradingDay)
+{
+	auto it = find_if(m_OrderSequences.begin(), m_OrderSequences.end(), [&](OrderSequence* orderSequence) {
+		return orderSequence->TradingDay == tradingDay;
+		});
+	auto orderLocalID = 0;
+	if (it == m_OrderSequences.end())
+	{
+		orderLocalID = 1;
+		auto orderSequence = new OrderSequence();
+		orderSequence->TradingDay = tradingDay;
+		orderSequence->MaxOrderLocalID = orderLocalID;
+		m_OrderSequences.insert(orderSequence);
+		Mdb::GetInstance().InsertRecord(orderSequence);
+	}
+	else
+	{
+		orderLocalID = ++((*it)->MaxOrderLocalID);
+		Mdb::GetInstance().InsertRecord(*it);
+	}
+	return orderLocalID;
+}
+Order* MdbEngine::GetOrderFromOrderSysID(const string& orderSysID)
 {
 	auto it = find_if(m_Orders.begin(), m_Orders.end(), [&](Order* order) {
 		return order->OrderSysID == orderSysID;

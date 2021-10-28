@@ -1,7 +1,6 @@
 #pragma once
 #include "ThreadBase.h"
 #include "ItsInterface.h"
-#include "FixApi.h"
 #include "MdbInterface.h"
 #include <set>
 #include <map>
@@ -43,7 +42,8 @@ public:
 private:
 	CmeInstrumentBrief* GetCmeInstrumentBriefFromBroker(const string& exchangeID, const string& contractID);
 	CmeInstrumentBrief* GetCmeInstrumentBriefFromExchange(const string& instrumentID);
-	Order* GetOrderFromOrderSysID(string orderSysID);
+	int GetNextOrderLocalID(const string& tradingDay);
+	Order* GetOrderFromOrderSysID(const string& orderSysID);
 	Order* GetOrderFromOrderLocalID(int orderLocalID);
 	OrderCancel* GetOrderCancelFromOrderLocalID(int orderLocalID);
 	bool CheckAndAddTrade(Trade* trade);
@@ -52,6 +52,7 @@ private:
 	sqlite3* m_Mdb;
 	std::set<CmeInstrumentBrief*> m_CmeInstrumentBriefs;
 
+	std::set<OrderSequence*> m_OrderSequences;
 	std::set<Order*> m_Orders;
 	std::set<OrderCancel*> m_OrderCancels;
 	std::set<Trade*> m_Trades;

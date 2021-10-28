@@ -47,6 +47,24 @@ private:
 	char m_Buff[4096];
 };
 
+class OrderSequence
+{
+public:
+	int ToStream(char* buff, int size) const;
+	int ToString(char* buff, int size) const;
+	static string CreateSql();
+	string InsertSql();
+	static int OnSelectCallback(void* callback, int colCount, char** colValues, char** colNames);
+
+public:
+	string TradingDay;
+	int MaxOrderLocalID;
+	
+	static constexpr char* TableName = "t_MdbOrderSequence";
+private:
+	char m_Buff[4096];
+};
+
 class Order
 {
 public:
@@ -165,6 +183,7 @@ class MdbCallback
 public:
 	virtual void SelectMdbCmeProductCallback(CmeProduct* field) { delete field; }
 	virtual void SelectMdbCmeInstrumentBriefCallback(CmeInstrumentBrief* field) { delete field; }
+	virtual void SelectMdbOrderSequenceCallback(OrderSequence* field) { delete field; }
 	virtual void SelectMdbOrderCallback(Order* field) { delete field; }
 	virtual void SelectMdbOrderCancelCallback(OrderCancel* field) { delete field; }
 	virtual void SelectMdbTradeCallback(Trade* field) { delete field; }

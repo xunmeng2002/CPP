@@ -68,6 +68,36 @@ int CmeInstrumentBrief::OnSelectCallback(void* callback, int colCount, char** co
 	return 0;
 }
 
+int OrderSequence::ToStream(char* buff, int size) const
+{
+	return snprintf(buff, size, " '%s',  '%d'",
+		TradingDay.c_str(), MaxOrderLocalID);
+}
+int OrderSequence::ToString(char* buff, int size) const
+{
+	return snprintf(buff, size, "MdbOrderSequence: TradingDay:[%s], MaxOrderLocalID:[%d]",
+		TradingDay.c_str(), MaxOrderLocalID);
+}
+string OrderSequence::CreateSql()
+{
+	return "CREATE TABLE IF NOT EXISTS t_MdbOrderSequence(TradingDay char(32), MaxOrderLocalID char(32), PRIMARY KEY(TradingDay));";
+}
+string OrderSequence::InsertSql()
+{
+	::memset(m_Buff, 0, sizeof(m_Buff));
+	ToStream(m_Buff, 4096);
+	return "REPLACE INTO t_MdbOrderSequence VALUES(" + string(m_Buff) + ");";
+}
+int OrderSequence::OnSelectCallback(void* callback, int colCount, char** colValues, char** colNames)
+{
+	auto field = new OrderSequence();
+	field->TradingDay = colValues[0];
+	field->MaxOrderLocalID = atoi(colValues[1]);
+
+	((MdbCallback*)callback)->SelectMdbOrderSequenceCallback(field);
+	return 0;
+}
+
 int Order::ToStream(char* buff, int size) const
 {
 	return snprintf(buff, size, " '%s',  '%s',  '%s',  '%s',  '%s',  '%d',  '%s',  '%c',  '%c',  '%c',  '%c',  '%f',  '%d',  '%d',  '%c',  '%s',  '%s',  '%s',  '%d',  '%s',  '%s',  '%s',  '%s',  '%c',  '%c',  '%s',  '%c',  '%s',  '%c',  '%d',  '%c',  '%s',  '%s'",

@@ -23,6 +23,7 @@ void Mdb::CreateAllTables()
 {
 	CreateTable<CmeProduct>();
 	CreateTable<CmeInstrumentBrief>();
+	CreateTable<OrderSequence>();
 	CreateTable<Order>();
 	CreateTable<OrderCancel>();
 	CreateTable<Trade>();
@@ -31,6 +32,7 @@ void Mdb::TruncateAllTables()
 {
 	TruncateTable<CmeProduct>();
 	TruncateTable<CmeInstrumentBrief>();
+	TruncateTable<OrderSequence>();
 	TruncateTable<Order>();
 	TruncateTable<OrderCancel>();
 	TruncateTable<Trade>();
@@ -39,6 +41,7 @@ void Mdb::SelectAllTables()
 {
 	SelectTable<CmeProduct>();
 	SelectTable<CmeInstrumentBrief>();
+	SelectTable<OrderSequence>();
 	SelectTable<Order>();
 	SelectTable<OrderCancel>();
 	SelectTable<Trade>();

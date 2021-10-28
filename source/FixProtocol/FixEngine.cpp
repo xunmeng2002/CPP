@@ -595,7 +595,7 @@ bool FixEngine::Verify(FixMessage* fixMessage, bool checkTooHigh, bool checkTooL
 	if (msgType == FIX_Message_ReqSequenceReset)
 		return true;
 	auto msgSeqNum = atoi(fixMessage->GetMsgSeqNum().c_str());
-	auto nextExpectSeqNum = GlobalParam::GetInstance().GetNextExpectSeqNum();
+	auto nextExpectSeqNum = SeqNum::GetInstance().GetNextExpectSeqNum();
 	if (checkTooHigh && msgSeqNum > nextExpectSeqNum)
 	{
 		DoMsgSeqTooHigh(fixMessage, msgSeqNum, nextExpectSeqNum);
@@ -614,7 +614,7 @@ bool FixEngine::Verify(FixMessage* fixMessage, bool checkTooHigh, bool checkTooL
 			m_ResendRange = std::make_pair(0, 0);
 		}
 	}
-	GlobalParam::GetInstance().SetLastRecvSeqNum(msgSeqNum);
+	SeqNum::GetInstance().SetLastRecvSeqNum(msgSeqNum);
 	return true;
 }
 void FixEngine::DoMsgSeqTooHigh(FixMessage* fixMessage, int msgSeqNum, int expectSeqNum)
@@ -656,7 +656,7 @@ bool FixEngine::NextQueue()
 	{
 		return false;
 	}
-	auto nextExpectSeqNum = GlobalParam::GetInstance().GetNextExpectSeqNum();
+	auto nextExpectSeqNum = SeqNum::GetInstance().GetNextExpectSeqNum();
 	auto it = m_FixMessages.begin();
 	auto msgSeqNum = it->first;
 	if (msgSeqNum < nextExpectSeqNum)
@@ -725,7 +725,7 @@ void FixEngine::ResendLastResendRequest()
 void FixEngine::DoResendRequest(int startSeqNum, int endSeqNum)
 {
 	m_IsDoResendRequest = false;
-	endSeqNum = GlobalParam::GetInstance().GetNextSendSeqNum();
+	endSeqNum = SeqNum::GetInstance().GetNextSendSeqNum();
 	if (m_AppReqFields.size() == 0)
 	{
 		ReqSequenceReset(startSeqNum, endSeqNum, "N");
@@ -745,7 +745,7 @@ void FixEngine::DoResendRequest(int startSeqNum, int endSeqNum)
 		}
 		it->second->SendingTime = GetUtcTime();
 		it->second->PossDupFlag = "Y";
-		it->second->LastMsgSeqNumProcessed = ItoA(GlobalParam::GetInstance().GetLastRecvSeqNum());
+		it->second->LastMsgSeqNumProcessed = ItoA(SeqNum::GetInstance().GetLastRecvSeqNum());
 		SendRequest(it->second, true);
 		currSeqNum++;
 	}
@@ -771,14 +771,14 @@ void FixEngine::OnFixRspLogon(FixMessage* fixMessage)
 	if (resetSeqNumFlag == "Y")
 	{
 		WRITE_LOG(LogLevel::Info, "Reset Sequence Num to 1");
-		GlobalParam::GetInstance().ResetSeqNum();
+		SeqNum::GetInstance().ResetSeqNum();
 	}
 	if (!Verify(fixMessage, false, true))
 	{
 		return;
 	}
 	m_LogonStatus = LogonStatus::Logged;
-	auto nextExpectSeqNum = GlobalParam::GetInstance().GetNextExpectSeqNum();
+	auto nextExpectSeqNum = SeqNum::GetInstance().GetNextExpectSeqNum();
 	auto msgSeqNum = atoi(fixMessage->GetMsgSeqNum().c_str());
 	if (msgSeqNum > nextExpectSeqNum)
 	{
@@ -800,13 +800,13 @@ void FixEngine::OnFixRspLogout(FixMessage* fixMessage)
 
 	if (rspField->NextExpectedMsgSeqNum == "1")
 	{
-		GlobalParam::GetInstance().ResetSeqNum();
+		SeqNum::GetInstance().ResetSeqNum();
 	}
 	else if (!rspField->NextExpectedMsgSeqNum.empty())
 	{
-		GlobalParam::GetInstance().SetNextSendSeqNum(rspField->NextExpectedMsgSeqNum);
+		SeqNum::GetInstance().SetNextSendSeqNum(rspField->NextExpectedMsgSeqNum);
 	}
-	GlobalParam::GetInstance().SetLastRecvSeqNum(rspField->MsgSeqNum);
+	SeqNum::GetInstance().SetLastRecvSeqNum(rspField->MsgSeqNum);
 
 	m_LogonStatus = LogonStatus::Logout;
 	m_TcpClient->DisConnect(m_SessionID);
@@ -871,18 +871,18 @@ void FixEngine::OnFixRspSequenceReset(FixMessage* fixMessage)
 	m_FixSpi->OnFixRspSequenceReset(rspField);
 	RecordResponse(rspField);
 	
-	auto nextExpectSeqNum = GlobalParam::GetInstance().GetNextExpectSeqNum();
+	auto nextExpectSeqNum = SeqNum::GetInstance().GetNextExpectSeqNum();
 	auto newSeqNo = atoi(rspField->NewSeqNo.c_str());
 	WRITE_LOG(LogLevel::Info, "Received SequenceReset FROM [%d] To [%d]", nextExpectSeqNum, newSeqNo);
 
 	if (IsOnResend() && newSeqNo > m_ResendRange.second)
 	{
-		GlobalParam::GetInstance().SetLastRecvSeqNum(m_ResendRange.second);
+		SeqNum::GetInstance().SetLastRecvSeqNum(m_ResendRange.second);
 		m_ResendRange = make_pair(0, 0);
 	}
 	else
 	{
-		GlobalParam::GetInstance().SetLastRecvSeqNum(newSeqNo - 1);
+		SeqNum::GetInstance().SetLastRecvSeqNum(newSeqNo - 1);
 	}
 }
 void FixEngine::OnFixExecutionReport(FixMessage* fixMessage)

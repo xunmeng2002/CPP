@@ -3,7 +3,7 @@
 #include "ThreadBase.h"
 #include "DataType.h"
 #include "FixApi.h"
-#include "GlobalParam.h"
+#include "SeqNum.h"
 #include "FixMdb.h"
 #include "TcpSelectClient.h"
 #include "MdbEngine.h"

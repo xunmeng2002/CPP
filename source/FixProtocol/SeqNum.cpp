@@ -1,32 +1,32 @@
-#include "GlobalParam.h"
+#include "SeqNum.h"
 #include <fstream>
 #include <Windows.h>
 #include <process.h>
 #include <assert.h>
 
-GlobalParam GlobalParam::m_Instance;
+SeqNum SeqNum::m_Instance;
 
 #define DATA_FILE_PATH "Data"
 #define SEQ_NUM_FILE "SeqNums.txt"
 
-GlobalParam::GlobalParam()
-:m_LastSendSeqNum(0), m_LastRecvSeqNum(0), m_OrderLocalID(1)
+SeqNum::SeqNum()
+:m_LastSendSeqNum(0), m_LastRecvSeqNum(0)
 {
 	m_SeqNumFileName = string(DATA_FILE_PATH) + "\\" + SEQ_NUM_FILE;
 	CreateDataDir(DATA_FILE_PATH);
 	Open();
 	ReadSeqNum();
 }
-GlobalParam::~GlobalParam()
+SeqNum::~SeqNum()
 {
 	WriteSeqNum();
 }
 
-bool GlobalParam::CreateDataDir(const char* path)
+bool SeqNum::CreateDataDir(const char* path)
 {
 	return CreateDirectory(path, NULL) || ERROR_ALREADY_EXISTS == GetLastError();
 }
-void GlobalParam::Open()
+void SeqNum::Open()
 {
 	m_SeqNumFile = fopen(m_SeqNumFileName.c_str(), "r+");
 	if (!m_SeqNumFile)
@@ -38,7 +38,7 @@ void GlobalParam::Open()
 		throw exception(string("Can not Open SeqNumFile:" + m_SeqNumFileName).c_str());
 	}
 }
-void GlobalParam::Close()
+void SeqNum::Close()
 {
 	if (m_SeqNumFile)
 	{
@@ -46,59 +46,58 @@ void GlobalParam::Close()
 	}
 }
 
-void GlobalParam::ReadSeqNum()
+void SeqNum::ReadSeqNum()
 {
 	rewind(m_SeqNumFile);
-	auto len = fscanf(m_SeqNumFile, "%d:%d:%d", &m_LastRecvSeqNum, &m_LastSendSeqNum, &m_OrderLocalID);
-	assert(len == 3);
+	auto len = fscanf(m_SeqNumFile, "%d:%d", &m_LastRecvSeqNum, &m_LastSendSeqNum);
+	assert(len == 2);
 }
-void GlobalParam::WriteSeqNum()
+void SeqNum::WriteSeqNum()
 {
 	rewind(m_SeqNumFile);
-	fprintf(m_SeqNumFile, "%d:%d:%d", m_LastRecvSeqNum, m_LastSendSeqNum, m_OrderLocalID);
+	fprintf(m_SeqNumFile, "%d:%d", m_LastRecvSeqNum, m_LastSendSeqNum);
 	fflush(m_SeqNumFile);
 }
 
-void GlobalParam::ResetSeqNum()
+void SeqNum::ResetSeqNum()
 {
 	m_LastSendSeqNum = 0;
 	m_LastRecvSeqNum = 0;
-	m_OrderLocalID = 0;
 	WriteSeqNum();
 }
 
-int GlobalParam::GetAndIncreaseNextSendSeqNum()
+int SeqNum::GetAndIncreaseNextSendSeqNum()
 {
 	++m_LastSendSeqNum;
 	WriteSeqNum();
 	return m_LastSendSeqNum;
 }
-int GlobalParam::GetNextSendSeqNum()
+int SeqNum::GetNextSendSeqNum()
 {
 	return m_LastSendSeqNum + 1;
 }
-void GlobalParam::SetNextSendSeqNum(int value)
+void SeqNum::SetNextSendSeqNum(int value)
 {
 	if (value <= m_LastSendSeqNum)
 		return;
 	m_LastSendSeqNum = value - 1;
 	WriteSeqNum();
 }
-void GlobalParam::SetNextSendSeqNum(string value)
+void SeqNum::SetNextSendSeqNum(string value)
 {
 	SetNextSendSeqNum(atoi(value.c_str()));
 }
 
 
-int GlobalParam::GetNextExpectSeqNum()
+int SeqNum::GetNextExpectSeqNum()
 {
 	return m_LastRecvSeqNum + 1;
 }
-int GlobalParam::GetLastRecvSeqNum()
+int SeqNum::GetLastRecvSeqNum()
 {
 	return m_LastRecvSeqNum;
 }
-void GlobalParam::SetLastRecvSeqNum(int value)
+void SeqNum::SetLastRecvSeqNum(int value)
 {
 	if (value <= m_LastRecvSeqNum)
 	{
@@ -107,14 +106,7 @@ void GlobalParam::SetLastRecvSeqNum(int value)
 	m_LastRecvSeqNum = value;
 	WriteSeqNum();
 }
-void GlobalParam::SetLastRecvSeqNum(string value)
+void SeqNum::SetLastRecvSeqNum(string value)
 {
 	SetLastRecvSeqNum(atoi(value.c_str()));
-}
-
-int GlobalParam::GetNextOrderLocalID()
-{
-	++m_OrderLocalID;
-	WriteSeqNum();
-	return m_OrderLocalID;
 }

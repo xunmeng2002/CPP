@@ -2,7 +2,7 @@
 #include "Utility.h"
 #include "TimeUtility.h"
 #include "FixEnumTransfer.h"
-#include "GlobalParam.h"
+#include "SeqNum.h"
 #include "Logger.h"
 
 

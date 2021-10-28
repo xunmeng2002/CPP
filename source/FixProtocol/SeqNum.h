@@ -5,14 +5,14 @@
 using namespace std;
 
 
-class GlobalParam
+class SeqNum
 {
-	GlobalParam();
-	~GlobalParam();
-	GlobalParam(const GlobalParam&) = delete;
-	GlobalParam& operator=(const GlobalParam&) = delete;
+	SeqNum();
+	~SeqNum();
+	SeqNum(const SeqNum&) = delete;
+	SeqNum& operator=(const SeqNum&) = delete;
 public:
-	static GlobalParam& GetInstance()
+	static SeqNum& GetInstance()
 	{
 		return m_Instance;
 	}
@@ -33,19 +33,14 @@ public:
 	int GetNextExpectSeqNum();
 	int GetLastRecvSeqNum();
 	void SetLastRecvSeqNum(int value);
-	void SetLastRecvSeqNum(string value);
-	
-
-	int GetNextOrderLocalID();
+	void SetLastRecvSeqNum(string value);	
 private:
-	static GlobalParam m_Instance;
+	static SeqNum m_Instance;
 
 	string m_SeqNumFileName;
 	FILE* m_SeqNumFile;
 
 	int m_LastSendSeqNum;
 	int m_LastRecvSeqNum;
-
-	int m_OrderLocalID;
 };
 

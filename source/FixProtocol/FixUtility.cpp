@@ -1,5 +1,5 @@
 #include "FixUtility.h"
-#include "GlobalParam.h"
+#include "SeqNum.h"
 #include "AccountInfo.h"
 #include "Utility.h"
 #include "TimeUtility.h"
@@ -15,7 +15,7 @@ FixMessage* PrepareReqHeader(const std::string& msgSeqNum)
 	fixMessage->SetItem(8, accountInfo.BeginString);
 	if (msgSeqNum.empty())
 	{
-		fixMessage->SetItem(34, ItoA(GlobalParam::GetInstance().GetAndIncreaseNextSendSeqNum()));
+		fixMessage->SetItem(34, ItoA(SeqNum::GetInstance().GetAndIncreaseNextSendSeqNum()));
 	}
 	else
 	{
@@ -29,7 +29,7 @@ FixMessage* PrepareReqHeader(const std::string& msgSeqNum)
 	fixMessage->SetItem(57, accountInfo.TargetSubID);
 
 	fixMessage->SetItem(142, accountInfo.SenderLocationID);
-	fixMessage->SetItem(369, ItoA(GlobalParam::GetInstance().GetLastRecvSeqNum()));
+	fixMessage->SetItem(369, ItoA(SeqNum::GetInstance().GetLastRecvSeqNum()));
 	
 	return fixMessage;
 }

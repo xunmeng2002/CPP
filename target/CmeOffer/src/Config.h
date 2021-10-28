@@ -7,11 +7,11 @@
 
 using namespace std;
 
-class AccountInfo
+class Config
 {
-	AccountInfo();
+	Config();
 public:
-	static AccountInfo& GetInstance();
+	static Config& GetInstance();
 	void Load(const char* fileName = "CmeOffer.json");
 	void Print();
 
@@ -42,7 +42,7 @@ public:
 	string FixAuditTrailFileName;
 
 private:
-	static AccountInfo m_Instance;
+	static Config m_Instance;
 };
 
 

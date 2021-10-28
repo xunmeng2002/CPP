@@ -2,7 +2,7 @@
 #include "MdbEngine.h"
 #include "ItsEngine.h"
 #include "FixEngine.h"
-#include "AccountInfo.h"
+#include "Config.h"
 #include "UdpServer.h"
 #include "CmeMonthMap.h"
 #include <iostream>
@@ -20,18 +20,18 @@ int main(int argc, char* argv[])
 	Logger::GetInstance().Init(argv[0]);
 	Logger::GetInstance().Start();
 
-	AccountInfo::GetInstance().Load();
-	auto& accountInfo = AccountInfo::GetInstance();
+	Config::GetInstance().Load();
+	auto& config = Config::GetInstance();
 
 	ItsEngine* itsEngine = new ItsEngine();
 	MdbEngine* mdbEngine = new MdbEngine();
 	FixEngine* fixEngine = new FixEngine();
 
 	UdpServer::GetInstance().SetBindAddress("127.0.0.1");
-	UdpServer::GetInstance().SetBroadAddress("127.0.0.1", atoi(accountInfo.BroadCastPort.c_str()));
+	UdpServer::GetInstance().SetBroadAddress("127.0.0.1", atoi(config.BroadCastPort.c_str()));
 	UdpServer::GetInstance().Init();
-	itsEngine->SetBindAddress("127.0.0.1", atoi(accountInfo.ListenPort.c_str()));
-	fixEngine->RegisterAddress(AccountInfo::GetInstance().CmeGlobexIP.c_str(), atoi(AccountInfo::GetInstance().CmeGlobexPrimaryPort.c_str()), AccountInfo::GetInstance().CmeGlobexIP.c_str(), atoi(AccountInfo::GetInstance().CmeGlobexBackupPort.c_str()));
+	itsEngine->SetBindAddress("127.0.0.1", atoi(config.ListenPort.c_str()));
+	fixEngine->RegisterAddress(config.CmeGlobexIP.c_str(), atoi(config.CmeGlobexPrimaryPort.c_str()), config.CmeGlobexIP.c_str(), atoi(config.CmeGlobexBackupPort.c_str()));
 
 	itsEngine->RegisterSubscriber(mdbEngine);
 	mdbEngine->RegisterItsPublisher(itsEngine);

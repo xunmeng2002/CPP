@@ -6,6 +6,7 @@
 #include "TimeUtility.h"
 #include "CryptoppEncode.h"
 #include "FixEnumTransfer.h"
+#include "Config.h"
 
 
 
@@ -92,7 +93,7 @@ bool FixEngine::Init(const char* dbName)
 	FixMdb::GetInstance().CreateAllTables();
 	FixMdb::GetInstance().SelectAllTables();
 
-	if (AccountInfo::GetInstance().RecordFixAuditTrail)
+	if (Config::GetInstance().RecordFixAuditTrail)
 	{
 		FixAuditTrailWriter::GetInstance().Init();
 	}
@@ -134,9 +135,9 @@ void FixEngine::InitRspMessage(FixRspHeader* rspField)
 
 void FixEngine::ReqInsertOrder(Order* order)
 {
-	auto& accountInfo = AccountInfo::GetInstance();
+	auto& config = Config::GetInstance();
 	auto fixReqNewOrder = new FixReqNewOrderField(PrepareReqHeader());
-	fixReqNewOrder->Account = accountInfo.Account;
+	fixReqNewOrder->Account = config.Account;
 	fixReqNewOrder->ClOrdID = ItoA(order->OrderLocalID);
 	fixReqNewOrder->HandInst = "1";
 	fixReqNewOrder->CustOrderHandlingInst = "Y";
@@ -183,9 +184,9 @@ void FixEngine::ReqInsertOrder(Order* order)
 }
 void FixEngine::ReqInsertOrderCancel(OrderCancel* orderCancel)
 {
-	auto& accountInfo = AccountInfo::GetInstance();
+	auto& config = Config::GetInstance();
 	auto fixReqOrderCancel = new FixReqOrderCancelRequestField(PrepareReqHeader());
-	fixReqOrderCancel->Account = accountInfo.Account;
+	fixReqOrderCancel->Account = config.Account;
 	fixReqOrderCancel->ClOrdID = ItoA(orderCancel->OrderLocalID);
 	fixReqOrderCancel->OrderID = orderCancel->OrderSysID;
 	fixReqOrderCancel->OrigClOrdID = ItoA(orderCancel->OrigOrderLocalID);
@@ -686,20 +687,20 @@ bool FixEngine::IsOnResend()
 void FixEngine::ReqLogon()
 {
 	auto reqLogonField = new FixReqLogonField(PrepareReqHeader());
-	auto& accountInfo = AccountInfo::GetInstance();
-	reqLogonField->SenderCompID = accountInfo.LogonSenderCompID;
+	auto& config = Config::GetInstance();
+	reqLogonField->SenderCompID = config.LogonSenderCompID;
 
-	reqLogonField->HeartBtInt = accountInfo.HeartBtInt;
-	reqLogonField->ResetSeqNumFlag = accountInfo.ResetSeqNumFlag;
-	reqLogonField->ApplicationSystemName = accountInfo.ApplicationSystemName;
-	reqLogonField->ApplicationSystemVersion = accountInfo.ApplicationSystemVersion;
-	reqLogonField->ApplicationSystemVendor = accountInfo.ApplicationSystemVendor;
-	reqLogonField->EncodedTextLen = ItoA(accountInfo.AccessID.length());
-	reqLogonField->EncodedText = accountInfo.AccessID;
-	reqLogonField->EncryptedPasswordMethod = accountInfo.EncryptedPasswordMethod;
+	reqLogonField->HeartBtInt = config.HeartBtInt;
+	reqLogonField->ResetSeqNumFlag = config.ResetSeqNumFlag;
+	reqLogonField->ApplicationSystemName = config.ApplicationSystemName;
+	reqLogonField->ApplicationSystemVersion = config.ApplicationSystemVersion;
+	reqLogonField->ApplicationSystemVendor = config.ApplicationSystemVendor;
+	reqLogonField->EncodedTextLen = ItoA(config.AccessID.length());
+	reqLogonField->EncodedText = config.AccessID;
+	reqLogonField->EncryptedPasswordMethod = config.EncryptedPasswordMethod;
 
 	std::string canonicalRequest = GetCanonicalReq(*reqLogonField);
-	std::string encodedHmac = calculateHMAC(accountInfo.SecretKey, canonicalRequest);
+	std::string encodedHmac = calculateHMAC(config.SecretKey, canonicalRequest);
 	reqLogonField->EncryptedPasswordLen = ItoA(encodedHmac.length());
 	reqLogonField->EncryptedPassword = encodedHmac;
 
@@ -930,7 +931,7 @@ void FixEngine::UpdateLastRecvTime()
 }
 void FixEngine::RecordFixAuditTrail(FixMessage* fixMessage, string messageDirection)
 {
-	if (!AccountInfo::GetInstance().RecordFixAuditTrail)
+	if (!Config::GetInstance().RecordFixAuditTrail)
 		return;
 	m_FixAuditTrail->SetMessage(fixMessage, messageDirection);
 

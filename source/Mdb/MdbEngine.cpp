@@ -2,7 +2,7 @@
 #include  "Logger.h"
 #include "TcpSelectClient.h"
 #include "MemCacheTemplateSingleton.h"
-#include "AccountInfo.h"
+#include "Config.h"
 #include "DataType.h"
 #include "MyEvent.h"
 #include "ItsUtility.h"
@@ -17,7 +17,7 @@ MdbEngine::MdbEngine()
 	:ThreadBase("MdbEngine"), m_ItsPublisher(nullptr), m_MdbSubscriber(nullptr), m_Mdb(nullptr)
 {
 	m_LogBuff = new char[BuffSize];
-	m_ChannelID = AccountInfo::GetInstance().ChannelID;
+	m_ChannelID = Config::GetInstance().ChannelID;
 }
 MdbEngine::~MdbEngine()
 {

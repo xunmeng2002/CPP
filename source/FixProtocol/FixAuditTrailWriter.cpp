@@ -1,5 +1,5 @@
 #include "FixAuditTrailWriter.h"
-#include "AccountInfo.h"
+#include "Config.h"
 #include "Utility.h"
 #include "TimeUtility.h"
 #include <Windows.h>
@@ -28,14 +28,14 @@ FixAuditTrailWriter& FixAuditTrailWriter::GetInstance()
 }
 bool FixAuditTrailWriter::Init()
 {
-	if (!AccountInfo::GetInstance().RecordFixAuditTrail)
+	if (!Config::GetInstance().RecordFixAuditTrail)
 	{
 		return true;
 	}
 	char timeBuff[32];
 	auto t = time(nullptr);
 	strftime(timeBuff, 32, "%Y%m%d-%H%M%S", localtime(&t));
-	m_FileName = "log\\" + AccountInfo::GetInstance().FixAuditTrailFileName + "." + timeBuff + ".csv";
+	m_FileName = "log\\" + Config::GetInstance().FixAuditTrailFileName + "." + timeBuff + ".csv";
 	if (m_File)
 	{
 		fclose(m_File);

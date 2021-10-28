@@ -1,6 +1,6 @@
 #include "FixUtility.h"
 #include "SeqNum.h"
-#include "AccountInfo.h"
+#include "Config.h"
 #include "Utility.h"
 #include "TimeUtility.h"
 #include "Logger.h"
@@ -10,9 +10,9 @@
 FixMessage* PrepareReqHeader(const std::string& msgSeqNum)
 {
 	auto fixMessage = FixMessage::Allocate();
-	auto& accountInfo = AccountInfo::GetInstance();
+	auto& config = Config::GetInstance();
 
-	fixMessage->SetItem(8, accountInfo.BeginString);
+	fixMessage->SetItem(8, config.BeginString);
 	if (msgSeqNum.empty())
 	{
 		fixMessage->SetItem(34, ItoA(SeqNum::GetInstance().GetAndIncreaseNextSendSeqNum()));
@@ -22,13 +22,13 @@ FixMessage* PrepareReqHeader(const std::string& msgSeqNum)
 		fixMessage->SetItem(34, msgSeqNum);
 	}
 	fixMessage->SetItem(43, "N");
-	fixMessage->SetItem(49, accountInfo.SenderCompID);
-	fixMessage->SetItem(50, accountInfo.SenderSubID);
+	fixMessage->SetItem(49, config.SenderCompID);
+	fixMessage->SetItem(50, config.SenderSubID);
 	fixMessage->SetItem(52, GetUtcTime());
-	fixMessage->SetItem(56, accountInfo.TargetCompID);
-	fixMessage->SetItem(57, accountInfo.TargetSubID);
+	fixMessage->SetItem(56, config.TargetCompID);
+	fixMessage->SetItem(57, config.TargetSubID);
 
-	fixMessage->SetItem(142, accountInfo.SenderLocationID);
+	fixMessage->SetItem(142, config.SenderLocationID);
 	fixMessage->SetItem(369, ItoA(SeqNum::GetInstance().GetLastRecvSeqNum()));
 	
 	return fixMessage;

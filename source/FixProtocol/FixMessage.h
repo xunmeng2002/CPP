@@ -1,6 +1,8 @@
 #pragma once
 #include "FixUtility.h"
 
+using namespace std;
+
 class FixMessage
 {
 public:

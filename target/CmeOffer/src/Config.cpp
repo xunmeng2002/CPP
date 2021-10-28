@@ -1,4 +1,4 @@
-#include "AccountInfo.h"
+#include "Config.h"
 #include "json/json.h"
 #include "Logger.h"
 #include <iostream>
@@ -7,18 +7,18 @@
 
 using namespace std;
 
-AccountInfo AccountInfo::m_Instance;
+Config Config::m_Instance;
 
-AccountInfo::AccountInfo()
+Config::Config()
 {
 
 }
-AccountInfo& AccountInfo::GetInstance()
+Config& Config::GetInstance()
 {
 	return m_Instance;
 }
 
-void AccountInfo::Load(const char* fileName)
+void Config::Load(const char* fileName)
 {
 	Json::Reader reader;
 	Json::FastWriter writer;
@@ -56,7 +56,7 @@ void AccountInfo::Load(const char* fileName)
 	Print();
 }
 
-void AccountInfo::Print()
+void Config::Print()
 {
 	WRITE_LOG(LogLevel::Info, "ChannelID[%s], ListenPort[%s], BroadCastPort[%s], CmeGlobexIP[%s], CmeGlobexPrimaryPort[%s], CmeGlobexBackupPort[%s], "
 		"BeginString[%s], LogonSenderCompID[%s], SenderCompID[%s],  SenderSubID[%s], TargetCompID[%s], TargetSubID[%s], "

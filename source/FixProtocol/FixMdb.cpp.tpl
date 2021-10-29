@@ -40,6 +40,12 @@ void FixMdb::CreateAllTables()
 	CreateTable<Fix!!@name!!Field>();
 !!leave!!
 !!leave!!
+
+!!entry InnerTables!!
+!!travel!!
+	CreateTable<Fix!!@name!!>();
+!!leave!!
+!!leave!!
 }
 void FixMdb::TruncateAllTables()
 {
@@ -54,6 +60,12 @@ void FixMdb::TruncateAllTables()
 	TruncateTable<Fix!!@name!!Field>();
 !!leave!!
 !!leave!!
+
+!!entry InnerTables!!
+!!travel!!
+	TruncateTable<Fix!!@name!!>();
+!!leave!!
+!!leave!!
 }
 void FixMdb::SelectAllTables()
 {
@@ -66,6 +78,12 @@ void FixMdb::SelectAllTables()
 !!entry RspFields!!
 !!travel!!
 	SelectTable<Fix!!@name!!Field>();
+!!leave!!
+!!leave!!
+
+!!entry InnerTables!!
+!!travel!!
+	TruncateTable<Fix!!@name!!>();
 !!leave!!
 !!leave!!
 }

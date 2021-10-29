@@ -5,48 +5,6 @@
 using namespace std;
 
 
-class CmeProduct
-{
-public:
-	int ToStream(char* buff, int size) const;
-	int ToString(char* buff, int size) const;
-	static string CreateSql();
-	string InsertSql();
-	static int OnSelectCallback(void* callback, int colCount, char** colValues, char** colNames);
-
-public:
-	string ExchangeID;
-	string ProductID;
-	string MarketSegmentID;
-	
-	static constexpr char* TableName = "t_MdbCmeProduct";
-private:
-	char m_Buff[4096];
-};
-
-class CmeInstrumentBrief
-{
-public:
-	int ToStream(char* buff, int size) const;
-	int ToString(char* buff, int size) const;
-	static string CreateSql();
-	string InsertSql();
-	static int OnSelectCallback(void* callback, int colCount, char** colValues, char** colNames);
-
-public:
-	string ExchangeID;
-	string ProductID;
-	string ContractID;
-	string ITCAlias;
-	string GenCode;
-	string MktID;
-	string MarketSegmentID;
-	
-	static constexpr char* TableName = "t_MdbCmeInstrumentBrief";
-private:
-	char m_Buff[4096];
-};
-
 class OrderSequence
 {
 public:
@@ -181,8 +139,6 @@ private:
 class MdbCallback
 {
 public:
-	virtual void SelectMdbCmeProductCallback(CmeProduct* field) { delete field; }
-	virtual void SelectMdbCmeInstrumentBriefCallback(CmeInstrumentBrief* field) { delete field; }
 	virtual void SelectMdbOrderSequenceCallback(OrderSequence* field) { delete field; }
 	virtual void SelectMdbOrderCallback(Order* field) { delete field; }
 	virtual void SelectMdbOrderCancelCallback(OrderCancel* field) { delete field; }

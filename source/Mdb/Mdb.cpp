@@ -21,8 +21,6 @@ void Mdb::SetCallback(MdbCallback* callback)
 }
 void Mdb::CreateAllTables()
 {
-	CreateTable<CmeProduct>();
-	CreateTable<CmeInstrumentBrief>();
 	CreateTable<OrderSequence>();
 	CreateTable<Order>();
 	CreateTable<OrderCancel>();
@@ -30,8 +28,6 @@ void Mdb::CreateAllTables()
 }
 void Mdb::TruncateAllTables()
 {
-	TruncateTable<CmeProduct>();
-	TruncateTable<CmeInstrumentBrief>();
 	TruncateTable<OrderSequence>();
 	TruncateTable<Order>();
 	TruncateTable<OrderCancel>();
@@ -39,8 +35,6 @@ void Mdb::TruncateAllTables()
 }
 void Mdb::SelectAllTables()
 {
-	SelectTable<CmeProduct>();
-	SelectTable<CmeInstrumentBrief>();
 	SelectTable<OrderSequence>();
 	SelectTable<Order>();
 	SelectTable<OrderCancel>();

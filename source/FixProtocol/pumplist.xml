@@ -8,9 +8,6 @@
 	<pump dest="./Source/FixProtocol/FixFields.h" tpl="./Source/FixProtocol/FixFields.h.tpl" model="./Model/FixProtocol/FixProtocol.xml"/>
 	<pump dest="./Source/FixProtocol/FixFields.cpp" tpl="./Source/FixProtocol/FixFields.cpp.tpl" model="./Model/FixProtocol/FixProtocol.xml"/>
 	
-	<pump dest="./Source/FixProtocol/FixApi.h" tpl="./Source/FixProtocol/FixApi.h.tpl" model="./Model/FixProtocol/FixProtocol.xml"/>
-	<pump dest="./Source/FixProtocol/FixApi.cpp" tpl="./Source/FixProtocol/FixApi.cpp.tpl" model="./Model/FixProtocol/FixProtocol.xml"/>
-	
 	<pump dest="./Source/FixProtocol/FixMdb.h" tpl="./Source/FixProtocol/FixMdb.h.tpl" model="./Model/FixProtocol/FixProtocol.xml"/>
 	<pump dest="./Source/FixProtocol/FixMdb.cpp" tpl="./Source/FixProtocol/FixMdb.cpp.tpl" model="./Model/FixProtocol/FixProtocol.xml"/>
 	

@@ -89,7 +89,7 @@ def handle_travel(in_str, entry_list):
     out_str += new_line()
     out_str += "pumpidlist.append(0)"
     out_str += new_line()
-    out_str += "pumpid = 0"
+    out_str += "pumpid = -1"
     out_str += new_line()
     out_str += "parent%d = curr_node" % len(entry_list)
     out_str += new_line()
@@ -99,8 +99,6 @@ def handle_travel(in_str, entry_list):
     out_str += "curr_node = node%d" % len(entry_list)
     out_str += new_line()
     out_str += "parent_map[curr_node] = parent%d" % len(entry_list)
-    out_str += new_line()
-    out_str += "pumpid = pumpidlist.pop()"
     out_str += new_line()
     out_str += "pumpid += 1"
     out_str += new_line()

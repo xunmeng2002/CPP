@@ -43,6 +43,9 @@ void FixMdb::CreateAllTables()
 	CreateTable<FixRspSequenceResetField>();
 	CreateTable<FixExecutionReportField>();
 	CreateTable<FixRspOrderCancelRejectField>();
+
+	CreateTable<FixProduct>();
+	CreateTable<FixInstrument>();
 }
 void FixMdb::TruncateAllTables()
 {
@@ -66,6 +69,9 @@ void FixMdb::TruncateAllTables()
 	TruncateTable<FixRspSequenceResetField>();
 	TruncateTable<FixExecutionReportField>();
 	TruncateTable<FixRspOrderCancelRejectField>();
+
+	TruncateTable<FixProduct>();
+	TruncateTable<FixInstrument>();
 }
 void FixMdb::SelectAllTables()
 {
@@ -89,5 +95,8 @@ void FixMdb::SelectAllTables()
 	SelectTable<FixRspSequenceResetField>();
 	SelectTable<FixExecutionReportField>();
 	SelectTable<FixRspOrderCancelRejectField>();
+
+	TruncateTable<FixProduct>();
+	TruncateTable<FixInstrument>();
 }
 

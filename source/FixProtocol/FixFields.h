@@ -712,3 +712,46 @@ public:
 
 	static constexpr char* TableName = "t_FixRspOrderCancelReject";
 };
+
+class FixProduct
+{
+public:
+	int ToString(char* buff, int size);
+	int ToStream(char* buff, int size);
+	static string CreateSql();
+	string InsertSql();
+	static int OnSelectCallback(void* callback, int colCount, char** colValues, char** colNames);
+	
+public:
+	string ExchangeID;
+	string ProductID;
+	string MarketSegmentID;
+
+	static constexpr char* TableName = "t_FixProduct";
+	
+private:
+	char m_Buff[4096];
+};
+class FixInstrument
+{
+public:
+	int ToString(char* buff, int size);
+	int ToStream(char* buff, int size);
+	static string CreateSql();
+	string InsertSql();
+	static int OnSelectCallback(void* callback, int colCount, char** colValues, char** colNames);
+	
+public:
+	string ExchangeID;
+	string ProductID;
+	string InstrumentID;
+	string ITCAlias;
+	string GenCode;
+	string MarketSegmentID;
+
+	static constexpr char* TableName = "t_FixInstrument";
+	
+private:
+	char m_Buff[4096];
+};
+

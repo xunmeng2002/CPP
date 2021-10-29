@@ -24,6 +24,6 @@ private:
 	int RecvIndex;
 };
 
-constexpr char FixAuditTrailHeader[] = "!!travel!!!!if $pumpid > "1":!!!!inc indent!!, !!dec indent!!!!@desc!!!!leave!!\n";
+constexpr char FixAuditTrailHeader[] = "!!travel!!!!if pumpid > 0:!!!!inc indent!!, !!dec indent!!!!@desc!!!!leave!!\n";
 
 !!leave!!

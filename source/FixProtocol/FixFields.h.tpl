@@ -117,3 +117,30 @@ public:
 };
 !!leave!!
 !!leave!!
+
+!!entry InnerTables!!
+!!travel!!
+class Fix!!@name!!
+{
+public:
+	int ToString(char* buff, int size);
+	int ToStream(char* buff, int size);
+	static string CreateSql();
+	string InsertSql();
+	static int OnSelectCallback(void* callback, int colCount, char** colValues, char** colNames);
+	
+public:
+!!entry items!!
+!!travel!!
+	string !!@name!!;
+!!leave!!
+!!leave!!
+
+	static constexpr char* TableName = "t_Fix!!@name!!";
+	
+private:
+	char m_Buff[4096];
+};
+!!leave!!
+!!leave!!
+

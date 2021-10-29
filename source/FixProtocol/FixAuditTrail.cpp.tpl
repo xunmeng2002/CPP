@@ -78,7 +78,7 @@ void FixAuditTrail::SetMessage(FixMessage* fixMessage, string messageDirection)
 }
 char* FixAuditTrail::ToString() const
 {
-	sprintf(Buff, "!!travel!!!!if $pumpid > "1":!!!!inc indent!!, !!dec indent!!%s!!leave!!\n"!!travel!!, !!@name!!.c_str()!!leave!!);
+	sprintf(Buff, "!!travel!!!!if pumpid > 0:!!!!inc indent!!, !!dec indent!!%s!!leave!!\n"!!travel!!, !!@name!!.c_str()!!leave!!);
 	return Buff;
 }
 

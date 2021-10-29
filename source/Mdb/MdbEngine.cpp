@@ -43,35 +43,9 @@ bool MdbEngine::Init(const char* dbName)
 	Mdb::GetInstance().SetDB(m_Mdb);
 	Mdb::GetInstance().SetCallback(this);
 	Mdb::GetInstance().CreateAllTables();
-	InitInstruments();
 	Mdb::GetInstance().SelectAllTables();
 
 	return true;
-}
-void MdbEngine::InitInstruments()
-{
-	CmeInstrumentBrief instrument;
-	instrument.ExchangeID = "CME";
-	instrument.ContractID = "CL2201";
-	instrument.MarketSegmentID = "921";
-	instrument.ITCAlias = "3GLBZ0";
-	Mdb::GetInstance().InsertRecord(&instrument);
-
-	instrument.ContractID = "CL2202";
-	instrument.MarketSegmentID = "921";
-	instrument.ITCAlias = "3GLBG1";
-	Mdb::GetInstance().InsertRecord(&instrument);
-
-	instrument.ContractID = "GC2202";
-	instrument.MarketSegmentID = "925";
-	instrument.ITCAlias = "0GLBZ0";
-	Mdb::GetInstance().InsertRecord(&instrument);
-
-	instrument.ContractID = "GC2204";
-	instrument.MarketSegmentID = "925";
-	instrument.ITCAlias = "0GLBG1";
-	Mdb::GetInstance().InsertRecord(&instrument);
-
 }
 void MdbEngine::ReqInsertOrder(int sessionID, ItsInsertOrder* field)
 {
@@ -111,12 +85,12 @@ void MdbEngine::OnErrRtnOrderCancel(OrderCancel* field)
 	OnEvent(myEvent);
 }
 
-void MdbEngine::SelectMdbCmeInstrumentBriefCallback(CmeInstrumentBrief* field)
+void MdbEngine::SelectMdbOrderSequenceCallback(OrderSequence* field)
 {
 	field->ToString(m_LogBuff, BuffSize);
-	WRITE_LOG(LogLevel::Info, "SelectMdbCmeInstrumentBriefCallback %s", m_LogBuff);
+	WRITE_LOG(LogLevel::Info, "SelectMdbOrderSequenceCallback %s", m_LogBuff);
 
-	m_CmeInstrumentBriefs.insert(field);
+	m_OrderSequences.insert(field);
 }
 void MdbEngine::SelectMdbOrderCallback(Order* field)
 {
@@ -190,19 +164,10 @@ void MdbEngine::HandleInsertOrder(int sessionID, ItsInsertOrder* field)
 	field->ToString(m_LogBuff, BuffSize);
 	WRITE_LOG(LogLevel::Info, "%s", m_LogBuff);
 
-	auto instrument = GetCmeInstrumentBriefFromBroker(field->ExchangeID, field->ContractID);
-	if (instrument == nullptr)
-	{
-		SendResponse(sessionID, field->SequenceNo, "-1", "合约代码未找到");
-		return;
-	}
-
 	Order* order = new Order();
 	order->AccountID = field->AccountID;
 	order->ExchangeID = field->ExchangeID;
-	order->ContractID = field->ContractID;
-	order->MarketSegmentID = instrument->MarketSegmentID;
-	order->InstrumentID = instrument->ITCAlias;
+	order->InstrumentID = field->ContractID;
 	order->OrderLocalID = GetNextOrderLocalID(field->TradingDay);
 	order->OrderSysID = "";
 	order->Direction = ConvertToDirection(field->Direction);
@@ -240,13 +205,6 @@ void MdbEngine::HandleInsertOrderCancel(int sessionID, ItsInsertOrderCancel* fie
 {
 	field->ToString(m_LogBuff, BuffSize);
 	WRITE_LOG(LogLevel::Info, "%s", m_LogBuff);
-
-	auto instrument = GetCmeInstrumentBriefFromBroker(field->ExchangeID, field->ContractID);
-	if (instrument == nullptr)
-	{
-		SendResponse(sessionID, field->SequenceNo, "-1", "合约代码未找到");
-		return;
-	}
 	if (field->OrderSysID.empty())
 	{
 		SendResponse(sessionID, field->SequenceNo, "-1", "交易所报单编号不能为空");
@@ -262,9 +220,7 @@ void MdbEngine::HandleInsertOrderCancel(int sessionID, ItsInsertOrderCancel* fie
 	auto orderCancel = new OrderCancel();
 	orderCancel->AccountID = "";
 	orderCancel->ExchangeID = field->ExchangeID;
-	orderCancel->ContractID = field->ContractID;
-	orderCancel->MarketSegmentID = instrument->MarketSegmentID;
-	orderCancel->InstrumentID = instrument->ITCAlias;
+	orderCancel->InstrumentID = field->ContractID;
 	orderCancel->OrderLocalID = GetNextOrderLocalID(field->TradingDay);
 	orderCancel->OrigOrderLocalID = order == nullptr ? 0 :  order->OrderLocalID;
 	orderCancel->OrderSysID = field->OrderSysID;
@@ -299,12 +255,6 @@ void MdbEngine::SendResponse(int sessionID, const string& sequenceNo, const stri
 }
 void MdbEngine::HandleRtnOrder(Order* field)
 {
-	auto instrument = GetCmeInstrumentBriefFromExchange(field->InstrumentID);
-	if (instrument)
-	{
-		field->ExchangeID = instrument->ExchangeID;
-		field->ContractID = instrument->ContractID;
-	}
 	field->ToString(m_LogBuff, BuffSize);
 	WRITE_LOG(LogLevel::Info, "HandleRtnOrder: %s", m_LogBuff);
 	auto order = GetOrderFromOrderSysID(field->OrderSysID);
@@ -341,7 +291,7 @@ void MdbEngine::HandleRtnOrder(Order* field)
 	itsOrder.Command = ItoA(CMS_CID_BROADCAST_MA_ORDER);
 	itsOrder.ChannelID = m_ChannelID;
 	itsOrder.ExchangeID = order->ExchangeID;
-	itsOrder.ContractID = order->ContractID;
+	itsOrder.ContractID = order->InstrumentID;
 	itsOrder.OrderRef = "";
 	itsOrder.InsertTime = order->InsertTime;
 	itsOrder.CancelTime = order->CancelTime;
@@ -376,12 +326,6 @@ void MdbEngine::HandleRtnOrder(Order* field)
 }
 void MdbEngine::HandleRtnTrade(Trade* field)
 {
-	auto instrument = GetCmeInstrumentBriefFromExchange(field->InstrumentID);
-	if (instrument)
-	{
-		field->ExchangeID = instrument->ExchangeID;
-		field->ContractID = instrument->ContractID;
-	}
 	field->ToString(m_LogBuff, BuffSize);
 	WRITE_LOG(LogLevel::Info, "HandleRtnTrade: %s", m_LogBuff);
 
@@ -395,7 +339,7 @@ void MdbEngine::HandleRtnTrade(Trade* field)
 	itsTrade.Command = ItoA(CMS_CID_BROADCAST_MA_TRADE);
 	itsTrade.ChannelID = m_ChannelID;
 	itsTrade.ExchangeID = field->ExchangeID;
-	itsTrade.ContractID = field->ContractID;
+	itsTrade.ContractID = field->InstrumentID;
 	itsTrade.OrderRef = "";
 	itsTrade.OrderSysID = field->OrderSysID;
 	itsTrade.TradeTime = field->TradeTime;
@@ -415,12 +359,6 @@ void MdbEngine::HandleRtnTrade(Trade* field)
 }
 void MdbEngine::HandleErrRtnOrderCancel(OrderCancel* field)
 {
-	auto instrument = GetCmeInstrumentBriefFromExchange(field->InstrumentID);
-	if (instrument)
-	{
-		field->ExchangeID = instrument->ExchangeID;
-		field->ContractID = instrument->ContractID;
-	}
 	field->ToString(m_LogBuff, BuffSize);
 	WRITE_LOG(LogLevel::Info, "HandleErrRtnOrderCancel: %s", m_LogBuff);
 	
@@ -458,28 +396,6 @@ void MdbEngine::HandleErrRtnOrderCancel(OrderCancel* field)
 }
 
 
-CmeInstrumentBrief* MdbEngine::GetCmeInstrumentBriefFromBroker(const string& exchangeID, const string& contractID)
-{
-	auto it = find_if(m_CmeInstrumentBriefs.begin(), m_CmeInstrumentBriefs.end(), [&](CmeInstrumentBrief* cmeInstrumentBrief) {
-		return cmeInstrumentBrief->ExchangeID == exchangeID && cmeInstrumentBrief->ContractID == contractID;
-		});
-	if (it == m_CmeInstrumentBriefs.end())
-	{
-		return nullptr;
-	}
-	return *it;
-}
-CmeInstrumentBrief* MdbEngine::GetCmeInstrumentBriefFromExchange(const string& instrumentID)
-{
-	auto it = find_if(m_CmeInstrumentBriefs.begin(), m_CmeInstrumentBriefs.end(), [&](CmeInstrumentBrief* cmeInstrumentBrief) {
-		return cmeInstrumentBrief->ITCAlias == instrumentID;
-		});
-	if (it == m_CmeInstrumentBriefs.end())
-	{
-		return nullptr;
-	}
-	return *it;
-}
 int MdbEngine::GetNextOrderLocalID(const string& tradingDay)
 {
 	auto it = find_if(m_OrderSequences.begin(), m_OrderSequences.end(), [&](OrderSequence* orderSequence) {

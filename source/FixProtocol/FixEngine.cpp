@@ -7,6 +7,7 @@
 #include "CryptoppEncode.h"
 #include "FixEnumTransfer.h"
 #include "Config.h"
+#include "CmeMonthMap.h"
 
 
 
@@ -14,7 +15,6 @@ FixEngine::FixEngine()
 	:ThreadBase("FixEngine"), m_LastResendRequestField(nullptr), m_Mdb(nullptr)
 {
 	m_TcpClient = new TcpSelectClient();
-	m_FixSpi = new FixSpiImpl();
 	m_LogBuff = new char[BuffSize];
 
 	m_ConnectStatus = ConnectStatus::NotConnected;
@@ -46,11 +46,6 @@ FixEngine::~FixEngine()
 		delete m_TcpClient;
 	}
 	m_TcpClient = nullptr;
-	if (m_FixSpi)
-	{
-		delete m_FixSpi;
-	}
-	m_FixSpi = nullptr;
 	if (m_LogBuff)
 	{
 		delete m_LogBuff;
@@ -74,10 +69,12 @@ FixEngine::~FixEngine()
 	m_FixAuditTrail = nullptr;
 
 	sqlite3_close(m_Mdb);
+
+	ClearInitMessage();
 }
 void FixEngine::RegisterMdbPublisher(MdbPublisher* mdbPublisher)
 {
-	m_FixSpi->RegisterSubscriber(mdbPublisher);
+	m_MdbPublisher = mdbPublisher;
 }
 void FixEngine::RegisterAddress(const string& primaryIP, int primaryPort, const string& backupIP, int backupPort)
 {
@@ -89,8 +86,8 @@ bool FixEngine::Init(const char* dbName)
 	sqlite3_open(dbName, &m_Mdb);
 	FixMdb::GetInstance().SetDB(m_Mdb);
 	FixMdb::GetInstance().SetCallback(this);
-	
 	FixMdb::GetInstance().CreateAllTables();
+	InitInstruments();
 	FixMdb::GetInstance().SelectAllTables();
 
 	if (Config::GetInstance().RecordFixAuditTrail)
@@ -101,6 +98,30 @@ bool FixEngine::Init(const char* dbName)
 	m_TcpClient->Subscriber(this);
 	m_TcpClient->SetTcpInfo();
 	return m_TcpClient->Init();
+}
+void FixEngine::InitInstruments()
+{
+	FixInstrument instrument;
+	instrument.ExchangeID = "CME";
+	instrument.InstrumentID = "CL2201";
+	instrument.MarketSegmentID = "921";
+	instrument.ITCAlias = "3GLBZ0";
+	FixMdb::GetInstance().InsertRecord(&instrument);
+
+	instrument.InstrumentID = "CL2202";
+	instrument.MarketSegmentID = "921";
+	instrument.ITCAlias = "3GLBG1";
+	FixMdb::GetInstance().InsertRecord(&instrument);
+
+	instrument.InstrumentID = "GC2202";
+	instrument.MarketSegmentID = "925";
+	instrument.ITCAlias = "0GLBZ0";
+	FixMdb::GetInstance().InsertRecord(&instrument);
+
+	instrument.InstrumentID = "GC2204";
+	instrument.MarketSegmentID = "925";
+	instrument.ITCAlias = "0GLBG1";
+	FixMdb::GetInstance().InsertRecord(&instrument);
 }
 bool FixEngine::Start()
 {
@@ -132,9 +153,60 @@ void FixEngine::InitRspMessage(FixRspHeader* rspField)
 	WRITE_LOG(LogLevel::Info, "InitRspMessage: %s", m_LogBuff);
 	m_AppRspFields.insert(make_pair(atoi(rspField->MsgSeqNum.c_str()), rspField));
 }
+void FixEngine::SelectFixProductCallback(FixProduct* field)
+{
+	field->ToString(m_LogBuff, BUFF_SIZE);
+	WRITE_LOG(LogLevel::Info, "%s", m_LogBuff);
+	m_FixProducts.insert(field);
+}
+void FixEngine::SelectFixInstrumentCallback(FixInstrument* field)
+{
+	field->ToString(m_LogBuff, BUFF_SIZE);
+	WRITE_LOG(LogLevel::Info, "%s", m_LogBuff);
+	m_FixInstruments.insert(field);
+}
+
+void FixEngine::ClearInitMessage()
+{
+	for (auto& it : m_AppReqFields)
+	{
+		delete it.second;
+	}
+	m_AppReqFields.clear();
+	for (auto& it : m_AppRspFields)
+	{
+		delete it.second;
+	}
+	m_AppRspFields.clear();
+	for (auto field : m_FixProducts)
+	{
+		delete field;
+	}
+	m_FixProducts.clear();
+	for (auto field : m_FixInstruments)
+	{
+		delete field;
+	}
+	m_FixInstruments.clear();
+}
 
 void FixEngine::ReqInsertOrder(Order* order)
 {
+	MyEvent* myEvent = MyEvent::Allocate();
+	myEvent->EventID = EVENT_INSERT_ORDER;
+	myEvent->Field = order;
+	OnEvent(myEvent);
+}
+void FixEngine::ReqInsertOrderCancel(OrderCancel* orderCancel)
+{
+	MyEvent* myEvent = MyEvent::Allocate();
+	myEvent->EventID = EVENT_INSERT_ORDER_CANCEL;
+	myEvent->Field = orderCancel;
+	OnEvent(myEvent);
+}
+void FixEngine::HandleInsertOrder(Order* order)
+{
+
 	auto& config = Config::GetInstance();
 	auto fixReqNewOrder = new FixReqNewOrderField(PrepareReqHeader());
 	fixReqNewOrder->Account = config.Account;
@@ -156,7 +228,7 @@ void FixEngine::ReqInsertOrder(Order* order)
 	fixReqNewOrder->AllocAccount = "";
 	fixReqNewOrder->StopPx = "";
 	fixReqNewOrder->MarketSegmentID = order->MarketSegmentID;
-	fixReqNewOrder->SecurityDesc = order->InstrumentID;
+	fixReqNewOrder->SecurityDesc = GetFixInstrumentFromBroker(order->ExchangeID, order->InstrumentID)->ITCAlias;
 	if (order->VolumeCondition == VolumeCondition::CV)
 	{
 		fixReqNewOrder->MinQty = ItoA(order->Volume);
@@ -180,9 +252,10 @@ void FixEngine::ReqInsertOrder(Order* order)
 	fixReqNewOrder->CmtaGiveupCD = "";
 	fixReqNewOrder->CorrelationClOrdID = fixReqNewOrder->ClOrdID;
 
-	ReqNewOrder(fixReqNewOrder);
+	SendRequest(fixReqNewOrder);
+	RecordRequest(fixReqNewOrder);
 }
-void FixEngine::ReqInsertOrderCancel(OrderCancel* orderCancel)
+void FixEngine::HandleInsertOrderCancel(OrderCancel* orderCancel)
 {
 	auto& config = Config::GetInstance();
 	auto fixReqOrderCancel = new FixReqOrderCancelRequestField(PrepareReqHeader());
@@ -195,12 +268,14 @@ void FixEngine::ReqInsertOrderCancel(OrderCancel* orderCancel)
 	fixReqOrderCancel->TransactTime = GetUtcTime();
 	fixReqOrderCancel->ManualOrderIndicator = "Y";
 	fixReqOrderCancel->Memo = "";
-	fixReqOrderCancel->SecurityDesc = orderCancel->InstrumentID;
+	fixReqOrderCancel->SecurityDesc = GetFixInstrumentFromBroker(orderCancel->ExchangeID, orderCancel->InstrumentID)->ITCAlias;
 	fixReqOrderCancel->SecurityType = FIX_Future;
 	fixReqOrderCancel->CorrelationClOrdID = ItoA(orderCancel->OrigOrderLocalID);
 
-	ReqOrderCancelRequest(fixReqOrderCancel);
+	SendRequest(fixReqOrderCancel);
+	RecordRequest(fixReqOrderCancel);
 }
+
 
 void FixEngine::OnConnect(int sessionID, const char* ip, int port)
 {
@@ -244,22 +319,7 @@ void FixEngine::ReqTestRequest(FixReqTestRequestField* reqField)
 {
 	OnEventFixMessage(reqField);
 }
-void FixEngine::ReqNewOrder(FixReqNewOrderField* reqField)
-{
-	OnEventFixMessage(reqField);
-}
-void FixEngine::ReqOrderCancelRequest(FixReqOrderCancelRequestField* reqField)
-{
-	OnEventFixMessage(reqField);
-}
-void FixEngine::ReqOrderCancelReplaceRequest(FixReqOrderCancelReplaceRequestField* reqField)
-{
-	OnEventFixMessage(reqField);
-}
-void FixEngine::ReqOrderStatusRequest(FixReqOrderStatusRequestField* reqField)
-{
-	OnEventFixMessage(reqField);
-}
+
 
 
 void FixEngine::Run()
@@ -285,13 +345,11 @@ void FixEngine::HandleEvent()
 		case EVENT_ON_CONNECTED:
 		{
 			HandleConnect(((TcpEvent*)event)->SessionID);
-			m_FixSpi->OnFixConnected();
 			break;
 		}
 		case EVENT_ON_DISCONNECTED:
 		{
 			HandleDisConnect(((TcpEvent*)event)->SessionID);
-			m_FixSpi->OnFixDisConnected();
 			break;
 		}
 		case EVENT_ON_TCP_RECV:
@@ -329,6 +387,20 @@ void FixEngine::HandleEvent()
 			SendRequest(field);
 			RecordRequest(field);
 			myEvent->Field = nullptr;
+			break;
+		}
+		case EVENT_INSERT_ORDER:
+		{
+			myEvent = (MyEvent*)event;
+			auto order = (Order*)myEvent->Field;
+			HandleInsertOrder(order);
+			break;
+		}
+		case EVENT_INSERT_ORDER_CANCEL:
+		{
+			myEvent = (MyEvent*)event;
+			auto orderCancel = (OrderCancel*)myEvent->Field;
+			HandleInsertOrderCancel(orderCancel);
 			break;
 		}
 		default:
@@ -515,6 +587,8 @@ void FixEngine::HandleConnect(int sessionID)
 	m_ResendRange = make_pair(0, 0);
 	m_IsDoResendRequest = false;
 	m_AlreadySendTestRequest = false;
+
+	WRITE_LOG(LogLevel::Info, "OnFixConnected");
 }
 void FixEngine::HandleDisConnect(int sessionID)
 {
@@ -534,6 +608,7 @@ void FixEngine::HandleDisConnect(int sessionID)
 		it.second->Free();
 	}
 	m_FixMessages.clear();
+	WRITE_LOG(LogLevel::Info, "OnFixDisConnected");
 }
 void FixEngine::HandleFixMessage(FixMessage* fixMessage)
 {
@@ -788,15 +863,12 @@ void FixEngine::OnFixRspLogon(FixMessage* fixMessage)
 	else
 	{
 		auto rspField = new FixRspLogonField(fixMessage);
-		m_FixSpi->OnFixRspLogon(rspField);
-		
 		RecordResponse(rspField);
 	}
 }
 void FixEngine::OnFixRspLogout(FixMessage* fixMessage)
 {
 	auto rspField = new FixRspLogoutField(fixMessage);
-	m_FixSpi->OnFixRspLogout(rspField);
 	RecordResponse(rspField);
 
 	if (rspField->NextExpectedMsgSeqNum == "1")
@@ -819,7 +891,6 @@ void FixEngine::OnFixRspHeartBeat(FixMessage* fixMessage)
 		return;
 	}
 	auto rspField = new FixRspHeartBeatField(fixMessage);
-	m_FixSpi->OnFixRspHeartBeat(rspField);
 	RecordResponse(rspField);
 
 	if (m_AlreadySendTestRequest && rspField->TestReqID == string(m_TestReqID))
@@ -834,7 +905,6 @@ void FixEngine::OnFixRspTestRequest(FixMessage* fixMessage)
 		return;
 	}
 	auto rspField = new FixRspTestRequestField(fixMessage);
-	m_FixSpi->OnFixRspTestRequest(rspField);
 	RecordResponse(rspField);
 
 	auto reqField = new FixReqHeartBeatField(PrepareReqHeader());
@@ -845,7 +915,6 @@ void FixEngine::OnFixRspResendRequest(FixMessage* fixMessage)
 {
 	Verify(fixMessage, false, false);
 	auto rspField = new FixRspResendRequestField(fixMessage);
-	m_FixSpi->OnFixRspResendRequest(rspField);
 	RecordResponse(rspField);
 
 	OnEventDoResendRequest(atoi(rspField->BeginSeqNo.c_str()), atoi(rspField->EndSeqNo.c_str()));
@@ -857,8 +926,6 @@ void FixEngine::OnFixRspSessionLevelReject(FixMessage* fixMessage)
 		return;
 	}
 	auto rspField = new FixRspSessionLevelRejectField(fixMessage);
-	m_FixSpi->OnFixRspSessionLevelReject(rspField);
-
 	RecordResponse(rspField);
 }
 void FixEngine::OnFixRspSequenceReset(FixMessage* fixMessage)
@@ -869,7 +936,6 @@ void FixEngine::OnFixRspSequenceReset(FixMessage* fixMessage)
 		return;
 	}
 	auto rspField = new FixRspSequenceResetField(fixMessage);
-	m_FixSpi->OnFixRspSequenceReset(rspField);
 	RecordResponse(rspField);
 	
 	auto nextExpectSeqNum = SeqNum::GetInstance().GetNextExpectSeqNum();
@@ -889,21 +955,39 @@ void FixEngine::OnFixRspSequenceReset(FixMessage* fixMessage)
 void FixEngine::OnFixExecutionReport(FixMessage* fixMessage)
 {
 	auto rspField = new FixExecutionReportField(fixMessage);
-	m_FixSpi->OnFixExecutionReport(rspField);
+	auto orderStatus = ConvertToFixOrderStatus(rspField->OrderStatus);
+	auto execType = ConvertToFixExecType(rspField->ExecType);
 
+	if (orderStatus == FixOrderStatus::PartiallyFilled || orderStatus == FixOrderStatus::Filled)
+	{
+		OnRtnOrder(rspField);
+		OnRtnTrade(rspField);
+	}
+	else if (orderStatus == FixOrderStatus::New || orderStatus == FixOrderStatus::Cancelled || orderStatus == FixOrderStatus::Replaced || orderStatus == FixOrderStatus::Rejected || orderStatus == FixOrderStatus::Eliminated)
+	{
+		OnRtnOrder(rspField);
+	}
+	else if (execType == FixExecType::OrderStatus)
+	{
+		OnRtnOrder(rspField);
+	}
+	else
+	{
+		WRITE_LOG(LogLevel::Warning, "UnExepected Order Status. OrderStatus[%s], ExecType[%s]", rspField->OrderStatus.c_str(), rspField->ExecType.c_str());
+	}
 	RecordResponse(rspField);
 }
 void FixEngine::OnFixRspOrderCancelReject(FixMessage* fixMessage)
 {
 	auto rspField = new FixRspOrderCancelRejectField(fixMessage);
-	m_FixSpi->OnFixRspOrderCancelReject(rspField);
-
+	OnErrRtnOrderCancel(rspField);
 	RecordResponse(rspField);
 }
 
 void FixEngine::RecordRequest(FixReqHeader* reqField)
 {
 	FixMdb::GetInstance().InsertRecord(reqField);
+	WriteFixLog(reqField);
 
 	if (reqField->MsgClass == "app")
 	{
@@ -918,8 +1002,8 @@ void FixEngine::RecordRequest(FixReqHeader* reqField)
 void FixEngine::RecordResponse(FixRspHeader* rspField)
 {
 	m_AppRspFields[atoi(rspField->MsgSeqNum.c_str())] = rspField;
-
 	FixMdb::GetInstance().InsertRecord(rspField);
+	WriteFixLog(rspField);
 }
 void FixEngine::UpdateLastSendTime()
 {
@@ -936,4 +1020,174 @@ void FixEngine::RecordFixAuditTrail(FixMessage* fixMessage, string messageDirect
 	m_FixAuditTrail->SetMessage(fixMessage, messageDirection);
 
 	FixAuditTrailWriter::GetInstance().WriteFixAuditTrailRecord(m_FixAuditTrail);
+}
+
+FixInstrument* FixEngine::GetFixInstrumentFromBroker(const string& exchangeID, const string& instrumentID)
+{
+	auto it = find_if(m_FixInstruments.begin(), m_FixInstruments.end(), [&](FixInstrument* fixInstrument) {
+		return fixInstrument->ExchangeID == exchangeID && fixInstrument->InstrumentID == instrumentID;
+		});
+	if (it == m_FixInstruments.end())
+	{
+		string productID = string(instrumentID.begin(), instrumentID.end() - 4);
+		string year = string(instrumentID.end() - 3, instrumentID.end() - 2);
+		string month = string(instrumentID.end() - 2, instrumentID.end());
+		string monthLetter = CmeMonthMap::GetInstance().GetMonthLetter(month);
+		string itcAlias = productID + monthLetter + year;
+		auto fixInstrument = new FixInstrument();
+		fixInstrument->ExchangeID = exchangeID;
+		fixInstrument->ProductID = productID;
+		fixInstrument->InstrumentID = instrumentID;
+		fixInstrument->ITCAlias = itcAlias;
+		fixInstrument->GenCode = itcAlias;
+		m_FixInstruments.insert(fixInstrument);
+
+
+		WRITE_LOG(LogLevel::Warning, "Cannot find FixInstrument from Broker ExchangeID[%s], InstrumentID[%s], ITCAlias[%s]", exchangeID.c_str(), instrumentID.c_str(), itcAlias.c_str());
+		return fixInstrument;
+	}
+	return *it;
+}
+FixInstrument* FixEngine::GetFixInstrumentFromExchange(const string& exchangeID, const string& itcAlias)
+{
+	auto it = find_if(m_FixInstruments.begin(), m_FixInstruments.end(), [&](FixInstrument* fixInstrument) {
+		return fixInstrument->ITCAlias == itcAlias;
+		});
+	if (it == m_FixInstruments.end())
+	{
+		string year = "";
+		string monthLetter = "";
+		string productID = "";
+		for (auto rit = itcAlias.rbegin(); rit != itcAlias.rend(); rit++)
+		{
+			if (*rit > '9' || *rit < '0')
+			{
+				auto it = rit.base();
+				year = string(it, itcAlias.end());
+				auto it2 = it - 1;
+				monthLetter = string(it2, it);
+				productID = string(itcAlias.begin(), it2);
+				break;
+			}
+		}
+		if (year.length() < 2)
+		{
+			string date = GetFormatDate();
+			year = string(date.begin() + 2, date.begin() + 3) + year;
+		}
+		else if (year.length() > 2)
+		{
+			year = string(year.end() - 2, year.end());
+		}
+		string monthNum = CmeMonthMap::GetInstance().GetMonthNum(monthLetter);
+		string instrumentID = productID + year + monthNum;
+
+		auto fixInstrument = new FixInstrument();
+		fixInstrument->ExchangeID = exchangeID;
+		fixInstrument->ProductID = productID;
+		fixInstrument->InstrumentID = instrumentID;
+		fixInstrument->ITCAlias = itcAlias;
+		fixInstrument->GenCode = itcAlias;
+		m_FixInstruments.insert(fixInstrument);
+
+		WRITE_LOG(LogLevel::Warning, "Cannot find FixInstrument from Broker ExchangeID[%s], InstrumentID[%s], ITCAlias[%s]", exchangeID.c_str(), instrumentID.c_str(), itcAlias.c_str());
+		return fixInstrument;
+	}
+	return *it;
+}
+void FixEngine::OnRtnOrder(FixExecutionReportField* rspField)
+{
+	auto requestTimeStamp = atoll(rspField->RequestTime.c_str()) / 1000000000LL;
+	string requestDate = GetDateFromUnixTimeStamp(requestTimeStamp);
+	string requestTime = GetTimeFromUnixTimeStamp(requestTimeStamp);
+
+	Order* order = new Order();
+	order->AccountID = "";
+	order->ExchangeID = rspField->SenderCompID;
+	order->InstrumentID = GetFixInstrumentFromExchange(rspField->SenderCompID, rspField->SecurityDesc)->InstrumentID;
+	order->OrderLocalID = atoi(rspField->CorrelationClOrdID.c_str());
+	order->OrderSysID = rspField->OrderID;
+	order->Direction = FromFixDirection(FixDirection(rspField->Side[0]));
+	order->OffsetFlag = OffsetFlag::Open;
+	order->HedgeFlag = HedgeFlag::Speculation;
+	order->OrderPriceType = FromFixPriceType(FixOrderType(rspField->OrdType[0]));
+	order->Price = atof(rspField->Price.c_str());
+	order->Volume = atoi(rspField->OrderQty.c_str());
+	order->VolumeTraded = atoi(rspField->CumQty.c_str());
+	order->OrderStatus = (OrderStatus)FromFixOrderStatus(FixOrderStatus(rspField->OrderStatus[0]));
+	order->StatusMsg = rspField->SplitMsg;
+	order->RequestID = "";
+	order->FrontID = "";
+	order->SessionID = 0;
+
+	order->InsertTime = requestTime;
+	if (order->OrderStatus == OrderStatus::Canceled)
+	{
+		order->CancelTime = GetTimeFromUtcTime(rspField->TransactTime);
+	}
+	order->InsertDate = requestDate;
+	order->TradingDay = requestDate;
+	order->ForceCloseReason = ForceCloseReason::NotForceClose;
+	order->IsLocalOrder = IsLocalOrder::Others;
+	order->UserProductInfo = "";
+	order->TimeCondition = FromFixTimeInForce(FixTimeInForce(rspField->TimeInForce[0]));
+	order->GTDDate = rspField->ExpireDate;
+	if (rspField->MinQty.empty())
+	{
+		order->VolumeCondition = VolumeCondition::AV;
+		order->MinVolume = 0;
+	}
+	else if (rspField->MinQty == rspField->OrderQty)
+	{
+		order->VolumeCondition = VolumeCondition::CV;
+		order->MinVolume = 0;
+	}
+	else
+	{
+		order->VolumeCondition = VolumeCondition::MV;
+		order->MinVolume = atoi(rspField->MinQty.c_str());
+	}
+	order->ContingentCondition = ContingentCondition::Immediately;
+	order->StopPrice = rspField->StopPx;
+	order->IsSwapOrder = "0";
+
+	m_MdbPublisher->OnRtnOrder(order);
+}
+void FixEngine::OnRtnTrade(FixExecutionReportField* rspField)
+{
+	Trade* trade = new Trade();
+	trade->AccountID = rspField->Account;
+	trade->ExchangeID = rspField->SenderCompID;
+	trade->InstrumentID = GetFixInstrumentFromExchange(rspField->SenderCompID, rspField->SecurityDesc)->InstrumentID;
+	trade->TradeID = rspField->MDTradeEntryID;
+	trade->Direction = FromFixDirection(FixDirection(rspField->Side[0]));
+	trade->OffsetFlag = OffsetFlag::Open;
+	trade->HedgeFlag = HedgeFlag::Speculation;
+	trade->Price = atof(rspField->LastPx.c_str());
+	trade->Volume = atoi(rspField->LastQty.c_str());
+	trade->OrderLocalID = atoi(rspField->CorrelationClOrdID.c_str());
+	trade->OrderSysID = rspField->OrderID;
+	trade->TradeTime = GetTimeFromUtcTime(rspField->TransactTime);
+	trade->TradeDate = GetDateFromUtcTime(rspField->TransactTime);
+	trade->TradingDay = GetDateFromUtcTime(rspField->TransactTime);
+
+	m_MdbPublisher->OnRtnTrade(trade);
+}
+void FixEngine::OnErrRtnOrderCancel(FixRspOrderCancelRejectField* rspField)
+{
+	OrderCancel* orderCancel = new OrderCancel();
+	orderCancel->AccountID = rspField->Account;
+	orderCancel->ExchangeID = rspField->SenderCompID;
+	orderCancel->InstrumentID = GetFixInstrumentFromExchange(rspField->SenderCompID, rspField->SecurityDesc)->InstrumentID;
+	orderCancel->OrderLocalID = atoi(rspField->ClOrdID.c_str());
+	orderCancel->OrigOrderLocalID = atoi(rspField->CorrelationClOrdID.c_str());
+	orderCancel->OrderSysID = rspField->OrderID;
+	orderCancel->Direction = Direction::Buy;
+	orderCancel->OrderRef = "";
+	orderCancel->FrontID = "";
+	orderCancel->SessionID = 0;
+	orderCancel->ErrorID = atoi(rspField->CxlRejReason.c_str());
+	orderCancel->ErrorMsg = rspField->Text;
+
+	m_MdbPublisher->OnErrRtnOrderCancel(orderCancel);
 }

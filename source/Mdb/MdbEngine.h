@@ -17,14 +17,13 @@ public:
 	void RegisterItsPublisher(ItsPublisher* itsPublisher);
 	void RegisterSubscriber(MdbSubscriber* mdbSubscriber);
 	bool Init(const char* dbName = "");
-	void InitInstruments();
 	virtual void ReqInsertOrder(int sessionID, ItsInsertOrder* field) override;
 	virtual void ReqInsertOrderCancel(int sessionID, ItsInsertOrderCancel* field) override;
 	virtual void OnRtnOrder(Order* field) override;
 	virtual void OnRtnTrade(Trade* field) override;
 	virtual void OnErrRtnOrderCancel(OrderCancel* field) override;
 
-	virtual void SelectMdbCmeInstrumentBriefCallback(CmeInstrumentBrief* field) override;
+	virtual void SelectMdbOrderSequenceCallback(OrderSequence* field) override;
 	virtual void SelectMdbOrderCallback(Order* field) override;
 	virtual void SelectMdbOrderCancelCallback(OrderCancel* field) override;
 	virtual void SelectMdbTradeCallback(Trade* field) override;
@@ -40,8 +39,6 @@ public:
 	void HandleErrRtnOrderCancel(OrderCancel* field);
 
 private:
-	CmeInstrumentBrief* GetCmeInstrumentBriefFromBroker(const string& exchangeID, const string& contractID);
-	CmeInstrumentBrief* GetCmeInstrumentBriefFromExchange(const string& instrumentID);
 	int GetNextOrderLocalID(const string& tradingDay);
 	Order* GetOrderFromOrderSysID(const string& orderSysID);
 	Order* GetOrderFromOrderLocalID(int orderLocalID);
@@ -50,7 +47,6 @@ private:
 
 private:
 	sqlite3* m_Mdb;
-	std::set<CmeInstrumentBrief*> m_CmeInstrumentBriefs;
 
 	std::set<OrderSequence*> m_OrderSequences;
 	std::set<Order*> m_Orders;

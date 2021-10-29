@@ -12,6 +12,8 @@ class FixTableCallback
 public:
 	virtual void InitReqMessage(FixReqHeader* reqField) { delete reqField; }
 	virtual void InitRspMessage(FixRspHeader* rspField) { delete rspField; }
+	virtual void SelectFixProductCallback(FixProduct* field) { delete field; }
+	virtual void SelectFixInstrumentCallback(FixInstrument* field) { delete field; }
 };
 
 

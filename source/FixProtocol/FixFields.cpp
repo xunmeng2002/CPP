@@ -2850,3 +2850,64 @@ int FixRspOrderCancelRejectField::OnSelectCallback(void* callback, int colCount,
 }
 
 
+int FixProduct::ToString(char* buff, int size)
+{
+	return snprintf(buff, size, "FixProduct: ExchangeID:[%s], ProductID:[%s], MarketSegmentID:[%s]", ExchangeID.c_str(), ProductID.c_str(), MarketSegmentID.c_str());
+}
+int FixProduct::ToStream(char* buff, int size)
+{
+	return snprintf(buff, size, "'%s', '%s', '%s'", ExchangeID.c_str(), ProductID.c_str(), MarketSegmentID.c_str());
+}
+string FixProduct::CreateSql()
+{
+	return "CREATE TABLE IF NOT EXISTS t_FixProduct(ExchangeID char(32), ProductID char(32), MarketSegmentID char(32), PRIMARY KEY(ExchangeID, ProductID));";
+}
+string FixProduct::InsertSql()
+{
+	::memset(m_Buff, 0, sizeof(m_Buff));
+	ToStream(m_Buff, 4096);
+	return "REPLACE INTO t_FixProduct VALUES(" + string(m_Buff) + ");";
+}
+int FixProduct::OnSelectCallback(void* callback, int colCount, char** colValues, char** colNames)
+{
+	auto field = new FixProduct();
+	field->ExchangeID = colValues[0];
+	field->ProductID = colValues[1];
+	field->MarketSegmentID = colValues[2];
+
+	((FixTableCallback*)callback)->SelectFixProductCallback(field);
+	return 0;
+}
+
+int FixInstrument::ToString(char* buff, int size)
+{
+	return snprintf(buff, size, "FixInstrument: ExchangeID:[%s], ProductID:[%s], InstrumentID:[%s], ITCAlias:[%s], GenCode:[%s], MarketSegmentID:[%s]", ExchangeID.c_str(), ProductID.c_str(), InstrumentID.c_str(), ITCAlias.c_str(), GenCode.c_str(), MarketSegmentID.c_str());
+}
+int FixInstrument::ToStream(char* buff, int size)
+{
+	return snprintf(buff, size, "'%s', '%s', '%s', '%s', '%s', '%s'", ExchangeID.c_str(), ProductID.c_str(), InstrumentID.c_str(), ITCAlias.c_str(), GenCode.c_str(), MarketSegmentID.c_str());
+}
+string FixInstrument::CreateSql()
+{
+	return "CREATE TABLE IF NOT EXISTS t_FixInstrument(ExchangeID char(32), ProductID char(32), InstrumentID char(32), ITCAlias char(32), GenCode char(32), MarketSegmentID char(32), PRIMARY KEY(ExchangeID, InstrumentID));";
+}
+string FixInstrument::InsertSql()
+{
+	::memset(m_Buff, 0, sizeof(m_Buff));
+	ToStream(m_Buff, 4096);
+	return "REPLACE INTO t_FixInstrument VALUES(" + string(m_Buff) + ");";
+}
+int FixInstrument::OnSelectCallback(void* callback, int colCount, char** colValues, char** colNames)
+{
+	auto field = new FixInstrument();
+	field->ExchangeID = colValues[0];
+	field->ProductID = colValues[1];
+	field->InstrumentID = colValues[2];
+	field->ITCAlias = colValues[3];
+	field->GenCode = colValues[4];
+	field->MarketSegmentID = colValues[5];
+
+	((FixTableCallback*)callback)->SelectFixInstrumentCallback(field);
+	return 0;
+}
+

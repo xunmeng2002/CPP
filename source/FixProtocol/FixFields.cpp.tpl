@@ -97,7 +97,7 @@ string Fix!!@name!!::CreateSql()
 }
 string Fix!!@name!!::InsertSql()
 {
-	return !!travel!!!!if $pumpid > "1":!!!!inc indent!! + "\", \"" + !!dec indent!!!!@name!!!!leave!!;
+	return !!travel!!!!if pumpid > 0:!!!!inc indent!! + "\", \"" + !!dec indent!!!!@name!!!!leave!!;
 }
 int Fix!!@name!!::AddHeader(char* buff, int bodyLen)
 {
@@ -233,7 +233,7 @@ FixMessage* Fix!!@name!!Field::GetFixMessage()
 }
 string Fix!!@name!!Field::CreateSql()
 {
-	return "CREATE TABLE IF NOT EXISTS t_Fix!!@name!!(" + FixReqHeader::CreateSql() + "!!travel!!!!if $pumpid > "1":!!!!inc indent!!, !!dec indent!!!!@name!! char(!!@len!!)!!leave!!);";
+	return "CREATE TABLE IF NOT EXISTS t_Fix!!@name!!(" + FixReqHeader::CreateSql() + "!!travel!!!!if pumpid > 0:!!!!inc indent!!, !!dec indent!!!!@name!! char(!!@len!!)!!leave!!);";
 }
 string Fix!!@name!!Field::InsertSql()
 {
@@ -329,7 +329,7 @@ FixMessage* Fix!!@name!!Field::GetFixMessage()
 }
 string Fix!!@name!!Field::CreateSql()
 {
-	return "CREATE TABLE IF NOT EXISTS t_Fix!!@name!!(" + FixRspHeader::CreateSql() + "!!travel!!!!if $pumpid > "1":!!!!inc indent!!, !!dec indent!!!!@name!! char(!!@len!!)!!leave!!);";
+	return "CREATE TABLE IF NOT EXISTS t_Fix!!@name!!(" + FixRspHeader::CreateSql() + "!!travel!!!!if pumpid > 0:!!!!inc indent!!, !!dec indent!!!!@name!! char(!!@len!!)!!leave!!);";
 }
 string Fix!!@name!!Field::InsertSql()
 {
@@ -352,3 +352,38 @@ int Fix!!@name!!Field::OnSelectCallback(void* callback, int colCount, char** col
 !!leave!!
 !!leave!!
 
+!!entry InnerTables!!
+!!travel!!
+int Fix!!@name!!::ToString(char* buff, int size)
+{
+	return snprintf(buff, size, "Fix!!@name!!: !!entry items!!!!travel!!!!if pumpid > 0:!!!!inc indent!!, !!dec indent!!!!@name!!:[%s]!!leave!!"!!travel!!, !!@name!!.c_str()!!leave!!!!leave!!);
+}
+int Fix!!@name!!::ToStream(char* buff, int size)
+{
+	return snprintf(buff, size, "!!entry items!!!!travel!!!!if pumpid > 0:!!!!inc indent!!, !!dec indent!!'%s'!!leave!!"!!travel!!, !!@name!!.c_str()!!leave!!!!leave!!);
+}
+string Fix!!@name!!::CreateSql()
+{
+	return "CREATE TABLE IF NOT EXISTS t_Fix!!@name!!(!!entry items!!!!travel!!!!@name!! char(!!@len!!), !!leave!!!!leave!!!!entry primarykey!!PRIMARY KEY(!!travel!!!!if pumpid > 0:!!!!inc indent!!, !!dec indent!!!!@name!!!!leave!!!!leave!!));";
+}
+string Fix!!@name!!::InsertSql()
+{
+	::memset(m_Buff, 0, sizeof(m_Buff));
+	ToStream(m_Buff, 4096);
+	return "REPLACE INTO t_Fix!!@name!! VALUES(" + string(m_Buff) + ");";
+}
+int Fix!!@name!!::OnSelectCallback(void* callback, int colCount, char** colValues, char** colNames)
+{
+	auto field = new Fix!!@name!!();
+!!entry items!!
+!!travel!!
+	field->!!@name!! = colValues[!!$pumpid!!];
+!!leave!!
+!!leave!!
+
+	((FixTableCallback*)callback)->SelectFix!!@name!!Callback(field);
+	return 0;
+}
+
+!!leave!!
+!!leave!!

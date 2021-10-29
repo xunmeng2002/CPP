@@ -12,20 +12,20 @@
 int !!@name!!::ToStream(char* buff, int size) const
 {
 !!entry items!!
-	return snprintf(buff, size, "!!travel!!!!if pumpid > 1:!!!!inc indent!!, !!dec indent!! !!itemType=formatSymbols[@type]!!'%!!$itemType!!'!!leave!!",
-		!!travel!!!!if pumpid > 1:!!!!inc indent!!, !!dec indent!!!!@name!!!!if @type == "string":!!!!inc indent!!.c_str()!!dec indent!!!!leave!!);
+	return snprintf(buff, size, "!!travel!!!!if pumpid > 0:!!!!inc indent!!, !!dec indent!! !!itemType=formatSymbols[@type]!!'%!!$itemType!!'!!leave!!",
+		!!travel!!!!if pumpid > 0:!!!!inc indent!!, !!dec indent!!!!@name!!!!if @type == "string":!!!!inc indent!!.c_str()!!dec indent!!!!leave!!);
 !!leave!!
 }
 int !!@name!!::ToString(char* buff, int size) const
 {
 !!entry items!!
-	return snprintf(buff, size, "Mdb!!@name!!: !!travel!!!!if pumpid > 1:!!!!inc indent!!, !!dec indent!!!!@name!!!!itemType=formatSymbols[@type]!!:[%!!$itemType!!]!!leave!!",
-		!!travel!!!!if pumpid > 1:!!!!inc indent!!, !!dec indent!!!!@name!!!!if @type == "string":!!!!inc indent!!.c_str()!!dec indent!!!!leave!!);
+	return snprintf(buff, size, "Mdb!!@name!!: !!travel!!!!if pumpid > 0:!!!!inc indent!!, !!dec indent!!!!@name!!!!itemType=formatSymbols[@type]!!:[%!!$itemType!!]!!leave!!",
+		!!travel!!!!if pumpid > 0:!!!!inc indent!!, !!dec indent!!!!@name!!!!if @type == "string":!!!!inc indent!!.c_str()!!dec indent!!!!leave!!);
 !!leave!!
 }
 string !!@name!!::CreateSql()
 {
-	return "CREATE TABLE IF NOT EXISTS t_Mdb!!@name!!(!!entry items!!!!travel!!!!@name!! char(!!@len!!), !!leave!!!!leave!!!!entry primarykey!!PRIMARY KEY(!!travel!!!!if $pumpid > "1":!!!!inc indent!!, !!dec indent!!!!@name!!!!leave!!!!leave!!));";
+	return "CREATE TABLE IF NOT EXISTS t_Mdb!!@name!!(!!entry items!!!!travel!!!!@name!! char(!!@len!!), !!leave!!!!leave!!!!entry primarykey!!PRIMARY KEY(!!travel!!!!if pumpid > 0:!!!!inc indent!!, !!dec indent!!!!@name!!!!leave!!!!leave!!));";
 }
 string !!@name!!::InsertSql()
 {
@@ -40,19 +40,19 @@ int !!@name!!::OnSelectCallback(void* callback, int colCount, char** colValues, 
 !!travel!!
 !!if @type == 'enum':!!
 !!inc indent!!
-	field->!!@name!! = ConvertTo!!@name!!(colValues[!!@column!!]);
+	field->!!@name!! = ConvertTo!!@name!!(colValues[!!$pumpid!!]);
 !!dec indent!!
 !!elif @type == 'int':!!
 !!inc indent!!
-	field->!!@name!! = atoi(colValues[!!@column!!]);
+	field->!!@name!! = atoi(colValues[!!$pumpid!!]);
 !!dec indent!!
 !!elif @type == 'double':!!
 !!inc indent!!
-	field->!!@name!! = atof(colValues[!!@column!!]);
+	field->!!@name!! = atof(colValues[!!$pumpid!!]);
 !!dec indent!!
 !!else:!!
 !!inc indent!!
-	field->!!@name!! = colValues[!!@column!!];
+	field->!!@name!! = colValues[!!$pumpid!!];
 !!dec indent!!
 !!leave!!
 !!leave!!

@@ -298,6 +298,33 @@
 			<item name="SplitMsg"/>
 		</field>
 	</RspFields>
+	<InnerTables>
+		<table name="Product">
+			<items>
+				<item name="ExchangeID"/>
+				<item name="ProductID"/>
+				<item name="MarketSegmentID"/>
+			</items>
+			<primarykey>
+				<item name="ExchangeID"/>
+				<item name="ProductID"/>
+			</primarykey>
+		</table>
+		<table name="Instrument">
+			<items>
+				<item name="ExchangeID"/>
+				<item name="ProductID"/>
+				<item name="InstrumentID"/>
+				<item name="ITCAlias"/>
+				<item name="GenCode"/>
+				<item name="MarketSegmentID"/>
+			</items>
+			<primarykey>
+				<item name="ExchangeID"/>
+				<item name="InstrumentID"/>
+			</primarykey>
+		</table>
+	</InnerTables>
 	<AuditTrail>
 		<item name="SendingTimestamps" desc="Sending Timestamps"/>
 		<item name="ReceivingTimestamps" desc="Receiving Timestamps"/>

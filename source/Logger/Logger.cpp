@@ -65,7 +65,7 @@ void Logger::WriteLog(LogLevel level, const char* file, int line, const char* fu
 }
 void Logger::ThreadInit()
 {
-	m_CreateLogFileTime = *GetTime();
+	m_CreateLogFileTime = *GetLocalTm();
 	CreateLogFile();
 }
 void Logger::Run()
@@ -77,7 +77,7 @@ void Logger::Run()
 	if (++count >= 120)
 	{
 		count = 0;
-		auto currTime = *GetTime();
+		auto currTime = *GetLocalTm();
 		if (m_CreateLogFileTime.tm_mday != currTime.tm_mday)
 		{
 			m_CreateLogFileTime = currTime;
@@ -129,7 +129,7 @@ void Logger::WriteToLog(LogLevel level, const char* file, int line, const char* 
 	for (auto p = file; *p != '\0'; p++)
 		if (*p == '\\' || *p == '/')
 			file = p + 1;
-	int len = sprintf(t_LogBuffer, "%s %d %s ", GetFormatDateTime().c_str(), GetCurrentThreadId(), s_LogLevelName[level].c_str());
+	int len = sprintf(t_LogBuffer, "%s %d %s ", GetLocalDateTimeWithMilliSecond().c_str(), GetCurrentThreadId(), s_LogLevelName[level].c_str());
 
 	len += vsnprintf(t_LogBuffer + len, (sizeof(t_LogBuffer) - len - 1), format, va);
 	len += _snprintf(t_LogBuffer + len, (sizeof(t_LogBuffer) - len - 1), "\t\t---%s:%d[%s]\n", file, line, func);

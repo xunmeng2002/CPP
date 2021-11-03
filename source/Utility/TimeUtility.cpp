@@ -6,89 +6,150 @@
 
 using namespace std;
 
-tm* GetTime()
-{
-	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-	time_t t = std::chrono::system_clock::to_time_t(now);
-	return std::localtime(&t);
-}
 
-long long GetUnixTimeStamp()
+time_t GetTime()
 {
-	return time(nullptr);
+	chrono::system_clock::time_point now = chrono::system_clock::now();
+	return chrono::system_clock::to_time_t(now);
 }
-string GetDateFromUnixTimeStamp(long long timeStamp)
+tm* GetUtcTm()
 {
-	static char buff[16];
-	int len = strftime(buff, 16, "%Y%m%d", localtime(&timeStamp));
+	time_t t = GetTime();
+	return gmtime(&t);
+}
+tm* GetLocalTm()
+{
+	time_t t = GetTime();
+	return localtime(&t);
+}
+string GetUtcDateTime()
+{
+	auto t = GetTime();
+	auto localTm = gmtime(&t);
+	char buff[32];
+	strftime(buff, 32, "%Y%m%d-%H:%M:%S", localTm);
 	return string(buff);
 }
-string GetTimeFromUnixTimeStamp(long long timeStamp)
+string GetUtcDate()
 {
-	static char buff[16];
-	int len = strftime(buff, 16, "%H:%M:%S", localtime(&timeStamp));
+	auto t = GetTime();
+	auto localTm = gmtime(&t);
+	char buff[32];
+	strftime(buff, 32, "%Y%m%d", localTm);
 	return string(buff);
 }
-
-string GetFormatDateTime()
-{
-	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-	std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
-
-	static char buff[32];
-	time_t t = std::chrono::system_clock::to_time_t(now);
-	int len = strftime(buff, 32, "%Y%m%d %H:%M:%S", localtime(&t));
-	len = _snprintf(buff + len, 32 - len, ".%03d", int(ms.time_since_epoch().count() % 1000));
-	return string(buff);
-}
-string GetFormatDate()
-{
-	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-	std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
-
-	static char buff[16];
-	time_t t = std::chrono::system_clock::to_time_t(now);
-	int len = strftime(buff, 16, "%Y%m%d", localtime(&t));
-	return string(buff);
-}
-string GetFormatTime()
-{
-	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-	std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
-
-	static char buff[16];
-	time_t t = std::chrono::system_clock::to_time_t(now);
-	int len = strftime(buff, 16, "%H:%M:%S", localtime(&t));
-	return string(buff);
-}
-string GetFormatTimeMilliSecond()
-{
-	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-	std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> ms = std::chrono::time_point_cast<std::chrono::milliseconds>(now);
-
-	static char buff[32];
-	time_t t = std::chrono::system_clock::to_time_t(now);
-	int len = strftime(buff, 32, "%H:%M:%S", localtime(&t));
-	len = _snprintf(buff + len, 32 - len, ".%03d", int(ms.time_since_epoch().count() % 1000));
-	return string(buff);
-}
-
 string GetUtcTime()
 {
-	struct timeb timePoint;
-	ftime(&timePoint);
-	auto tmTime = gmtime(&timePoint.time);
-
+	auto t = GetTime();
+	auto localTm = gmtime(&t);
 	char buff[32];
-	auto len = strftime(buff, sizeof(buff), "%Y%m%d-%H:%M:%S", gmtime(&timePoint.time));
-	sprintf(buff + len, ".%03u", timePoint.millitm);
+	strftime(buff, 32, "%H:%M:%S", localTm);
 	return string(buff);
 }
-string GetDateFromUtcTime(string utcTime)
+string GetUtcDateTimeWithMilliSecond()
 {
-	return string(utcTime.begin(), utcTime.begin() + 8);
+	auto now = chrono::time_point_cast<chrono::milliseconds>(chrono::system_clock::now());
+	time_t t = chrono::system_clock::to_time_t(now);
+	int milliSecond = now.time_since_epoch().count() % 1000;
+	auto localTm = gmtime(&t);
+	char buff[32];
+	int len = strftime(buff, 32, "%Y%m%d-%H:%M:%S", localTm);
+	sprintf(buff + len, ".%03u", milliSecond);
+	return string(buff);
 }
-string GetTimeFromUtcTime(string utcTime)
+string GetLocalDateTime()
 {
-	return string(utcTime.begin() + 9, utcTime.begin() + 17);
+	auto t = GetTime();
+	auto localTm = localtime(&t);
+	char buff[32];
+	strftime(buff, 32, "%Y%m%d-%H:%M:%S", localTm);
+	return string(buff);
+}
+string GetLocalDate()
+{
+	auto t = GetTime();
+	auto localTm = localtime(&t);
+	char buff[32];
+	strftime(buff, 32, "%Y%m%d", localTm);
+	return string(buff);
+}
+string GetLocalTime()
+{
+	auto t = GetTime();
+	auto localTm = localtime(&t);
+	char buff[32];
+	strftime(buff, 32, "%H:%M:%S", localTm);
+	return string(buff);
+}
+string GetLocalDateTimeWithMilliSecond()
+{
+	auto now = chrono::time_point_cast<chrono::milliseconds>(chrono::system_clock::now());
+	time_t t = chrono::system_clock::to_time_t(now);
+	int milliSecond = now.time_since_epoch().count() % 1000;
+	auto localTm = localtime(&t);
+	char buff[32];
+	int len = strftime(buff, 32, "%Y%m%d-%H:%M:%S", localTm);
+	sprintf(buff + len, ".%03u", milliSecond);
+	return string(buff);
+}
+
+string GetLocalDateFromUnixTimeStamp(long long timeStamp)
+{
+	time_t time = timeStamp / 1000000000LL;
+	static char buff[16];
+	int len = strftime(buff, 16, "%Y%m%d", localtime(&time));
+	return string(buff);
+}
+string GetLocalTimeFromUnixTimeStamp(long long timeStamp)
+{
+	time_t time = timeStamp / 1000000000LL;
+	static char buff[16];
+	int len = strftime(buff, 16, "%H:%M:%S", localtime(&time));
+	return string(buff);
+}
+
+time_t GetTimeFromString(string dateTime, string format)
+{
+	tm t;
+	int len = sscanf(dateTime.c_str(), format.c_str(), &t.tm_year, &t.tm_mon, &t.tm_mday, &t.tm_hour, &t.tm_min, &t.tm_sec);
+	t.tm_year -= 1900;
+	t.tm_mon -= 1;
+
+	return mktime(&t);
+}
+string ToUtcDateTime(time_t* time)
+{
+	char buff[32];
+	strftime(buff, 32, "%Y%m%d-%H:%M:%S", gmtime(time));
+	return string(buff);
+}
+string ToUtcDate(time_t* time)
+{
+	char buff[32];
+	strftime(buff, 32, "%Y%m%d", gmtime(time));
+	return string(buff);
+}
+string ToUtcTime(time_t* time)
+{
+	char buff[32];
+	strftime(buff, 32, "%H:%M:%S", gmtime(time));
+	return string(buff);
+}
+string ToLocalDateTime(time_t* time)
+{
+	char buff[32];
+	strftime(buff, 32, "%Y%m%d-%H:%M:%S", localtime(time));
+	return string(buff);
+}
+string ToLocalDate(time_t* time)
+{
+	char buff[32];
+	strftime(buff, 32, "%Y%m%d", localtime(time));
+	return string(buff);
+}
+string ToLocalTime(time_t* time)
+{
+	char buff[32];
+	strftime(buff, 32, "%H:%M:%S", localtime(time));
+	return string(buff);
 }

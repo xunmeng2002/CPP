@@ -35,8 +35,6 @@ public:
 public:
 	string AccountID;
 	string ExchangeID;
-	string ContractID;
-	string MarketSegmentID;
 	string InstrumentID;
 	int OrderLocalID;
 	string OrderSysID;
@@ -84,8 +82,6 @@ public:
 public:
 	string AccountID;
 	string ExchangeID;
-	string ContractID;
-	string MarketSegmentID;
 	string InstrumentID;
 	int OrderLocalID;
 	int OrigOrderLocalID;
@@ -115,8 +111,6 @@ public:
 public:
 	string AccountID;
 	string ExchangeID;
-	string ContractID;
-	string MarketSegmentID;
 	string InstrumentID;
 	string TradeID;
 	Direction Direction;

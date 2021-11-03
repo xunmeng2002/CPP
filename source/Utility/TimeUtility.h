@@ -3,31 +3,33 @@
 #include <chrono>
 #include <string>
 
-using namespace std;
 
-#define TIMERSTART(tag)  auto tag##_start = std::chrono::steady_clock::now()
-#define TIMEREND(tag)  auto tag##_end =  std::chrono::steady_clock::now()
-#define DURATION_s(tag) std::chrono::duration_cast<std::chrono::seconds>(tag##_end - tag##_start).count()
-#define DURATION_ms(tag) std::chrono::duration_cast<std::chrono::milliseconds>(tag##_end - tag##_start).count()
-#define DURATION_us(tag) std::chrono::duration_cast<std::chrono::microseconds>(tag##_end - tag##_start).count()
-#define DURATION_ns(tag) std::chrono::duration_cast<std::chrono::nanoseconds>(tag##_end - tag##_start).count()
-
-tm* GetTime();
-
-long long GetUnixTimeStamp();
-string GetDateFromUnixTimeStamp(long long timeStamp);
-string GetTimeFromUnixTimeStamp(long long timeStamp);
-
-string GetFormatDateTime();
-string GetFormatDate();
-string GetFormatTime();
-string GetFormatTimeMilliSecond();
+time_t GetTime();
+tm* GetUtcTm();
+tm* GetLocalTm();
+std::string GetUtcDateTime();
+std::string GetUtcDate();
 std::string GetUtcTime();
-string GetDateFromUtcTime(string utcTime);
-string GetTimeFromUtcTime(string utcTime);
+std::string GetUtcDateTimeWithMilliSecond();
+std::string GetLocalDateTime();
+std::string GetLocalDate();
+std::string GetLocalTime();
+std::string GetLocalDateTimeWithMilliSecond();
 
-template<typename T>
-long long GetDuration(std::chrono::system_clock::time_point& start, std::chrono::system_clock::time_point& end)
+std::string GetLocalDateFromUnixTimeStamp(long long timeStamp);
+std::string GetLocalTimeFromUnixTimeStamp(long long timeStamp);
+
+time_t GetTimeFromString(std::string dateTime, std::string format = "%04d%02d%02d-%02d:%02d:%02d");
+std::string ToUtcDateTime(time_t* time);
+std::string ToUtcDate(time_t* time);
+std::string ToUtcTime(time_t* time);
+std::string ToLocalDateTime(time_t* time);
+std::string ToLocalDate(time_t* time);
+std::string ToLocalTime(time_t* time);
+
+
+template<typename T, typename T2>
+long long GetDuration(T2& start, T2& end)
 {
 	return std::chrono::duration_cast<T>(end - start).count();
 }

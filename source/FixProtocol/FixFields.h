@@ -296,7 +296,6 @@ public:
 	string GiveUpFirm;
 	string CmtaGiveupCD;
 	string CorrelationClOrdID;
-	string MarketSegmentID;
 
 	static constexpr char* TableName = "t_FixReqNewOrder";
 };

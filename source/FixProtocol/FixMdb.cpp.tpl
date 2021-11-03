@@ -83,7 +83,7 @@ void FixMdb::SelectAllTables()
 
 !!entry InnerTables!!
 !!travel!!
-	TruncateTable<Fix!!@name!!>();
+	SelectTable<Fix!!@name!!>();
 !!leave!!
 !!leave!!
 }

@@ -167,7 +167,7 @@ void MdbEngine::HandleInsertOrder(int sessionID, ItsInsertOrder* field)
 	Order* order = new Order();
 	order->AccountID = field->AccountID;
 	order->ExchangeID = field->ExchangeID;
-	order->InstrumentID = field->ContractID;
+	order->InstrumentID = field->InstrumentID;
 	order->OrderLocalID = GetNextOrderLocalID(field->TradingDay);
 	order->OrderSysID = "";
 	order->Direction = ConvertToDirection(field->Direction);
@@ -181,7 +181,7 @@ void MdbEngine::HandleInsertOrder(int sessionID, ItsInsertOrder* field)
 	order->RequestID = field->RequestID;
 	order->FrontID = "";
 	order->SessionID = sessionID;
-	order->InsertTime = GetFormatTime();
+	order->InsertTime = GetLocalTime();
 	order->CancelTime = "";
 	order->InsertDate = field->TradingDay;
 	order->TradingDay = field->TradingDay;
@@ -220,7 +220,7 @@ void MdbEngine::HandleInsertOrderCancel(int sessionID, ItsInsertOrderCancel* fie
 	auto orderCancel = new OrderCancel();
 	orderCancel->AccountID = "";
 	orderCancel->ExchangeID = field->ExchangeID;
-	orderCancel->InstrumentID = field->ContractID;
+	orderCancel->InstrumentID = field->InstrumentID;
 	orderCancel->OrderLocalID = GetNextOrderLocalID(field->TradingDay);
 	orderCancel->OrigOrderLocalID = order == nullptr ? 0 :  order->OrderLocalID;
 	orderCancel->OrderSysID = field->OrderSysID;
@@ -291,7 +291,7 @@ void MdbEngine::HandleRtnOrder(Order* field)
 	itsOrder.Command = ItoA(CMS_CID_BROADCAST_MA_ORDER);
 	itsOrder.ChannelID = m_ChannelID;
 	itsOrder.ExchangeID = order->ExchangeID;
-	itsOrder.ContractID = order->InstrumentID;
+	itsOrder.InstrumentID = order->InstrumentID;
 	itsOrder.OrderRef = "";
 	itsOrder.InsertTime = order->InsertTime;
 	itsOrder.CancelTime = order->CancelTime;
@@ -339,7 +339,7 @@ void MdbEngine::HandleRtnTrade(Trade* field)
 	itsTrade.Command = ItoA(CMS_CID_BROADCAST_MA_TRADE);
 	itsTrade.ChannelID = m_ChannelID;
 	itsTrade.ExchangeID = field->ExchangeID;
-	itsTrade.ContractID = field->InstrumentID;
+	itsTrade.InstrumentID = field->InstrumentID;
 	itsTrade.OrderRef = "";
 	itsTrade.OrderSysID = field->OrderSysID;
 	itsTrade.TradeTime = field->TradeTime;
@@ -391,7 +391,7 @@ void MdbEngine::HandleErrRtnOrderCancel(OrderCancel* field)
 	itsErrRtnOrderCancel.OrderSysID = orderCancel->OrderSysID;
 	itsErrRtnOrderCancel.ErrorID = ItoA(orderCancel->ErrorID);
 	itsErrRtnOrderCancel.ErrorMsg = orderCancel->ErrorMsg;
-	itsErrRtnOrderCancel.TradingDay = GetFormatDate();
+	itsErrRtnOrderCancel.TradingDay = GetLocalDate();
 	m_ItsPublisher->OnErrRtnOrderCancel(&itsErrRtnOrderCancel);
 }
 

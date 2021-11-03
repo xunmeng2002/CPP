@@ -83,7 +83,7 @@ public:
 	string Reserve5;
 	string Reserve6;
 	string ExchangeID;
-	string ContractID;
+	string InstrumentID;
 	string Price;
 	string Direction;
 	string Reserve7;
@@ -134,7 +134,7 @@ public:
 	string OrderSysID;
 	string ChannelOrderID;
 	string BrokerOrderID;
-	string ContractID;
+	string InstrumentID;
 	string Direction;
 	string TradingDay;
 
@@ -188,7 +188,7 @@ public:
 	string Reserve4;
 	string ChannelID;
 	string ExchangeID;
-	string ContractID;
+	string InstrumentID;
 	string OrderRef;
 	string InsertTime;
 	string CancelTime;
@@ -245,7 +245,7 @@ public:
 	string Reserve4;
 	string ChannelID;
 	string ExchangeID;
-	string ContractID;
+	string InstrumentID;
 	string OrderRef;
 	string OrderSysID;
 	string TradeTime;

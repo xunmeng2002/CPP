@@ -101,7 +101,6 @@
 			<item name="GiveUpFirm"/>
 			<item name="CmtaGiveupCD"/>
 			<item name="CorrelationClOrdID"/>
-			<item name="MarketSegmentID"/>
 		</field>
 		<field name="ReqOrderCancelRequest" msgtype="F" msgClass="app">
 			<item name="Account"/>

@@ -24,7 +24,7 @@ FixMessage* PrepareReqHeader(const std::string& msgSeqNum)
 	fixMessage->SetItem(43, "N");
 	fixMessage->SetItem(49, config.SenderCompID);
 	fixMessage->SetItem(50, config.SenderSubID);
-	fixMessage->SetItem(52, GetUtcTime());
+	fixMessage->SetItem(52, GetUtcDateTimeWithMilliSecond());
 	fixMessage->SetItem(56, config.TargetCompID);
 	fixMessage->SetItem(57, config.TargetSubID);
 

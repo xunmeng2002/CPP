@@ -12,14 +12,9 @@ Its!!@name!!::Its!!@name!!()
 Its!!@name!!::Its!!@name!!(const vector<string>& items)
 {
 	memset(m_Buff, 0, sizeof(m_Buff));
-	if(items.size() < !!@colNum!!)
-	{
-		WRITE_LOG(LogLevel::Error, "Items Size:[%d] less than Its!!@name!!'s ColNum:[!!@colNum!!]", items.size());
-		return;
-	}
 !!entry items!!
 !!travel!!
-	!!@name!! = items[!!@column!!];
+	!!@name!! = items[!!$pumpid!!];
 !!leave!!
 !!leave!!
 }
@@ -33,7 +28,7 @@ int Its!!@name!!::ToStream(char* buff, int size)
 }
 string Its!!@name!!::CreateSql()
 {
-	return "CREATE TABLE IF NOT EXISTS t_Its!!@name!!(!!entry items!!!!travel!!!!@name!! char(32), !!leave!!!!leave!!!!entry primarykey!!PRIMARY KEY(!!travel!!!!if pumpid > 0:!!!!inc indent!!, !!dec indent!!!!@name!!!!leave!!!!leave!!));";
+	return "CREATE TABLE IF NOT EXISTS t_Its!!@name!!(!!entry items!!!!travel!!!!@name!! char(!!@len!!), !!leave!!!!leave!!!!entry primarykey!!PRIMARY KEY(!!travel!!!!if pumpid > 0:!!!!inc indent!!, !!dec indent!!!!@name!!!!leave!!!!leave!!));";
 }
 string Its!!@name!!::InsertSql()
 {
@@ -46,7 +41,7 @@ int Its!!@name!!::OnSelectCallback(void* callback, int colCount, char** colValue
 	auto field = new Its!!@name!!();
 !!entry items!!
 !!travel!!
-	field->!!@name!! = colValues[!!@column!!];
+	field->!!@name!! = colValues[!!$pumpid!!];
 !!leave!!
 !!leave!!
 

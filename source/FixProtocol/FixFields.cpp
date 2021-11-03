@@ -859,7 +859,6 @@ FixReqNewOrderField::FixReqNewOrderField(FixMessage* fixMessage)
 	GiveUpFirm = fixMessage->GetItem(9707);
 	CmtaGiveupCD = fixMessage->GetItem(9708);
 	CorrelationClOrdID = fixMessage->GetItem(9717);
-	MarketSegmentID = fixMessage->GetItem(1300);
 }
 FixReqNewOrderField::FixReqNewOrderField(FixReqNewOrderField&& other) noexcept
 	:FixReqHeader(std::move(other)), FixTrailer(other)
@@ -895,7 +894,6 @@ FixReqNewOrderField::FixReqNewOrderField(FixReqNewOrderField&& other) noexcept
 	GiveUpFirm = std::move(other.GiveUpFirm);
 	CmtaGiveupCD = std::move(other.CmtaGiveupCD);
 	CorrelationClOrdID = std::move(other.CorrelationClOrdID);
-	MarketSegmentID = std::move(other.MarketSegmentID);
 }
 FixReqNewOrderField& FixReqNewOrderField::operator=(FixReqNewOrderField&& other) noexcept
 {
@@ -932,7 +930,6 @@ FixReqNewOrderField& FixReqNewOrderField::operator=(FixReqNewOrderField&& other)
 	GiveUpFirm = std::move(other.GiveUpFirm);
 	CmtaGiveupCD = std::move(other.CmtaGiveupCD);
 	CorrelationClOrdID = std::move(other.CorrelationClOrdID);
-	MarketSegmentID = std::move(other.MarketSegmentID);
 
 	return *this;
 }
@@ -976,7 +973,6 @@ int FixReqNewOrderField::ToString(char* buff, int size)
 	len += WriteString(buff + len, size - len, "GiveUpFirm", GiveUpFirm);
 	len += WriteString(buff + len, size - len, "CmtaGiveupCD", CmtaGiveupCD);
 	len += WriteString(buff + len, size - len, "CorrelationClOrdID", CorrelationClOrdID);
-	len += WriteString(buff + len, size - len, "MarketSegmentID", MarketSegmentID);
 
 	len += FixTrailer::ToString(buff + len, size - len);
 	return len;
@@ -1017,7 +1013,6 @@ int FixReqNewOrderField::ToStream(char* buff)
 	len += WriteStream(buff + len, 9707, GiveUpFirm);
 	len += WriteStream(buff + len, 9708, CmtaGiveupCD);
 	len += WriteStream(buff + len, 9717, CorrelationClOrdID);
-	len += WriteStream(buff + len, 1300, MarketSegmentID);
 
 	AddHeader(buff, len - HEAD_LEN);
 	len += AddTrailer(buff, len);
@@ -1059,16 +1054,15 @@ FixMessage* FixReqNewOrderField::GetFixMessage()
 	m_FixMessage->SetItem(9707, GiveUpFirm);
 	m_FixMessage->SetItem(9708, CmtaGiveupCD);
 	m_FixMessage->SetItem(9717, CorrelationClOrdID);
-	m_FixMessage->SetItem(1300, MarketSegmentID);
 	return m_FixMessage;
 }
 string FixReqNewOrderField::CreateSql()
 {
-	return "CREATE TABLE IF NOT EXISTS t_FixReqNewOrder(" + FixReqHeader::CreateSql() + "Account char(32), ClOrdID char(32), HandInst char(32), CustOrderHandlingInst char(32), OrderQty char(32), OrdType char(32), Price char(32), Side char(32), Symbol char(32), TimeInForce char(32), TransactTime char(32), ManualOrderIndicator char(32), NoAllocs char(32), AllocAccount char(32), StopPx char(32), SecurityDesc char(32), MinQty char(32), SecurityType char(32), CustomerOrFirm char(32), MaxShow char(32), ExpireDate char(32), SelfMatchPreventionID char(32), SelfMatchPreventionInstruction char(32), CtiCode char(32), AvgPxGroupID char(32), ClearingTradePriceType char(32), AvgPXIndicator char(32), Memo char(32), GiveUpFirm char(32), CmtaGiveupCD char(32), CorrelationClOrdID char(32), MarketSegmentID char(32));";
+	return "CREATE TABLE IF NOT EXISTS t_FixReqNewOrder(" + FixReqHeader::CreateSql() + "Account char(32), ClOrdID char(32), HandInst char(32), CustOrderHandlingInst char(32), OrderQty char(32), OrdType char(32), Price char(32), Side char(32), Symbol char(32), TimeInForce char(32), TransactTime char(32), ManualOrderIndicator char(32), NoAllocs char(32), AllocAccount char(32), StopPx char(32), SecurityDesc char(32), MinQty char(32), SecurityType char(32), CustomerOrFirm char(32), MaxShow char(32), ExpireDate char(32), SelfMatchPreventionID char(32), SelfMatchPreventionInstruction char(32), CtiCode char(32), AvgPxGroupID char(32), ClearingTradePriceType char(32), AvgPXIndicator char(32), Memo char(32), GiveUpFirm char(32), CmtaGiveupCD char(32), CorrelationClOrdID char(32));";
 }
 string FixReqNewOrderField::InsertSql()
 {
-	return "REPLACE INTO t_FixReqNewOrder VALUES(\"" + FixReqHeader::InsertSql() + "\", \"" + Account + "\", \"" + ClOrdID + "\", \"" + HandInst + "\", \"" + CustOrderHandlingInst + "\", \"" + OrderQty + "\", \"" + OrdType + "\", \"" + Price + "\", \"" + Side + "\", \"" + Symbol + "\", \"" + TimeInForce + "\", \"" + TransactTime + "\", \"" + ManualOrderIndicator + "\", \"" + NoAllocs + "\", \"" + AllocAccount + "\", \"" + StopPx + "\", \"" + SecurityDesc + "\", \"" + MinQty + "\", \"" + SecurityType + "\", \"" + CustomerOrFirm + "\", \"" + MaxShow + "\", \"" + ExpireDate + "\", \"" + SelfMatchPreventionID + "\", \"" + SelfMatchPreventionInstruction + "\", \"" + CtiCode + "\", \"" + AvgPxGroupID + "\", \"" + ClearingTradePriceType + "\", \"" + AvgPXIndicator + "\", \"" + Memo + "\", \"" + GiveUpFirm + "\", \"" + CmtaGiveupCD + "\", \"" + CorrelationClOrdID + "\", \"" + MarketSegmentID + "\");";
+	return "REPLACE INTO t_FixReqNewOrder VALUES(\"" + FixReqHeader::InsertSql() + "\", \"" + Account + "\", \"" + ClOrdID + "\", \"" + HandInst + "\", \"" + CustOrderHandlingInst + "\", \"" + OrderQty + "\", \"" + OrdType + "\", \"" + Price + "\", \"" + Side + "\", \"" + Symbol + "\", \"" + TimeInForce + "\", \"" + TransactTime + "\", \"" + ManualOrderIndicator + "\", \"" + NoAllocs + "\", \"" + AllocAccount + "\", \"" + StopPx + "\", \"" + SecurityDesc + "\", \"" + MinQty + "\", \"" + SecurityType + "\", \"" + CustomerOrFirm + "\", \"" + MaxShow + "\", \"" + ExpireDate + "\", \"" + SelfMatchPreventionID + "\", \"" + SelfMatchPreventionInstruction + "\", \"" + CtiCode + "\", \"" + AvgPxGroupID + "\", \"" + ClearingTradePriceType + "\", \"" + AvgPXIndicator + "\", \"" + Memo + "\", \"" + GiveUpFirm + "\", \"" + CmtaGiveupCD + "\", \"" + CorrelationClOrdID + "\");";
 }
 int FixReqNewOrderField::OnSelectCallback(void* callback, int colCount, char** colValues, char** colNames)
 {

@@ -98,9 +98,6 @@ protected:
 		auto len = reqField->ToStream(tcpEvent->Buff);
 		tcpEvent->Length = len;
 
-		reqField->ToString(m_LogBuff, BUFF_SIZE);
-		WRITE_LOG(LogLevel::Info, "%s", m_LogBuff);
-
 		UpdateLastSendTime();
 		m_TcpClient->Send(tcpEvent);
 

@@ -96,7 +96,7 @@ void FixMdb::SelectAllTables()
 	SelectTable<FixExecutionReportField>();
 	SelectTable<FixRspOrderCancelRejectField>();
 
-	TruncateTable<FixProduct>();
-	TruncateTable<FixInstrument>();
+	SelectTable<FixProduct>();
+	SelectTable<FixInstrument>();
 }
 

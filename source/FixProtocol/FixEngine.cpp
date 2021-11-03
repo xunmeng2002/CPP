@@ -206,7 +206,6 @@ void FixEngine::ReqInsertOrderCancel(OrderCancel* orderCancel)
 }
 void FixEngine::HandleInsertOrder(Order* order)
 {
-
 	auto& config = Config::GetInstance();
 	auto fixReqNewOrder = new FixReqNewOrderField(PrepareReqHeader());
 	fixReqNewOrder->Account = config.Account;
@@ -222,12 +221,11 @@ void FixEngine::HandleInsertOrder(Order* order)
 	fixReqNewOrder->Side = (char)ToFixDirection(order->Direction);
 	fixReqNewOrder->Symbol = "";
 	fixReqNewOrder->TimeInForce = (char)ToFixTimeInForce(order->TimeCondition);
-	fixReqNewOrder->TransactTime = GetUtcTime();
+	fixReqNewOrder->TransactTime = GetUtcDateTimeWithMilliSecond();
 	fixReqNewOrder->ManualOrderIndicator = "Y";
 	fixReqNewOrder->NoAllocs = "";
 	fixReqNewOrder->AllocAccount = "";
 	fixReqNewOrder->StopPx = "";
-	fixReqNewOrder->MarketSegmentID = order->MarketSegmentID;
 	fixReqNewOrder->SecurityDesc = GetFixInstrumentFromBroker(order->ExchangeID, order->InstrumentID)->ITCAlias;
 	if (order->VolumeCondition == VolumeCondition::CV)
 	{
@@ -265,7 +263,7 @@ void FixEngine::HandleInsertOrderCancel(OrderCancel* orderCancel)
 	fixReqOrderCancel->OrigClOrdID = ItoA(orderCancel->OrigOrderLocalID);
 	fixReqOrderCancel->Side = (char)ToFixDirection(orderCancel->Direction);
 	fixReqOrderCancel->Symbol = "";
-	fixReqOrderCancel->TransactTime = GetUtcTime();
+	fixReqOrderCancel->TransactTime = GetUtcDateTimeWithMilliSecond();
 	fixReqOrderCancel->ManualOrderIndicator = "Y";
 	fixReqOrderCancel->Memo = "";
 	fixReqOrderCancel->SecurityDesc = GetFixInstrumentFromBroker(orderCancel->ExchangeID, orderCancel->InstrumentID)->ITCAlias;
@@ -546,8 +544,8 @@ void FixEngine::CheckHeartBeat()
 	if (m_ConnectStatus != ConnectStatus::Connected || m_LogonStatus != LogonStatus::Logged)
 		return;
 	auto now = chrono::steady_clock::now();
-	auto lastSendTimeDiff = chrono::duration_cast<chrono::seconds>(now - m_LastSendTimePoint);
-	if (lastSendTimeDiff.count() > m_HeartBeatSecond)
+	auto sendDiffSeconds = GetDuration<chrono::seconds>(m_LastSendTimePoint, now);
+	if (sendDiffSeconds > m_HeartBeatSecond)
 	{
 		auto reqField = new FixReqHeartBeatField(PrepareReqHeader());
 		reqField->TestReqID = "From CheckHeartBeat";
@@ -555,8 +553,8 @@ void FixEngine::CheckHeartBeat()
 	}
 	if (!m_AlreadySendTestRequest)
 	{
-		auto lastRecvTimeDiff = chrono::duration_cast<chrono::seconds>(now - m_LastRecvTimePoint);
-		if (lastRecvTimeDiff.count() > m_HeartBeatSecond)
+		auto recvDiffSeconds = GetDuration<chrono::seconds>(m_LastRecvTimePoint, now);
+		if (recvDiffSeconds > m_HeartBeatSecond)
 		{
 			auto reqField = new FixReqTestRequestField(PrepareReqHeader());
 			reqField->TestReqID = m_TestReqID;
@@ -568,8 +566,8 @@ void FixEngine::CheckHeartBeat()
 	}
 	else
 	{
-		auto lastRecvTimeDiff = chrono::duration_cast<chrono::seconds>(now - m_TestRequestSendTimePoint);
-		if (lastRecvTimeDiff.count() > m_HeartBeatSecond)
+		auto recvDiffSeconds = GetDuration<chrono::seconds>(m_TestRequestSendTimePoint, now);
+		if (recvDiffSeconds > m_HeartBeatSecond)
 		{
 			m_ConnectStatus = ConnectStatus::DisConnecting;
 			m_TcpClient->DisConnect(m_SessionID);
@@ -793,7 +791,7 @@ void FixEngine::ReqResendRequest(int startSeqNum, int endSeqNum)
 }
 void FixEngine::ResendLastResendRequest()
 {
-	m_LastResendRequestField.SendingTime = GetUtcTime();
+	m_LastResendRequestField.SendingTime = GetUtcDateTimeWithMilliSecond();
 	m_LastResendRequestField.PossDupFlag = "Y";
 
 	SendRequest(&m_LastResendRequestField, true);
@@ -819,7 +817,7 @@ void FixEngine::DoResendRequest(int startSeqNum, int endSeqNum)
 			ReqSequenceReset(currSeqNum, it->first);
 			currSeqNum = it->first;
 		}
-		it->second->SendingTime = GetUtcTime();
+		it->second->SendingTime = GetUtcDateTimeWithMilliSecond();
 		it->second->PossDupFlag = "Y";
 		it->second->LastMsgSeqNumProcessed = ItoA(SeqNum::GetInstance().GetLastRecvSeqNum());
 		SendRequest(it->second, true);
@@ -1072,7 +1070,7 @@ FixInstrument* FixEngine::GetFixInstrumentFromExchange(const string& exchangeID,
 		}
 		if (year.length() < 2)
 		{
-			string date = GetFormatDate();
+			string date = GetLocalDate();
 			year = string(date.begin() + 2, date.begin() + 3) + year;
 		}
 		else if (year.length() > 2)
@@ -1097,9 +1095,9 @@ FixInstrument* FixEngine::GetFixInstrumentFromExchange(const string& exchangeID,
 }
 void FixEngine::OnRtnOrder(FixExecutionReportField* rspField)
 {
-	auto requestTimeStamp = atoll(rspField->RequestTime.c_str()) / 1000000000LL;
-	string requestDate = GetDateFromUnixTimeStamp(requestTimeStamp);
-	string requestTime = GetTimeFromUnixTimeStamp(requestTimeStamp);
+	auto requestTimeStamp = atoll(rspField->RequestTime.c_str());
+	string requestDate = GetLocalDateFromUnixTimeStamp(requestTimeStamp);
+	string requestTime = GetLocalTimeFromUnixTimeStamp(requestTimeStamp);
 
 	Order* order = new Order();
 	order->AccountID = "";
@@ -1123,7 +1121,8 @@ void FixEngine::OnRtnOrder(FixExecutionReportField* rspField)
 	order->InsertTime = requestTime;
 	if (order->OrderStatus == OrderStatus::Canceled)
 	{
-		order->CancelTime = GetTimeFromUtcTime(rspField->TransactTime);
+		auto transactTime = GetTimeFromString(rspField->TransactTime);
+		order->CancelTime = ToLocalTime(&transactTime);
 	}
 	order->InsertDate = requestDate;
 	order->TradingDay = requestDate;
@@ -1167,9 +1166,10 @@ void FixEngine::OnRtnTrade(FixExecutionReportField* rspField)
 	trade->Volume = atoi(rspField->LastQty.c_str());
 	trade->OrderLocalID = atoi(rspField->CorrelationClOrdID.c_str());
 	trade->OrderSysID = rspField->OrderID;
-	trade->TradeTime = GetTimeFromUtcTime(rspField->TransactTime);
-	trade->TradeDate = GetDateFromUtcTime(rspField->TransactTime);
-	trade->TradingDay = GetDateFromUtcTime(rspField->TransactTime);
+	auto transactTime = GetTimeFromString(rspField->TransactTime);
+	trade->TradeTime = ToLocalTime(&transactTime);
+	trade->TradeDate = ToLocalDate(&transactTime);
+	trade->TradingDay = trade->TradeDate;
 
 	m_MdbPublisher->OnRtnTrade(trade);
 }

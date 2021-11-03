@@ -13,8 +13,6 @@
 			<items>
 				<item name="AccountID" type="string"/>
 				<item name="ExchangeID" type="string"/>
-				<item name="ContractID" type="string"/>
-				<item name="MarketSegmentID" type="string"/>
 				<item name="InstrumentID" type="string"/>
 				<item name="OrderLocalID" type="int"/>
 				<item name="OrderSysID" type="string"/>
@@ -54,8 +52,6 @@
 			<items>
 				<item name="AccountID" type="string"/>
 				<item name="ExchangeID" type="string"/>
-				<item name="ContractID" type="string"/>
-				<item name="MarketSegmentID" type="string"/>
 				<item name="InstrumentID" type="string"/>
 				<item name="OrderLocalID" type="int"/>
 				<item name="OrigOrderLocalID" type="int"/>
@@ -65,7 +61,7 @@
 				<item name="FrontID" type="string"/>
 				<item name="SessionID" type="int"/>
 				<item name="ErrorID" type="int"/>
-				<item name="ErrorMsg" type="string"/>
+				<item name="ErrorMsg" type="string" len="255"/>
 				<item name="TradingDay" type="string"/>
 			</items>
 			<primarykey>
@@ -77,8 +73,6 @@
 			<items>
 				<item name="AccountID" type="string"/>
 				<item name="ExchangeID" type="string"/>
-				<item name="ContractID" type="string"/>
-				<item name="MarketSegmentID" type="string"/>
 				<item name="InstrumentID" type="string"/>
 				<item name="TradeID" type="string"/>
 				<item name="Direction" type="enum"/>

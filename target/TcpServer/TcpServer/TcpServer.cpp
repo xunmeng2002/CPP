@@ -36,6 +36,7 @@ void TcpServerTest()
 		if (len <= 0)
 		{
 			WRITE_LOG(LogLevel::Info, "Disconnect recv: [%d]", len);
+			break;
 		}
 		else
 		{

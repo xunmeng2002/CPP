@@ -5,6 +5,7 @@
 class Udp
 {
 	Udp();
+	~Udp();
 public:
 	static Udp& GetInstance();
 	void SetBindAddress(const char* ip = "127.0.0.1", int port = 0);

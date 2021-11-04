@@ -15,6 +15,10 @@ Udp::Udp()
 	memset(&m_RemoteAddress, 0, sizeof(m_BindAddress));
 	m_RemoteAddressLen = sizeof(SOCKADDR);
 }
+Udp::~Udp()
+{
+	closesocket(m_Socket);
+}
 Udp& Udp::GetInstance()
 {
 	return m_Instance;

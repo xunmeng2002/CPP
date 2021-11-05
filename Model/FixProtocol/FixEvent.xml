@@ -1,0 +1,27 @@
+<root>
+	<FixEvents startID="10000">
+		<event name="OnMessage" desc="收到消息"/>
+		<event name="OnSequenceGap" desc="序号间隙信息"/>
+		<event name="ReqLogon" desc="请求登录"/>
+		<event name="RspLogon" desc="登录回报"/>
+		<event name="ReqLogout" desc="请求登出"/>
+		<event name="RspLogout" desc="登出回报"/>
+		<event name="ReqHeartBeat" desc="请求心跳"/>
+		<event name="RspHeartBeat" desc="心跳回报"/>
+		<event name="ReqTestRequest" desc="请求测试请求"/>
+		<event name="RspTestRequest" desc="测试请求回报"/>
+		<event name="ReqResendRequest" desc="请求重发请求"/>
+		<event name="RspResendRequest" desc="重发请求回报"/>
+		<event name="ReqSequenceReset" desc="请求序号重置"/>
+		<event name="RspSequenceReset" desc="序号重置回报"/>
+		
+		<event name="ReqNewOrder" desc="请求报单"/>
+		<event name="ReqOrderCancel" desc="请求撤单"/>
+		<event name="ReqOrderCancelReplace" desc="请求改单"/>
+		<event name="RspExecutionReport" desc="执行回报"/>
+		<event name="RspOrderCancelReject" desc="撤单拒绝回报"/>
+		<event name="RspSessionLevelReject" desc="会话级别拒绝回报"/>
+		
+		<event name="DoResendLastResendRequest" desc="重发上次重发的请求报文"/>
+	</FixEvents>
+</root>

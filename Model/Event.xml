@@ -1,0 +1,19 @@
+<root>
+	<TcpEvents startID="0">
+		<event name="Connect" desc="请求连接"/>
+		<event name="DisConnect" desc="请求断开连接"/>
+		<event name="OnConnected" desc="已连接"/>
+		<event name="OnDisConnected" desc="已断开连接"/>
+		<event name="Send" desc="请求发送"/>
+		<event name="Recv" desc="请求接收"/>
+	</TcpEvents>
+	<BusinessEvents startID="100">
+		<event name="InsertOrder" desc="请求报单"/>
+		<event name="InsertOrderCancel" desc="请求撤单"/>
+		<event name="OnRspOrder" desc="报单回报"/>
+		<event name="OnRspOrderCancel" desc="撤单回报"/>
+		<event name="OnErrRtnOrderCancel" desc="撤单错误推送"/>
+		<event name="OnRtnOrder" desc="报单推送"/>
+		<event name="OnRtnTrade" desc="成交推送"/>
+	</BusinessEvents>
+</root>

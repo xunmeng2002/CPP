@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
     WorkThreadManage::GetInstance().Init(workThreads);
     WorkThreadManage::GetInstance().Start();
 
-    TcpIOCPClient::GetInstance().SetServerAddress("192.168.6.78", 20000);
+    TcpIOCPClient::GetInstance().SetServerAddress("127.0.0.1", 20000);
     if (!TcpIOCPClient::GetInstance().Init())
     {
         WRITE_ERROR_LOG(-1, "TcpServer Init Failed.");

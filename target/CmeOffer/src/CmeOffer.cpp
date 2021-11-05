@@ -3,7 +3,7 @@
 #include "ItsEngine.h"
 #include "FixEngine.h"
 #include "Config.h"
-#include "UdpServer.h"
+#include "Udp.h"
 #include "CmeMonthMap.h"
 #include <iostream>
 
@@ -27,9 +27,9 @@ int main(int argc, char* argv[])
 	MdbEngine* mdbEngine = new MdbEngine();
 	FixEngine* fixEngine = new FixEngine();
 
-	UdpServer::GetInstance().SetBindAddress("127.0.0.1");
-	UdpServer::GetInstance().SetBroadAddress("127.0.0.1", atoi(config.BroadCastPort.c_str()));
-	UdpServer::GetInstance().Init();
+	Udp::GetInstance().SetBindAddress("127.0.0.1");
+	Udp::GetInstance().SetRemoteAddress("127.0.0.1", atoi(config.BroadCastPort.c_str()));
+	Udp::GetInstance().Init(true);
 	itsEngine->SetBindAddress("127.0.0.1", atoi(config.ListenPort.c_str()));
 	fixEngine->RegisterAddress(config.CmeGlobexIP.c_str(), atoi(config.CmeGlobexPrimaryPort.c_str()), config.CmeGlobexIP.c_str(), atoi(config.CmeGlobexBackupPort.c_str()));
 

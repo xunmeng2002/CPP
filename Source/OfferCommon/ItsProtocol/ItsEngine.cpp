@@ -4,8 +4,8 @@
 #include "ItsFields.h"
 #include "command_id.h"
 #include "TimeUtility.h"
-#include "UdpServer.h"
-#include "TcpEvent.h"
+#include "Udp.h"
+#include "Event.h"
 
 
 ItsEngine::ItsEngine()
@@ -49,7 +49,7 @@ void ItsEngine::OnRspOrder(int sessionID, ItsRspOrder* field)
 {
 	ItsMdb::GetInstance().InsertRecord(field);
 	TcpEvent* tcpEvent = TcpEvent::Allocate();
-	tcpEvent->EventID = EVENT_ON_TCP_SEND;
+	tcpEvent->EventID = EventSend;
 	tcpEvent->SessionID = sessionID;
 	auto len = (unsigned short)field->ToStream(tcpEvent->Buff + sizeof(unsigned short), BuffSize - sizeof(unsigned short));
 	*(unsigned short*)tcpEvent->Buff = len;

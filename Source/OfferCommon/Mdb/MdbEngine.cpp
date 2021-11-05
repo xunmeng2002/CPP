@@ -4,7 +4,7 @@
 #include "MemCacheTemplateSingleton.h"
 #include "Config.h"
 #include "DataType.h"
-#include "MyEvent.h"
+#include "Event.h"
 #include "ItsUtility.h"
 #include "command_id.h"
 #include "Utility.h"
@@ -50,7 +50,7 @@ bool MdbEngine::Init(const char* dbName)
 void MdbEngine::ReqInsertOrder(int sessionID, ItsInsertOrder* field)
 {
 	auto myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_INSERT_ORDER;
+	myEvent->EventID = EventInsertOrder;
 	myEvent->NumParams.push_back(sessionID);
 	myEvent->Field = field;
 	OnEvent(myEvent);
@@ -58,7 +58,7 @@ void MdbEngine::ReqInsertOrder(int sessionID, ItsInsertOrder* field)
 void MdbEngine::ReqInsertOrderCancel(int sessionID, ItsInsertOrderCancel* field)
 {
 	auto myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_INSERT_ORDER_CANCEL;
+	myEvent->EventID = EventInsertOrderCancel;
 	myEvent->NumParams.push_back(sessionID);
 	myEvent->Field = field;
 	OnEvent(myEvent);
@@ -66,21 +66,21 @@ void MdbEngine::ReqInsertOrderCancel(int sessionID, ItsInsertOrderCancel* field)
 void MdbEngine::OnRtnOrder(Order* field)
 {
 	auto myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_RTN_ORDER;
+	myEvent->EventID = EventOnRtnOrder;
 	myEvent->Field = field;
 	OnEvent(myEvent);
 }
 void MdbEngine::OnRtnTrade(Trade* field)
 {
 	auto myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_RTN_TRADE;
+	myEvent->EventID = EventOnRtnTrade;
 	myEvent->Field = field;
 	OnEvent(myEvent);
 }
 void MdbEngine::OnErrRtnOrderCancel(OrderCancel* field)
 {
 	auto myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_ERR_RTN_ORDER_CANCEL;
+	myEvent->EventID = EventOnErrRtnOrderCancel;
 	myEvent->Field = field;
 	OnEvent(myEvent);
 }
@@ -126,29 +126,29 @@ void MdbEngine::HandleEvent()
 	{
 		switch (myEvent->EventID)
 		{
-		case EVENT_INSERT_ORDER:
+		case EventInsertOrder:
 		{
 			auto sessionID = myEvent->NumParams[0];
 			HandleInsertOrder(sessionID, (ItsInsertOrder*)myEvent->Field);
 			break;
 		}
-		case EVENT_INSERT_ORDER_CANCEL:
+		case EventInsertOrderCancel:
 		{
 			auto sessionID = myEvent->NumParams[0];
 			HandleInsertOrderCancel(sessionID, (ItsInsertOrderCancel*)myEvent->Field);
 			break;
 		}
-		case EVENT_RTN_ORDER:
+		case EventOnRtnOrder:
 		{
 			HandleRtnOrder((Order*)myEvent->Field);
 			break;
 		}
-		case EVENT_RTN_TRADE:
+		case EventOnRtnTrade:
 		{
 			HandleRtnTrade((Trade*)myEvent->Field);
 			break;
 		}
-		case EVENT_ERR_RTN_ORDER_CANCEL:
+		case EventOnErrRtnOrderCancel:
 		{
 			HandleErrRtnOrderCancel((OrderCancel*)myEvent->Field);
 			break;

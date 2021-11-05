@@ -50,8 +50,6 @@ protected:
 	void OnEventSequenceGap(int beginSeqNo, int endSeqNo);
 	void OnEventResendLastResendRequest();
 	void OnEventDoResendRequest(int beginSeqNo, int endSeqNo);
-	void OnEventHeartBeat(const string& testReqID);
-	void OnEventTestRequest(const string& testReqID);
 	void OnEventFixMessage(FixReqHeader* reqField);
 	void CheckConnectStatus();
 	void CheckLogonStatus();
@@ -93,7 +91,7 @@ protected:
 	void SendRequest(T* reqField, bool isResend = false)
 	{
 		TcpEvent* tcpEvent = TcpEvent::Allocate();
-		tcpEvent->EventID = EVENT_ON_TCP_SEND;
+		tcpEvent->EventID = EventSend;
 		tcpEvent->SessionID = m_SessionID;
 		auto len = reqField->ToStream(tcpEvent->Buff);
 		tcpEvent->Length = len;

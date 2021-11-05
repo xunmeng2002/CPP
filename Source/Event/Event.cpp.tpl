@@ -1,5 +1,17 @@
-#include "TcpEvent.h"
+#include "Event.h"
 #include "MemCacheTemplateSingleton.h"
+
+
+Event* Event::Allocate()
+{
+	return MemCacheTemplateSingleton<Event>::GetInstance().Allocate();
+}
+
+void Event::Free()
+{
+	MemCacheTemplateSingleton<Event>::GetInstance().Free(this);
+}
+
 
 TcpEvent::TcpEvent(int buffSize)
 	:SessionID(0), IP(""), Port(0)
@@ -33,3 +45,18 @@ void TcpEvent::Shift(int len)
 	ReadPos += len;
 	Length -= len;
 }
+
+MyEvent* MyEvent::Allocate()
+{
+	return MemCacheTemplateSingleton<MyEvent>::GetInstance().Allocate();
+}
+
+void MyEvent::Free()
+{
+	Field = nullptr;
+	NumParams.clear();
+	StringParams.clear();
+
+	MemCacheTemplateSingleton<MyEvent>::GetInstance().Free(this);
+}
+

@@ -16,7 +16,7 @@ bool TcpSelectClient::Init()
 void TcpSelectClient::Connect(const char* ip, int port)
 {
 	TcpEvent* tcpEvent = TcpEvent::Allocate();
-	tcpEvent->EventID = EVENT_CONNECT;
+	tcpEvent->EventID = EventConnect;
 	tcpEvent->IP = ip;
 	tcpEvent->Port = port;
 	OnEvent(tcpEvent);

@@ -1,0 +1,8 @@
+<pumplist>
+	<pump dest="./source/OfferCommon/Mdb/Mdb.h" tpl="./source/OfferCommon/Mdb/Mdb.h.tpl" model="./model/Mdb/Mdb.xml"/>
+	<pump dest="./source/OfferCommon/Mdb/Mdb.cpp" tpl="./source/OfferCommon/Mdb/Mdb.cpp.tpl" model="./model/Mdb/Mdb.xml"/>
+	<pump dest="./source/OfferCommon/Mdb/MdbTables.h" tpl="./source/OfferCommon/Mdb/MdbTables.h.tpl" model="./model/Mdb/Mdb.xml"/>
+	<pump dest="./source/OfferCommon/Mdb/MdbTables.cpp" tpl="./source/OfferCommon/Mdb/MdbTables.cpp.tpl" model="./model/Mdb/Mdb.xml"/>
+	<pump dest="./source/OfferCommon/Mdb/MdbEnumDict.h" tpl="./source/OfferCommon/Mdb/MdbEnumDict.h.tpl" model="./model/Mdb/MdbEnumDict.xml"/>
+	<pump dest="./source/OfferCommon/Mdb/MdbEnumDict.cpp" tpl="./source/OfferCommon/Mdb/MdbEnumDict.cpp.tpl" model="./model/Mdb/MdbEnumDict.xml"/>
+</pumplist>

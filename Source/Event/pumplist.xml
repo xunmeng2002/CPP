@@ -1,0 +1,4 @@
+<pumplist>
+	<pump dest="./source/Event/Event.h" tpl="./source/Event/Event.h.tpl" model="./model/Event.xml"/>
+	<pump dest="./source/Event/Event.cpp" tpl="./source/Event/Event.cpp.tpl" model="./model/Event.xml"/>
+</pumplist>

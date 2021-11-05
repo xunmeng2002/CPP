@@ -1,6 +1,6 @@
 #include "FixEngine.h"
 #include "FixUtility.h"
-#include "MyEvent.h"
+#include "FixEvent.h"
 #include "FixItems.h"
 #include "Utility.h"
 #include "TimeUtility.h"
@@ -193,14 +193,14 @@ void FixEngine::ClearInitMessage()
 void FixEngine::ReqInsertOrder(Order* order)
 {
 	MyEvent* myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_INSERT_ORDER;
+	myEvent->EventID = FixEventReqNewOrder;
 	myEvent->Field = order;
 	OnEvent(myEvent);
 }
 void FixEngine::ReqInsertOrderCancel(OrderCancel* orderCancel)
 {
 	MyEvent* myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_INSERT_ORDER_CANCEL;
+	myEvent->EventID = FixEventReqOrderCancel;
 	myEvent->Field = orderCancel;
 	OnEvent(myEvent);
 }
@@ -278,7 +278,7 @@ void FixEngine::HandleInsertOrderCancel(OrderCancel* orderCancel)
 void FixEngine::OnConnect(int sessionID, const char* ip, int port)
 {
 	TcpEvent* tcpEvent = TcpEvent::Allocate();
-	tcpEvent->EventID = EVENT_ON_CONNECTED;
+	tcpEvent->EventID = EventOnConnected;
 	tcpEvent->SessionID = sessionID;
 	tcpEvent->IP = ip;
 	tcpEvent->Port = port;
@@ -288,7 +288,7 @@ void FixEngine::OnConnect(int sessionID, const char* ip, int port)
 void FixEngine::OnDisConnect(int sessionID, const char* ip, int port)
 {
 	TcpEvent* tcpEvent = TcpEvent::Allocate();
-	tcpEvent->EventID = EVENT_ON_DISCONNECTED;
+	tcpEvent->EventID = EventOnDisConnected;
 	tcpEvent->SessionID = sessionID;
 	tcpEvent->IP = ip;
 	tcpEvent->Port = port;
@@ -340,24 +340,24 @@ void FixEngine::HandleEvent()
 		shouldFree = true;
 		switch (event->EventID)
 		{
-		case EVENT_ON_CONNECTED:
+		case EventOnConnected:
 		{
 			HandleConnect(((TcpEvent*)event)->SessionID);
 			break;
 		}
-		case EVENT_ON_DISCONNECTED:
+		case EventOnDisConnected:
 		{
 			HandleDisConnect(((TcpEvent*)event)->SessionID);
 			break;
 		}
-		case EVENT_ON_TCP_RECV:
+		case EventRecv:
 		{
 			tcpEvent = (TcpEvent*)event;
 			m_RecvDatas.push_back(tcpEvent);
 			shouldFree = false;
 			break;
 		}
-		case EVENT_ON_SEQUENCE_GAP:
+		case FixEventOnSequenceGap:
 		{
 			myEvent = (MyEvent*)event;
 			auto startSeqNum = myEvent->NumParams[0];
@@ -365,12 +365,12 @@ void FixEngine::HandleEvent()
 			ReqResendRequest(startSeqNum, endSeqNum);
 			break;
 		}
-		case EVENT_ON_RESEND_LAST_RESEND_REQUEST:
+		case FixEventDoResendLastResendRequest:
 		{
 			ResendLastResendRequest();
 			break;
 		}
-		case EVENT_DO_RESEND_REQUEST:
+		case FixEventReqResendRequest:
 		{
 			myEvent = (MyEvent*)event;
 			auto beginSeqNum = myEvent->NumParams[0];
@@ -378,7 +378,7 @@ void FixEngine::HandleEvent()
 			DoResendRequest(beginSeqNum, endSeqNum);
 			break;
 		}
-		case EVENT_ON_FIX_MESSAGE:
+		case FixEventOnMessage:
 		{
 			myEvent = (MyEvent*)event;
 			auto field = (FixReqHeader*)myEvent->Field;
@@ -387,14 +387,14 @@ void FixEngine::HandleEvent()
 			myEvent->Field = nullptr;
 			break;
 		}
-		case EVENT_INSERT_ORDER:
+		case FixEventReqNewOrder:
 		{
 			myEvent = (MyEvent*)event;
 			auto order = (Order*)myEvent->Field;
 			HandleInsertOrder(order);
 			break;
 		}
-		case EVENT_INSERT_ORDER_CANCEL:
+		case FixEventReqOrderCancel:
 		{
 			myEvent = (MyEvent*)event;
 			auto orderCancel = (OrderCancel*)myEvent->Field;
@@ -417,7 +417,7 @@ void FixEngine::OnEventSequenceGap(int beginSeqNo, int endSeqNo)
 	m_ResendRange = make_pair(beginSeqNo, endSeqNo);
 
 	MyEvent* myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_ON_SEQUENCE_GAP;
+	myEvent->EventID = FixEventOnSequenceGap;
 	myEvent->NumParams.push_back(beginSeqNo);
 	myEvent->NumParams.push_back(endSeqNo);
 	OnEvent(myEvent);
@@ -425,7 +425,7 @@ void FixEngine::OnEventSequenceGap(int beginSeqNo, int endSeqNo)
 void FixEngine::OnEventResendLastResendRequest()
 {
 	MyEvent* myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_ON_RESEND_LAST_RESEND_REQUEST;
+	myEvent->EventID = FixEventDoResendLastResendRequest;
 	OnEvent(myEvent);
 }
 void FixEngine::OnEventDoResendRequest(int beginSeqNo, int endSeqNo)
@@ -436,30 +436,16 @@ void FixEngine::OnEventDoResendRequest(int beginSeqNo, int endSeqNo)
 	}
 	m_IsDoResendRequest = true;
 	MyEvent* myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_DO_RESEND_REQUEST;
+	myEvent->EventID = FixEventReqResendRequest;
 	myEvent->NumParams.push_back(beginSeqNo);
 	myEvent->NumParams.push_back(endSeqNo);
 
 	OnEvent(myEvent);
 }
-void FixEngine::OnEventHeartBeat(const string& testReqID)
-{
-	MyEvent* myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_DO_HEART_BEAT;
-	myEvent->StringParams.push_back(testReqID);
-	OnEvent(myEvent);
-}
-void FixEngine::OnEventTestRequest(const string& testReqID)
-{
-	MyEvent* myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_DO_TEST_REQUEST;
-	myEvent->StringParams.push_back(testReqID);
-	OnEvent(myEvent);
-}
 void FixEngine::OnEventFixMessage(FixReqHeader* reqField)
 {
 	auto myEvent = MyEvent::Allocate();
-	myEvent->EventID = EVENT_ON_FIX_MESSAGE;
+	myEvent->EventID = FixEventOnMessage;
 	myEvent->Field = reqField;
 
 	OnEvent(myEvent);

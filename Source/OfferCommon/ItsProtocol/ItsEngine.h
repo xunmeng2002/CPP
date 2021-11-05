@@ -6,7 +6,7 @@
 #include "TcpSelectServer.h"
 #include "ItsInterface.h"
 #include "ItsMdb.h"
-#include "UdpServer.h"
+#include "Udp.h"
 
 struct ItsInsertOrderKey
 {
@@ -45,7 +45,8 @@ protected:
 		ItsMdb::GetInstance().InsertRecord(field);
 		TcpEvent* tcpEvent = TcpEvent::Allocate();
 		tcpEvent->Length = field->ToStream(tcpEvent->Buff, BuffSize);
-		UdpServer::GetInstance().ZipSend(tcpEvent);
+		Udp::GetInstance().ZipSendTo(tcpEvent);
+		tcpEvent->Free();
 	}
 
 

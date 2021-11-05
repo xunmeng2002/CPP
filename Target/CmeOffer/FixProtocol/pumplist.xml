@@ -1,0 +1,19 @@
+<pumplist>
+	<pump dest="./Target/CmeOffer/FixProtocol/FixEvent.h" tpl="./Target/CmeOffer/FixProtocol/FixEvent.h.tpl" model="./Model/FixProtocol/FixEvent.xml"/>
+	<pump dest="./Target/CmeOffer/FixProtocol/FixEvent.cpp" tpl="./Target/CmeOffer/FixProtocol/FixEvent.cpp.tpl" model="./Model/FixProtocol/FixEvent.xml"/>
+	
+	<pump dest="./Target/CmeOffer/FixProtocol/FixEnumDict.h" tpl="./Target/CmeOffer/FixProtocol/FixEnumDict.h.tpl" model="./Model/FixProtocol/FixEnumDict.xml"/>
+	<pump dest="./Target/CmeOffer/FixProtocol/FixEnumDict.cpp" tpl="./Target/CmeOffer/FixProtocol/FixEnumDict.cpp.tpl" model="./Model/FixProtocol/FixEnumDict.xml"/>
+	
+	<pump dest="./Target/CmeOffer/FixProtocol/FixItems.h" tpl="./Target/CmeOffer/FixProtocol/FixItems.h.tpl" model="./Model/FixProtocol/FixProtocol.xml"/>
+	<pump dest="./Target/CmeOffer/FixProtocol/FixItems.cpp" tpl="./Target/CmeOffer/FixProtocol/FixItems.cpp.tpl" model="./Model/FixProtocol/FixProtocol.xml"/>
+	
+	<pump dest="./Target/CmeOffer/FixProtocol/FixFields.h" tpl="./Target/CmeOffer/FixProtocol/FixFields.h.tpl" model="./Model/FixProtocol/FixProtocol.xml"/>
+	<pump dest="./Target/CmeOffer/FixProtocol/FixFields.cpp" tpl="./Target/CmeOffer/FixProtocol/FixFields.cpp.tpl" model="./Model/FixProtocol/FixProtocol.xml"/>
+	
+	<pump dest="./Target/CmeOffer/FixProtocol/FixMdb.h" tpl="./Target/CmeOffer/FixProtocol/FixMdb.h.tpl" model="./Model/FixProtocol/FixProtocol.xml"/>
+	<pump dest="./Target/CmeOffer/FixProtocol/FixMdb.cpp" tpl="./Target/CmeOffer/FixProtocol/FixMdb.cpp.tpl" model="./Model/FixProtocol/FixProtocol.xml"/>
+	
+	<pump dest="./Target/CmeOffer/FixProtocol/FixAuditTrail.h" tpl="./Target/CmeOffer/FixProtocol/FixAuditTrail.h.tpl" model="./Model/FixProtocol/FixProtocol.xml"/>
+	<pump dest="./Target/CmeOffer/FixProtocol/FixAuditTrail.cpp" tpl="./Target/CmeOffer/FixProtocol/FixAuditTrail.cpp.tpl" model="./Model/FixProtocol/FixProtocol.xml"/>
+</pumplist>

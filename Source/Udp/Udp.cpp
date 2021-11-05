@@ -79,13 +79,7 @@ void Udp::Close()
 int Udp::SendTo(TcpEvent* tcpEvent)
 {
 	auto sendLen = ::sendto(m_Socket, tcpEvent->ReadPos, tcpEvent->Length, 0, (sockaddr*)&m_RemoteAddress, sizeof(m_RemoteAddress));
-	WRITE_LOG(LogLevel::Info, "Udp SendTo:[%s:%u], Len:[%d], Ret:[%d], Buff:[%s]", inet_ntoa(m_RemoteAddress.sin_addr), ntohs(m_RemoteAddress.sin_port), tcpEvent->Length, sendLen, (unsigned char*)tcpEvent->Buff);
-	cout << "[";
-	for (auto i = 0; i < sendLen; i++)
-	{
-		printf("%02x", (unsigned char)tcpEvent->ReadPos[i]);
-	}
-	cout <<"]" << endl;
+	WRITE_LOG(LogLevel::Info, "Udp SendTo:[%s:%u], Len:[%d], Ret:[%d]", inet_ntoa(m_RemoteAddress.sin_addr), ntohs(m_RemoteAddress.sin_port), tcpEvent->Length, sendLen);
 	return sendLen;
 }
 int Udp::RecvFrom(TcpEvent* tcpEvent)
@@ -93,12 +87,6 @@ int Udp::RecvFrom(TcpEvent* tcpEvent)
 	int recvLen = recvfrom(m_Socket, tcpEvent->Buff, BuffSize - 1, 0, (SOCKADDR*)&m_RemoteAddress, &m_RemoteAddressLen);
 	WRITE_LOG(LogLevel::Info, "Udp RecvFrom:[%s:%u], recvLen:[%d]", inet_ntoa(m_RemoteAddress.sin_addr), ntohs(m_RemoteAddress.sin_port), recvLen);
 	tcpEvent->Length = recvLen;
-	cout << "[";
-	for (auto i = 0; i < recvLen; i++)
-	{
-		printf("%02x", (unsigned char)tcpEvent->ReadPos[i]);
-	}
-	cout << "]" << endl;
 	return recvLen;
 }
 bool Udp::ZipSendTo(TcpEvent* tcpEvent)

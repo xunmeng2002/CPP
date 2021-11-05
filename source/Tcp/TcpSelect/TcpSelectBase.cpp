@@ -1,6 +1,6 @@
 #include "TcpSelectBase.h"
 #include "Logger.h"
-#include "MyEvent.h"
+#include "Event.h"
 
 
 TcpSelectBase::TcpSelectBase(const char* name)
@@ -40,14 +40,14 @@ void TcpSelectBase::DisConnect(int sessionID)
 {
 	WRITE_LOG(LogLevel::Info, "DisConnect SessionID:[%d]", sessionID);
 	TcpEvent* tcpEvent = TcpEvent::Allocate();
-	tcpEvent->EventID = EVENT_DISCONNECT;
+	tcpEvent->EventID = EventDisConnect;
 	tcpEvent->SessionID = sessionID;
 	OnEvent(tcpEvent);
 }
 void TcpSelectBase::Send(int sessionID, const char* data, int length)
 {
 	TcpEvent* tcpEvent = TcpEvent::Allocate();
-	tcpEvent->EventID = EVENT_ON_TCP_SEND;
+	tcpEvent->EventID = EventSend;
 	tcpEvent->SessionID = sessionID;
 	memcpy(tcpEvent->Buff, data, length);
 	tcpEvent->Length = length;
@@ -78,17 +78,17 @@ void TcpSelectBase::HandleEvent()
 		bool shouldFree = true;
 		switch (tcpEvent->EventID)
 		{
-		case EVENT_CONNECT:
+		case EventConnect:
 		{
 			DoConnect(tcpEvent->IP, tcpEvent->Port);
 			break;
 		}
-		case EVENT_DISCONNECT:
+		case EventDisConnect:
 		{
 			DoDisConnect(tcpEvent->SessionID);
 			break;
 		}
-		case EVENT_ON_TCP_SEND:
+		case EventSend:
 		{
 			PushSendEvent(tcpEvent);
 			shouldFree = false;
@@ -179,7 +179,7 @@ void TcpSelectBase::DoRecv()
 			{
 				tcpEvent->Buff[len] = '\0';
 				WRITE_LOG(LogLevel::Debug, "OnRecv: SessionID[%d], len[%d], [%s]", sessionID, len, tcpEvent->Buff);
-				tcpEvent->EventID = EVENT_ON_TCP_RECV;
+				tcpEvent->EventID = EventRecv;
 				tcpEvent->SessionID = sessionID;
 				tcpEvent->Length = len;
 

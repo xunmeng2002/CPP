@@ -4,7 +4,6 @@
 #include <map>
 #include "ThreadBase.h"
 #include "SocketInit.h"
-#include "TcpEvent.h"
 #include "ConnectData.h"
 #include "TcpInterface.h"
 

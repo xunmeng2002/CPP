@@ -1,5 +1,4 @@
 #pragma once
-#include "SocketDataStruct.h"
 #include "ThreadBase.h"
 #include "TcpInterface.h"
 #include "ConnectData.h"

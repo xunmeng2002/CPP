@@ -1,7 +1,7 @@
 #include <map>
 #include <mutex>
 #include "SocketInit.h"
-#include "SocketDataStruct.h"
+#include "OverlappedData.h"
 #include "ThreadBase.h"
 #include "TcpInterface.h"
 #include "ConnectData.h"

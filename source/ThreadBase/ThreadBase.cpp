@@ -47,6 +47,11 @@ void ThreadBase::ThreadInit()
 {
 	WRITE_LOG(LogLevel::Info, "Thread[%d]:%s Start", m_ThreadID, m_ThreadName.c_str());
 }
+void ThreadBase::Run()
+{
+	CheckEvent();
+	HandleEvent();
+}
 void ThreadBase::ThreadExit()
 {
 	WRITE_LOG(LogLevel::Info, "Thread[%d]:%s Exit", m_ThreadID, m_ThreadName.c_str());

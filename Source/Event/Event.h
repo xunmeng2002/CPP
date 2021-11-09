@@ -45,10 +45,12 @@ struct MyEvent : public Event
 
 constexpr int EventConnect = 0;		//请求连接
 constexpr int EventDisConnect = 1;		//请求断开连接
-constexpr int EventOnConnected = 2;		//已连接
-constexpr int EventOnDisConnected = 3;		//已断开连接
-constexpr int EventSend = 4;		//请求发送
-constexpr int EventRecv = 5;		//请求接收
+constexpr int EventAccept = 2;		//请求接受连接
+constexpr int EventOnConnected = 3;		//已连接
+constexpr int EventOnDisConnected = 4;		//已断开连接
+constexpr int EventOnAccept = 5;		//已接受连接
+constexpr int EventSend = 6;		//请求发送
+constexpr int EventRecv = 7;		//请求接收
 
 
 constexpr int EventInsertOrder = 100;		//请求报单

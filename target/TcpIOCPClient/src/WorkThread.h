@@ -1,26 +1,42 @@
 #pragma once
 #include "SocketDataStruct.h"
-#include "WorkThreadBase.h"
+#include "ThreadBase.h"
+#include "TcpInterface.h"
+#include "ConnectData.h"
+#include <set>
 #include <map>
 #pragma once
 
+using namespace std;
 
-class WorkThread : public WorkThreadBase
+class WorkThread : public ThreadBase, public TcpSubscriber
 {
-public:
-	WorkThread(int workThreadID);
+	WorkThread();
 	~WorkThread();
+public:
+	static WorkThread& GetInstance();
+	void RegisterTcp(TcpPublisher* tcpPublisher);
 
-	virtual void CloseConnects() override;
-	virtual void SendTestMessage(const std::string& message);
+	virtual void OnConnect(int sessionID, const char* ip, int port) override;
+	virtual void OnDisConnect(int sessionID, const char* ip, int port) override;
+	virtual void OnRecv(TcpEvent* tcpEvent) override;
 
+	void CloseConnects();
+	void Send(const char* data, int len);
 protected:
-	virtual void HandleNewConnect(SocketData* socketData) override;
-	virtual void HandleRecvMessage(SocketData* socketData) override;
+	virtual void HandleEvent() override;
 
-	void SendTestMessage(int sessionID, const std::string& message);
+	void AddConnect(int sessionID, const char* ip, int port);
+	void RemoveConnect(int sessionID, const char* ip, int port);
+	void HandleRecvData(TcpEvent* tcpEvent);
+	void HandleDisConnects();
+	void HandleSendData(TcpEvent* tcpEvent);
+
 
 private:
-	char m_MessageBuffer[1024];
+	static WorkThread m_Instance;
+
+	TcpPublisher* m_TcpPublisher;
+	map<int, ConnectData*> m_ConnectDatas;
 };
 

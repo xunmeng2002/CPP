@@ -1,57 +1,137 @@
 #include "WorkThread.h"
 #include "Logger.h"
-#include "TcpIOCPServer.h"
+#include "TcpIOCPClient.h"
 
 using namespace std;
 
-WorkThread::WorkThread(int workThreadID)
-	:WorkThreadBase(workThreadID), m_MessageBuffer("")
+WorkThread WorkThread::m_Instance;
+WorkThread::WorkThread()
+	:ThreadBase("WorkThread"), m_TcpPublisher(nullptr)
 {
-	
+
 }
 WorkThread::~WorkThread()
 {
-	
+
 }
 
+WorkThread& WorkThread::GetInstance()
+{
+	return m_Instance;
+}
+void WorkThread::RegisterTcp(TcpPublisher* tcpPublisher)
+{
+	m_TcpPublisher = tcpPublisher;
+}
+
+void WorkThread::OnConnect(int sessionID, const char* ip, int port)
+{
+	TcpEvent* tcpEvent = TcpEvent::Allocate();
+	tcpEvent->EventID = EventOnConnected;
+	tcpEvent->SessionID = sessionID;
+	tcpEvent->IP = string(ip);
+	tcpEvent->Port = port;
+	OnEvent(tcpEvent);
+}
+void WorkThread::OnDisConnect(int sessionID, const char* ip, int port)
+{
+	TcpEvent* tcpEvent = TcpEvent::Allocate();
+	tcpEvent->EventID = EventOnDisConnected;
+	tcpEvent->SessionID = sessionID;
+	tcpEvent->IP = string(ip);
+	tcpEvent->Port = port;
+	OnEvent(tcpEvent);
+}
+void WorkThread::OnRecv(TcpEvent* tcpEvent)
+{
+	OnEvent(tcpEvent);
+}
 void WorkThread::CloseConnects()
 {
-	lock_guard<mutex> guard(m_SessionIDMutex);
-	for (auto it : m_SessionIDs)
-	{
-		TcpIOCPServer::GetInstance().CloseConnect(it.first);
-	}
+	TcpEvent* tcpEvent = TcpEvent::Allocate();
+	tcpEvent->EventID = EventDisConnect;
+	OnEvent(tcpEvent);
 }
-void WorkThread::SendTestMessage(const std::string& message)
+void WorkThread::Send(const char* data, int len)
 {
-	for (auto it : m_SessionIDs)
-	{
-		SendTestMessage(it.first, message);
-	}
-}
+	TcpEvent* tcpEvent = TcpEvent::Allocate();
+	tcpEvent->EventID = EventDisConnect;
+	memcpy(tcpEvent->Buff, data, len);
+	tcpEvent->Length = len;
 
-
-void WorkThread::HandleRecvMessage(SocketData* socketData)
-{
-	socketData->FormatBuffer();
-	WRITE_LOG(LogLevel::Info, "WorkThread:[%d] RecvMessage SessionID:[%d] Socket:[%lld], Len:[%d], Data:[%s].",
-		m_WorkThreadID, socketData->SessionID, socketData->ConnectSocket, socketData->WsaBuffer.len, socketData->WsaBuffer.buf);
-
-	char responseMessage[256] = { 0 };
-	sprintf(responseMessage, "Server Recv Message Len:[%d].", socketData->WsaBuffer.len);
-	if (!TcpIOCPServer::GetInstance().Send(socketData->SessionID, responseMessage, strlen(responseMessage)))
-	{
-		TcpIOCPServer::GetInstance().CloseConnect(socketData->SessionID);
-	}
+	OnEvent(tcpEvent);
 }
 
-void WorkThread::SendTestMessage(int sessionID, const std::string& message)
+void WorkThread::HandleEvent()
 {
-	sprintf(m_MessageBuffer, "Message From TcpIOCPServer Data:[%s]", message.c_str());
-	WRITE_LOG(LogLevel::Info, "SendTestMessage, Len:[%d].", strlen(m_MessageBuffer));
-	if (!TcpIOCPServer::GetInstance().Send(sessionID, m_MessageBuffer, strlen(m_MessageBuffer)))
+	Event* event = nullptr;
+	TcpEvent* tcpEvent = nullptr;
+	while (event = GetEvent())
 	{
-		WRITE_LOG(LogLevel::Info, "Tcp Send Failed. On WorkThread:[%d], SessionID:[%d]", m_WorkThreadID, sessionID);
-		TcpIOCPServer::GetInstance().CloseConnect(sessionID);
+		switch (event->EventID)
+		{
+		case EventOnConnected:
+		{
+			tcpEvent = (TcpEvent*)event;
+			AddConnect(tcpEvent->SessionID, tcpEvent->IP.c_str(), tcpEvent->Port);
+			break;
+		}
+		case EventOnDisConnected:
+		{
+			tcpEvent = (TcpEvent*)event;
+			RemoveConnect(tcpEvent->SessionID, tcpEvent->IP.c_str(), tcpEvent->Port);
+			break;
+		}
+		case EventRecv:
+		{
+			HandleRecvData((TcpEvent*)event);
+			break;
+		}
+		case EventDisConnect:
+		{
+			HandleDisConnects();
+			break;
+		}
+		case EventSend:
+		{
+			HandleSendData((TcpEvent*)event);
+			break;
+		}
+		}
+		event->Free();
+	}
+}
+void WorkThread::AddConnect(int sessionID, const char* ip, int port)
+{
+	m_ConnectDatas.insert(make_pair(sessionID, ConnectData::Allocate(sessionID, 0, ip, port)));
+}
+void WorkThread::RemoveConnect(int sessionID, const char* ip, int port)
+{
+	if (m_ConnectDatas.find(sessionID) != m_ConnectDatas.end())
+	{
+		m_ConnectDatas[sessionID]->Free();
+	}
+	m_ConnectDatas.erase(sessionID);
+}
+void WorkThread::HandleRecvData(TcpEvent* tcpEvent)
+{
+	WRITE_LOG(LogLevel::Info, "RecvData From SessionID:[%d], Address:[%s:%d], Data:[%s]", tcpEvent->SessionID, tcpEvent->IP.c_str(), tcpEvent->Port, tcpEvent->ReadPos);
+
+	static char buff[1024];
+	int len = sprintf(buff, "ServerRsponse For SessionID:[%d] Address:[%s:%d] Data:[%s]", tcpEvent->SessionID, tcpEvent->IP.c_str(), tcpEvent->Port, tcpEvent->ReadPos);
+	m_TcpPublisher->Send(tcpEvent->SessionID, buff, len);
+}
+void WorkThread::HandleDisConnects()
+{
+	for (auto& it : m_ConnectDatas)
+	{
+		m_TcpPublisher->DisConnect(it.first);
+	}
+}
+void WorkThread::HandleSendData(TcpEvent* tcpEvent)
+{
+	for (auto& it : m_ConnectDatas)
+	{
+		m_TcpPublisher->Send(it.first, tcpEvent->ReadPos, tcpEvent->Length);
 	}
 }

@@ -5,7 +5,6 @@
 #include "Logger.h"
 #include "TcpIOCPServer.h"
 #include "WorkThread.h"
-#include "WorkThreadManage.h"
 #include "Logger.h"
 
 int main(int argc, char* argv[])
@@ -13,38 +12,33 @@ int main(int argc, char* argv[])
     Logger::GetInstance().Init(argv[0]);
     Logger::GetInstance().Start();
 
-    std::vector<WorkThreadBase*> workThreads;
-    for (auto i = 0; i < 10; i++)
-    {
-        auto workThread = new WorkThread(i);
-        workThreads.push_back(workThread);
-    }
-    WorkThreadManage::GetInstance().Init(workThreads);
-    WorkThreadManage::GetInstance().Start();
 
-    TcpIOCPServer::GetInstance().SetSocketInfo(20000, "0.0.0.0");
+    TcpIOCPServer::GetInstance().SetLocalAddress("0.0.0.0", 20000);
+    TcpIOCPServer::GetInstance().RegisterSubscriber(&WorkThread::GetInstance());
     if (!TcpIOCPServer::GetInstance().Init())
     {
-        WRITE_ERROR_LOG(-1, "TcpIOCPServer Init Failed.");
+        WRITE_LOG(LogLevel::Error, "TcpIOCPServer Init Failed.");
         return 0;
     }
     TcpIOCPServer::GetInstance().Start();
 
-    Sleep(300000);
+    WorkThread::GetInstance().RegisterTcp(&TcpIOCPServer::GetInstance());
+    WorkThread::GetInstance().Start();
+
+    while (true)
+    {
+        Sleep(10000);
+    }
     
-    WorkThreadManage::GetInstance().CloseConnects();
 
-    Sleep(5000);
-
-    WorkThreadManage::GetInstance().Stop();
-    WorkThreadManage::GetInstance().Join();
+    WorkThread::GetInstance().Stop();
+    WorkThread::GetInstance().Join();
 
     TcpIOCPServer::GetInstance().Stop();
     TcpIOCPServer::GetInstance().Join();
 
     Logger::GetInstance().Stop();
     Logger::GetInstance().Join();
-    std::cout << "Hello World!\n";
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

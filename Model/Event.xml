@@ -2,8 +2,10 @@
 	<TcpEvents startID="0">
 		<event name="Connect" desc="请求连接"/>
 		<event name="DisConnect" desc="请求断开连接"/>
+		<event name="Accept" desc="请求接受连接"/>
 		<event name="OnConnected" desc="已连接"/>
 		<event name="OnDisConnected" desc="已断开连接"/>
+		<event name="OnAccept" desc="已接受连接"/>
 		<event name="Send" desc="请求发送"/>
 		<event name="Recv" desc="请求接收"/>
 	</TcpEvents>

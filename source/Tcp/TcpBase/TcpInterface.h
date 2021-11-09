@@ -14,6 +14,6 @@ class TcpPublisher
 public:
 	virtual void Connect(const char* ip, int port) {}
 	virtual void DisConnect(int sessionID) {}
-	virtual void Send(int sessionID, const char* data, int length) {}
+	virtual void Send(int sessionID, const char* data, int len) {}
 	virtual void Send(TcpEvent* tcpEvent) {}
 };

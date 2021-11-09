@@ -8,12 +8,11 @@ add_package(Utility ../../source/Utility)
 add_package(CacheList ../../source/CacheList)
 add_package(MemCache ../../source/MemCache)
 add_package(Event ../../source/Event)
+add_package(Logger ../../source/Logger)
 add_package(SocketInit ../../source/SocketInit)
 add_package(SocketMemCache ../../source/SocketMemCache)
 add_package(TcpBase ../../source/Tcp/TcpBase)
 add_package(TcpIOCP ../../source/Tcp/TcpIOCP)
-add_package(WorkThreadBase ../../source/WorkThreadBase)
-add_package(Logger ../../source/Logger)
 
 
 add_definitions("-D_CRT_SECURE_NO_WARNINGS")

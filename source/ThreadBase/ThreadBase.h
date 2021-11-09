@@ -23,11 +23,11 @@ public:
 protected:
 	void ThreadFunc();
 	virtual void ThreadInit();
-	virtual void Run() = 0;
+	virtual void Run();
 	virtual void ThreadExit();
 
 	virtual void CheckEvent();
-	virtual void HandleEvent() {}
+	virtual void HandleEvent() = 0;
 	virtual Event* GetEvent();
 	
 

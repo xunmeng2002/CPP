@@ -51,15 +51,15 @@ void WorkThreadBase::Run()
 		{
 			continue;
 		}
-		switch (socketData->Event)
+		switch (socketData->EventID)
 		{
-		case EventType::NewConnect:
+		case EventOnConnected:
 			HandleNewConnect(socketData);
 			break;
-		case EventType::DisConnect:
+		case EventOnDisConnected:
 			HandleDisConnect(socketData);
 			break;
-		case EventType::Recv:
+		case EventRecv:
 			HandleRecvMessage(socketData);
 			break;
 		}

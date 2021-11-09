@@ -38,6 +38,7 @@ protected:
 	virtual void ThreadInit() override;
 	virtual void Run() override;
 	virtual void ThreadExit() override;
+	virtual void HandleEvent() override {}
 
 
 	bool CreateLogDir(const char* path);

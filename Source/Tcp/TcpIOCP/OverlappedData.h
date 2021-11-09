@@ -6,9 +6,9 @@
 #define MESSAGE_SIZE 64 * 1024
 
 
-struct SocketData : public OVERLAPPED
+struct OverlappedData : public OVERLAPPED
 {
-    SocketData()
+    OverlappedData()
     {
         Clear();
     }
@@ -25,7 +25,7 @@ struct SocketData : public OVERLAPPED
         memset(Buffer, 0, sizeof(Buffer));
         RemoteAddress = { 0 };
     }
-    static SocketData* Allocate();
+    static OverlappedData* Allocate();
     void Free();
 
     int EventID;

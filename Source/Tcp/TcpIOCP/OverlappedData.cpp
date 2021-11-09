@@ -2,12 +2,12 @@
 #include "MemCacheTemplateSingleton.h"
 
 
-SocketData* SocketData::Allocate()
+OverlappedData* OverlappedData::Allocate()
 {
-	return MemCacheTemplateSingleton<SocketData>::GetInstance().Allocate();
+	return MemCacheTemplateSingleton<OverlappedData>::GetInstance().Allocate();
 }
-void SocketData::Free()
+void OverlappedData::Free()
 {
 	Clear();
-	MemCacheTemplateSingleton<SocketData>::GetInstance().Free(this);
+	MemCacheTemplateSingleton<OverlappedData>::GetInstance().Free(this);
 }

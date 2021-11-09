@@ -137,53 +137,53 @@ void TcpIOCP::HandleCompletePortEvent()
 {
     DWORD len;
     SOCKET socket;
-    SocketData* socketData;
+    OverlappedData* overlappedData;
 
-    auto bOK = IOCompletePort::GetInstance().GetStatus(&len, (PULONG_PTR)&socket, (LPOVERLAPPED*)&socketData, 5000);
+    auto bOK = IOCompletePort::GetInstance().GetStatus(&len, (PULONG_PTR)&socket, (LPOVERLAPPED*)&overlappedData, 5000);
     WRITE_LOG(LogLevel::Debug, "CompletionKey:[%d], Len:[%d], Ret:[%d].", socket, len, bOK);
-    if (socketData == nullptr)
+    if (overlappedData == nullptr)
     {
-        WRITE_LOG(LogLevel::Info, "CompetionKey:[%d], SocketData is null.", socket);
+        WRITE_LOG(LogLevel::Info, "CompetionKey:[%d], OverlappedData is null.", socket);
         return;
     }
     if (!bOK)
     {
-        WRITE_LOG(LogLevel::Warning, "GetQueuedCompletionStatus Failed. ErrorID:[%d] SOCKET:[%lld].", GetLastError(), socketData->ConnectSocket);
-        PostDisConnect(socketData->SessionID);
-        socketData->Free();
+        WRITE_LOG(LogLevel::Warning, "GetQueuedCompletionStatus Failed. ErrorID:[%d] SOCKET:[%lld].", GetLastError(), overlappedData->ConnectSocket);
+        PostDisConnect(overlappedData->SessionID);
+        overlappedData->Free();
         return;
     }
-    if (len == 0 && (socketData->EventID == EventSend || socketData->EventID == EventRecv))
+    if (len == 0 && (overlappedData->EventID == EventSend || overlappedData->EventID == EventRecv))
     {
-        WRITE_LOG(LogLevel::Debug, "Disconnect SOCKET:[%lld].", socketData->ConnectSocket);
-        PostDisConnect(socketData->SessionID);
-        socketData->Free();
+        WRITE_LOG(LogLevel::Debug, "Disconnect SOCKET:[%lld].", overlappedData->ConnectSocket);
+        PostDisConnect(overlappedData->SessionID);
+        overlappedData->Free();
         return;
     }
 
-    switch (socketData->EventID)
+    switch (overlappedData->EventID)
     {
     case EventConnect:
-        ConnectComplete(socketData, len);
+        ConnectComplete(overlappedData, len);
         break;
     case EventDisConnect:
-        DisConnectComplete(socketData, len);
+        DisConnectComplete(overlappedData, len);
         break;
     case EventAccept:
-        AcceptComplete(socketData, len);
+        AcceptComplete(overlappedData, len);
         break;
     case EventSend:
-        SendComplete(socketData, len);
+        SendComplete(overlappedData, len);
         break;
     case EventRecv:
-        RecvComplete(socketData, len);
+        RecvComplete(overlappedData, len);
         break;
     default:
-        WRITE_LOG(LogLevel::Error, "INVALID EventID:[%d] SOCKET:[%lld].", socketData->EventID, socketData->ConnectSocket);
+        WRITE_LOG(LogLevel::Error, "INVALID EventID:[%d] SOCKET:[%lld].", overlappedData->EventID, overlappedData->ConnectSocket);
         assert(false);
         break;
     }
-    socketData->Free();
+    overlappedData->Free();
 }
 
 bool TcpIOCP::PostConnect(const char* ip, int port)
@@ -194,21 +194,21 @@ bool TcpIOCP::PostConnect(const char* ip, int port)
         WRITE_ERROR_LOG(GetLastError(), "CreateSocket Failed.");
         return false;
     }
-    SocketData* socketData = SocketData::Allocate();
-    socketData->EventID = EventConnect;
-    socketData->SessionID = ++m_LastSessionID;
-    socketData->ConnectSocket = connectSocket;
-    socketData->WsaBuffer.len = sizeof(socketData->Buffer);
-    socketData->WsaBuffer.buf = socketData->Buffer;
-    memset(socketData->Buffer, 0, sizeof(socketData->Buffer));
-    socketData->RemoteAddress.sin_family = AF_INET;
-    socketData->RemoteAddress.sin_addr.S_un.S_addr = inet_addr(ip);
-    socketData->RemoteAddress.sin_port = htons(port);
+    OverlappedData* overlappedData = OverlappedData::Allocate();
+    overlappedData->EventID = EventConnect;
+    overlappedData->SessionID = ++m_LastSessionID;
+    overlappedData->ConnectSocket = connectSocket;
+    overlappedData->WsaBuffer.len = sizeof(overlappedData->Buffer);
+    overlappedData->WsaBuffer.buf = overlappedData->Buffer;
+    memset(overlappedData->Buffer, 0, sizeof(overlappedData->Buffer));
+    overlappedData->RemoteAddress.sin_family = AF_INET;
+    overlappedData->RemoteAddress.sin_addr.S_un.S_addr = inet_addr(ip);
+    overlappedData->RemoteAddress.sin_port = htons(port);
 
-    WRITE_LOG(LogLevel::Info, "PostConnect For SessionID:[%d] SOCKET:[%lld].", socketData->SessionID, socketData->ConnectSocket);
+    WRITE_LOG(LogLevel::Info, "PostConnect For SessionID:[%d] SOCKET:[%lld].", overlappedData->SessionID, overlappedData->ConnectSocket);
     DWORD transBytes = 0;
-    if (!SocketApi::GetInstance().ConnectEx(socketData->ConnectSocket, (const sockaddr*)&socketData->RemoteAddress, sizeof(SOCKADDR_IN),
-        NULL, 0, &transBytes, (LPOVERLAPPED)socketData) && WSAGetLastError() != ERROR_IO_PENDING)
+    if (!SocketApi::GetInstance().ConnectEx(overlappedData->ConnectSocket, (const sockaddr*)&overlappedData->RemoteAddress, sizeof(SOCKADDR_IN),
+        NULL, 0, &transBytes, (LPOVERLAPPED)overlappedData) && WSAGetLastError() != ERROR_IO_PENDING)
     {
         WRITE_ERROR_LOG(WSAGetLastError(), "Call ConnectEx Failed.");
         return false;
@@ -225,11 +225,11 @@ bool TcpIOCP::PostDisConnect(int sessionID)
     }
 
     WRITE_LOG(LogLevel::Info, "PostDisConnect For SessionID:[%d], Socket:[%lld].", sessionID, connectData->SocketID);
-    auto socketData = SocketData::Allocate();
-    socketData->EventID = EventDisConnect;
-    socketData->SessionID = sessionID;
-    socketData->ConnectSocket = connectData->SocketID;
-    if (!SocketApi::GetInstance().DisconnectEx(socketData->ConnectSocket, (LPOVERLAPPED)socketData, TF_REUSE_SOCKET, 0) && WSAGetLastError() != ERROR_IO_PENDING)
+    auto overlappedData = OverlappedData::Allocate();
+    overlappedData->EventID = EventDisConnect;
+    overlappedData->SessionID = sessionID;
+    overlappedData->ConnectSocket = connectData->SocketID;
+    if (!SocketApi::GetInstance().DisconnectEx(overlappedData->ConnectSocket, (LPOVERLAPPED)overlappedData, TF_REUSE_SOCKET, 0) && WSAGetLastError() != ERROR_IO_PENDING)
     {
         WRITE_ERROR_LOG(WSAGetLastError(), "Call DisconnectEx Failed.");
         return false;
@@ -239,26 +239,26 @@ bool TcpIOCP::PostDisConnect(int sessionID)
 }
 bool TcpIOCP::PostAccept()
 {
-    SocketData* socketData = SocketData::Allocate();
-    socketData->EventID = EventAccept;
-    socketData->SessionID = ++m_LastSessionID;
-    socketData->ConnectSocket = AllocateSocket();
-    if (socketData->ConnectSocket == INVALID_SOCKET)
+    OverlappedData* overlappedData = OverlappedData::Allocate();
+    overlappedData->EventID = EventAccept;
+    overlappedData->SessionID = ++m_LastSessionID;
+    overlappedData->ConnectSocket = AllocateSocket();
+    if (overlappedData->ConnectSocket == INVALID_SOCKET)
     {
         WRITE_ERROR_LOG(GetLastError(), "CreateSocket Failed.");
-        socketData->Free();
+        overlappedData->Free();
         return false;
     }
-    socketData->WsaBuffer.len = sizeof(socketData->Buffer);
-    socketData->WsaBuffer.buf = socketData->Buffer;
-    memset(socketData->Buffer, 0, sizeof(socketData->Buffer));
+    overlappedData->WsaBuffer.len = sizeof(overlappedData->Buffer);
+    overlappedData->WsaBuffer.buf = overlappedData->Buffer;
+    memset(overlappedData->Buffer, 0, sizeof(overlappedData->Buffer));
 
-    WRITE_LOG(LogLevel::Info, "PostAccept SessionID:[%d] SOCKET:[%lld].", socketData->SessionID, socketData->ConnectSocket);
+    WRITE_LOG(LogLevel::Info, "PostAccept SessionID:[%d] SOCKET:[%lld].", overlappedData->SessionID, overlappedData->ConnectSocket);
     DWORD transBytes = 0;
-    if (!SocketApi::GetInstance().AcceptEx(m_InitSocket, socketData->ConnectSocket, socketData->WsaBuffer.buf, 0,
-        (sizeof(SOCKADDR_IN) + 16), (sizeof(SOCKADDR_IN) + 16), &transBytes, (LPOVERLAPPED)socketData) && WSAGetLastError() != ERROR_IO_PENDING)
+    if (!SocketApi::GetInstance().AcceptEx(m_InitSocket, overlappedData->ConnectSocket, overlappedData->WsaBuffer.buf, 0,
+        (sizeof(SOCKADDR_IN) + 16), (sizeof(SOCKADDR_IN) + 16), &transBytes, (LPOVERLAPPED)overlappedData) && WSAGetLastError() != ERROR_IO_PENDING)
     {
-        WRITE_LOG(LogLevel::Error, "Call AcceptEx Failed. Socket:[%lld]", socketData->ConnectSocket);
+        WRITE_LOG(LogLevel::Error, "Call AcceptEx Failed. Socket:[%lld]", overlappedData->ConnectSocket);
         WRITE_ERROR_LOG(WSAGetLastError(), "Call AcceptEx Failed.");
         return false;
     }
@@ -277,18 +277,18 @@ bool TcpIOCP::PostSend(TcpEvent* tcpEvent)
     {
         DWORD transBytes = 0, flag = 0;
         int currSendLen = tcpEvent->Length >= MESSAGE_SIZE ? MESSAGE_SIZE : tcpEvent->Length;
-        auto socketData = SocketData::Allocate();
-        socketData->EventID = EventSend;
-        socketData->SessionID = tcpEvent->SessionID;
-        socketData->ConnectSocket = connectData->SocketID;
-        socketData->WsaBuffer.len = currSendLen;
-        socketData->WsaBuffer.buf = socketData->Buffer;
-        memcpy(socketData->Buffer, tcpEvent->ReadPos, currSendLen);
+        auto overlappedData = OverlappedData::Allocate();
+        overlappedData->EventID = EventSend;
+        overlappedData->SessionID = tcpEvent->SessionID;
+        overlappedData->ConnectSocket = connectData->SocketID;
+        overlappedData->WsaBuffer.len = currSendLen;
+        overlappedData->WsaBuffer.buf = overlappedData->Buffer;
+        memcpy(overlappedData->Buffer, tcpEvent->ReadPos, currSendLen);
 
-        if (WSASend(socketData->ConnectSocket, &socketData->WsaBuffer, 1, &transBytes, flag, (LPOVERLAPPED)socketData, NULL) == SOCKET_ERROR && WSAGetLastError() != ERROR_IO_PENDING)
+        if (WSASend(overlappedData->ConnectSocket, &overlappedData->WsaBuffer, 1, &transBytes, flag, (LPOVERLAPPED)overlappedData, NULL) == SOCKET_ERROR && WSAGetLastError() != ERROR_IO_PENDING)
         {
             WRITE_ERROR_LOG(WSAGetLastError(), "PostSend: WSASend failed.");
-            socketData->Free();
+            overlappedData->Free();
             PostDisConnect(tcpEvent->SessionID);
             return false;
         }
@@ -301,105 +301,105 @@ bool TcpIOCP::PostSend(TcpEvent* tcpEvent)
 bool TcpIOCP::PostRecv(int sessionID, SOCKET sock)
 {
     WRITE_LOG(LogLevel::Info, "PostRecv SessionID:[%d] Socket:[%lld]", sessionID, sock);
-    auto socketData = SocketData::Allocate();
-    socketData->EventID = EventRecv;
-    socketData->SessionID = sessionID;
-    socketData->ConnectSocket = sock;
-    socketData->WsaBuffer.len = sizeof(socketData->Buffer);
-    socketData->WsaBuffer.buf = socketData->Buffer;
-    memset(socketData->Buffer, 0, sizeof(socketData->Buffer));
+    auto overlappedData = OverlappedData::Allocate();
+    overlappedData->EventID = EventRecv;
+    overlappedData->SessionID = sessionID;
+    overlappedData->ConnectSocket = sock;
+    overlappedData->WsaBuffer.len = sizeof(overlappedData->Buffer);
+    overlappedData->WsaBuffer.buf = overlappedData->Buffer;
+    memset(overlappedData->Buffer, 0, sizeof(overlappedData->Buffer));
 
     DWORD transBytes = 0, flag = 0;
-    if (WSARecv(socketData->ConnectSocket, &socketData->WsaBuffer, 1, &transBytes, &flag, (LPOVERLAPPED)socketData, NULL) == SOCKET_ERROR && WSAGetLastError() != ERROR_IO_PENDING)
+    if (WSARecv(overlappedData->ConnectSocket, &overlappedData->WsaBuffer, 1, &transBytes, &flag, (LPOVERLAPPED)overlappedData, NULL) == SOCKET_ERROR && WSAGetLastError() != ERROR_IO_PENDING)
     {
         WRITE_ERROR_LOG(WSAGetLastError(), "PostRecv: WSARecv failed.");
-        PostDisConnect(socketData->SessionID);
-        socketData->Free();
+        PostDisConnect(overlappedData->SessionID);
+        overlappedData->Free();
         return false;
     }
     return true;
 }
 
-void TcpIOCP::ConnectComplete(SocketData* socketData, int len)
+void TcpIOCP::ConnectComplete(OverlappedData* overlappedData, int len)
 {
     WRITE_LOG(LogLevel::Info, "ConnectComplete  SOCKET:[%lld] Len:[%d], WSALen:[%d].",
-        socketData->ConnectSocket, len, socketData->WsaBuffer.len);
-    AddConnect(socketData);
-    PostRecv(socketData->SessionID, socketData->ConnectSocket);
+        overlappedData->ConnectSocket, len, overlappedData->WsaBuffer.len);
+    AddConnect(overlappedData);
+    PostRecv(overlappedData->SessionID, overlappedData->ConnectSocket);
 }
-void TcpIOCP::DisConnectComplete(SocketData* socketData, int len)
+void TcpIOCP::DisConnectComplete(OverlappedData* overlappedData, int len)
 {
-    RemoveConnect(socketData);
-    FreeSocket(socketData->ConnectSocket);
+    RemoveConnect(overlappedData);
+    FreeSocket(overlappedData->ConnectSocket);
 }
-void TcpIOCP::AcceptComplete(SocketData* socketData, int len)
+void TcpIOCP::AcceptComplete(OverlappedData* overlappedData, int len)
 {
     SOCKADDR_IN* remoteAddr = NULL;
     SOCKADDR_IN* localAddr = NULL;
     int remoteLen = sizeof(SOCKADDR_IN), localLen = sizeof(SOCKADDR_IN);
-    SocketApi::GetInstance().GetAcceptExSockAddrs(socketData->WsaBuffer.buf, 0,
+    SocketApi::GetInstance().GetAcceptExSockAddrs(overlappedData->WsaBuffer.buf, 0,
         (sizeof(SOCKADDR_IN) + 16), (sizeof(SOCKADDR_IN) + 16), (LPSOCKADDR*)&localAddr, &localLen, (LPSOCKADDR*)&remoteAddr, &remoteLen);
 
     WRITE_LOG(LogLevel::Info, "AcceptComplete: From <%s:%d> SOCKET:[%lld] Len:[%d], WSALen:[%d].",
-        inet_ntoa(remoteAddr->sin_addr), ntohs(remoteAddr->sin_port), socketData->ConnectSocket, len, socketData->WsaBuffer.len);
+        inet_ntoa(remoteAddr->sin_addr), ntohs(remoteAddr->sin_port), overlappedData->ConnectSocket, len, overlappedData->WsaBuffer.len);
 
-    if (!IOCompletePort::GetInstance().AssociateDevice((HANDLE)socketData->ConnectSocket, socketData->ConnectSocket))
+    if (!IOCompletePort::GetInstance().AssociateDevice((HANDLE)overlappedData->ConnectSocket, overlappedData->ConnectSocket))
     {
-        WRITE_LOG(LogLevel::Warning, "Associate CompletionPort Failed, SessionID:[%d] Socket:[%lld]", socketData->SessionID, socketData->ConnectSocket);
+        WRITE_LOG(LogLevel::Warning, "Associate CompletionPort Failed, SessionID:[%d] Socket:[%lld]", overlappedData->SessionID, overlappedData->ConnectSocket);
     }
-    AddConnect(socketData);
-    PostRecv(socketData->SessionID, socketData->ConnectSocket);
+    AddConnect(overlappedData);
+    PostRecv(overlappedData->SessionID, overlappedData->ConnectSocket);
     PostAccept();
 }
-void TcpIOCP::SendComplete(SocketData* socketData, int len)
+void TcpIOCP::SendComplete(OverlappedData* overlappedData, int len)
 {
-    WRITE_LOG(LogLevel::Info, "SendComplete  SessionID:[%d] SOCKET:[%lld], WsaLen=[%d], Len=[%d].", socketData->SessionID, socketData->ConnectSocket, socketData->WsaBuffer.len, len);
+    WRITE_LOG(LogLevel::Info, "SendComplete  SessionID:[%d] SOCKET:[%lld], WsaLen=[%d], Len=[%d].", overlappedData->SessionID, overlappedData->ConnectSocket, overlappedData->WsaBuffer.len, len);
     m_TotalSendLen += len;
-    if (len < socketData->WsaBuffer.len)
+    if (len < overlappedData->WsaBuffer.len)
     {
-        WRITE_LOG(LogLevel::Warning, "Sendlen:[%d] Less than TargetLen:[%d].", len, socketData->WsaBuffer.len);
-        PostDisConnect(socketData->SessionID);
+        WRITE_LOG(LogLevel::Warning, "Sendlen:[%d] Less than TargetLen:[%d].", len, overlappedData->WsaBuffer.len);
+        PostDisConnect(overlappedData->SessionID);
     }
 }
-void TcpIOCP::RecvComplete(SocketData* socketData, int len)
+void TcpIOCP::RecvComplete(OverlappedData* overlappedData, int len)
 {
-    WRITE_LOG(LogLevel::Info, "RecvComplete  SessionID:[%d] SOCKET:[%lld], WsaLen=[%d], Len=[%d].", socketData->SessionID, socketData->ConnectSocket, socketData->WsaBuffer.len, len);
+    WRITE_LOG(LogLevel::Info, "RecvComplete  SessionID:[%d] SOCKET:[%lld], WsaLen=[%d], Len=[%d].", overlappedData->SessionID, overlappedData->ConnectSocket, overlappedData->WsaBuffer.len, len);
     m_TotalRecvLen += len;
 
-    socketData->EventID = EventRecv;
-    socketData->WsaBuffer.len = len;
+    overlappedData->EventID = EventRecv;
+    overlappedData->WsaBuffer.len = len;
 
     TcpEvent* tcpEvent = TcpEvent::Allocate();
     tcpEvent->EventID = EventRecv;
-    tcpEvent->SessionID = socketData->SessionID;
-    tcpEvent->IP = inet_ntoa(socketData->RemoteAddress.sin_addr);
-    tcpEvent->Port = ntohs(socketData->RemoteAddress.sin_port);
-    memcpy(tcpEvent->Buff, socketData->WsaBuffer.buf, socketData->WsaBuffer.len);
-    tcpEvent->Length = socketData->WsaBuffer.len;
+    tcpEvent->SessionID = overlappedData->SessionID;
+    tcpEvent->IP = inet_ntoa(overlappedData->RemoteAddress.sin_addr);
+    tcpEvent->Port = ntohs(overlappedData->RemoteAddress.sin_port);
+    memcpy(tcpEvent->Buff, overlappedData->WsaBuffer.buf, overlappedData->WsaBuffer.len);
+    tcpEvent->Length = overlappedData->WsaBuffer.len;
     tcpEvent->ReadPos[tcpEvent->Length] = '\0';
     
     m_TcpSubscriber->OnRecv(tcpEvent);
-    PostRecv(socketData->SessionID, socketData->ConnectSocket);
+    PostRecv(overlappedData->SessionID, overlappedData->ConnectSocket);
 }
-void TcpIOCP::AddConnect(SocketData* socketData)
+void TcpIOCP::AddConnect(OverlappedData* overlappedData)
 {
-    WRITE_LOG(LogLevel::Info, "AddConnect  SessionID:[%d] Socket:[%lld].", socketData->SessionID, socketData->ConnectSocket);
+    WRITE_LOG(LogLevel::Info, "AddConnect  SessionID:[%d] Socket:[%lld].", overlappedData->SessionID, overlappedData->ConnectSocket);
 
-    auto connectData = ConnectData::Allocate(socketData->SessionID, socketData->ConnectSocket, inet_ntoa(socketData->RemoteAddress.sin_addr), ntohs(socketData->RemoteAddress.sin_port));
-    m_ConnectDatas.insert(make_pair(socketData->SessionID, connectData));
+    auto connectData = ConnectData::Allocate(overlappedData->SessionID, overlappedData->ConnectSocket, inet_ntoa(overlappedData->RemoteAddress.sin_addr), ntohs(overlappedData->RemoteAddress.sin_port));
+    m_ConnectDatas.insert(make_pair(overlappedData->SessionID, connectData));
     m_TcpSubscriber->OnConnect(connectData->SessionID, connectData->RemoteIP.c_str(), connectData->RemotePort);
 }
-void TcpIOCP::RemoveConnect(SocketData* socketData)
+void TcpIOCP::RemoveConnect(OverlappedData* overlappedData)
 {
-    WRITE_LOG(LogLevel::Info, "RemoveConnect  SessionID:[%d] Socket:[%lld].", socketData->SessionID, socketData->ConnectSocket);
-    auto connectData = GetConnect(socketData->SessionID);
+    WRITE_LOG(LogLevel::Info, "RemoveConnect  SessionID:[%d] Socket:[%lld].", overlappedData->SessionID, overlappedData->ConnectSocket);
+    auto connectData = GetConnect(overlappedData->SessionID);
     if (connectData == nullptr)
     {
         WRITE_LOG(LogLevel::Warning, "Get ConnectData Failed while RemoveConnect For SessionID:[%d].", connectData->SessionID);
         return;
     }
-    m_ConnectDatas[socketData->SessionID]->Free();
-    m_ConnectDatas.erase(socketData->SessionID);
+    m_ConnectDatas[overlappedData->SessionID]->Free();
+    m_ConnectDatas.erase(overlappedData->SessionID);
 }
 ConnectData* TcpIOCP::GetConnect(int sessionID)
 {

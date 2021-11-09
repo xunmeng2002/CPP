@@ -34,14 +34,14 @@ protected:
 	bool PostSend(TcpEvent* tcpEvent);
 	bool PostRecv(int sessionID, SOCKET sock);
 
-	void ConnectComplete(SocketData* socketData, int len);
-	void DisConnectComplete(SocketData* socketData, int len);
-	void AcceptComplete(SocketData* socketData, int len);
-	void SendComplete(SocketData* socketData, int len);
-	void RecvComplete(SocketData* socketData, int len);
+	void ConnectComplete(OverlappedData* overlappedData, int len);
+	void DisConnectComplete(OverlappedData* overlappedData, int len);
+	void AcceptComplete(OverlappedData* overlappedData, int len);
+	void SendComplete(OverlappedData* overlappedData, int len);
+	void RecvComplete(OverlappedData* overlappedData, int len);
 	
-	void AddConnect(SocketData* socketData);
-	void RemoveConnect(SocketData* socketData);
+	void AddConnect(OverlappedData* overlappedData);
+	void RemoveConnect(OverlappedData* overlappedData);
 	ConnectData* GetConnect(int sessionID);
 
 	SOCKET AllocateSocket();

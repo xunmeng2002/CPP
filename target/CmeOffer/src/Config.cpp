@@ -28,12 +28,12 @@ void Config::Load(const char* fileName)
 	cout << "parse: " << reader.parse(in_file, root) << endl;
 	in_file.close();
 
-	ChannelID = root["ChannelID"].asString();
-	ListenPort = root["ListenPort"].asString();
-	BroadCastPort = root["BroadCastPort"].asString();
+	ChannelID = root["ChannelID"].asInt();
+	ListenPort = root["ListenPort"].asInt();
+	BroadCastPort = root["BroadCastPort"].asInt();
 	CmeGlobexIP = root["CmeGlobexIP"].asString();
-	CmeGlobexPrimaryPort = root["CmeGlobexPrimaryPort"].asString();
-	CmeGlobexBackupPort = root["CmeGlobexBackupPort"].asString();
+	CmeGlobexPrimaryPort = root["CmeGlobexPrimaryPort"].asInt();
+	CmeGlobexBackupPort = root["CmeGlobexBackupPort"].asInt();
 	BeginString = root["BeginString"].asString();
 	LogonSenderCompID = root["LogonSenderCompID"].asString();
 	SenderCompID = root["SenderCompID"].asString();
@@ -41,8 +41,8 @@ void Config::Load(const char* fileName)
 	TargetCompID = root["TargetCompID"].asString();
 	TargetSubID = root["TargetSubID"].asString();
 	SenderLocationID = root["SenderLocationID"].asString();
-	HeartBtInt = root["HeartBtInt"].asString();
-	ResetSeqNumFlag = root["ResetSeqNumFlag"].asString();
+	HeartBtInt = root["HeartBtInt"].asInt();
+	ResetSeqNumFlag = root["ResetSeqNumFlag"].asBool();
 	ApplicationSystemName = root["ApplicationSystemName"].asString();
 	ApplicationSystemVersion = root["ApplicationSystemVersion"].asString();
 	ApplicationSystemVendor = root["ApplicationSystemVendor"].asString();
@@ -58,12 +58,12 @@ void Config::Load(const char* fileName)
 
 void Config::Print()
 {
-	WRITE_LOG(LogLevel::Info, "ChannelID[%s], ListenPort[%s], BroadCastPort[%s], CmeGlobexIP[%s], CmeGlobexPrimaryPort[%s], CmeGlobexBackupPort[%s], "
+	WRITE_LOG(LogLevel::Info, "ChannelID[%d], ListenPort[%d], BroadCastPort[%d], CmeGlobexIP[%s], CmeGlobexPrimaryPort[%d], CmeGlobexBackupPort[%d], "
 		"BeginString[%s], LogonSenderCompID[%s], SenderCompID[%s],  SenderSubID[%s], TargetCompID[%s], TargetSubID[%s], "
-		"SenderLocationID[%s], HeartBtInt[%s], ResetSeqNumFlag[%s], ApplicationSystemName[%s], ApplicationSystemVersion[%s], ApplicationSystemVendor[%s], "
+		"SenderLocationID[%s], HeartBtInt[%d], ResetSeqNumFlag[%d], ApplicationSystemName[%s], ApplicationSystemVersion[%s], ApplicationSystemVendor[%s], "
 		"AccountID[%s], EncryptedPasswordMethod[%s], SecretKey[%s], Account[%s], RecordFixAuditTrail[%d], FixAuditTrailFileName[%s].",
-		ChannelID.c_str(), ListenPort.c_str(), BroadCastPort.c_str(), CmeGlobexIP.c_str(), CmeGlobexPrimaryPort.c_str(), CmeGlobexBackupPort.c_str(),
+		ChannelID, ListenPort, BroadCastPort, CmeGlobexIP.c_str(), CmeGlobexPrimaryPort, CmeGlobexBackupPort,
 		BeginString.c_str(), LogonSenderCompID.c_str(), SenderCompID.c_str(), SenderSubID.c_str(), TargetCompID.c_str(), TargetSubID.c_str(),
-		SenderLocationID.c_str(), HeartBtInt.c_str(), ResetSeqNumFlag.c_str(), ApplicationSystemName.c_str(), ApplicationSystemVersion.c_str(), ApplicationSystemVendor.c_str(),
+		SenderLocationID.c_str(), HeartBtInt, ResetSeqNumFlag, ApplicationSystemName.c_str(), ApplicationSystemVersion.c_str(), ApplicationSystemVendor.c_str(),
 		AccessID.c_str(), EncryptedPasswordMethod.c_str(), SecretKey.c_str(), Account.c_str(), RecordFixAuditTrail, FixAuditTrailFileName.c_str());
 }

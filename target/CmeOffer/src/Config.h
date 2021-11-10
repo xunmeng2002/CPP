@@ -16,12 +16,12 @@ public:
 	void Print();
 
 public:
-	string ChannelID;
-	string ListenPort;
-	string BroadCastPort;
+	int ChannelID;
+	int ListenPort;
+	int BroadCastPort;
 	string CmeGlobexIP;
-	string CmeGlobexPrimaryPort;
-	string CmeGlobexBackupPort;
+	int CmeGlobexPrimaryPort;
+	int CmeGlobexBackupPort;
 	string BeginString;
 	string LogonSenderCompID;
 	string SenderCompID;
@@ -29,8 +29,8 @@ public:
 	string TargetCompID;
 	string TargetSubID;
 	string SenderLocationID;
-	string HeartBtInt;
-	string ResetSeqNumFlag;
+	int HeartBtInt;
+	bool ResetSeqNumFlag;
 	string ApplicationSystemName;
 	string ApplicationSystemVersion;
 	string ApplicationSystemVendor;

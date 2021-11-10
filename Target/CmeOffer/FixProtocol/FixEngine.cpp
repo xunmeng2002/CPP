@@ -19,12 +19,12 @@ FixEngine::FixEngine()
 
 	m_ConnectStatus = ConnectStatus::NotConnected;
 	m_LogonStatus = LogonStatus::NotLogged;
+	m_ResetSeqNumLogonProcedure = Config::GetInstance().ResetSeqNumFlag;
 	m_SessionID = 0;
 	m_FixMessage = new FixMessage();
 
 	m_ParseBuff = new char[BuffSize];
 	m_ParseBuffDataLen = 0;
-
 	m_IsDoResendRequest = false;
 	m_ResendRange = make_pair(0, 0);
 	
@@ -251,7 +251,6 @@ void FixEngine::HandleInsertOrder(Order* order)
 	fixReqNewOrder->CorrelationClOrdID = fixReqNewOrder->ClOrdID;
 
 	SendRequest(fixReqNewOrder);
-	RecordRequest(fixReqNewOrder);
 }
 void FixEngine::HandleInsertOrderCancel(OrderCancel* orderCancel)
 {
@@ -271,7 +270,6 @@ void FixEngine::HandleInsertOrderCancel(OrderCancel* orderCancel)
 	fixReqOrderCancel->CorrelationClOrdID = ItoA(orderCancel->OrigOrderLocalID);
 
 	SendRequest(fixReqOrderCancel);
-	RecordRequest(fixReqOrderCancel);
 }
 
 
@@ -299,25 +297,6 @@ void FixEngine::OnRecv(TcpEvent* tcpEvent)
 {
 	OnEvent(tcpEvent);
 }
-
-
-void FixEngine::ReqLogon(FixReqLogonField* reqField)
-{
-	OnEventFixMessage(reqField);
-}
-void FixEngine::ReqLogout(FixReqLogoutField* reqField)
-{
-	OnEventFixMessage(reqField);
-}
-void FixEngine::ReqHeartBeat(FixReqHeartBeatField* reqField)
-{
-	OnEventFixMessage(reqField);
-}
-void FixEngine::ReqTestRequest(FixReqTestRequestField* reqField)
-{
-	OnEventFixMessage(reqField);
-}
-
 
 
 void FixEngine::Run()
@@ -383,7 +362,6 @@ void FixEngine::HandleEvent()
 			myEvent = (MyEvent*)event;
 			auto field = (FixReqHeader*)myEvent->Field;
 			SendRequest(field);
-			RecordRequest(field);
 			myEvent->Field = nullptr;
 			break;
 		}
@@ -533,21 +511,14 @@ void FixEngine::CheckHeartBeat()
 	auto sendDiffSeconds = GetDuration<chrono::seconds>(m_LastSendTimePoint, now);
 	if (sendDiffSeconds > m_HeartBeatSecond)
 	{
-		auto reqField = new FixReqHeartBeatField(PrepareReqHeader());
-		reqField->TestReqID = "From CheckHeartBeat";
-		ReqHeartBeat(reqField);
+		ReqHeartBeat();
 	}
 	if (!m_AlreadySendTestRequest)
 	{
 		auto recvDiffSeconds = GetDuration<chrono::seconds>(m_LastRecvTimePoint, now);
 		if (recvDiffSeconds > m_HeartBeatSecond)
 		{
-			auto reqField = new FixReqTestRequestField(PrepareReqHeader());
-			reqField->TestReqID = m_TestReqID;
-			ReqTestRequest(reqField);
-
-			m_AlreadySendTestRequest = true;
-			m_TestRequestSendTimePoint = now;
+			ReqTestRequest();
 		}
 	}
 	else
@@ -578,9 +549,9 @@ void FixEngine::HandleDisConnect(int sessionID)
 {
 	m_ConnectStatus = ConnectStatus::NotConnected;
 	m_LogonStatus = LogonStatus::NotLogged;
-	auto ip =  m_IPAddresses.front();
-	m_IPAddresses.pop_front();
-	m_IPAddresses.push_back(ip);
+	//auto ip =  m_IPAddresses.front();
+	//m_IPAddresses.pop_front();
+	//m_IPAddresses.push_back(ip);
 	for (auto tcpEvent : m_RecvDatas)
 	{
 		tcpEvent->Free();
@@ -743,14 +714,16 @@ bool FixEngine::IsOnResend()
 {
 	return !(m_ResendRange.first == 0 && m_ResendRange.second == 0);
 }
-void FixEngine::ReqLogon()
+void FixEngine::ReqLogon(bool resetSeqNum)
 {
 	auto reqLogonField = new FixReqLogonField(PrepareReqHeader());
 	auto& config = Config::GetInstance();
-	reqLogonField->SenderCompID = config.LogonSenderCompID;
-
-	reqLogonField->HeartBtInt = config.HeartBtInt;
-	reqLogonField->ResetSeqNumFlag = config.ResetSeqNumFlag;
+	if (!resetSeqNum)
+	{
+		reqLogonField->SenderCompID = config.LogonSenderCompID;
+	}
+	reqLogonField->HeartBtInt = ItoA(config.HeartBtInt);
+	reqLogonField->ResetSeqNumFlag = resetSeqNum ? "Y" : "N";
 	reqLogonField->ApplicationSystemName = config.ApplicationSystemName;
 	reqLogonField->ApplicationSystemVersion = config.ApplicationSystemVersion;
 	reqLogonField->ApplicationSystemVendor = config.ApplicationSystemVendor;
@@ -763,7 +736,28 @@ void FixEngine::ReqLogon()
 	reqLogonField->EncryptedPasswordLen = ItoA(encodedHmac.length());
 	reqLogonField->EncryptedPassword = encodedHmac;
 
-	ReqLogon(reqLogonField);
+	OnEventFixMessage(reqLogonField);
+}
+void FixEngine::ReqLogout()
+{
+	auto reqLogoutField = new FixReqLogoutField(PrepareReqHeader());
+	reqLogoutField->NextExpectedMsgSeqNum = ItoA(SeqNum::GetInstance().GetNextExpectSeqNum());
+	OnEventFixMessage(reqLogoutField);
+}
+void FixEngine::ReqHeartBeat(string testReqID)
+{
+	auto reqField = new FixReqHeartBeatField(PrepareReqHeader());
+	reqField->TestReqID = testReqID;
+	OnEventFixMessage(reqField);
+}
+void FixEngine::ReqTestRequest()
+{
+	auto reqField = new FixReqTestRequestField(PrepareReqHeader());
+	reqField->TestReqID = m_TestReqID;
+	OnEventFixMessage(reqField);
+
+	m_AlreadySendTestRequest = true;
+	m_TestRequestSendTimePoint = chrono::steady_clock::now();;
 }
 void FixEngine::ReqResendRequest(int startSeqNum, int endSeqNum)
 {
@@ -826,12 +820,11 @@ void FixEngine::ReqSequenceReset(int beginSeqNum, int endSeqNum, const string& g
 
 void FixEngine::OnFixRspLogon(FixMessage* fixMessage)
 {
-	
 	auto resetSeqNumFlag = fixMessage->GetItem(141);
 	if (resetSeqNumFlag == "Y")
 	{
-		WRITE_LOG(LogLevel::Info, "Reset Sequence Num to 1");
-		SeqNum::GetInstance().ResetSeqNum();
+		WRITE_LOG(LogLevel::Info, "Succeed to Reset Sequence Num");
+		m_ResetSeqNumLogonProcedure = false;
 	}
 	if (!Verify(fixMessage, false, true))
 	{
@@ -849,6 +842,7 @@ void FixEngine::OnFixRspLogon(FixMessage* fixMessage)
 		auto rspField = new FixRspLogonField(fixMessage);
 		RecordResponse(rspField);
 	}
+	ReqTestRequest();
 }
 void FixEngine::OnFixRspLogout(FixMessage* fixMessage)
 {
@@ -881,6 +875,11 @@ void FixEngine::OnFixRspHeartBeat(FixMessage* fixMessage)
 	{
 		m_AlreadySendTestRequest = false;
 	}
+	if (m_ResetSeqNumLogonProcedure)
+	{
+		SeqNum::GetInstance().ResetSeqNum();
+		ReqLogon(m_ResetSeqNumLogonProcedure);
+	}
 }
 void FixEngine::OnFixRspTestRequest(FixMessage* fixMessage)
 {
@@ -890,10 +889,7 @@ void FixEngine::OnFixRspTestRequest(FixMessage* fixMessage)
 	}
 	auto rspField = new FixRspTestRequestField(fixMessage);
 	RecordResponse(rspField);
-
-	auto reqField = new FixReqHeartBeatField(PrepareReqHeader());
-	reqField->TestReqID = rspField->TestReqID;
-	ReqHeartBeat(reqField);
+	ReqHeartBeat(rspField->TestReqID);
 }
 void FixEngine::OnFixRspResendRequest(FixMessage* fixMessage)
 {
@@ -911,6 +907,7 @@ void FixEngine::OnFixRspSessionLevelReject(FixMessage* fixMessage)
 	}
 	auto rspField = new FixRspSessionLevelRejectField(fixMessage);
 	RecordResponse(rspField);
+	ResetSeqNum();
 }
 void FixEngine::OnFixRspSequenceReset(FixMessage* fixMessage)
 {
@@ -970,8 +967,11 @@ void FixEngine::OnFixRspOrderCancelReject(FixMessage* fixMessage)
 
 void FixEngine::RecordRequest(FixReqHeader* reqField)
 {
+	if (reqField->PossDupFlag == "Y")
+	{
+		return;
+	}
 	FixMdb::GetInstance().InsertRecord(reqField);
-	WriteFixLog(reqField);
 
 	if (reqField->MsgClass == "app")
 	{
@@ -1004,6 +1004,11 @@ void FixEngine::RecordFixAuditTrail(FixMessage* fixMessage, string messageDirect
 	m_FixAuditTrail->SetMessage(fixMessage, messageDirection);
 
 	FixAuditTrailWriter::GetInstance().WriteFixAuditTrailRecord(m_FixAuditTrail);
+}
+void FixEngine::ResetSeqNum()
+{
+	m_ResetSeqNumLogonProcedure = true;
+	ReqTestRequest();
 }
 
 FixInstrument* FixEngine::GetFixInstrumentFromBroker(const string& exchangeID, const string& instrumentID)

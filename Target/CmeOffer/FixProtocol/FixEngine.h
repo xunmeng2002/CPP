@@ -39,11 +39,6 @@ public:
 	virtual void OnDisConnect(int sessionID, const char* ip, int port) override;
 	virtual void OnRecv(TcpEvent* tcpEvent) override;
 
-	void ReqLogon(FixReqLogonField* reqField);
-	void ReqLogout(FixReqLogoutField* reqField);
-	void ReqHeartBeat(FixReqHeartBeatField* reqField);
-	void ReqTestRequest(FixReqTestRequestField* reqField);
-
 protected:
 	virtual void Run() override;
 	virtual void HandleEvent() override;
@@ -64,7 +59,10 @@ protected:
 	void DoMsgSeqTooLow(FixMessage* fixMessage, int msgSeqNum, int expectSeqNum);
 	bool NextQueue();
 	bool IsOnResend();
-	void ReqLogon();
+	void ReqLogon(bool resetSeqNum = false);
+	void ReqLogout();
+	void ReqHeartBeat(string testReqID = "");
+	void ReqTestRequest();
 	void ReqResendRequest(int startSeqNum, int endSeqNum);
 	void ResendLastResendRequest();
 	void DoResendRequest(int startSeqNum, int endSeqNum);
@@ -86,6 +84,7 @@ protected:
 	void UpdateLastSendTime();
 	void UpdateLastRecvTime();
 	void RecordFixAuditTrail(FixMessage* fixMessage, string messageDirection);
+	void ResetSeqNum();
 
 	template<typename T>
 	void SendRequest(T* reqField, bool isResend = false)
@@ -98,11 +97,12 @@ protected:
 
 		UpdateLastSendTime();
 		m_TcpClient->Send(tcpEvent);
-
 		if (reqField->MsgClass == "app")
 		{
 			RecordFixAuditTrail(reqField->GetFixMessage(), "TO CME");
 		}
+		WriteFixLog(reqField);
+		RecordRequest(reqField);
 	}
 
 private:
@@ -127,6 +127,7 @@ private:
 
 	ConnectStatus m_ConnectStatus;
 	LogonStatus m_LogonStatus;
+	bool m_ResetSeqNumLogonProcedure;
 	int m_SessionID;
 	FixMessage* m_FixMessage;
 	std::map<int, FixMessage*> m_FixMessages;

@@ -28,10 +28,10 @@ int main(int argc, char* argv[])
 	FixEngine* fixEngine = new FixEngine();
 
 	Udp::GetInstance().SetBindAddress("127.0.0.1");
-	Udp::GetInstance().SetRemoteAddress("127.0.0.1", atoi(config.BroadCastPort.c_str()));
+	Udp::GetInstance().SetRemoteAddress("127.0.0.1", config.BroadCastPort);
 	Udp::GetInstance().Init(true);
-	itsEngine->SetBindAddress("127.0.0.1", atoi(config.ListenPort.c_str()));
-	fixEngine->RegisterAddress(config.CmeGlobexIP.c_str(), atoi(config.CmeGlobexPrimaryPort.c_str()), config.CmeGlobexIP.c_str(), atoi(config.CmeGlobexBackupPort.c_str()));
+	itsEngine->SetBindAddress("127.0.0.1", config.ListenPort);
+	fixEngine->RegisterAddress(config.CmeGlobexIP.c_str(), config.CmeGlobexPrimaryPort, config.CmeGlobexIP.c_str(), config.CmeGlobexBackupPort);
 
 	itsEngine->RegisterSubscriber(mdbEngine);
 	mdbEngine->RegisterItsPublisher(itsEngine);

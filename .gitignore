@@ -9,3 +9,7 @@ test/*/GenCode/*/*.cpp
 test/*/GenCode/*/*.h
 target/*/GenCode/*.cpp
 target/*/GenCode/*.h
+Test/*/.vs
+Test/*/out
+Target/*/.vs
+Target/*/out

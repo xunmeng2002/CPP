@@ -13,3 +13,6 @@ Test/*/.vs
 Test/*/out
 Target/*/.vs
 Target/*/out
+.vs/*
+Source/.vs/*
+*CMakeSettings.json

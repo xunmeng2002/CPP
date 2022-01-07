@@ -1,16 +1,20 @@
 ﻿cmake_minimum_required (VERSION 3.8)
+SET(PROJECT_NAME "GetAddrinfoTest")
+project (${PROJECT_NAME})
 
-project ("GetAddrinfoTest")
-
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 20)
 IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
-	set(CURRENT_SYSTEM Linux)
+	message("CMAKE_SYSTEM_NAME Linux:" ${CMAKE_SYSTEM_NAME})
 	add_definitions("-DLINUX")
 ELSEIF(CMAKE_SYSTEM_NAME MATCHES "Windows")
-	set(CURRENT_SYSTEM Windows)
+	message("CMAKE_SYSTEM_NAME Windows:" ${CMAKE_SYSTEM_NAME})
 	add_definitions("-DWINDOWS")
 ENDIF()
 
-# 将源代码添加到此项目的可执行文件。
-add_executable (GetAddrinfoTest "GetAddrinfoTest.cpp")
+message("CMAKE_SYSTEM_NAME:" ${CMAKE_SYSTEM_NAME})
+add_executable(${PROJECT_NAME} "GetAddrinfoTest.cpp")
 
-# TODO: 如有需要，请添加测试并安装目标。
+IF(CMAKE_SYSTEM_NAME MATCHES "Linux")
+target_link_libraries(${PROJECT_NAME} pthread)
+ENDIF()

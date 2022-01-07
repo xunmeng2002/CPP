@@ -9,10 +9,34 @@
 #ifdef LINUX
 #include <arpa/inet.h>
 #include <netdb.h>
+
+#include <unistd.h>  
 #endif // LINUX
 
+#include <thread>
 
 using namespace std;
+
+void Init()
+{
+#ifdef WINDOWS
+    cout << "ON WINDOWS" << endl;
+    WSADATA initData;
+    initData.wVersion = 0;
+    initData.wHighVersion = 2;
+    memset(initData.szDescription, 0, sizeof(initData.szDescription));
+    memset(initData.szSystemStatus, 0, sizeof(initData.szSystemStatus));
+    initData.iMaxSockets = 100;
+    initData.lpVendorInfo = nullptr;
+    if (WSAStartup(2, &initData) != 0)
+    {
+        std::cout << "SocketInit Failed!" << std::endl;
+    }
+#endif
+#ifdef LINUX
+    cout << "ON LINUX" << endl;
+#endif
+}
 
 int ParseSockAddr(const struct sockaddr* addr, string& ip, int& port)
 {
@@ -46,29 +70,8 @@ void PrintAddr(const struct addrinfo* addr)
     auto ret = ParseSockAddr(addr->ai_addr, ip, port);
     printf("ParseSockAddr: ret[%d], Address<%s|%d>\n", ret, ip.c_str(), port);
 }
-
-
-
-int main()
+void Test()
 {
-#ifdef WINDOWS
-    cout << "ON WINDOWS" << endl;
-    WSADATA initData;
-    initData.wVersion = 0;
-    initData.wHighVersion = 2;
-    memset(initData.szDescription, 0, sizeof(initData.szDescription));
-    memset(initData.szSystemStatus, 0, sizeof(initData.szSystemStatus));
-    initData.iMaxSockets = 100;
-    initData.lpVendorInfo = nullptr;
-    if (WSAStartup(2, &initData) != 0)
-    {
-        std::cout << "SocketInit Failed!" << std::endl;
-    }
-#endif
-#ifdef LINUX
-    cout << "ON LINUX" << endl;
-#endif
-	
     set<string> ips = { "::", "::0","::1", "fe80::20c:29ff:fed5:82f","fe80::20c:29ff:fed5:82f%ens33", "fe80::59d8:5d6d:25cc:42cf%14", "0.0.0.0", "127.0.0.1","192.168.137.129" };
     addrinfo hints, * res;
     memset(&hints, 0, sizeof(hints));
@@ -91,6 +94,40 @@ int main()
         cout << endl;
     }
     cout << endl;
+}
+
+void ParseProcessName(const char* fullProcessName, char* processName, int len)
+{
+#if WINDOWS
+    const char* temp = strrchr(fullProcessName, '\\');
+    temp = temp == nullptr ? fullProcessName : ++temp;
+    temp = strtok((char*)temp, ".");
+#endif
+#if LINUX
+    const char* temp = strrchr(fullProcessName, '/');
+    temp = temp == nullptr ? fullProcessName : ++temp;
+#endif
+    strncpy(processName, temp, len);
+}
+
+void ThreadFunc()
+{
+#if WINDOWS
+    auto id = GetCurrentThreadId();
+    cout << "GetCurrentThreadId()" << id << endl;
+#endif
+#if LINUX
+    cout <<"gettid()" << gettid() << endl;
+#endif    
+}
+
+
+int main(int argc, const char* argv[])
+{  
+    auto m_Thread = thread(ThreadFunc);
+    cout << "get_id()" << m_Thread.get_id() << endl;
+    
+    m_Thread.join();
 
 	return 0;
 }

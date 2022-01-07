@@ -1,18 +1,38 @@
-target/*/build/*
-target/spec/*
-libs/*
-test/*/build/*
-pump_temp.py
-test/*/GenCode/*.cpp
-test/*/GenCode/*.h
-test/*/GenCode/*/*.cpp
-test/*/GenCode/*/*.h
-target/*/GenCode/*.cpp
-target/*/GenCode/*.h
-Test/*/.vs
-Test/*/out
-Target/*/.vs
-Target/*/out
-.vs/*
-Source/.vs/*
-*CMakeSettings.json
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+
+*build/
+*.vs
+*out
+Libs/*

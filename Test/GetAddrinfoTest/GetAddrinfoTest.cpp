@@ -126,7 +126,10 @@ int main(int argc, const char* argv[])
 {  
     auto m_Thread = thread(ThreadFunc);
     cout << "get_id()" << m_Thread.get_id() << endl;
-    
+#if LINUX
+    cout << "main gettid()" << gettid() << endl;
+#endif
+
     m_Thread.join();
 
 	return 0;
